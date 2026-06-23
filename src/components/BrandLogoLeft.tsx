@@ -1,16 +1,12 @@
 export const BrandLogoLeft = () => {
   return (
-    <a href="/" aria-label="Home" className="ml-2 flex items-center">
-      {/* TEMPLATE: Replace /logo.png with your brand logo */}
-      <img 
-        src="/logo.png"
-        alt="Logo"
-        className="h-8 w-auto object-contain" 
-        onError={(e) => {
-          e.currentTarget.style.display = 'none';
-          e.currentTarget.parentElement!.innerHTML = '<span class="text-xl font-bold text-black">YourBrand</span>';
-        }}
-      />
+    <a href="/" aria-label="dunaru — Inicio" className="flex items-center gap-2 group">
+      <span className="font-display text-2xl tracking-wide text-foreground select-none">
+        dunaru
+      </span>
+      <span className="text-dunaru-ambar animate-flame inline-block leading-none text-lg -mt-1">
+        ·
+      </span>
     </a>
   )
 }

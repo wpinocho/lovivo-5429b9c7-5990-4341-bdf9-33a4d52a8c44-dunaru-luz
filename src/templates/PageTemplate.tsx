@@ -88,7 +88,7 @@ export const PageTemplate = ({
       </div>
 
       {footer && (
-        <footer className="border-t bg-muted/30">
+        <footer>
           {footer}
         </footer>
       )}
