@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils"
 const ADDON_MAP: Record<string, string[]> = {
   "kit-vaso-de-vidrio": ["recarga-500-g-30-mechas", "pack-30-mechas"],
   "kit-vaso-de-concreto": ["recarga-500-g-30-mechas", "pack-30-mechas"],
-  "perlas-originales-500-g": ["vaso-extra-transparente", "pack-30-mechas"],
+  // perlas-originales-500-g: sin add-ons — usa el selector "Lleva más y ahorra"
   "reserva-1-kg": ["pack-60-mechas"],
   "d-o-de-tonos": ["pack-60-mechas"],
   "tr-o-de-tonos": ["pack-60-mechas"],

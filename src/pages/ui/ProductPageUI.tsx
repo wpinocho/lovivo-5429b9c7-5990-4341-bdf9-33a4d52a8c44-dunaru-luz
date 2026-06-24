@@ -39,6 +39,11 @@ import { BOGOLabel } from "@/components/ui/BOGOLabel"
 import { intervalLabel } from "@/lib/subscription-utils"
 import ProductExpressCheckout from "@/components/ProductExpressCheckout"
 import { ProductAddOns } from "@/components/ProductAddOns"
+import { ProductQuantityTiers } from "@/components/ProductQuantityTiers"
+import { ProductStorySections } from "@/components/ProductStorySections"
+
+// Slugs que usan el selector "Lleva más y ahorra" en lugar del stepper + add-ons
+const TIER_SELECTOR_SLUGS = ["perlas-originales-500-g"]
 import { useCart } from "@/contexts/CartContext"
 import type { Product } from "@/lib/supabase"
 import { SEO } from "@/components/SEO"
@@ -151,6 +156,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
       : 0
 
   const vendor = logic.product.vendor || logic.product.product_type
+  const useTierSelector =
+    logic.product?.slug && TIER_SELECTOR_SLUGS.includes(logic.product.slug)
 
   const { storeName, currencyCode } = useSettings()
   const product = logic.product
@@ -521,48 +528,61 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </div>
             )}
 
-            {/* Quantity stepper */}
-            <div className="space-y-2.5">
-              <Label className="text-sm font-medium uppercase tracking-wider">
-                Cantidad
-              </Label>
-              <div className="inline-flex items-center border border-border rounded-md overflow-hidden">
-                <button
-                  type="button"
-                  onClick={() =>
-                    logic.handleQuantityChange(
-                      Math.max(1, logic.quantity - 1)
-                    )
-                  }
-                  disabled={logic.quantity <= 1}
-                  className="w-11 h-11 flex items-center justify-center hover:bg-muted/60 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                  aria-label="Disminuir cantidad"
-                >
-                  <Minus className="h-4 w-4" />
-                </button>
-                <div className="w-12 h-11 flex items-center justify-center font-medium tabular-nums border-x border-border">
-                  {logic.quantity}
-                </div>
-                <button
-                  type="button"
-                  onClick={() =>
-                    logic.handleQuantityChange(logic.quantity + 1)
-                  }
-                  className="w-11 h-11 flex items-center justify-center hover:bg-muted/60 transition-colors"
-                  aria-label="Aumentar cantidad"
-                >
-                  <Plus className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* Add-ons / complementos */}
-            {logic.inStock && logic.product?.slug && (
-              <ProductAddOns
-                productSlug={logic.product.slug}
+            {useTierSelector ? (
+              /* Selector "Lleva más y ahorra" — reemplaza stepper + add-ons */
+              <ProductQuantityTiers
+                productId={logic.product.id}
+                basePrice={logic.currentPrice}
+                quantity={logic.quantity}
+                onQuantityChange={logic.handleQuantityChange}
                 formatMoney={logic.formatMoney}
-                onSelectionChange={setSelectedAddOns}
               />
+            ) : (
+              <>
+                {/* Quantity stepper */}
+                <div className="space-y-2.5">
+                  <Label className="text-sm font-medium uppercase tracking-wider">
+                    Cantidad
+                  </Label>
+                  <div className="inline-flex items-center border border-border rounded-md overflow-hidden">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        logic.handleQuantityChange(
+                          Math.max(1, logic.quantity - 1)
+                        )
+                      }
+                      disabled={logic.quantity <= 1}
+                      className="w-11 h-11 flex items-center justify-center hover:bg-muted/60 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      aria-label="Disminuir cantidad"
+                    >
+                      <Minus className="h-4 w-4" />
+                    </button>
+                    <div className="w-12 h-11 flex items-center justify-center font-medium tabular-nums border-x border-border">
+                      {logic.quantity}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        logic.handleQuantityChange(logic.quantity + 1)
+                      }
+                      className="w-11 h-11 flex items-center justify-center hover:bg-muted/60 transition-colors"
+                      aria-label="Aumentar cantidad"
+                    >
+                      <Plus className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Add-ons / complementos */}
+                {logic.inStock && logic.product?.slug && (
+                  <ProductAddOns
+                    productSlug={logic.product.slug}
+                    formatMoney={logic.formatMoney}
+                    onSelectionChange={setSelectedAddOns}
+                  />
+                )}
+              </>
             )}
 
             {/* CTAs */}
@@ -682,6 +702,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             </Accordion>
           </div>
         </div>
+
+        {/* Editorial story sections (driven by slug) */}
+        {logic.product?.slug && (
+          <ProductStorySections slug={logic.product.slug} />
+        )}
       </div>
 
       {/* Sticky Add to Cart Bar */}
