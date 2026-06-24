@@ -194,7 +194,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 animate-fade-up delay-300">
-              <Link to="/products/kit-vaso-de-vidrio">
+              <Link to="/productos/kit-vaso-de-vidrio">
                 <Button size="lg" className="w-full sm:w-auto bg-dunaru-marfil text-dunaru-onix hover:bg-dunaru-arena font-body font-semibold px-8 py-4 text-base rounded-sm shadow-none border-0 transition-colors">
                   Comprar ahora
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -264,7 +264,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </div>
 
           <div className="mt-12 text-center">
-            <Link to="/products/perlas-originales-500-g">
+            <Link to="/productos/perlas-originales-500-g">
               <Button variant="outline" className="font-body font-medium rounded-sm border-foreground/30 hover:border-foreground text-foreground transition-colors">
                 Ver el producto completo
               </Button>
@@ -283,7 +283,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           {/* Two main paths */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
             {/* Path A */}
-            <Link to="/products/perlas-originales-500-g" className="group block">
+            <Link to="/productos/perlas-originales-500-g" className="group block">
               <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
@@ -306,7 +306,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
 
             {/* Path B */}
             <div className="flex flex-col gap-5">
-              <Link to="/products/kit-vaso-de-vidrio" className="group block flex-1">
+              <Link to="/productos/kit-vaso-de-vidrio" className="group block flex-1">
                 <div className="relative overflow-hidden rounded-sm bg-dunaru-onix border border-dunaru-onix hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg h-full">
                   <div className="absolute top-4 left-4 badge-mas-elegido z-10">Más elegido</div>
                   <div className="grid grid-cols-2 h-full">
@@ -327,7 +327,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                 </div>
               </Link>
 
-              <Link to="/products/kit-vaso-de-concreto" className="group block">
+              <Link to="/productos/kit-vaso-de-concreto" className="group block">
                 <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
                   <div className="grid grid-cols-2">
                     <div className="overflow-hidden">
@@ -360,7 +360,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               ].map(({ slug, label, price, badge }) => (
                 <Link
                   key={slug}
-                  to={`/products/${slug}`}
+                  to={`/productos/${slug}`}
                   className="flex items-center gap-3 px-4 py-3 rounded-sm border border-border hover:border-dunaru-champagne/50 bg-background hover:bg-dunaru-arena/50 transition-all font-body text-sm"
                 >
                   <span className="font-medium text-foreground">{label}</span>
@@ -384,7 +384,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {TONOS.map((tono) => (
-              <Link key={tono.name} to={`/products/${tono.slug}`} className="group block">
+              <Link key={tono.name} to={`/productos/${tono.slug}`} className="group block">
                 <div className="relative overflow-hidden rounded-sm">
                   <div className="aspect-[3/4] overflow-hidden">
                     <img
@@ -456,7 +456,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
             {BUNDLES.map((bundle) => (
-              <Link key={bundle.slug} to={`/products/${bundle.slug}`} className="group block">
+              <Link key={bundle.slug} to={`/productos/${bundle.slug}`} className="group block">
                 <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 hover:shadow-lg transition-all duration-300">
                   <div className="absolute top-4 left-4 z-10">
                     <span className={bundle.badgeClass}>{bundle.badge}</span>
@@ -485,7 +485,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </div>
 
           <div className="text-center mt-8">
-            <Link to="/products/reserva-1-kg">
+            <Link to="/productos/reserva-1-kg">
               <Button variant="outline" className="font-body font-medium rounded-sm border-foreground/30 hover:border-foreground text-foreground transition-colors">
                 Ver también: Reserva 1 kg — $999
               </Button>

@@ -21,27 +21,31 @@
 - Acento/marca: Champagne dorado #C2A878 → HSL 38 40% 61% → `--secondary` / `text-dunaru-champagne`
 - Botones CTA: Ónix #1E1C1A → HSL 30 4% 11% → `--primary`
 - Detalle llama (mínimo): Ámbar #D89A57 → `--accent` / `text-dunaru-ambar`
-- Tipografía display: Instrument Serif (h1, h2, h3, logotipo en CSS)
-- Tipografía body/UI: Manrope (precios, body, labels, botones)
+- Tipografía display: Instrument Serif (h1, h2, h3, logotipo en CSS) → `font-display`
+- Tipografía body/UI: Manrope (precios, body, labels, botones) → `font-body`
 - Tokens custom: `dunaru-marfil`, `dunaru-arena`, `dunaru-champagne`, `dunaru-carbon`, `dunaru-onix`, `dunaru-ambar`
-- Swatches: Marfil #F2EBDD · Champagne #E2CCA3 · Ónix #1F1D1B
+- Swatches CSS: `.swatch-marfil` · `.swatch-champagne` · `.swatch-onix`
 - Badges: `.badge-mas-elegido`, `.badge-mejor-valor`, `.badge-msi`
 - Estética: editorial, mínima, mucho aire, no saturada de íconos
 - Mobile-first, enfoque conversión
 
 ## 3. Active Plan
-### Homepage MVP — completado 2026-06-23
+### Routing — completado 2026-06-24
 - Status: done
-- Archivos: src/index.css, tailwind.config.ts, src/templates/EcommerceTemplate.tsx, src/pages/ui/IndexUI.tsx, src/components/BrandLogoLeft.tsx, index.html
+- Todos los links de la homepage usan `/productos/:slug` correctamente (corregido 2 veces — el cambio previo no se había persistido).
 
-### Siguiente sesión: PDPs + header refinements
-- Status: pending
-- PDP Perlas Originales (educativa, completa per brief §7)
-- PDP Kit Vaso Vidrio (§8)
-- PDP Kit Concreto (§9)
-- Páginas: /terminos-y-condiciones, /aviso-de-privacidad
+### Siguiente sesión
+- Páginas legales: /terminos-y-condiciones, /aviso-de-privacidad
+- Sección reseñas reales cuando el cliente tenga UGC
+- WhatsApp real (reemplazar placeholder 5215500000000)
 
 ## 4. Recent Changes
+- 2026-06-24 — IndexUI.tsx: 9 links re-corregidos de `/products/` → `/productos/` (cambio anterior no había persistido correctamente)
+- 2026-06-24 — IndexUI.tsx: 9 links corregidos de `/products/` → `/productos/` (hero CTA, cómo funciona, intención de compra, tonos, bundles, reserva)
+- 2026-06-23 — PDPKitConcreto.tsx creado: 7 secciones including dark CTA "Se compra una vez. Para siempre."
+- 2026-06-23 — PDPKitVidrio.tsx creado: 5 secciones "Kit listo para encender hoy"
+- 2026-06-23 — PDPPerlasOriginales.tsx creado: 7 secciones educativas + comparativa vs vela
+- 2026-06-23 — ProductPageUI.tsx rediseñado: swatches de tono, MSI badge, shipping-aware trust bar, below-fold routing por slug
 - 2026-06-23 — Sistema de diseño dunaru completo (index.css, tailwind.config.ts)
 - 2026-06-23 — Fonts: Instrument Serif + Manrope agregados a index.html
 - 2026-06-23 — EcommerceTemplate rediseñado: topbar MSI, header sticky, footer dunaru
@@ -62,17 +66,17 @@
 - Logo: `public/logo.png` — wordmark dunaru minimalista con llama
 
 ## 6. Known Issues
-- 2026-06-23 — Logo PNG generado es cuadrado 1024×1024, se renderiza como CSS wordmark en BrandLogoLeft. Considerar generar SVG o imagen horizontal en próxima sesión.
-- 2026-06-23 — Whatsapp number en footer/cierre es placeholder (5215500000000). Actualizar con número real del cliente.
+- 2026-06-24 — Los cambios en IndexUI.tsx no persistían correctamente en sesión anterior (bug de staging). Re-aplicados manualmente con lov-multi-edit verificando cada cambio.
+- 2026-06-23 — Logo PNG generado es cuadrado 1024×1024, se renderiza como CSS wordmark en BrandLogoLeft.
+- 2026-06-23 — Whatsapp number en footer/cierre es placeholder (5215500000000). Actualizar con número real.
+- 2026-06-23 — Star rating en PDP es estático (48 reseñas, 4.9). Activar reviews reales cuando haya UGC.
+- 2026-06-23 — Add-on (500g extra para kits) es cross-sell informativo, no agrega al carrito directamente.
 
 ## 7. Pending / Future Sessions
-- [high] PDP Perlas Originales — sección educativa completa (§7 del brief)
-- [high] PDP Kit Vaso Vidrio (§8)
-- [high] PDP Kit Concreto (§9)
-- [med] Páginas legales: /terminos-y-condiciones, /aviso-de-privacidad
+- [high] Páginas legales: /terminos-y-condiciones, /aviso-de-privacidad
+- [med] Número real de WhatsApp en footer + IndexUI
 - [med] Sección "Así se ve en una casa real" — carrusel shoppable (requiere fotos UGC reales)
-- [med] Sección prueba social — zona lista para activar reseñas
-- [med] Número real de WhatsApp en footer
-- [low] Add-ons contextuales en PDPs (500g extra, vaso extra, pack mechas)
-- [low] Integración Mercado Pago
-- [low] Comparativa dunaru vs vela tradicional en PDP
+- [med] Reviews reales (UGC) — activar cuando el cliente tenga testimonios
+- [low] Add-on contextual en PDPs (agregar 500g extra directo al carrito, requiere CartContext lookup)
+- [low] Integración Mercado Pago completa
+- [low] PDP Reserva 1kg (below-fold genérico o educativo)
