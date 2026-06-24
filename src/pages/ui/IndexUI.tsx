@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, Flame, RotateCcw, Layers, Clock, ChevronDown, MessageCircle, Check } from 'lucide-react';
 import { FloatingCart } from '@/components/FloatingCart';
+import { DunaruNewsletterForm } from '@/components/DunaruNewsletterForm';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { useState } from 'react';
@@ -515,19 +516,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           <p className="font-body text-sm text-dunaru-marfil/60 mb-8 leading-relaxed">
             Nuevos tonos, ediciones especiales y consejos para sacarle más a tu vela. Sé la primera en saber.
           </p>
-          <form
-            onSubmit={(e) => e.preventDefault()}
-            className="flex gap-2 max-w-sm mx-auto mb-8"
-          >
-            <input
-              type="email"
-              placeholder="tu@correo.com"
-              className="flex-1 px-4 py-3 rounded-sm bg-dunaru-marfil/10 border border-dunaru-marfil/20 text-dunaru-marfil placeholder:text-dunaru-marfil/30 font-body text-sm focus:outline-none focus:border-dunaru-champagne transition-colors"
-            />
-            <Button type="submit" className="bg-dunaru-champagne hover:bg-dunaru-ambar text-dunaru-carbon font-body font-semibold rounded-sm px-5 shrink-0 transition-colors border-0">
-              Suscribirse
-            </Button>
-          </form>
+          <DunaruNewsletterForm />
 
           <div className="divider-warm opacity-20 my-6" />
 
