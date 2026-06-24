@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AuthDialog } from '@/components/AuthDialog'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
-import { Package, Calendar, RefreshCw, ShoppingBag, AlertCircle, LogIn, ChevronDown, MapPin, Tag } from 'lucide-react'
+import { Package, Calendar, RefreshCw, ShoppingBag, AlertCircle, LogIn, ChevronDown, MapPin, Tag, Truck, ExternalLink } from 'lucide-react'
 import { formatMoney } from '@/lib/money'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
@@ -70,9 +70,13 @@ function OrderSkeleton() {
 }
 
 function OrderCard({ order }: { order: any }) {
+  const navigate = useNavigate()
   const [open, setOpen] = useState(false)
   const items = order.order_items || []
   const currency = order.currency_code || 'USD'
+  const estimatedDelivery = order.estimated_delivery_at
+    ? format(new Date(order.estimated_delivery_at), 'd MMM yyyy', { locale: es })
+    : null
 
   // Thumbnails: first image of each product (max 4)
   const thumbnails = items
@@ -214,6 +218,44 @@ function OrderCard({ order }: { order: any }) {
                     <p className="text-sm">{address}</p>
                   </div>
                 </div>
+              </div>
+            )}
+
+            {/* Tracking */}
+            {(order.checkout_token || order.tracking_number || estimatedDelivery) && (
+              <div className="border-t pt-3 space-y-2">
+                {estimatedDelivery && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Truck className="h-4 w-4 text-dunaru-champagne shrink-0" />
+                    <span className="text-muted-foreground">Entrega estimada:</span>
+                    <span className="font-medium">{estimatedDelivery}</span>
+                  </div>
+                )}
+                {order.checkout_token && (
+                  <Button
+                    size="sm"
+                    className="w-full"
+                    onClick={() => navigate('/orders/track/' + order.checkout_token)}
+                  >
+                    <Truck className="mr-2 h-4 w-4" />
+                    Rastrear pedido
+                  </Button>
+                )}
+                {order.tracking_number && (
+                  <div className="flex items-center justify-between gap-2 text-xs">
+                    <span className="text-muted-foreground">Guía: <span className="font-medium text-foreground">{order.tracking_number}</span></span>
+                    {order.tracking_url && (
+                      <a
+                        href={order.tracking_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1 text-dunaru-champagne hover:underline"
+                      >
+                        Ver en la paquetería <ExternalLink className="h-3 w-3" />
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>

@@ -94,6 +94,12 @@ export const EcommerceTemplate = ({
               >
                 Comprar
               </ScrollLink>
+              <Link
+                to="/orders/track"
+                className="text-foreground/60 hover:text-foreground transition-colors"
+              >
+                Rastrear pedido
+              </Link>
             </nav>
 
             {/* Actions */}
@@ -150,6 +156,13 @@ export const EcommerceTemplate = ({
                   {label}
                 </ScrollLink>
               ))}
+              <Link
+                to="/orders/track"
+                className="text-foreground/70 hover:text-foreground py-1 transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Rastrear pedido
+              </Link>
             </nav>
           )}
 
@@ -195,10 +208,10 @@ export const EcommerceTemplate = ({
             <h4 className="font-body font-semibold text-xs uppercase tracking-widest text-dunaru-marfil/50 mb-4">Comprar</h4>
             <div className="space-y-2 text-sm font-body">
               {[
-                { to: '/products/perlas-originales-500-g', label: 'Perlas Originales' },
-                { to: '/products/kit-vaso-de-vidrio', label: 'Kit Vaso de Vidrio' },
-                { to: '/products/kit-vaso-de-concreto', label: 'Kit de Concreto' },
-                { to: '/products/reserva-1-kg', label: 'Reserva 1 kg' },
+                { to: '/productos/perlas-originales-500-g', label: 'Perlas Originales' },
+                { to: '/productos/kit-vaso-de-vidrio', label: 'Kit Vaso de Vidrio' },
+                { to: '/productos/kit-vaso-de-concreto', label: 'Kit de Concreto' },
+                { to: '/productos/reserva-1-kg', label: 'Reserva 1 kg' },
               ].map(({ to, label }) => (
                 <Link key={to} to={to} className="block text-dunaru-marfil/70 hover:text-dunaru-marfil transition-colors py-0.5">
                   {label}
@@ -212,6 +225,7 @@ export const EcommerceTemplate = ({
             <h4 className="font-body font-semibold text-xs uppercase tracking-widest text-dunaru-marfil/50 mb-4">Ayuda</h4>
             <div className="space-y-2 text-sm font-body">
               {[
+                { to: '/orders/track', label: 'Rastrear pedido' },
                 { to: '/#faq', label: 'Preguntas frecuentes' },
                 { to: '/#como-funciona', label: 'Cómo funciona' },
                 { to: '/terminos-y-condiciones', label: 'Envíos y cambios' },
