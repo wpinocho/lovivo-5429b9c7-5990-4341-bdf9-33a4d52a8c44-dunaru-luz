@@ -242,7 +242,7 @@ export const EcommerceTemplate = ({
           <div>
             <h4 className="font-body font-semibold text-xs uppercase tracking-widest text-dunaru-marfil/50 mb-4">Contacto</h4>
             <a
-              href="https://wa.me/5215500000000?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"
+              href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 text-sm font-body text-dunaru-marfil/70 hover:text-dunaru-marfil transition-colors"

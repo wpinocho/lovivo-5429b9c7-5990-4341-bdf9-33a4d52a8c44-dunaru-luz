@@ -485,7 +485,7 @@ export default function OrderTrackUI({ token }: OrderTrackUIProps) {
       <p className="text-center text-xs text-muted-foreground font-body pt-2">
         ¿Algún problema con tu pedido?{' '}
         <a
-          href="https://wa.me/5215500000000?text=Hola%2C%20tengo%20una%20duda%20sobre%20mi%20pedido"
+          href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20duda%20sobre%20mi%20pedido"
           target="_blank"
           rel="noopener noreferrer"
           className="text-dunaru-champagne hover:underline"

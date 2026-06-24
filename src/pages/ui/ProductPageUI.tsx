@@ -38,6 +38,9 @@ import { VolumeBadge } from "@/components/ui/VolumeBadge"
 import { BOGOLabel } from "@/components/ui/BOGOLabel"
 import { intervalLabel } from "@/lib/subscription-utils"
 import ProductExpressCheckout from "@/components/ProductExpressCheckout"
+import { ProductAddOns } from "@/components/ProductAddOns"
+import { useCart } from "@/contexts/CartContext"
+import type { Product } from "@/lib/supabase"
 import { SEO } from "@/components/SEO"
 import { useSettings } from "@/contexts/SettingsContext"
 import { productJsonLd, breadcrumbJsonLd, plainText } from "@/lib/seo/jsonld"
@@ -75,7 +78,15 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [expressAvailable, setExpressAvailable] = useState(false)
   const [isZoomed, setIsZoomed] = useState(false)
+  const [selectedAddOns, setSelectedAddOns] = useState<Product[]>([])
+  const { addItem } = useCart()
   const { ref: ctaRef, inView: ctaInView } = useInView({ threshold: 0 })
+
+  // Agrega los complementos seleccionados como líneas extra y luego el producto principal
+  const handleAddToCartWithAddOns = () => {
+    selectedAddOns.forEach((addon) => addItem(addon))
+    logic.handleAddToCart()
+  }
 
   const displayImage =
     selectedImage ||
@@ -545,6 +556,15 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </div>
             </div>
 
+            {/* Add-ons / complementos */}
+            {logic.inStock && logic.product?.slug && (
+              <ProductAddOns
+                productSlug={logic.product.slug}
+                formatMoney={logic.formatMoney}
+                onSelectionChange={setSelectedAddOns}
+              />
+            )}
+
             {/* CTAs */}
             <div ref={ctaRef} className="flex flex-col gap-3">
               {logic.inStock &&
@@ -582,7 +602,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               )}
 
               <Button
-                onClick={logic.handleAddToCart}
+                onClick={handleAddToCartWithAddOns}
                 disabled={!logic.inStock}
                 variant={logic.inStock ? "outline" : "default"}
                 className="w-full h-14 text-base tracking-wide rounded-md"
@@ -697,7 +717,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   Comprar ahora
                 </Button>
                 <Button
-                  onClick={logic.handleAddToCart}
+                  onClick={handleAddToCartWithAddOns}
                   variant="outline"
                   size="default"
                 >
@@ -734,7 +754,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   Comprar ahora
                 </Button>
                 <Button
-                  onClick={logic.handleAddToCart}
+                  onClick={handleAddToCartWithAddOns}
                   variant="outline"
                   size="sm"
                   className="flex-1"

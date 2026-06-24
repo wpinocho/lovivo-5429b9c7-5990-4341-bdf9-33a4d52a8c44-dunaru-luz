@@ -521,7 +521,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           <div className="divider-warm opacity-20 my-6" />
 
           <a
-            href="https://wa.me/5215500000000?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"
+            href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 font-body text-sm text-dunaru-marfil/60 hover:text-dunaru-marfil transition-colors"
