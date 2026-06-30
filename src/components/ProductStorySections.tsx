@@ -35,6 +35,8 @@ interface StoryBlock {
   bullets?: string[]
   image: string
   flip?: boolean
+  /** true = foto lifestyle real (object-cover, sin opacidad); false/undefined = placeholder */
+  photo?: boolean
 }
 
 interface CompareRow {
@@ -157,6 +159,183 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       },
     ],
   },
+
+  "kit-vaso-de-vidrio": {
+    steps: [
+      {
+        title: "Abre tu kit",
+        text: "Vaso de vidrio, 500 g de perlas y 30 mechas. Todo lo que necesitas, en una sola caja.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Vierte las perlas",
+        text: "Llena el vaso de vidrio con las perlas de cera. Sin moldes, sin derretir nada.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Enciende hoy mismo",
+        text: "Coloca una mecha en el centro y préndela. Tu vela queda lista en segundos.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Recarga sin fin",
+        text: "Cuando se consuma, agrega más perlas y una mecha nueva. El mismo vaso, otra vela.",
+        image: PLACEHOLDER,
+      },
+    ],
+    blocks: [
+      {
+        title: "Todo listo para encender hoy",
+        body: "Sin armar, sin buscar recipiente, sin complicaciones. Tu Kit Vaso de Vidrio llega **completo y listo para usar o regalar**.",
+        bullets: [
+          "Vaso de vidrio de diseño, resistente al calor",
+          "500 g de perlas de cera perlada",
+          "30 mechas de algodón incluidas",
+          "Envío gratis a todo México",
+        ],
+        image: "/casa-real-comedor.webp",
+        photo: true,
+      },
+      {
+        title: "Se compra una vez, se rellena para siempre",
+        body: "Cuando las perlas se consumen, **no tiras nada**: vuelves a llenar el mismo vaso con una recarga y tu vela empieza de nuevo. Una compra, luz para mucho tiempo.",
+        bullets: [
+          "El vaso se reutiliza infinitas veces",
+          "Recarga con cualquier bolsa de perlas dunaru",
+        ],
+        image: "/casa-real-sala.webp",
+        photo: true,
+        flip: true,
+      },
+      {
+        title: "Tu vaso, también cuando no es vela",
+        body: "El vaso de vidrio es una pieza de diseño por sí sola. Úsalo como **portavela, florero pequeño o detalle de mesa** cuando quieras.",
+        bullets: [
+          "Vidrio transparente que combina con todo",
+          "Fácil de limpiar y reutilizar",
+        ],
+        image: PLACEHOLDER,
+      },
+    ],
+    compareRows: [
+      { label: "Llega listo para encender", dunaru: true, traditional: false },
+      { label: "Recargable infinitamente", dunaru: true, traditional: false },
+      { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
+      { label: "Vaso reutilizable de diseño", dunaru: true, traditional: false },
+      { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
+      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿Qué incluye el kit?",
+        a: "Un vaso de vidrio transparente de diseño, 500 g de perlas de cera perlada y 30 mechas de algodón. Todo listo para encender o regalar.",
+      },
+      {
+        q: "¿Tiene costo el envío?",
+        a: "No. El Kit Vaso de Vidrio incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+      },
+      {
+        q: "¿Puedo recargarlo después?",
+        a: "Sí. Cuando las perlas se consuman, agregas una recarga y una mecha nueva en el mismo vaso. Se reutiliza infinitas veces.",
+      },
+      {
+        q: "¿Sirve para regalar?",
+        a: "Totalmente. Llega en una presentación cuidada, listo para usar desde el primer momento. Es un regalo con intención y diseño.",
+      },
+      {
+        q: "¿Qué colores hay?",
+        a: "Elige entre Marfil, Champagne y Ónix. Cada tono crea un ambiente distinto en el mismo vaso.",
+      },
+    ],
+  },
+
+  "kit-vaso-de-concreto": {
+    steps: [
+      {
+        title: "Recibe el objeto",
+        text: "Un bowl de concreto mate, hecho a mano. Llega listo para regalar o estrenar en tu mesa.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Vierte las perlas",
+        text: "Llena el cuenco de concreto con las perlas. La pieza ya se ve increíble apagada.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Enciende y presume",
+        text: "Coloca la mecha y enciende. Una luz cálida sobre concreto: presencia pura.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Rellena para siempre",
+        text: "El concreto dura años. Solo recargas perlas y mechas cuando se acaben.",
+        image: PLACEHOLDER,
+      },
+    ],
+    blocks: [
+      {
+        title: "Un objeto de diseño que da luz",
+        body: "El bowl de concreto gris mate es una pieza de decoración por mérito propio. **Encendido, transforma cualquier espacio**: una cena, un recibidor, una casa nueva.",
+        bullets: [
+          "Bowl artesanal de concreto mate",
+          "500 g de perlas + 30 mechas incluidas",
+          "Llega listo para regalar · envío gratis",
+        ],
+        image: "/casa-real-recibidor.webp",
+        photo: true,
+      },
+      {
+        title: "Por qué concreto",
+        body: "El concreto es **durable, pesado y mate**: aguanta el calor, no se deforma y envejece con elegancia. Se compra una vez y se rellena infinitamente.",
+        bullets: [
+          "Material que dura años, no se desecha",
+          "Acabado mate que combina con todo",
+          "Recargable para siempre",
+        ],
+        image: PLACEHOLDER,
+        flip: true,
+      },
+      {
+        title: "El regalo que se nota",
+        body: "Cuando buscas algo que diga \"pensé en ti\", un objeto de concreto con luz cálida **se siente distinto a una vela cualquiera**. Perfecto para estrenos de casa, cumpleaños o agradecimientos.",
+        bullets: [
+          "Presentación cuidada, lista para obsequiar",
+          "Un detalle que se queda en la casa",
+        ],
+        image: PLACEHOLDER,
+      },
+    ],
+    compareRows: [
+      { label: "Objeto de diseño reutilizable", dunaru: true, traditional: false },
+      { label: "Recargable infinitamente", dunaru: true, traditional: false },
+      { label: "Llega listo para regalar", dunaru: true, traditional: false },
+      { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
+      { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
+      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿Qué incluye el kit?",
+        a: "Un bowl de concreto gris mate hecho a mano, 500 g de perlas de cera perlada y 30 mechas de algodón. Listo para regalar o estrenar.",
+      },
+      {
+        q: "¿Tiene costo el envío?",
+        a: "No. El Kit Vaso de Concreto incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+      },
+      {
+        q: "¿El concreto es seguro con el calor?",
+        a: "Sí. El concreto resiste el calor de la llama sin deformarse. Úsalo siempre sobre una superficie plana y nunca lo dejes encendido sin supervisión.",
+      },
+      {
+        q: "¿Se puede recargar?",
+        a: "Por supuesto. El bowl de concreto se reutiliza infinitamente: solo agregas más perlas y mechas cuando se consuman.",
+      },
+      {
+        q: "¿Es buen regalo?",
+        a: "Es nuestro producto más elegido para regalar. Llega en una presentación cuidada y queda como objeto de diseño en la casa de quien lo recibe.",
+      },
+    ],
+  },
 }
 
 const GUARANTEES = [
@@ -244,7 +423,12 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
                 src={block.image}
                 alt={block.title}
                 loading="lazy"
-                className="w-full h-full object-contain p-8 opacity-60"
+                className={cn(
+                  "w-full h-full",
+                  block.photo
+                    ? "object-cover"
+                    : "object-contain p-8 opacity-60"
+                )}
               />
             </div>
             <div

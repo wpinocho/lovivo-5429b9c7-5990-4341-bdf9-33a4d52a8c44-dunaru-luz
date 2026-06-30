@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, Flame, RotateCcw, Layers, Clock, ChevronDown, MessageCircle, Check } from 'lucide-react';
 import { FloatingCart } from '@/components/FloatingCart';
 import { DunaruNewsletterForm } from '@/components/DunaruNewsletterForm';
+import { CasaRealSection } from '@/components/CasaRealSection';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { useState } from 'react';
@@ -411,6 +412,9 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </div>
         </div>
       </section>
+
+      {/* ── ASÍ SE VE EN UNA CASA REAL ───────────────────────────────────── */}
+      <CasaRealSection />
 
       {/* ── POR QUÉ NO ES UNA VELA NORMAL ────────────────────────────────── */}
       <section className="section-pad-sm bg-dunaru-onix">
