@@ -21,7 +21,7 @@ const PRODUCTS = [
     price: '$599',
     shipping: '+$99 envío',
     badge: null,
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/perlas-originales-marfil.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp',
   },
   {
     slug: 'kit-vaso-de-vidrio',
@@ -30,7 +30,7 @@ const PRODUCTS = [
     price: '$899',
     shipping: 'Envío gratis',
     badge: 'Más elegido',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/kit-vaso-vidrio.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/21sy3747vik.webp',
   },
   {
     slug: 'kit-vaso-de-concreto',
@@ -39,7 +39,7 @@ const PRODUCTS = [
     price: '$1,099',
     shipping: 'Envío gratis',
     badge: 'Premio regalo',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/kit-concreto.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/c47q4wicqvv.webp',
   },
   {
     slug: 'reserva-1-kg',
@@ -48,7 +48,7 @@ const PRODUCTS = [
     price: '$999',
     shipping: 'Envío gratis',
     badge: null,
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/reserva-1kg.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/vjtp9uzft8.webp',
   },
 ];
 
@@ -61,7 +61,7 @@ const BUNDLES = [
     compare: '$1,398',
     badge: 'Más elegido',
     badgeClass: 'badge-mas-elegido',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/duo-tonos.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/yuq5htx9eol.webp',
   },
   {
     slug: 'tr-o-de-tonos',
@@ -71,7 +71,7 @@ const BUNDLES = [
     compare: '$1,797',
     badge: 'Mejor valor',
     badgeClass: 'badge-mejor-valor',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/trio-tonos.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/bfh3fau5iyv.webp',
   },
 ];
 
@@ -109,7 +109,7 @@ const TONOS = [
     slug: 'perlas-originales-500-g',
     mood: 'Luz de mañana. Mesa despejada. Inicio de día.',
     scene: 'Mesa de madera clara con vaso de vidrio y perlas blancas encendidas, luz solar matutina, plantas verdes de fondo',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/kit-vaso-vidrio.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp',
   },
   {
     name: 'Champagne',
@@ -117,15 +117,15 @@ const TONOS = [
     slug: 'perlas-originales-500-g',
     mood: 'Cena entre amigos. Mesa de madera y vino.',
     scene: 'Mesa de cena con mantel de lino, vela champagne encendida, copas de vino, luz cálida de tarde',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/reserva-1kg.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/ndawzidqt2a.webp',
   },
   {
     name: 'Ónix',
     hex: '#1F1D1B',
-    slug: 'kit-vaso-de-concreto',
+    slug: 'perlas-originales-500-g',
     mood: 'Noche en terraza. Contraste y presencia.',
     scene: 'Bowl de concreto con perlas ónix negras encendidas en terraza nocturna con luces de ciudad de fondo',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/kit-concreto.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/57db85v1ixx.webp',
   },
 ];
 
@@ -289,7 +289,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/perlas-originales-marfil.webp"
+                    src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp"
                     alt="Perlas Originales dunaru"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -314,7 +314,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                   <div className="grid grid-cols-2 h-full">
                     <div className="overflow-hidden">
                       <img
-                        src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/kit-vaso-vidrio.webp"
+                        src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/21sy3747vik.webp"
                         alt="Kit Vaso de Vidrio dunaru"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 min-h-[160px]"
                       />
@@ -334,7 +334,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                   <div className="grid grid-cols-2">
                     <div className="overflow-hidden">
                       <img
-                        src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/kit-concreto.webp"
+                        src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/c47q4wicqvv.webp"
                         alt="Kit Concreto dunaru"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 min-h-[140px]"
                       />
