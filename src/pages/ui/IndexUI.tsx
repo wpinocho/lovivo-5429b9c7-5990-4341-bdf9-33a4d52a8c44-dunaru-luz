@@ -4,6 +4,8 @@ import { ArrowRight, Flame, RotateCcw, Layers, Clock, ChevronDown, MessageCircle
 import { FloatingCart } from '@/components/FloatingCart';
 import { DunaruNewsletterForm } from '@/components/DunaruNewsletterForm';
 import { CasaRealSection } from '@/components/CasaRealSection';
+import { BrandStorySection } from '@/components/BrandStorySection';
+import { ReviewsInvite } from '@/components/ReviewsInvite';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { useState } from 'react';
@@ -80,25 +82,25 @@ const STEPS = [
     n: '01',
     title: 'Vierte',
     desc: 'Llena tu recipiente favorito con las perlas. Cualquier vaso, bowl o copa de mínimo 10 cm de diámetro.',
-    icon: '🫙',
+    img: '/paso-vierte.webp',
   },
   {
     n: '02',
     title: 'Inserta',
     desc: 'Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.',
-    icon: '🕯️',
+    img: '/paso-inserta.webp',
   },
   {
     n: '03',
     title: 'Enciende',
     desc: 'Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.',
-    icon: '🔥',
+    img: '/paso-enciende.webp',
   },
   {
     n: '04',
     title: 'Renueva',
     desc: 'Cuando la mecha se consume, agrega una nueva. Las perlas se reutilizan. Tu recipiente también.',
-    icon: '♻️',
+    img: '/paso-renueva.webp',
   },
 ];
 
@@ -252,14 +254,21 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             <h2 className="font-display text-3xl sm:text-4xl text-foreground">Cómo funciona</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {STEPS.map((step, i) => (
-              <div key={i} className="flex flex-col items-center text-center group">
-                <div className="w-16 h-16 rounded-full bg-dunaru-arena flex items-center justify-center text-2xl mb-4 group-hover:scale-105 transition-transform duration-200">
-                  {step.icon}
+              <div key={i} className="group">
+                <div className="relative aspect-square overflow-hidden rounded-sm mb-4">
+                  <img
+                    src={step.img}
+                    alt={`Paso ${step.n}: ${step.title} — vela perlada dunaru`}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <span className="absolute top-3 left-3 font-body text-xs font-bold tracking-widest text-dunaru-onix bg-dunaru-marfil/90 backdrop-blur-sm rounded-full h-8 w-8 flex items-center justify-center">
+                    {step.n}
+                  </span>
                 </div>
-                <span className="font-body text-xs font-bold tracking-widest text-dunaru-champagne mb-1">{step.n}</span>
-                <h3 className="font-display text-xl text-foreground mb-2">{step.title}</h3>
+                <h3 className="font-display text-xl text-foreground mb-1.5">{step.title}</h3>
                 <p className="font-body text-sm text-foreground/60 leading-relaxed">{step.desc}</p>
               </div>
             ))}
@@ -498,6 +507,12 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </div>
         </div>
       </section>
+
+      {/* ── HISTORIA DE MARCA + HECHO EN MÉXICO + GARANTÍA ────────────────── */}
+      <BrandStorySection />
+
+      {/* ── RESEÑAS (HONESTO — MARCA NUEVA) ──────────────────────────────── */}
+      <ReviewsInvite />
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section id="faq" className="section-pad bg-background">

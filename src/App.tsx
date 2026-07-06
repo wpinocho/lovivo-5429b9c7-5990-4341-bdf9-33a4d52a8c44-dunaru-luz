@@ -27,6 +27,7 @@ const Bundle = lazy(() => import('./pages/Bundle'));
 const MySubscriptions = lazy(() => import('./pages/MySubscriptions'));
 const TermsAndConditions = lazy(() => import('./pages/TermsAndConditions'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const ReturnsPolicy = lazy(() => import('./pages/ReturnsPolicy'));
 const PendingPayment = lazy(() => import('./pages/PendingPayment'));
 const OrderTrack = lazy(() => import('./pages/OrderTrack'));
 
@@ -82,6 +83,7 @@ const App = () => (
                         <Route path="/blog/:slug" element={<BlogPost />} />
                         <Route path="/terminos-y-condiciones" element={<TermsAndConditions />} />
                         <Route path="/aviso-de-privacidad" element={<PrivacyPolicy />} />
+                        <Route path="/devoluciones" element={<ReturnsPolicy />} />
                         <Route path="/pago-pendiente/:orderId" element={<PendingPayment />} />
                         <Route path="*" element={<NotFound />} />
                       </Routes>

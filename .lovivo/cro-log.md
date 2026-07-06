@@ -36,6 +36,13 @@
 - **Result**: (fill in after 5-7 days) before% → after%, verdict: ✅ kept / ❌ reverted / ➡️ inconclusive
 -->
 
+### 2026-07-06 — Capa de confianza pre-lanzamiento (marca nueva, 0 reseñas)
+- **Hypothesis**: Como marca nueva sin reseñas (vs VelaVita/Foton con miles), la confianza debe venir de historia de marca, garantía visible y honestidad. Emojis en "Cómo funciona" y hero/casa-real rotas restan credibilidad y frenan la conversión.
+- **Change**: (1) Regeneré hero + 4 imágenes "casa real" que estaban rotas (archivos faltantes en public/). (2) Reemplacé emojis del "Cómo funciona" por 4 fotos reales de manos. (3) Nueva sección historia de marca + Hecho en México + garantía 30 días. (4) Bloque de reseñas honesto (sin fakes) invitando a las primeras clientas. (5) Página /devoluciones con garantía. (6) Topbar rotativo con envío/MSI/garantía.
+- **Files**: IndexUI.tsx, CasaRealSection (assets), BrandStorySection.tsx (nuevo), ReviewsInvite.tsx (nuevo), ReturnsPolicy.tsx (nuevo), EcommerceTemplate.tsx, App.tsx, public/*.webp.
+- **Metric to watch**: viewcontent → addtocart (confianza), tiempo en home, scroll depth a secciones de confianza.
+- **Result**: (pendiente 5-7 días post-lanzamiento).
+
 ## Active Experiments
 <!-- A/B tests currently running. Include flag_key, start date, variants, and target metric. -->
 None

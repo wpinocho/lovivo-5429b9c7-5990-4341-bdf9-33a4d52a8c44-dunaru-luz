@@ -12,6 +12,14 @@ import { useCart } from '@/contexts/CartContext'
 import { useCollections } from '@/hooks/useCollections'
 import { ScrollLink } from '@/components/ScrollLink'
 
+const TOP_MESSAGES = [
+  'Envío gratis en pedidos desde $899',
+  'Hasta 6 meses sin intereses con Mercado Pago',
+  'Hecho en México con cera vegetal',
+  'Entregas en 2–5 días hábiles',
+  'Garantía de satisfacción de 30 días',
+]
+
 interface EcommerceTemplateProps {
   children: ReactNode
   pageTitle?: string
@@ -39,6 +47,7 @@ export const EcommerceTemplate = ({
   const totalItems = getTotalItems()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [topMsgIndex, setTopMsgIndex] = useState(0)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -46,16 +55,20 @@ export const EcommerceTemplate = ({
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  // Top bar
+  useEffect(() => {
+    const id = setInterval(
+      () => setTopMsgIndex((i) => (i + 1) % TOP_MESSAGES.length),
+      3500
+    )
+    return () => clearInterval(id)
+  }, [])
+
+  // Top bar rotativo (urgencia + envío + pagos + confianza)
   const topBar = (
     <div className="bg-dunaru-carbon text-dunaru-marfil text-xs font-body font-medium py-2 px-4 text-center overflow-hidden">
-      <div className="flex items-center justify-center gap-6 flex-wrap">
-        <span>Envío gratis desde $899</span>
-        <span className="opacity-40">·</span>
-        <span>Hasta 6 meses sin intereses con Mercado Pago</span>
-        <span className="opacity-40 hidden sm:inline">·</span>
-        <span className="hidden sm:inline">Entregas en 2–5 días hábiles</span>
-      </div>
+      <span key={topMsgIndex} className="inline-block animate-fade-in">
+        {TOP_MESSAGES[topMsgIndex]}
+      </span>
     </div>
   )
 
@@ -228,7 +241,8 @@ export const EcommerceTemplate = ({
                 { to: '/orders/track', label: 'Rastrear pedido' },
                 { to: '/#faq', label: 'Preguntas frecuentes' },
                 { to: '/#como-funciona', label: 'Cómo funciona' },
-                { to: '/terminos-y-condiciones', label: 'Envíos y cambios' },
+                { to: '/devoluciones', label: 'Garantía y devoluciones' },
+                { to: '/terminos-y-condiciones', label: 'Términos y condiciones' },
                 { to: '/aviso-de-privacidad', label: 'Aviso de privacidad' },
               ].map(({ to, label }) => (
                 <Link key={to} to={to} className="block text-dunaru-marfil/70 hover:text-dunaru-marfil transition-colors py-0.5">
