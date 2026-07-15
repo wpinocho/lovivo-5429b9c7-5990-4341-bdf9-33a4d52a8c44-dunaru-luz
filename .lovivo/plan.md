@@ -31,13 +31,14 @@
 - Estética: editorial, mínima, mucho aire. Pocas animaciones. Mobile-first.
 
 ## 3. Active Plan — 🟡 FIX PDP: placeholders restantes en blocks de KITS (2026-07-15)
-Perlas YA quedó 100% con fotos reales. Faltan solo los **blocks** de los kits con `PLACEHOLDER`:
+Perlas YA quedó 100% con fotos reales del user. Faltan solo los **blocks** de los kits con `PLACEHOLDER`:
 - **kit-vaso-de-vidrio → blocks**: bloque 3 ("Tu vaso, también cuando no es vela") = PLACEHOLDER (falta 1).
 - **kit-vaso-de-concreto → blocks**: bloques 2 ("Por qué concreto") y 3 ("El regalo que se nota") = PLACEHOLDER (faltan 2).
-- Para generarlas: `imagegen` model=gemini, reference = foto real de producto (la subida por user `1784138202029-sv5fpcay1h.webp` es excelente ref de marca). aspect_ratio 4:3. Marcar `photo: true`.
+- Para generarlas: `imagegen` model=gemini, reference = foto real de producto. aspect_ratio 4:3. Marcar `photo: true`.
 
 ## 4. Recent Changes
-- 2026-07-15 — ✅ PDP PERLAS blocks editoriales: reescritos los 4 TÍTULOS para no copiar a VelaVita ("Siempre luce como el primer día", "El recipiente que ya amas, ahora da luz", "Se cae y no pasa nada", "Recarga en vez de tirar") + copy refrescado. Conectadas 4 fotos reales generadas con IA (ref = foto de producto del user): `/pdp-perlas-encanto|recipiente|seguro|recarga.webp`. Todos con `photo: true`.
+- 2026-07-15 — ✅ PDP PERLAS: reemplazadas las 4 fotos de los blocks editoriales por las **fotos mejoradas que subió el user** (URLs directas de Supabase message-images). Mapeo: "Siempre luce como el primer día" = h29qq6dodik, "El recipiente que ya amas..." = 4z1j2dq3ab9, "Se cae y no pasa nada" = go7315yuax, "Recarga en vez de tirar" = c47lrhv7fa. NOTA: `lov-copy` de user-uploads NO copia a public/, devuelve URL de Supabase → usar esa URL directa en el código.
+- 2026-07-15 — ✅ PDP PERLAS blocks editoriales: reescritos los 4 TÍTULOS para no copiar a VelaVita + copy refrescado. Todos con `photo: true`.
 - 2026-07-15 — ✅ FIX PDP "Crea tu vela en 4 pasos": usa `HOW_IT_WORKS_STEPS` (constante compartida) con fotos reales de la landing. Igual en los 3 productos.
 - 2026-07-15 — 🖼️ REEMPLAZADA imagen paso "Renueva" (`/paso-renueva.webp`) con foto real del user.
 - 2026-07-15 — 🧩 FIX layout "¿Cómo quieres empezar?" en `IndexUI.tsx` (columnas parejas).
@@ -56,9 +57,9 @@ Perlas YA quedó 100% con fotos reales. Faltan solo los **blocks** de los kits c
 - **Hero**: `/hero-dunaru.webp` — ✅.
 - **Casa real**: `/casa-real-comedor|recibidor|recamara|sala.webp` — ✅.
 - **Cómo funciona / 4 pasos**: `/paso-vierte|inserta|enciende|renueva.webp` — ✅. Compartidos entre landing y PDP (constante `HOW_IT_WORKS_STEPS`).
-- **PDP Perlas blocks**: `/pdp-perlas-encanto|recipiente|seguro|recarga.webp` — ✅ NUEVAS (2026-07-15), generadas con IA usando foto de producto como ref. Estética: arena fina crema, bolsa DUNARU, travertino, tonos cálidos.
+- **PDP Perlas blocks**: ✅ AHORA usan las 4 fotos mejoradas del user (URLs Supabase message-images, no /public). Los `/pdp-perlas-*.webp` viejos (AI) ya NO se usan.
 - **PLACEHOLDER (bug restante)**: solo en blocks de KITS (ver Active Plan). Perlas YA no tiene placeholder.
-- **Ref de marca ideal para generar**: foto subida por user `user-uploads://...1784138202029-sv5fpcay1h.webp` (mano vertiendo arena a vaso, bolsa DUNARU).
+- **Ref de marca ideal para generar**: foto subida por user `1784138202029-sv5fpcay1h.webp` (mano vertiendo arena a vaso, bolsa DUNARU).
 - **OJO consistencia visual**: material = **arena fina**, no perlas grandes.
 
 ## 6. Known Issues
