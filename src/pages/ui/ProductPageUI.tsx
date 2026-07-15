@@ -246,9 +246,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 )}
               </div>
 
-              {/* Horizontal thumbnails below main image */}
+              {/* Horizontal thumbnails below main image (scrollable row) */}
               {logic.displayImages && logic.displayImages.length > 1 && (
-                <div className="flex gap-3 mt-4">
+                <div className="flex gap-3 mt-4 overflow-x-auto pb-2 -mb-2 snap-x scroll-smooth thumbnails-scroll">
                   {logic.displayImages.map((img: string, index: number) => {
                     const isActive =
                       selectedImage === img ||
@@ -262,7 +262,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                         key={index}
                         onClick={() => setSelectedImage(img)}
                         className={cn(
-                          "shrink-0 w-20 h-20 rounded-md overflow-hidden border-2 transition-all bg-muted/30",
+                          "shrink-0 snap-start w-20 h-20 rounded-md overflow-hidden border-2 transition-all bg-muted/30",
                           isActive
                             ? "border-foreground"
                             : "border-transparent hover:border-muted-foreground/40"

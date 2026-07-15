@@ -193,3 +193,9 @@ html {
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: hsl(var(--background)); }
 ::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
+
+/* ══ Thumbnails horizontal scroll (PDP gallery) ══ */
+.thumbnails-scroll { scrollbar-width: thin; scrollbar-color: hsl(var(--border)) transparent; }
+.thumbnails-scroll::-webkit-scrollbar { height: 4px; }
+.thumbnails-scroll::-webkit-scrollbar-track { background: transparent; }
+.thumbnails-scroll::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 999px; }

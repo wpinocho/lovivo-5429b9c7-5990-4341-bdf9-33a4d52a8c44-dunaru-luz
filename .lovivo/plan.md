@@ -37,6 +37,7 @@ Perlas YA quedó 100% con fotos reales del user. Faltan solo los **blocks** de l
 - Para generarlas: `imagegen` model=gemini, reference = foto real de producto. aspect_ratio 4:3. Marcar `photo: true`.
 
 ## 4. Recent Changes
+- 2026-07-15 — ✅ FIX BUG galería PDP (desktop): las miniaturas (`flex gap-3` con `shrink-0`, sin wrap/scroll) se desbordaban horizontalmente e invadían la columna de descripción. Solución: `overflow-x-auto` + `snap-x` en la fila de thumbnails + clase `.thumbnails-scroll` (scrollbar sutil) en index.css. Ahora las miniaturas se deslizan dentro de su columna. `ProductPageUI.tsx` líneas ~250.
 - 2026-07-15 — ✅ PDP PERLAS: reemplazadas las 4 fotos de los blocks editoriales por las **fotos mejoradas que subió el user** (URLs directas de Supabase message-images). Mapeo: "Siempre luce como el primer día" = h29qq6dodik, "El recipiente que ya amas..." = 4z1j2dq3ab9, "Se cae y no pasa nada" = go7315yuax, "Recarga en vez de tirar" = c47lrhv7fa. NOTA: `lov-copy` de user-uploads NO copia a public/, devuelve URL de Supabase → usar esa URL directa en el código.
 - 2026-07-15 — ✅ PDP PERLAS blocks editoriales: reescritos los 4 TÍTULOS para no copiar a VelaVita + copy refrescado. Todos con `photo: true`.
 - 2026-07-15 — ✅ FIX PDP "Crea tu vela en 4 pasos": usa `HOW_IT_WORKS_STEPS` (constante compartida) con fotos reales de la landing. Igual en los 3 productos.
