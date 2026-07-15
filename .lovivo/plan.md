@@ -39,7 +39,8 @@
 - **kit-vaso-de-concreto → blocks**: bloques 2 y 3 = PLACEHOLDER (faltan 2).
 
 ## 4. Recent Changes
-- 2026-07-15 — 🎨 FIX imagen `/paso-vierte.webp`: el material vertido se veía como perlas grandes; regenerado con Gemini (referencia = imagen actual del preview) para que se vea como **arena fina de cera** (gránulos ~1mm, tipo couscous). Escena idéntica (mano, bolsa DUNARU, vaso, mesa, luz). Se actualiza en 2 lugares: paso "Vierte" de "Cómo funciona" + sección "Quiénes somos" (BrandStorySection). Sin cambios de código.
+- 2026-07-15 — 🧩 FIX layout sección "¿Cómo quieres empezar?" en `IndexUI.tsx`: la tarjeta izquierda (Perlas Originales) dejaba un hueco vacío abajo porque el grid iguala altura con la columna derecha (2 tarjetas apiladas). Ahora la Link + card usan `h-full flex flex-col` y la imagen es `flex-1 min-h-[260px]` para expandirse y llenar el espacio. Columnas parejas.
+- 2026-07-15 — 🎨 FIX imagen `/paso-vierte.webp`: el material se veía como perlas grandes; regenerado con Gemini para que se vea como **arena fina de cera** (gránulos ~1mm). Se usa en paso "Vierte" (Cómo funciona) + "Quiénes somos" (BrandStorySection).
 - 2026-07-07 — 🔍 REVISIÓN VISUAL en vivo landing + PDPs. Landing ✅. Detectado bug placeholder en `ProductStorySections.tsx`. Confirmado rutas `/productos/:slug`.
 - 2026-07-06 — ✅ SPRINT PRE-LANZAMIENTO: fix bug imágenes, "Cómo funciona" con fotos reales, `BrandStorySection`, `ReviewsInvite`, `/devoluciones`, topbar rotativo.
 - 2026-07-06 — 🔍 AUDITORÍA PRE-LANZAMIENTO vs VelaVita.cl + Foton.

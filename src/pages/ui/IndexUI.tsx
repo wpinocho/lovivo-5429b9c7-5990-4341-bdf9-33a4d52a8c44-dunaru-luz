@@ -294,9 +294,9 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           {/* Two main paths */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
             {/* Path A */}
-            <Link to="/productos/perlas-originales-500-g" className="group block">
-              <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
-                <div className="aspect-[4/3] overflow-hidden">
+            <Link to="/productos/perlas-originales-500-g" className="group block h-full">
+              <div className="relative flex flex-col h-full overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
+                <div className="flex-1 min-h-[260px] overflow-hidden">
                   <img
                     src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp"
                     alt="Perlas Originales dunaru"
