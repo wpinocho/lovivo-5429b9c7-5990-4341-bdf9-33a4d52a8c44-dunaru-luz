@@ -29,24 +29,22 @@
 - Badges: `.badge-mas-elegido`, `.badge-mejor-valor`, `.badge-msi`
 - Estética: editorial, mínima, mucho aire. Pocas animaciones. Mobile-first.
 
-## 3. Active Plan — 🔴 FIX PDP: imágenes placeholder en secciones de historia (2026-07-07)
-`ProductStorySections.tsx` usa `PLACEHOLDER = "/placeholder.svg"` en varios bloques → recuadros grises en las PDPs. Reemplazar por fotos reales.
-
-### Estado del bug por producto (`PDP_CONTENT` en `src/components/ProductStorySections.tsx`)
-- **"Crea tu vela en 4 pasos" (steps)**: los 4 pasos usan PLACEHOLDER en los 3 productos. → REUTILIZAR `/paso-vierte.webp`, `/paso-inserta.webp`, `/paso-enciende.webp`, `/paso-renueva.webp` (ya existen). Cambiar render de steps a object-cover (hoy object-contain opacity-60).
+## 3. Active Plan — 🟡 FIX PDP: blocks editoriales aún con placeholder (2026-07-15)
+Los STEPS de la PDP ("Crea tu vela en 4 pasos") YA quedaron con fotos reales (resuelto). Falta arreglar los **blocks** editoriales que siguen con `PLACEHOLDER = "/placeholder.svg"`:
 - **perlas-originales-500-g → blocks**: 4 bloques con PLACEHOLDER. Faltan 4 fotos reales.
-- **kit-vaso-de-vidrio → blocks**: bloque 3 = PLACEHOLDER (faltan 1).
+- **kit-vaso-de-vidrio → blocks**: bloque 3 = PLACEHOLDER (falta 1).
 - **kit-vaso-de-concreto → blocks**: bloques 2 y 3 = PLACEHOLDER (faltan 2).
 
 ## 4. Recent Changes
-- 2026-07-15 — 🧩 FIX layout sección "¿Cómo quieres empezar?" en `IndexUI.tsx`: la tarjeta izquierda (Perlas Originales) dejaba un hueco vacío abajo porque el grid iguala altura con la columna derecha (2 tarjetas apiladas). Ahora la Link + card usan `h-full flex flex-col` y la imagen es `flex-1 min-h-[260px]` para expandirse y llenar el espacio. Columnas parejas.
-- 2026-07-15 — 🎨 FIX imagen `/paso-vierte.webp`: el material se veía como perlas grandes; regenerado con Gemini para que se vea como **arena fina de cera** (gránulos ~1mm). Se usa en paso "Vierte" (Cómo funciona) + "Quiénes somos" (BrandStorySection).
-- 2026-07-07 — 🔍 REVISIÓN VISUAL en vivo landing + PDPs. Landing ✅. Detectado bug placeholder en `ProductStorySections.tsx`. Confirmado rutas `/productos/:slug`.
-- 2026-07-06 — ✅ SPRINT PRE-LANZAMIENTO: fix bug imágenes, "Cómo funciona" con fotos reales, `BrandStorySection`, `ReviewsInvite`, `/devoluciones`, topbar rotativo.
+- 2026-07-15 — ✅ FIX PDP "Crea tu vela en 4 pasos": ahora usa `HOW_IT_WORKS_STEPS` (constante compartida en `ProductStorySections.tsx`) con los MISMOS 4 pasos e imágenes reales de la landing (`/paso-vierte|inserta|enciende|renueva.webp`), render `object-cover` (antes object-contain opacity-60 con placeholder). Igual en los 3 productos.
+- 2026-07-15 — 🖼️ REEMPLAZADA imagen paso "Renueva" (`/paso-renueva.webp`) con foto real subida por el user (mano colocando disco de cera sobre vaso con arena fina). Afecta landing "Cómo funciona" y las PDPs.
+- 2026-07-15 — 🧩 FIX layout sección "¿Cómo quieres empezar?" en `IndexUI.tsx`: tarjeta Perlas usa `h-full flex flex-col` + imagen `flex-1 min-h-[260px]` para llenar hueco. Columnas parejas.
+- 2026-07-15 — 🎨 FIX imagen `/paso-vierte.webp`: material se veía como perlas grandes; regenerado a arena fina (~1mm). Usado en "Vierte" + "Quiénes somos".
+- 2026-07-07 — 🔍 REVISIÓN VISUAL en vivo landing + PDPs. Detectado bug placeholder en `ProductStorySections.tsx`.
+- 2026-07-06 — ✅ SPRINT PRE-LANZAMIENTO: fix bug imágenes, "Cómo funciona" fotos reales, `BrandStorySection`, `ReviewsInvite`, `/devoluciones`, topbar rotativo.
 - 2026-07-06 — 🔍 AUDITORÍA PRE-LANZAMIENTO vs VelaVita.cl + Foton.
 - 2026-07-03 — ✅ LANDING SINCRONIZADA: swaps a fotos reales + hero/casa real regeneradas.
 - 2026-06-30 — V1 CIERRE: 4 lifestyle "casa real" + `CasaRealSection.tsx`.
-- 2026-06-29 — AUDITORÍA V1: 5 gaps.
 - 2026-06-24 — SPRINT 2: PDP editorial perlas. Volume rule (2→10%,3→15%).
 - 2026-06-24 — WhatsApp real `525531215386`.
 - 2026-06-23 — 6 productos + sistema de diseño dunaru + EcommerceTemplate.
@@ -55,22 +53,21 @@
 - **FOTOS REALES (catálogo)**: `product-images/products/<hash>.webp`. 9 productos, 74 imágenes.
 - **Hero**: `/hero-dunaru.webp` — ✅.
 - **Casa real**: `/casa-real-comedor|recibidor|recamara|sala.webp` — ✅.
-- **Cómo funciona / 4 pasos**: `/paso-vierte|inserta|enciende|renueva.webp` — ✅. `paso-vierte.webp` REGENERADO 2026-07-15 (material = arena fina, no perlas grandes). USAR también en steps de PDPs.
-- **PLACEHOLDER (bug)**: varios blocks/steps de `ProductStorySections.tsx` apuntan a `/placeholder.svg`.
-- **OJO consistencia visual**: si se regeneran otras imágenes con producto, el material debe verse como **arena fina**, no perlas grandes.
+- **Cómo funciona / 4 pasos**: `/paso-vierte|inserta|enciende|renueva.webp` — ✅. Compartidos entre landing y PDP (constante `HOW_IT_WORKS_STEPS`). `paso-renueva.webp` REEMPLAZADO 2026-07-15 con foto real del user. `paso-vierte.webp` regenerado a arena fina.
+- **PLACEHOLDER (bug restante)**: solo en `blocks` editoriales de `ProductStorySections.tsx` (ver Active Plan). Los steps YA no usan placeholder.
+- **OJO consistencia visual**: material debe verse como **arena fina**, no perlas grandes.
 
 ## 6. Known Issues
-- 2026-07-07 — PDP story sections con `/placeholder.svg`: recuadros grises. Ver Active Plan.
+- 2026-07-15 — PDP `blocks` editoriales con `/placeholder.svg`: recuadros grises. Ver Active Plan (steps YA resueltos).
 - 2026-06-24 — Descuento de volumen: front no recalcula total carrito; VERIFICAR end-to-end.
 - 2026-06-24 — Regla de envío $99 solo en Perlas: VERIFICAR config real de shipping.
 - 2026-06-24 — "Comprar ahora" NO incluye add-ons seleccionados. Aceptable.
 
 ## 7. Pending / Future Sessions
-- [high] FIX PDP placeholder images (Active Plan) — PRIORIDAD 1 pre-lanzamiento.
+- [high] FIX PDP placeholder en `blocks` editoriales (Active Plan) — faltan ~7 fotos reales.
 - [high] SPRINT video demo (hero/cómo funciona) con `videogen`.
 - [med] Garantía en buy box de PDP (verificar consistencia en los 3).
 - [med] Barra "te faltan $X para envío gratis" en carrito (AOV).
 - [med] VERIFICAR cobro real del descuento por volumen en checkout.
 - [med] Star ratings en product cards (cuando haya reseñas reales).
 - [low] Feed IG/UGC, FAQ en tabs, badge MSI en buy box PDP.
-- [nota] Revisar si otras fotos muestran el material como perlas grandes y corregir a arena fina.

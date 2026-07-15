@@ -338,6 +338,33 @@ const PDP_CONTENT: Record<string, PdpContent> = {
   },
 }
 
+/**
+ * Pasos reales compartidos con la landing ("Cómo funciona").
+ * Mismos textos e imágenes en todas las PDPs para consistencia.
+ */
+const HOW_IT_WORKS_STEPS: StoryStep[] = [
+  {
+    title: "Vierte",
+    text: "Llena tu recipiente favorito con las perlas. Cualquier vaso, bowl o copa de mínimo 10 cm de diámetro.",
+    image: "/paso-vierte.webp",
+  },
+  {
+    title: "Inserta",
+    text: "Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.",
+    image: "/paso-inserta.webp",
+  },
+  {
+    title: "Enciende",
+    text: "Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.",
+    image: "/paso-enciende.webp",
+  },
+  {
+    title: "Renueva",
+    text: "Cuando la mecha se consume, agrega una nueva. Las perlas se reutilizan. Tu recipiente también.",
+    image: "/paso-renueva.webp",
+  },
+]
+
 const GUARANTEES = [
   { icon: Leaf, label: "Libre de parafina" },
   { icon: Flame, label: "Larga duración" },
@@ -381,14 +408,14 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
             Sin moldes, sin desperdicio. Así de simple es tener luz de diseño en casa.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {content.steps.map((step, i) => (
+            {HOW_IT_WORKS_STEPS.map((step, i) => (
               <div key={i} className="space-y-4">
                 <div className="relative aspect-square rounded-lg overflow-hidden bg-background/60">
                   <img
                     src={step.image}
-                    alt={step.title}
+                    alt={`Paso ${i + 1}: ${step.title} — vela perlada dunaru`}
                     loading="lazy"
-                    className="w-full h-full object-contain p-6 opacity-60"
+                    className="w-full h-full object-cover"
                   />
                   <span className="absolute top-3 left-3 h-8 w-8 rounded-full bg-foreground text-background flex items-center justify-center font-display text-lg">
                     {i + 1}
