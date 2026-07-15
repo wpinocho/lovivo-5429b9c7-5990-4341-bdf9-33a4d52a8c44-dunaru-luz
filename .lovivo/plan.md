@@ -15,6 +15,7 @@
 - WhatsApp REAL: `525531215386` (+52 55 3121 5386) — formato wa.me sin "1" intermedio.
 - V0 scope: sin aromas, sin suscripción, sin regalos físicos, sin B2B.
 - REGLA DE INTEGRIDAD: **NUNCA reseñas falsas ni testimonios inventados.**
+- REGLA COPY: NO copiar textos de VelaVita. Inspirarse en el concepto, redactar propio.
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - **RUTAS EN ESPAÑOL**: producto = `/productos/:slug`, paquete = `/paquete/:slug`, carrito = `/carrito`, checkout = `/pagar`.
 - Competencia analizada: **VelaVita.cl** (LATAM) y **Foton (US)**.
@@ -29,21 +30,22 @@
 - Badges: `.badge-mas-elegido`, `.badge-mejor-valor`, `.badge-msi`
 - Estética: editorial, mínima, mucho aire. Pocas animaciones. Mobile-first.
 
-## 3. Active Plan — 🟡 FIX PDP: blocks editoriales aún con placeholder (2026-07-15)
-Los STEPS de la PDP ("Crea tu vela en 4 pasos") YA quedaron con fotos reales (resuelto). Falta arreglar los **blocks** editoriales que siguen con `PLACEHOLDER = "/placeholder.svg"`:
-- **perlas-originales-500-g → blocks**: 4 bloques con PLACEHOLDER. Faltan 4 fotos reales.
-- **kit-vaso-de-vidrio → blocks**: bloque 3 = PLACEHOLDER (falta 1).
-- **kit-vaso-de-concreto → blocks**: bloques 2 y 3 = PLACEHOLDER (faltan 2).
+## 3. Active Plan — 🟡 FIX PDP: placeholders restantes en blocks de KITS (2026-07-15)
+Perlas YA quedó 100% con fotos reales. Faltan solo los **blocks** de los kits con `PLACEHOLDER`:
+- **kit-vaso-de-vidrio → blocks**: bloque 3 ("Tu vaso, también cuando no es vela") = PLACEHOLDER (falta 1).
+- **kit-vaso-de-concreto → blocks**: bloques 2 ("Por qué concreto") y 3 ("El regalo que se nota") = PLACEHOLDER (faltan 2).
+- Para generarlas: `imagegen` model=gemini, reference = foto real de producto (la subida por user `1784138202029-sv5fpcay1h.webp` es excelente ref de marca). aspect_ratio 4:3. Marcar `photo: true`.
 
 ## 4. Recent Changes
-- 2026-07-15 — ✅ FIX PDP "Crea tu vela en 4 pasos": ahora usa `HOW_IT_WORKS_STEPS` (constante compartida en `ProductStorySections.tsx`) con los MISMOS 4 pasos e imágenes reales de la landing (`/paso-vierte|inserta|enciende|renueva.webp`), render `object-cover` (antes object-contain opacity-60 con placeholder). Igual en los 3 productos.
-- 2026-07-15 — 🖼️ REEMPLAZADA imagen paso "Renueva" (`/paso-renueva.webp`) con foto real subida por el user (mano colocando disco de cera sobre vaso con arena fina). Afecta landing "Cómo funciona" y las PDPs.
-- 2026-07-15 — 🧩 FIX layout sección "¿Cómo quieres empezar?" en `IndexUI.tsx`: tarjeta Perlas usa `h-full flex flex-col` + imagen `flex-1 min-h-[260px]` para llenar hueco. Columnas parejas.
-- 2026-07-15 — 🎨 FIX imagen `/paso-vierte.webp`: material se veía como perlas grandes; regenerado a arena fina (~1mm). Usado en "Vierte" + "Quiénes somos".
-- 2026-07-07 — 🔍 REVISIÓN VISUAL en vivo landing + PDPs. Detectado bug placeholder en `ProductStorySections.tsx`.
-- 2026-07-06 — ✅ SPRINT PRE-LANZAMIENTO: fix bug imágenes, "Cómo funciona" fotos reales, `BrandStorySection`, `ReviewsInvite`, `/devoluciones`, topbar rotativo.
+- 2026-07-15 — ✅ PDP PERLAS blocks editoriales: reescritos los 4 TÍTULOS para no copiar a VelaVita ("Siempre luce como el primer día", "El recipiente que ya amas, ahora da luz", "Se cae y no pasa nada", "Recarga en vez de tirar") + copy refrescado. Conectadas 4 fotos reales generadas con IA (ref = foto de producto del user): `/pdp-perlas-encanto|recipiente|seguro|recarga.webp`. Todos con `photo: true`.
+- 2026-07-15 — ✅ FIX PDP "Crea tu vela en 4 pasos": usa `HOW_IT_WORKS_STEPS` (constante compartida) con fotos reales de la landing. Igual en los 3 productos.
+- 2026-07-15 — 🖼️ REEMPLAZADA imagen paso "Renueva" (`/paso-renueva.webp`) con foto real del user.
+- 2026-07-15 — 🧩 FIX layout "¿Cómo quieres empezar?" en `IndexUI.tsx` (columnas parejas).
+- 2026-07-15 — 🎨 FIX `/paso-vierte.webp` a arena fina (~1mm).
+- 2026-07-07 — 🔍 REVISIÓN VISUAL en vivo landing + PDPs. Detectado bug placeholder.
+- 2026-07-06 — ✅ SPRINT PRE-LANZAMIENTO: fix imágenes, "Cómo funciona", `BrandStorySection`, `ReviewsInvite`, `/devoluciones`, topbar rotativo.
 - 2026-07-06 — 🔍 AUDITORÍA PRE-LANZAMIENTO vs VelaVita.cl + Foton.
-- 2026-07-03 — ✅ LANDING SINCRONIZADA: swaps a fotos reales + hero/casa real regeneradas.
+- 2026-07-03 — ✅ LANDING SINCRONIZADA: swaps a fotos reales + hero/casa real.
 - 2026-06-30 — V1 CIERRE: 4 lifestyle "casa real" + `CasaRealSection.tsx`.
 - 2026-06-24 — SPRINT 2: PDP editorial perlas. Volume rule (2→10%,3→15%).
 - 2026-06-24 — WhatsApp real `525531215386`.
@@ -53,18 +55,20 @@ Los STEPS de la PDP ("Crea tu vela en 4 pasos") YA quedaron con fotos reales (re
 - **FOTOS REALES (catálogo)**: `product-images/products/<hash>.webp`. 9 productos, 74 imágenes.
 - **Hero**: `/hero-dunaru.webp` — ✅.
 - **Casa real**: `/casa-real-comedor|recibidor|recamara|sala.webp` — ✅.
-- **Cómo funciona / 4 pasos**: `/paso-vierte|inserta|enciende|renueva.webp` — ✅. Compartidos entre landing y PDP (constante `HOW_IT_WORKS_STEPS`). `paso-renueva.webp` REEMPLAZADO 2026-07-15 con foto real del user. `paso-vierte.webp` regenerado a arena fina.
-- **PLACEHOLDER (bug restante)**: solo en `blocks` editoriales de `ProductStorySections.tsx` (ver Active Plan). Los steps YA no usan placeholder.
-- **OJO consistencia visual**: material debe verse como **arena fina**, no perlas grandes.
+- **Cómo funciona / 4 pasos**: `/paso-vierte|inserta|enciende|renueva.webp` — ✅. Compartidos entre landing y PDP (constante `HOW_IT_WORKS_STEPS`).
+- **PDP Perlas blocks**: `/pdp-perlas-encanto|recipiente|seguro|recarga.webp` — ✅ NUEVAS (2026-07-15), generadas con IA usando foto de producto como ref. Estética: arena fina crema, bolsa DUNARU, travertino, tonos cálidos.
+- **PLACEHOLDER (bug restante)**: solo en blocks de KITS (ver Active Plan). Perlas YA no tiene placeholder.
+- **Ref de marca ideal para generar**: foto subida por user `user-uploads://...1784138202029-sv5fpcay1h.webp` (mano vertiendo arena a vaso, bolsa DUNARU).
+- **OJO consistencia visual**: material = **arena fina**, no perlas grandes.
 
 ## 6. Known Issues
-- 2026-07-15 — PDP `blocks` editoriales con `/placeholder.svg`: recuadros grises. Ver Active Plan (steps YA resueltos).
+- 2026-07-15 — PDP `blocks` de KITS con `/placeholder.svg`: recuadros grises. Ver Active Plan.
 - 2026-06-24 — Descuento de volumen: front no recalcula total carrito; VERIFICAR end-to-end.
 - 2026-06-24 — Regla de envío $99 solo en Perlas: VERIFICAR config real de shipping.
 - 2026-06-24 — "Comprar ahora" NO incluye add-ons seleccionados. Aceptable.
 
 ## 7. Pending / Future Sessions
-- [high] FIX PDP placeholder en `blocks` editoriales (Active Plan) — faltan ~7 fotos reales.
+- [high] FIX placeholders en blocks de KITS (kit-vidrio 1, kit-concreto 2) — generar 3 fotos.
 - [high] SPRINT video demo (hero/cómo funciona) con `videogen`.
 - [med] Garantía en buy box de PDP (verificar consistencia en los 3).
 - [med] Barra "te faltan $X para envío gratis" en carrito (AOV).
