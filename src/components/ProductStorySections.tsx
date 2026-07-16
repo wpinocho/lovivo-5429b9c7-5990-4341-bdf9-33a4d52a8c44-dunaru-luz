@@ -15,6 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { cn } from "@/lib/utils"
+import { Reviews } from "@/components/Reviews"
 
 /**
  * ProductStorySections — Secciones editoriales full-width de la PDP.
@@ -568,18 +569,8 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         </Accordion>
       </section>
 
-      {/* 6 — Reviews (sin reseñas reales todavía) */}
-      <section className="max-w-2xl mx-auto text-center">
-        <h2 className="font-display text-2xl md:text-3xl mb-3">
-          Opiniones de clientes
-        </h2>
-        <p className="text-muted-foreground">
-          Aún no hay reseñas de este producto.{" "}
-          <span className="text-foreground font-medium">
-            Sé el primero en compartir tu experiencia.
-          </span>
-        </p>
-      </section>
+      {/* 6 — Reseñas reales del producto */}
+      <Reviews slug={slug} title="Opiniones de quienes ya la tienen" />
 
       {/* 7 — Pago seguro + MSI */}
       <section className="max-w-[1400px] mx-auto">

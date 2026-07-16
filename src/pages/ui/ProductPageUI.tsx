@@ -16,6 +16,7 @@ import {
   RotateCcw,
   Lock,
   ChevronRight,
+  Star,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
@@ -38,6 +39,7 @@ import { intervalLabel } from "@/lib/subscription-utils"
 import ProductExpressCheckout from "@/components/ProductExpressCheckout"
 import { ProductAddOns } from "@/components/ProductAddOns"
 import { ProductQuantityTiers } from "@/components/ProductQuantityTiers"
+import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
 
 // Slugs que usan el selector "Lleva más y ahorra" en lugar del stepper + add-ons
@@ -358,6 +360,36 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     </>
                   )}
               </div>
+
+              {/* Mini rating — prueba social arriba del fold */}
+              {(() => {
+                const stats = getReviewStats(logic.product?.slug)
+                if (stats.count === 0) return null
+                return (
+                  <a
+                    href="#resenas"
+                    className="flex items-center gap-2 pt-1 w-fit group"
+                  >
+                    <span className="flex items-center gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={cn(
+                            "h-4 w-4",
+                            i < Math.round(stats.average)
+                              ? "fill-dunaru-champagne text-dunaru-champagne"
+                              : "text-dunaru-champagne/30"
+                          )}
+                          strokeWidth={1.5}
+                        />
+                      ))}
+                    </span>
+                    <span className="text-sm font-medium text-foreground/80 underline-offset-4 group-hover:underline">
+                      {stats.average} ({stats.count} opiniones)
+                    </span>
+                  </a>
+                )
+              })()}
 
               {/* Promo badges */}
               {logic.product?.id && (

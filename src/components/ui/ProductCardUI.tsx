@@ -5,6 +5,8 @@ import { HeadlessProductCard } from "@/components/headless/HeadlessProductCard"
 import { PriceRuleBadge } from "@/components/ui/PriceRuleBadge"
 import { usePriceRules } from "@/hooks/usePriceRules"
 import type { Product } from "@/lib/supabase"
+import { getReviewStats } from "@/data/reviews"
+import { Star } from "lucide-react"
 
 /**
  * EDITABLE UI COMPONENT - ProductCardUI
@@ -101,6 +103,24 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
               <h3 className="text-black font-medium text-sm mb-1 line-clamp-2">
                 {logic.product.title}
               </h3>
+              {(() => {
+                const stats = getReviewStats(logic.product.slug)
+                if (stats.count === 0) return null
+                return (
+                  <div className="flex items-center gap-1.5 mb-1">
+                    <span className="flex items-center gap-0.5">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <Star
+                          key={i}
+                          className={`h-3 w-3 ${i < Math.round(stats.average) ? "fill-dunaru-champagne text-dunaru-champagne" : "text-dunaru-champagne/30"}`}
+                          strokeWidth={1.5}
+                        />
+                      ))}
+                    </span>
+                    <span className="text-xs text-gray-500">({stats.count})</span>
+                  </div>
+                )
+              })()}
               {logic.product.description && (
                 <p className="text-gray-600 text-xs mb-3 line-clamp-2">
                   {logic.product.description.replace(/<[^>]*>/g, '')}

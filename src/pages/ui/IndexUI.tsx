@@ -5,7 +5,7 @@ import { FloatingCart } from '@/components/FloatingCart';
 import { DunaruNewsletterForm } from '@/components/DunaruNewsletterForm';
 import { CasaRealSection } from '@/components/CasaRealSection';
 import { BrandStorySection } from '@/components/BrandStorySection';
-import { ReviewsInvite } from '@/components/ReviewsInvite';
+import { Reviews } from '@/components/Reviews';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { useState } from 'react';
@@ -512,7 +512,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       <BrandStorySection />
 
       {/* ── RESEÑAS (HONESTO — MARCA NUEVA) ──────────────────────────────── */}
-      <ReviewsInvite />
+      <Reviews />
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section id="faq" className="section-pad bg-background">
