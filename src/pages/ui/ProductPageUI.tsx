@@ -23,8 +23,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselPrevious,
-  CarouselNext,
 } from "@/components/ui/carousel"
 import {
   Accordion,
@@ -85,7 +83,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const [isZoomed, setIsZoomed] = useState(false)
   const [selectedAddOns, setSelectedAddOns] = useState<Product[]>([])
   const { addItem } = useCart()
-  const { ref: ctaRef, inView: ctaInView } = useInView({ threshold: 0 })
+  const { ref: ctaRef, inView: ctaInView, entry } = useInView({ threshold: 0 })
+  // Solo mostramos la barra sticky cuando el usuario YA pasó (scrolleó por encima) del CTA,
+  // no cuando el CTA todavía está debajo del fold al cargar la página.
+  const scrolledPastCta = !ctaInView && (entry?.boundingClientRect.top ?? 0) < 0
 
   // Agrega los complementos seleccionados como líneas extra y luego el producto principal
   const handleAddToCartWithAddOns = () => {
@@ -286,10 +287,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             {/* Mobile: carousel */}
             {logic.displayImages && logic.displayImages.length > 1 ? (
               <div className="md:hidden">
-                <Carousel className="w-full">
+                <Carousel className="w-full" opts={{ align: "start" }}>
                   <CarouselContent>
                     {logic.displayImages.map((img: string, index: number) => (
-                      <CarouselItem key={index}>
+                      <CarouselItem key={index} className="basis-[88%]">
                         <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
                           <img
                             src={img}
@@ -307,8 +308,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                       </CarouselItem>
                     ))}
                   </CarouselContent>
-                  <CarouselPrevious className="left-2" />
-                  <CarouselNext className="right-2" />
                 </Carousel>
               </div>
             ) : (
@@ -714,7 +713,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
         <div
           className={cn(
             "fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t shadow-lg transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)]",
-            ctaInView ? "translate-y-full" : "translate-y-0"
+            scrolledPastCta ? "translate-y-0" : "translate-y-full"
           )}
         >
           <div className="max-w-7xl mx-auto px-4 py-3">

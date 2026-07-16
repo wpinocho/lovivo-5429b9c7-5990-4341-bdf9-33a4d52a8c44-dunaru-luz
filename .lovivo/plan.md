@@ -30,19 +30,24 @@
 - Badges: `.badge-mas-elegido`, `.badge-mejor-valor`, `.badge-msi`
 - Estética: editorial, mínima, mucho aire. Pocas animaciones. Mobile-first.
 
-## 3. Active Plan — 🟡 FIX PDP: placeholders restantes en blocks de KITS (2026-07-15)
-Perlas YA quedó 100% con fotos reales del user. Faltan solo los **blocks** de los kits con `PLACEHOLDER`:
-- **kit-vaso-de-vidrio → blocks**: bloque 3 ("Tu vaso, también cuando no es vela") = PLACEHOLDER (falta 1).
-- **kit-vaso-de-concreto → blocks**: bloques 2 ("Por qué concreto") y 3 ("El regalo que se nota") = PLACEHOLDER (faltan 2).
-- Para generarlas: `imagegen` model=gemini, reference = foto real de producto. aspect_ratio 4:3. Marcar `photo: true`.
+## 3. Active Plan — ✅ PDP: sticky bar + carrusel móvil (2026-07-16) — DONE
+Archivo: `src/pages/ui/ProductPageUI.tsx`
+- ✅ Sticky bar ya solo aparece cuando el usuario scrolleó POR ENCIMA del CTA (usa `entry.boundingClientRect.top < 0` → bandera `scrolledPastCta`).
+- ✅ Carrusel móvil estilo rodata.mx: `opts={{ align:"start" }}` + `CarouselItem className="basis-[88%]"` (peek de la siguiente) + flechas eliminadas + imports `CarouselPrevious/Next` removidos.
+- Pendiente opcional que NO se hizo: dots indicadores debajo del carrusel (el peek ya comunica el swipe; omitido).
+
+### Pendiente aparte (de sesiones previas, sigue vigente)
+- Faltan 3 fotos PLACEHOLDER en blocks de KITS (kit-vidrio 1, kit-concreto 2). Generar con imagegen (gemini, ref foto real, 4:3, `photo: true`).
 
 ## 4. Recent Changes
-- 2026-07-15 — ✅ FIX BUG galería PDP (desktop): las miniaturas (`flex gap-3` con `shrink-0`, sin wrap/scroll) se desbordaban horizontalmente e invadían la columna de descripción. Solución: `overflow-x-auto` + `snap-x` en la fila de thumbnails + clase `.thumbnails-scroll` (scrollbar sutil) en index.css. Ahora las miniaturas se deslizan dentro de su columna. `ProductPageUI.tsx` líneas ~250.
-- 2026-07-15 — ✅ PDP PERLAS: reemplazadas las 4 fotos de los blocks editoriales por las **fotos mejoradas que subió el user** (URLs directas de Supabase message-images). Mapeo: "Siempre luce como el primer día" = h29qq6dodik, "El recipiente que ya amas..." = 4z1j2dq3ab9, "Se cae y no pasa nada" = go7315yuax, "Recarga en vez de tirar" = c47lrhv7fa. NOTA: `lov-copy` de user-uploads NO copia a public/, devuelve URL de Supabase → usar esa URL directa en el código.
-- 2026-07-15 — ✅ PDP PERLAS blocks editoriales: reescritos los 4 TÍTULOS para no copiar a VelaVita + copy refrescado. Todos con `photo: true`.
-- 2026-07-15 — ✅ FIX PDP "Crea tu vela en 4 pasos": usa `HOW_IT_WORKS_STEPS` (constante compartida) con fotos reales de la landing. Igual en los 3 productos.
+- 2026-07-16 — ✅ FIX PDP sticky bar prematuro: ahora usa `scrolledPastCta = !ctaInView && entry.boundingClientRect.top < 0`. Solo sale al pasar el CTA.
+- 2026-07-16 — ✅ FIX carrusel móvil PDP estilo rodata.mx: peek `basis-[88%]` + `align:"start"`, sin flechas laterales. Imports `CarouselPrevious/Next` eliminados.
+- 2026-07-15 — ✅ FIX BUG galería PDP (desktop): thumbnails se desbordaban. Solución: `overflow-x-auto` + `snap-x` + `.thumbnails-scroll`.
+- 2026-07-15 — ✅ PDP PERLAS: reemplazadas las 4 fotos de los blocks editoriales por fotos mejoradas del user (Supabase message-images).
+- 2026-07-15 — ✅ PDP PERLAS blocks editoriales: reescritos los 4 TÍTULOS + copy propio. Todos con `photo: true`.
+- 2026-07-15 — ✅ FIX PDP "Crea tu vela en 4 pasos": usa `HOW_IT_WORKS_STEPS` con fotos reales. Igual en los 3 productos.
 - 2026-07-15 — 🖼️ REEMPLAZADA imagen paso "Renueva" (`/paso-renueva.webp`) con foto real del user.
-- 2026-07-15 — 🧩 FIX layout "¿Cómo quieres empezar?" en `IndexUI.tsx` (columnas parejas).
+- 2026-07-15 — 🧩 FIX layout "¿Cómo quieres empezar?" en `IndexUI.tsx`.
 - 2026-07-15 — 🎨 FIX `/paso-vierte.webp` a arena fina (~1mm).
 - 2026-07-07 — 🔍 REVISIÓN VISUAL en vivo landing + PDPs. Detectado bug placeholder.
 - 2026-07-06 — ✅ SPRINT PRE-LANZAMIENTO: fix imágenes, "Cómo funciona", `BrandStorySection`, `ReviewsInvite`, `/devoluciones`, topbar rotativo.
@@ -50,21 +55,19 @@ Perlas YA quedó 100% con fotos reales del user. Faltan solo los **blocks** de l
 - 2026-07-03 — ✅ LANDING SINCRONIZADA: swaps a fotos reales + hero/casa real.
 - 2026-06-30 — V1 CIERRE: 4 lifestyle "casa real" + `CasaRealSection.tsx`.
 - 2026-06-24 — SPRINT 2: PDP editorial perlas. Volume rule (2→10%,3→15%).
-- 2026-06-24 — WhatsApp real `525531215386`.
-- 2026-06-23 — 6 productos + sistema de diseño dunaru + EcommerceTemplate.
 
 ## 5. Image Inventory
 - **FOTOS REALES (catálogo)**: `product-images/products/<hash>.webp`. 9 productos, 74 imágenes.
 - **Hero**: `/hero-dunaru.webp` — ✅.
 - **Casa real**: `/casa-real-comedor|recibidor|recamara|sala.webp` — ✅.
 - **Cómo funciona / 4 pasos**: `/paso-vierte|inserta|enciende|renueva.webp` — ✅. Compartidos entre landing y PDP (constante `HOW_IT_WORKS_STEPS`).
-- **PDP Perlas blocks**: ✅ AHORA usan las 4 fotos mejoradas del user (URLs Supabase message-images, no /public). Los `/pdp-perlas-*.webp` viejos (AI) ya NO se usan.
+- **PDP Perlas blocks**: ✅ usan las 4 fotos mejoradas del user (URLs Supabase message-images, no /public).
 - **PLACEHOLDER (bug restante)**: solo en blocks de KITS (ver Active Plan). Perlas YA no tiene placeholder.
 - **Ref de marca ideal para generar**: foto subida por user `1784138202029-sv5fpcay1h.webp` (mano vertiendo arena a vaso, bolsa DUNARU).
 - **OJO consistencia visual**: material = **arena fina**, no perlas grandes.
 
 ## 6. Known Issues
-- 2026-07-15 — PDP `blocks` de KITS con `/placeholder.svg`: recuadros grises. Ver Active Plan.
+- 2026-07-15 — PDP `blocks` de KITS con `/placeholder.svg`: recuadros grises.
 - 2026-06-24 — Descuento de volumen: front no recalcula total carrito; VERIFICAR end-to-end.
 - 2026-06-24 — Regla de envío $99 solo en Perlas: VERIFICAR config real de shipping.
 - 2026-06-24 — "Comprar ahora" NO incluye add-ons seleccionados. Aceptable.
@@ -76,4 +79,4 @@ Perlas YA quedó 100% con fotos reales del user. Faltan solo los **blocks** de l
 - [med] Barra "te faltan $X para envío gratis" en carrito (AOV).
 - [med] VERIFICAR cobro real del descuento por volumen en checkout.
 - [med] Star ratings en product cards (cuando haya reseñas reales).
-- [low] Feed IG/UGC, FAQ en tabs, badge MSI en buy box PDP.
+- [low] Feed IG/UGC, FAQ en tabs, badge MSI en buy box PDP, dots en carrusel móvil PDP.
