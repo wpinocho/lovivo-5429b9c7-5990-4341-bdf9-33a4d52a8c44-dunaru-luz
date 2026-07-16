@@ -30,16 +30,44 @@
 - Badges: `.badge-mas-elegido`, `.badge-mejor-valor`, `.badge-msi`
 - Estética: editorial, mínima, mucho aire. Pocas animaciones. Mobile-first.
 
-## 3. Active Plan — ✅ PDP: sticky bar + carrusel móvil (2026-07-16) — DONE
-Archivo: `src/pages/ui/ProductPageUI.tsx`
-- ✅ Sticky bar ya solo aparece cuando el usuario scrolleó POR ENCIMA del CTA (usa `entry.boundingClientRect.top < 0` → bandera `scrolledPastCta`).
-- ✅ Carrusel móvil estilo rodata.mx: `opts={{ align:"start" }}` + `CarouselItem className="basis-[88%]"` (peek de la siguiente) + flechas eliminadas + imports `CarouselPrevious/Next` removidos.
-- Pendiente opcional que NO se hizo: dots indicadores debajo del carrusel (el peek ya comunica el swipe; omitido).
+## 3. Active Plan — 🔍 AUDITORÍA PRE-PAUTA (2026-07-16)
+Objetivo del user: confirmar si la tienda está lista para invertir en pauta (Meta) y definir a qué 3 PDPs mandar tráfico frío. Comparación fuerte hecha vs VelaVita.cl.
 
-### Pendiente aparte (de sesiones previas, sigue vigente)
-- Faltan 3 fotos PLACEHOLDER en blocks de KITS (kit-vidrio 1, kit-concreto 2). Generar con imagegen (gemini, ref foto real, 4:3, `photo: true`).
+### Veredicto general
+Las PDPs se ven MUY profesionales (editorial, fotos reales, "Crea tu vela en 4 pasos", tabla comparativa, FAQ, benefits, sticky bar + carrusel móvil ya arreglados). El Kit de Concreto YA no muestra placeholders grises — quedó limpio. Nivel de diseño = a la par o mejor que VelaVita. PERO hay 1 bloqueador grande y varios boosters antes de escalar gasto.
+
+### 3 PDPs recomendadas para pauta (tráfico frío)
+1. **Kit Vaso de Vidrio** `/productos/kit-vaso-de-vidrio` — $899 · Ángulo "todo listo para empezar hoy" / regalo. Menor fricción (no necesita recipiente propio). FLAGSHIP para frío.
+2. **Perlas Originales 500 g** `/productos/perlas-originales-500-g` — $599 · Ángulo hero "crea una vela en el recipiente que YA tienes". Precio de entrada más bajo = conversión más fácil. PDP más desarrollada.
+3. **Kit Vaso de Concreto** `/productos/kit-vaso-de-concreto` — $1099 · Ángulo objeto de diseño / regalo premium. Sube AOV. Ya se ve limpio.
+
+### 🔴 BLOQUEADOR #1 — Cero prueba social (el mayor gap vs VelaVita)
+VelaVita tiene 91/69/9 reseñas con FOTOS de clientes y star ratings en todos lados. dunaru tiene 0 reseñas y solo un bloque "sé el primero en compartir tu experiencia". Para tráfico frío esto MATA la conversión.
+- REGLA: NO inventar reseñas. Camino honesto:
+  a) **Soft-launch primero**: presupuesto bajo o enviar producto a un puñado de clientes/amigas/micro-influencers reales → recolectar reseñas + fotos UGC reales → LUEGO escalar gasto.
+  b) Configurar email post-compra pidiendo reseña (desde el Dashboard AI).
+  c) Mientras llegan reseñas, reforzar confianza con: garantía visible + historia de marca + WhatsApp + framing honesto de "marca nueva mexicana".
+- Cuando existan reseñas reales: activar star ratings en product cards + sección de reseñas con foto en las 3 PDPs.
+
+### 🟡 BOOSTERS antes/junto con la pauta (conv rate)
+1. **Línea de garantía en el buy box** de las 3 PDPs (ej. "Garantía 30 días — si no te encanta, te devolvemos tu dinero"). Verificar consistencia; ya existe `/devoluciones`.
+2. **Estimado de entrega cerca del CTA** ("Recibe en 2–4 días hábiles"). VelaVita explota esto ("recibe HOY"). Alto impacto en frío.
+3. **Video demo** (vierte → inserta → enciende → renueva) para creative de Meta Y embebido en PDP/landing. Usar `videogen`. Cold traffic en Meta convierte mucho mejor con video.
+4. **Oferta/urgencia de lanzamiento** para frío: considerar `compare_at_price` en productos hero (Perlas/Kits) para un precio de lanzamiento, como hace VelaVita ("Oferta").
+5. **Verificar checkout end-to-end**: descuento por volumen se cobra bien + regla de envío $99 solo en Perlas. Probar antes de pagar pauta.
+
+### ✅ Ya está bien (no tocar)
+- Diseño editorial, fotos reales de catálogo, galería desktop, carrusel móvil (peek), sticky bar condicional.
+- "Crea tu vela en 4 pasos" con fotos reales (compartido landing+PDP).
+- Tabla comparativa "Esto hace diferente a dunaru", FAQ, benefits icons.
+- Topbar rotativo (envío gratis + MSI), footer con medios de pago, WhatsApp.
+- Variantes de color, tiers de volumen, add-ons (Pack mechas).
+
+### OJO datos
+- Todos los productos tienen `track_inventory: false` → `inventory_quantity: 0` NO bloquea la compra. OK.
 
 ## 4. Recent Changes
+- 2026-07-16 — 🔍 AUDITORÍA PRE-PAUTA vs VelaVita.cl. Veredicto: PDPs listas en diseño; bloqueador = 0 reseñas. 3 PDPs elegidas: Kit Vidrio, Perlas Originales, Kit Concreto. Boosters: garantía en buy box, ETA de entrega, video demo, oferta de lanzamiento, verificar checkout.
 - 2026-07-16 — ✅ FIX PDP sticky bar prematuro: ahora usa `scrolledPastCta = !ctaInView && entry.boundingClientRect.top < 0`. Solo sale al pasar el CTA.
 - 2026-07-16 — ✅ FIX carrusel móvil PDP estilo rodata.mx: peek `basis-[88%]` + `align:"start"`, sin flechas laterales. Imports `CarouselPrevious/Next` eliminados.
 - 2026-07-15 — ✅ FIX BUG galería PDP (desktop): thumbnails se desbordaban. Solución: `overflow-x-auto` + `snap-x` + `.thumbnails-scroll`.
@@ -54,7 +82,6 @@ Archivo: `src/pages/ui/ProductPageUI.tsx`
 - 2026-07-06 — 🔍 AUDITORÍA PRE-LANZAMIENTO vs VelaVita.cl + Foton.
 - 2026-07-03 — ✅ LANDING SINCRONIZADA: swaps a fotos reales + hero/casa real.
 - 2026-06-30 — V1 CIERRE: 4 lifestyle "casa real" + `CasaRealSection.tsx`.
-- 2026-06-24 — SPRINT 2: PDP editorial perlas. Volume rule (2→10%,3→15%).
 
 ## 5. Image Inventory
 - **FOTOS REALES (catálogo)**: `product-images/products/<hash>.webp`. 9 productos, 74 imágenes.
@@ -62,21 +89,22 @@ Archivo: `src/pages/ui/ProductPageUI.tsx`
 - **Casa real**: `/casa-real-comedor|recibidor|recamara|sala.webp` — ✅.
 - **Cómo funciona / 4 pasos**: `/paso-vierte|inserta|enciende|renueva.webp` — ✅. Compartidos entre landing y PDP (constante `HOW_IT_WORKS_STEPS`).
 - **PDP Perlas blocks**: ✅ usan las 4 fotos mejoradas del user (URLs Supabase message-images, no /public).
-- **PLACEHOLDER (bug restante)**: solo en blocks de KITS (ver Active Plan). Perlas YA no tiene placeholder.
+- **PDP Kits blocks**: ✅ verificado 2026-07-16 en vivo, ya NO se ven placeholders grises (Concreto limpio).
+- **PENDIENTE UGC**: reseñas con foto real de clientes (aún no existen — recolectar en soft-launch).
 - **Ref de marca ideal para generar**: foto subida por user `1784138202029-sv5fpcay1h.webp` (mano vertiendo arena a vaso, bolsa DUNARU).
 - **OJO consistencia visual**: material = **arena fina**, no perlas grandes.
 
 ## 6. Known Issues
-- 2026-07-15 — PDP `blocks` de KITS con `/placeholder.svg`: recuadros grises.
-- 2026-06-24 — Descuento de volumen: front no recalcula total carrito; VERIFICAR end-to-end.
+- 2026-07-16 — 🔴 CERO reseñas/prueba social — bloqueador principal para tráfico frío. Camino honesto: soft-launch + email post-compra + garantía/marca visible. NO inventar reseñas.
+- 2026-06-24 — Descuento de volumen: front no recalcula total carrito; VERIFICAR end-to-end antes de pagar pauta.
 - 2026-06-24 — Regla de envío $99 solo en Perlas: VERIFICAR config real de shipping.
 - 2026-06-24 — "Comprar ahora" NO incluye add-ons seleccionados. Aceptable.
 
 ## 7. Pending / Future Sessions
-- [high] FIX placeholders en blocks de KITS (kit-vidrio 1, kit-concreto 2) — generar 3 fotos.
-- [high] SPRINT video demo (hero/cómo funciona) con `videogen`.
-- [med] Garantía en buy box de PDP (verificar consistencia en los 3).
+- [high] PRUEBA SOCIAL: plan de recolección de reseñas reales (soft-launch + email post-compra vía Dashboard). Activar star ratings en cards + sección reseñas con foto cuando existan.
+- [high] VIDEO DEMO (vierte→inserta→enciende→renueva) con `videogen` — para creative Meta + embebido en PDP/landing.
+- [high] Garantía visible en buy box de las 3 PDPs de pauta + ETA de entrega cerca del CTA.
+- [med] Oferta de lanzamiento (`compare_at_price`) en productos hero para tráfico frío.
+- [med] VERIFICAR checkout end-to-end: descuento por volumen + regla envío $99.
 - [med] Barra "te faltan $X para envío gratis" en carrito (AOV).
-- [med] VERIFICAR cobro real del descuento por volumen en checkout.
-- [med] Star ratings en product cards (cuando haya reseñas reales).
 - [low] Feed IG/UGC, FAQ en tabs, badge MSI en buy box PDP, dots en carrusel móvil PDP.
