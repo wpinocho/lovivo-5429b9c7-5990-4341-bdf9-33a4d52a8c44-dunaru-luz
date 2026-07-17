@@ -25,10 +25,11 @@
 - Tokens: `dunaru-marfil/arena/champagne/carbon/onix/ambar`
 - Estrellas de reseñas: `fill-dunaru-champagne text-dunaru-champagne` (vacías = `/30`).
 - Estética: editorial, mínima, mucho aire. Mobile-first.
-- **HERO responsive**: móvil usa imagen VERTICAL dedicada (`/hero-dunaru-mobile.webp`, 9:16, `md:hidden`), desktop usa la horizontal (`/hero-dunaru.webp`, `hidden md:block`). Contenido `items-start` en móvil (texto arriba), `md:items-center` en desktop. Gradiente móvil = oscuro arriba (`to-b`); desktop = oscuro izquierda (`to-r`).
+- **HERO responsive**: móvil usa imagen VERTICAL dedicada (`/hero-dunaru-mobile.webp`, 9:16, `md:hidden`), desktop usa la horizontal (`/hero-dunaru.webp`, `hidden md:block`). Contenido `items-start` en móvil, `md:items-center` desktop.
+- **PDP layout**: `ProductPageUI.tsx`. Grid 7/5. Galería sticky desktop + carrusel móvil. SIN botón "Seguir comprando" (quitado 2026-07-17). Contenedor tiene `-mt-4 md:mt-0` para subir galería en móvil. `py-6` global del template NO se toca.
 
-## 3. Active Plan — ✅ FIX HERO MÓVIL (ejecutado 2026-07-17)
-El producto no se veía en el hero móvil porque la imagen era horizontal y cortaba mal. Solución: imagen vertical 9:16 dedicada + layout responsive. Hecho.
+## 3. Active Plan — ✅ PDP: quitado back-link + galería más arriba (2026-07-17)
+Quitado "Seguir comprando" en móvil y subida la galería con `-mt-4 md:mt-0`. Recomendaciones de conversión propuestas al user (ver sección 7) — esperando cuáles quiere implementar.
 
 ### ⚠️ PENDIENTE DE CONFIRMAR POR EL USER (arrastrado)
 - **Textos reseñas #5–#12**: reconstruidos. User debe pegar texto EXACTO. (Verbatim OK: #1–#4, #13–#15.)
@@ -36,9 +37,9 @@ El producto no se veía en el hero móvil porque la imagen era horizontal y cort
 - **ProductCardUI** stars: sigue conteo por slug (no global). Evaluar cambiar a global.
 
 ## 4. Recent Changes
-- 2026-07-17 — ✅ FIX HERO MÓVIL: generada imagen vertical `/hero-dunaru-mobile.webp` (9:16, producto+arena visible abajo, espacio para texto arriba, ref = bolsa perlas x3azemqdof). `IndexUI` hero ahora sirve img móvil vs desktop con `md:hidden`/`hidden md:block`, `items-start md:items-center`, gradientes responsive.
-- 2026-07-17 — (previo) intento object-right en móvil (insuficiente, revertido a solución vertical).
-- 2026-07-17 — ✅ EJECUTADO rediseño reseñas PDP: `Reviews.tsx` layout mixto (resumen+barra distribución, featured en carrusel Embla, "Ver las 15 opiniones"). PDP muestra las 15. Buy box mini-rating global.
+- 2026-07-17 — ✅ PDP: quitado botón "Seguir comprando" (móvil) + galería subida con `-mt-4 md:mt-0` en contenedor. Propuestas de conversión PDP dadas al user (ETA/urgencia cerca del CTA, MSI+garantía en buy box, video demo).
+- 2026-07-17 — ✅ FIX HERO MÓVIL: generada imagen vertical `/hero-dunaru-mobile.webp` (9:16). `IndexUI` sirve img móvil vs desktop responsive.
+- 2026-07-17 — ✅ EJECUTADO rediseño reseñas PDP: `Reviews.tsx` layout mixto. PDP muestra las 15. Buy box mini-rating global.
 - 2026-07-16 — ✅ RESEÑAS REALES LIVE: `src/data/reviews.ts` (15 reseñas). 5 fotos UGC. Promedio 4.9/15.
 - 2026-07-16 — 🔍 AUDITORÍA PRE-PAUTA vs VelaVita.cl.
 - 2026-07-16 — ✅ FIX PDP sticky bar prematuro.
@@ -51,9 +52,8 @@ El producto no se veía en el hero móvil porque la imagen era horizontal y cort
 
 ## 5. Image Inventory
 - **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos.
-- **Hero desktop**: `/hero-dunaru.webp` (horizontal) · **Hero móvil**: `/hero-dunaru-mobile.webp` (9:16 vertical, NUEVO 2026-07-17) · **Casa real**: `/casa-real-*.webp` · **4 pasos**: `/paso-*.webp` — ✅.
-- **UGC RESEÑAS (5 fotos, en `reviews.ts` const UGC)** — Supabase message-images:
-  - `1784238899091-zp99w7xbo5a.webp` = visitas · `...092-ztn82bcfir.webp` = completa · `...092-0snwjx0f7w7.webp` = regalo · `...092-acdwwacyaq.webp` = facil · `...092-i6pb49ce8vp.webp` = reutilizar
+- **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` (9:16) · **Casa real**: `/casa-real-*.webp` · **4 pasos**: `/paso-*.webp` — ✅.
+- **UGC RESEÑAS (5 fotos, en `reviews.ts` const UGC)** — Supabase message-images.
 - OJO consistencia: material = **arena fina**, no perlas grandes.
 
 ## 6. Known Issues
@@ -64,10 +64,13 @@ El producto no se veía en el hero móvil porque la imagen era horizontal y cort
 - 2026-06-24 — Regla envío $99 solo Perlas: verificar config shipping.
 
 ## 7. Pending / Future Sessions
-- [high] USER confirma textos exactos #5–#12 + nombres reales → actualizar `reviews.ts`.
-- [high] Recolectar fotos UGC no-featured + email post-compra pidiendo reseña.
-- [high] VIDEO DEMO (vierte→inserta→enciende→renueva) con `videogen`.
-- [med] ProductCardUI stars: evaluar conteo global (15).
-- [med] Garantía visible en buy box + ETA cerca del CTA.
-- [med] Oferta de lanzamiento (`compare_at_price`) en productos hero.
-- [low] Borrar `ReviewsInvite.tsx`, barra envío gratis en carrito, JSON-LD AggregateRating. Borrar `public/tmp-upload-hero.webp` (temporal).
+- [high] RECOMENDACIONES PDP propuestas (esperando OK del user):
+  1. ETA concreta + urgencia cerca del CTA ("Pídelo hoy, llega en 2–5 días").
+  2. Recordatorio MSI + garantía 30 días PEGADO al buy box (no solo en highlights).
+  3. Video demo corto (vierte→inserta→enciende→renueva) arriba de reseñas.
+  4. Sticky add-to-cart móvil: verificar que muestre precio + rating.
+- [high] USER confirma textos exactos #5–#12 + nombres reales → `reviews.ts`.
+- [high] VIDEO DEMO con `videogen`.
+- [med] ProductCardUI stars: conteo global (15).
+- [med] Oferta lanzamiento (`compare_at_price`) en productos hero.
+- [low] Borrar `ReviewsInvite.tsx`, barra envío gratis en carrito, JSON-LD AggregateRating. Borrar `public/tmp-upload-hero.webp`.

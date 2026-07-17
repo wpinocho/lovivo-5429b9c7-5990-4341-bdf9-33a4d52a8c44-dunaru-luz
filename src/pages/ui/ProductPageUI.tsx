@@ -191,7 +191,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
         jsonLd={[productSchema, breadcrumbs]}
       />
     <EcommerceTemplate hideFloatingCartOnMobile>
-      <div className="max-w-[1400px] mx-auto">
+      <div className="max-w-[1400px] mx-auto -mt-4 md:mt-0">
         {/* Breadcrumbs */}
         <nav
           aria-label="Migas de pan"
@@ -212,16 +212,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             {logic.product.title}
           </span>
         </nav>
-
-        {/* Mobile back link */}
-        <button
-          type="button"
-          onClick={logic.handleNavigateBack}
-          className="md:hidden mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="h-3.5 w-3.5" />
-          Seguir comprando
-        </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* ========== GALLERY (lg:col-span-7, sticky on desktop) ========== */}
