@@ -159,6 +159,15 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
       : 0
 
   const vendor = logic.product.vendor || logic.product.product_type
+  const stickyStats = getReviewStats()
+  const StickyRating = stickyStats.count > 0 ? (
+    <span className="flex items-center gap-1 shrink-0">
+      <Star className="h-3.5 w-3.5 fill-dunaru-champagne text-dunaru-champagne" strokeWidth={1.5} />
+      <span className="text-xs font-medium text-foreground/70">
+        {stickyStats.average} ({stickyStats.count})
+      </span>
+    </span>
+  ) : null
   const useTierSelector =
     logic.product?.slug && TIER_SELECTOR_SLUGS.includes(logic.product.slug)
 
@@ -350,6 +359,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     </>
                   )}
               </div>
+
+              {/* MSI — recordatorio pegado al precio */}
+              <p className="text-sm text-muted-foreground pt-1">
+                o <span className="font-medium text-foreground/90">6 pagos de {logic.formatMoney(logic.currentPrice / 6)}</span> sin intereses con Mercado Pago
+              </p>
 
               {/* Mini rating — prueba social arriba del fold */}
               {(() => {
@@ -667,6 +681,24 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   Agotado
                 </Badge>
               )}
+
+              {/* Reaseguros pegados al buy box */}
+              {logic.inStock && (
+                <div className="space-y-2 pt-1">
+                  <div className="flex items-center gap-2.5 text-sm text-foreground/80">
+                    <Truck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
+                    <span>
+                      <span className="font-medium text-foreground">Pídelo hoy</span> y llega en 2 a 5 días hábiles
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-sm text-foreground/80">
+                    <ShieldCheck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
+                    <span>
+                      <span className="font-medium text-foreground">Garantía de 30 días</span> o te devolvemos tu dinero
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Detail accordions */}
@@ -753,9 +785,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   <h3 className="font-medium truncate text-sm">
                     {logic.product.title}
                   </h3>
-                  <span className="font-semibold text-base">
-                    {logic.formatMoney(logic.currentPrice)}
-                  </span>
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-semibold text-base">
+                      {logic.formatMoney(logic.currentPrice)}
+                    </span>
+                    {StickyRating}
+                  </div>
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
@@ -783,9 +818,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   />
                 </div>
                 <div className="flex items-center justify-between gap-2 flex-1 min-w-0">
-                  <h3 className="font-medium text-sm truncate">
-                    {logic.product.title}
-                  </h3>
+                  <div className="min-w-0">
+                    <h3 className="font-medium text-sm truncate">
+                      {logic.product.title}
+                    </h3>
+                    {StickyRating}
+                  </div>
                   <span className="font-semibold shrink-0 text-sm">
                     {logic.formatMoney(logic.currentPrice)}
                   </span>

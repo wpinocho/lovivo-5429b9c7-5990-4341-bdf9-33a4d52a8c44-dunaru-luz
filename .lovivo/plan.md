@@ -26,10 +26,12 @@
 - Estrellas de reseñas: `fill-dunaru-champagne text-dunaru-champagne` (vacías = `/30`).
 - Estética: editorial, mínima, mucho aire. Mobile-first.
 - **HERO responsive**: móvil usa imagen VERTICAL dedicada (`/hero-dunaru-mobile.webp`, 9:16, `md:hidden`), desktop usa la horizontal (`/hero-dunaru.webp`, `hidden md:block`). Contenido `items-start` en móvil, `md:items-center` desktop.
-- **PDP layout**: `ProductPageUI.tsx`. Grid 7/5. Galería sticky desktop + carrusel móvil. SIN botón "Seguir comprando" (quitado 2026-07-17). Contenedor tiene `-mt-4 md:mt-0` para subir galería en móvil. `py-6` global del template NO se toca.
+- **PDP layout**: `ProductPageUI.tsx`. Grid 7/5. Galería sticky desktop + carrusel móvil. SIN botón "Seguir comprando". Contenedor tiene `-mt-4 md:mt-0`. `py-6` global del template NO se toca.
+- **PDP buy box** (2026-07-17): bajo el precio → línea MSI ("o 6 pagos de $X sin intereses con Mercado Pago"). Bajo el CTA → reaseguros ETA ("Pídelo hoy y llega en 2-5 días hábiles") + garantía 30 días, íconos `text-dunaru-ambar`.
+- **Barra sticky PDP**: `StickyRating` (estrella champagne + "4.9 (15)") junto al precio en desktop y bajo el título en móvil.
 
-## 3. Active Plan — ✅ PDP: quitado back-link + galería más arriba (2026-07-17)
-Quitado "Seguir comprando" en móvil y subida la galería con `-mt-4 md:mt-0`. Recomendaciones de conversión propuestas al user (ver sección 7) — esperando cuáles quiere implementar.
+## 3. Active Plan — ✅ Mejoras conversión PDP (2026-07-17)
+Implementadas recomendaciones 1, 2 y 4: MSI junto al precio, ETA+garantía bajo el CTA, rating en barra sticky. Rec #3 (video demo) POSPUESTA por el user.
 
 ### ⚠️ PENDIENTE DE CONFIRMAR POR EL USER (arrastrado)
 - **Textos reseñas #5–#12**: reconstruidos. User debe pegar texto EXACTO. (Verbatim OK: #1–#4, #13–#15.)
@@ -37,8 +39,9 @@ Quitado "Seguir comprando" en móvil y subida la galería con `-mt-4 md:mt-0`. R
 - **ProductCardUI** stars: sigue conteo por slug (no global). Evaluar cambiar a global.
 
 ## 4. Recent Changes
-- 2026-07-17 — ✅ PDP: quitado botón "Seguir comprando" (móvil) + galería subida con `-mt-4 md:mt-0` en contenedor. Propuestas de conversión PDP dadas al user (ETA/urgencia cerca del CTA, MSI+garantía en buy box, video demo).
-- 2026-07-17 — ✅ FIX HERO MÓVIL: generada imagen vertical `/hero-dunaru-mobile.webp` (9:16). `IndexUI` sirve img móvil vs desktop responsive.
+- 2026-07-17 — ✅ CONVERSIÓN PDP: (1) línea MSI 6 pagos bajo precio, (2) reaseguros ETA "Pídelo hoy, llega 2-5 días" + garantía 30 días bajo CTA, (4) rating champagne en barra sticky móvil+desktop. Rec #3 video demo pospuesta.
+- 2026-07-17 — ✅ PDP: quitado botón "Seguir comprando" (móvil) + galería subida con `-mt-4 md:mt-0`.
+- 2026-07-17 — ✅ FIX HERO MÓVIL: generada imagen vertical `/hero-dunaru-mobile.webp` (9:16).
 - 2026-07-17 — ✅ EJECUTADO rediseño reseñas PDP: `Reviews.tsx` layout mixto. PDP muestra las 15. Buy box mini-rating global.
 - 2026-07-16 — ✅ RESEÑAS REALES LIVE: `src/data/reviews.ts` (15 reseñas). 5 fotos UGC. Promedio 4.9/15.
 - 2026-07-16 — 🔍 AUDITORÍA PRE-PAUTA vs VelaVita.cl.
@@ -64,13 +67,8 @@ Quitado "Seguir comprando" en móvil y subida la galería con `-mt-4 md:mt-0`. R
 - 2026-06-24 — Regla envío $99 solo Perlas: verificar config shipping.
 
 ## 7. Pending / Future Sessions
-- [high] RECOMENDACIONES PDP propuestas (esperando OK del user):
-  1. ETA concreta + urgencia cerca del CTA ("Pídelo hoy, llega en 2–5 días").
-  2. Recordatorio MSI + garantía 30 días PEGADO al buy box (no solo en highlights).
-  3. Video demo corto (vierte→inserta→enciende→renueva) arriba de reseñas.
-  4. Sticky add-to-cart móvil: verificar que muestre precio + rating.
+- [high] VIDEO DEMO con `videogen` (rec #3, pospuesta por user): vierte→inserta→enciende→renueva, arriba de reseñas.
 - [high] USER confirma textos exactos #5–#12 + nombres reales → `reviews.ts`.
-- [high] VIDEO DEMO con `videogen`.
 - [med] ProductCardUI stars: conteo global (15).
 - [med] Oferta lanzamiento (`compare_at_price`) en productos hero.
 - [low] Borrar `ReviewsInvite.tsx`, barra envío gratis en carrito, JSON-LD AggregateRating. Borrar `public/tmp-upload-hero.webp`.
