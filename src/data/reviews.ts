@@ -196,6 +196,16 @@ export function getFeaturedReviews(slug?: string): Review[] {
   return getReviews(slug).filter((r) => r.featured)
 }
 
+/** Distribución de estrellas: { 5: n, 4: n, 3: n, 2: n, 1: n }. */
+export function getRatingDistribution(slug?: string): Record<5 | 4 | 3 | 2 | 1, number> {
+  const list = getReviews(slug)
+  const dist: Record<5 | 4 | 3 | 2 | 1, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 }
+  list.forEach((r) => {
+    dist[r.rating as 5 | 4 | 3 | 2 | 1] += 1
+  })
+  return dist
+}
+
 /** Promedio + conteo. Redondeado a 1 decimal. */
 export function getReviewStats(slug?: string): { average: number; count: number } {
   const list = getReviews(slug)

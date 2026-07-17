@@ -569,8 +569,8 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         </Accordion>
       </section>
 
-      {/* 6 — Reseñas reales del producto */}
-      <Reviews slug={slug} title="Opiniones de quienes ya la tienen" />
+      {/* 6 — Reseñas reales (todas, para máxima prueba social) */}
+      <Reviews title="Opiniones de quienes ya la tienen" />
 
       {/* 7 — Pago seguro + MSI */}
       <section className="max-w-[1400px] mx-auto">

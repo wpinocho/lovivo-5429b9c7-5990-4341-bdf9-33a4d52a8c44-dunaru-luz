@@ -363,7 +363,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
               {/* Mini rating — prueba social arriba del fold */}
               {(() => {
-                const stats = getReviewStats(logic.product?.slug)
+                const stats = getReviewStats()
                 if (stats.count === 0) return null
                 return (
                   <a
