@@ -25,19 +25,19 @@
 - Tokens: `dunaru-marfil/arena/champagne/carbon/onix/ambar`
 - Estrellas de reseñas: `fill-dunaru-champagne text-dunaru-champagne` (vacías = `/30`).
 - Estética: editorial, mínima, mucho aire. Mobile-first.
+- **FAVICON**: `/favicon.png` (256x256) — monograma "d" serif champagne con glow ámbar sobre ónix. apple-touch-icon también apunta ahí. El viejo `favicon.svg` (L azul genérico) quedó huérfano.
 - **HERO responsive**: móvil usa imagen VERTICAL dedicada (`/hero-dunaru-mobile.webp`, 9:16, `md:hidden`), desktop usa la horizontal (`/hero-dunaru.webp`, `hidden md:block`).
 - **PDP layout**: `ProductPageUI.tsx`. Grid 7/5. Galería sticky desktop + carrusel móvil. Contenedor `-mt-4 md:mt-0`.
 - **PDP buy box**: MSI bajo el precio (ahora "a meses sin intereses", SIN nombrar proveedor) + reaseguros ETA + garantía bajo el CTA (íconos `text-dunaru-ambar`). Barra sticky con `StickyRating`.
 - **CHECKOUT layout** (`CheckoutUI.tsx` + `StripePayment.tsx`): 2 cols desktop (form + resumen sticky), 1 col móvil (resumen colapsable arriba ABIERTO por defecto + form). Botón de pago vive DENTRO de `StripePayment`.
 - **CHECKOUT slots** (StripePayment tiene props opcionales `React.ReactNode`): `paymentNoticeSlot` (arriba de PaymentElement), `socialProofSlot` (arriba del botón), `trustBadgesSlot` (debajo del botón). Se construyen en CheckoutUI dentro del IIFE de isStripeReady.
 
-## 3. Active Plan — ✅ COMPLETADO: Checkout UI + limpiar "Mercado Pago" (2026-07-17)
-Ejecutado en esta sesión. Ver Recent Changes. Próximo foco sugerido: video demo (pending) y confirmar textos/nombres reales de reseñas.
+## 3. Active Plan — ✅ Sin plan activo. Foco sugerido: video demo (pending) + confirmar textos/nombres reales de reseñas.
 
 ## 4. Recent Changes
-- 2026-07-17 — ✅ EJECUTADO checkout UI: (1) resumen móvil ABIERTO por defecto + línea reaseguro Truck "Envío gratis · Llega 2-5 días", (2) línea seguridad Lock "Pago 100% seguro · SSL" arriba del pago, (3) StripePayment nuevos slots paymentNotice/socialProof/trustBadges, (4) callout "Págalo a meses sin intereses" (CreditCard, desde $X/mes), (5) prueba social REAL getReviewStats (4.9/15 estrellas champagne), (6) trust badges VISA/MC/AMEX/APPLE PAY/G PAY (+OXXO/SPEI condicional). CTA guion→"·".
+- 2026-07-17 — ✅ FAVICON de marca: generado `/favicon.png` (256px, monograma "d" champagne + glow ámbar sobre ónix). Agregado apple-touch-icon. Corregida meta description en index.html (quitado "Mercado Pago" → "Paga a meses sin intereses").
+- 2026-07-17 — ✅ EJECUTADO checkout UI: resumen móvil abierto, línea seguridad SSL, slots StripePayment, callout meses sin intereses, prueba social REAL 4.9/15, trust badges VISA/MC/AMEX/APPLE PAY/G PAY.
 - 2026-07-17 — ✅ PDP: quitado "Mercado Pago" del MSI → "6 pagos de {X} a meses sin intereses".
-- 2026-07-17 — 📋 PLAN checkout (ya ejecutado arriba).
 - 2026-07-17 — ✅ CONVERSIÓN PDP: MSI + reaseguros ETA + garantía + rating champagne barra sticky.
 - 2026-07-17 — ✅ PDP: quitado botón "Seguir comprando" (móvil) + galería subida.
 - 2026-07-17 — ✅ FIX HERO MÓVIL: imagen vertical `/hero-dunaru-mobile.webp` (9:16).
@@ -52,6 +52,7 @@ Ejecutado en esta sesión. Ver Recent Changes. Próximo foco sugerido: video dem
 - 2026-07-03 — ✅ LANDING SINCRONIZADA con fotos reales.
 
 ## 5. Image Inventory
+- **FAVICON**: `/favicon.png` (256x256, ~52KB). Viejo `public/favicon.svg` huérfano (borrable).
 - **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos.
 - **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` (9:16) · **Casa real**: `/casa-real-*.webp` · **4 pasos**: `/paso-*.webp` — ✅.
 - **UGC RESEÑAS (5 fotos, en `reviews.ts` const UGC)** — Supabase message-images.
@@ -72,4 +73,4 @@ Ejecutado en esta sesión. Ver Recent Changes. Próximo foco sugerido: video dem
 - [med] Verificar visualmente checkout móvil en deploy (slots + resumen abierto).
 - [med] ProductCardUI stars: conteo global (15).
 - [med] Oferta lanzamiento (`compare_at_price`) en productos hero.
-- [low] Borrar `ReviewsInvite.tsx`, barra envío gratis en carrito, JSON-LD AggregateRating. Borrar `public/tmp-upload-hero.webp`.
+- [low] Borrar `ReviewsInvite.tsx`, `public/favicon.svg`, barra envío gratis en carrito, JSON-LD AggregateRating. Borrar `public/tmp-upload-hero.webp`.
