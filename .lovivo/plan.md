@@ -26,18 +26,35 @@
 - Estrellas de reseñas: `fill-dunaru-champagne text-dunaru-champagne` (vacías = `/30`).
 - Estética: editorial, mínima, mucho aire. Mobile-first.
 
-## 3. Active Plan — ✅ RESEÑAS REALES IMPLEMENTADAS (2026-07-16)
-Sistema de prueba social real montado y funcionando. Arquitectura:
-- **`src/data/reviews.ts`** — fuente única. 15 reseñas tipadas + helpers `getReviews(slug)`, `getFeaturedReviews(slug)`, `getReviewStats(slug)`. Promedio 4.9 · 15. #14 y #15 = 4★, resto 5★.
-- **`src/components/Reviews.tsx`** — `<Reviews slug? title? />`. Header con estrellas + "4.9 · 15 opiniones". Featured con foto (grid 3-col) + resto solo texto. CTA WhatsApp para juntar UGC. `id="resenas"` para ancla.
-- Integrado en: landing (`IndexUI` reemplazó `ReviewsInvite`), PDP (`ProductStorySections` sección 6), mini-rating en buy box (`ProductPageUI`, ancla a `#resenas`), estrellas en `ProductCardUI`.
-- 5 fotos UGC asignadas a featured: #5 visitas (vidrio ámbar), #1 fácil (vidrio cuadrado), #6 reutilizar (bowl crema), #7 regalo (cerámica estriada), #13 completa (arena negra). URLs en `reviews.ts` const `UGC`.
+## 3. Active Plan — 🎯 REDISEÑO SECCIÓN RESEÑAS EN PDP (definido 2026-07-17)
 
-### ⚠️ PENDIENTE DE CONFIRMAR POR EL USER
-- **Textos reseñas #5–#12**: se RECONSTRUYERON del título/categoría porque el chat cortó el contenido. El user debe pegar el texto EXACTO original y reemplazarlo en `reviews.ts`. (Verbatim confirmados: #1, #2, #3, #4, #13, #14, #15.)
-- **Nombres**: son propuesta editorial (Ana P., Regina M., etc.). Reemplazar por nombres reales antes de escalar pauta.
+### Decisión del user (confirmada)
+1. **Mostrar las 15 reseñas en TODAS las PDP** (dejar de filtrar por slug). Con tan pocas reseñas, filtrar reduce la prueba social percibida. Best practice validada (productos con 5+ reseñas convierten mucho más; ocultar reseñas resta confianza).
+2. **Resolver el "muro vertical largo"** con layout mixto (NO todo vertical, NO todo carrusel).
+
+### Layout objetivo de `Reviews.tsx` (formato mixto, mobile-first)
+A. **Header resumen** (ya existe, mejorar): "4.9 · 15 opiniones" + añadir **barra de distribución de estrellas** (5★: 13, 4★: 2, 3★/2★/1★: 0). Compacto, genera confianza inmediata.
+B. **Reseñas con foto (featured) en CARRUSEL horizontal deslizable** en móvil (usar `embla-carousel-react` ya instalado, patrón peek `basis-[85%]` como el carrusel PDP existente). En desktop: grid 3-col como ahora.
+C. **Reseñas de solo texto:** mostrar **3 por defecto**, y un botón **"Ver las 15 opiniones"** que despliega el resto INLINE (estado `useState` show/collapse). Evita el muro largo pero mantiene todo accesible con un toque. El botón muestra el conteo total real.
+D. Mantener CTA WhatsApp UGC al final.
+- Evitar: convertir TODAS las reseñas en carrusel (accesibilidad + banner blindness). El mix featured-carrusel + texto-expandible es lo que mejor convierte.
+
+### Cambios técnicos
+- **`src/components/Reviews.tsx`**:
+  - Añadir prop `showAllProducts?: boolean` (o simplemente, para PDP, llamar `<Reviews />` SIN slug para traer las 15). Decisión: en PDP pasar sin slug → `getReviews()` devuelve las 15. Mantener el filtro por slug solo si en el futuro hay muchas reseñas (>30). Por ahora: PDP = todas.
+  - Header: agregar barra de distribución de estrellas. Nuevo helper en `reviews.ts`: `getRatingDistribution(slug?)` → `{5: n, 4: n, ...}`.
+  - Featured: envolver en Embla carousel para móvil (peek), grid en `sm:`/`lg:`.
+  - Texto (rest): estado `expanded` con `useState`. Slice a 3 si `!expanded`. Botón "Ver las N opiniones" / "Ver menos".
+- **PDP integration** (`src/components/ProductStorySections.tsx` sección 6): cambiar `<Reviews slug={slug} />` por `<Reviews />` para mostrar las 15 en cada PDP. (Confirmar dónde se renderiza y el prop actual.)
+- **Mini-rating buy box** (`ProductPageUI`): actualizar el conteo para reflejar 15 globales (ya usa `getReviewStats` — si se pasa sin slug dará 4.9 · 15; verificar que use el global).
+- **Landing** (`IndexUI`): mantiene `<Reviews />` sin slug (ya muestra las 15 destacadas). Sin cambios salvo heredar el nuevo layout.
+
+### ⚠️ PENDIENTE DE CONFIRMAR POR EL USER (arrastrado)
+- **Textos reseñas #5–#12**: reconstruidos del título/categoría (chat cortado). User debe pegar texto EXACTO. (Verbatim OK: #1, #2, #3, #4, #13, #14, #15.)
+- **Nombres**: propuesta editorial. Reemplazar por reales antes de escalar pauta.
 
 ## 4. Recent Changes
+- 2026-07-17 — 🎯 PLAN rediseño reseñas PDP: mostrar las 15 en cada PDP (quitar filtro por slug) + layout mixto (header con distribución de estrellas, featured en carrusel deslizable móvil, texto con "Ver las 15 opiniones"). Best practices web validadas. PENDIENTE ejecutar en Craft.
 - 2026-07-16 — ✅ RESEÑAS REALES LIVE: creados `src/data/reviews.ts` (15 reseñas + helpers) y `Reviews.tsx`. Integrado en landing (reemplaza ReviewsInvite), PDP sección 6 (`Reviews slug`), mini-rating buy box PDP (ancla #resenas) y estrellas en ProductCardUI. 5 fotos UGC en featured. Promedio 4.9/15. OJO: textos #5–#12 reconstruidos, user debe confirmar; nombres son propuesta.
 - 2026-07-16 — ⭐ PLAN RESEÑAS REALES definido (ya ejecutado).
 - 2026-07-16 — 🔍 AUDITORÍA PRE-PAUTA vs VelaVita.cl. Bloqueador era 0 reseñas (ya resuelto).
@@ -65,11 +82,12 @@ Sistema de prueba social real montado y funcionando. Arquitectura:
 ## 6. Known Issues
 - 2026-07-16 — 🟡 Textos reseñas #5–#12 RECONSTRUIDOS (chat cortado). User debe pegar exactos.
 - 2026-07-16 — 🟡 Nombres de reseñas = propuesta, confirmar reales antes de pauta.
-- 2026-07-16 — 🟡 `ReviewsInvite.tsx` quedó huérfano (ya no se importa). Se puede borrar en próxima sesión (no se borró por precaución).
+- 2026-07-16 — 🟡 `ReviewsInvite.tsx` quedó huérfano (ya no se importa). Se puede borrar en próxima sesión.
 - 2026-06-24 — Descuento volumen: verificar recálculo total carrito end-to-end.
 - 2026-06-24 — Regla envío $99 solo Perlas: verificar config shipping.
 
 ## 7. Pending / Future Sessions
+- [high] EJECUTAR rediseño reseñas PDP (sección 3): 15 por PDP + layout mixto (carrusel featured + "ver todas" texto + barra distribución).
 - [high] USER confirma textos exactos #5–#12 + nombres reales → actualizar `reviews.ts`.
 - [high] Recolectar fotos UGC de reseñas no-featured + email post-compra pidiendo reseña.
 - [high] VIDEO DEMO (vierte→inserta→enciende→renueva) con `videogen`.
