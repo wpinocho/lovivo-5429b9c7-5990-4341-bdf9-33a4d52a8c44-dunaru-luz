@@ -175,7 +175,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           <img
             src="/hero-dunaru.webp"
             alt="Mesa con vela perlada dunaru encendida en interior mexicano contemporáneo"
-            className="w-full h-full object-cover object-center"
+            className="w-full h-full object-cover object-right md:object-center"
             fetchPriority="high"
           />
           {/* Gradient overlay */}
