@@ -169,18 +169,27 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
     <EcommerceTemplate showCart={true} layout="full-width">
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-dunaru-carbon">
+      <section className="relative min-h-[92vh] flex items-start md:items-center overflow-hidden bg-dunaru-carbon">
         {/* Background image */}
         <div className="absolute inset-0">
+          {/* Mobile: dedicated vertical composition (product visible, text space on top) */}
+          <img
+            src="/hero-dunaru-mobile.webp"
+            alt="Vela perlada dunaru encendida junto a la bolsa de perladas en un interior cálido"
+            className="w-full h-full object-cover object-center md:hidden"
+            fetchPriority="high"
+          />
+          {/* Desktop: horizontal composition */}
           <img
             src="/hero-dunaru.webp"
             alt="Mesa con vela perlada dunaru encendida en interior mexicano contemporáneo"
-            className="w-full h-full object-cover object-right md:object-center"
+            className="hidden md:block w-full h-full object-cover object-center"
             fetchPriority="high"
           />
-          {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-dunaru-carbon/75 via-dunaru-carbon/40 to-transparent" />
-          <div className="absolute inset-0 bg-gradient-to-t from-dunaru-carbon/60 via-transparent to-transparent" />
+          {/* Gradient overlay — desktop: dark on the left for text */}
+          <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-dunaru-carbon/75 via-dunaru-carbon/40 to-transparent" />
+          {/* Gradient overlay — mobile: dark on top for text */}
+          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-carbon/90 via-dunaru-carbon/40 to-dunaru-carbon/5" />
         </div>
 
         {/* Content */}
