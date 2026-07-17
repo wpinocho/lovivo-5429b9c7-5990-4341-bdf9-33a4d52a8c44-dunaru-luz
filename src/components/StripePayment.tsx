@@ -88,6 +88,12 @@ interface StripePaymentProps {
   onLinkAuthChange?: (authenticated: boolean) => void
   /** Optional slot rendered just below the Stripe ExpressCheckoutElement (e.g. PayPal button). */
   paypalSlot?: React.ReactNode
+  /** Optional slot rendered just ABOVE the PaymentElement (e.g. months-without-interest notice). */
+  paymentNoticeSlot?: React.ReactNode
+  /** Optional slot rendered just ABOVE the submit button (e.g. social proof / ratings). */
+  socialProofSlot?: React.ReactNode
+  /** Optional slot rendered just BELOW the submit button (e.g. trust badges / payment logos). */
+  trustBadgesSlot?: React.ReactNode
 }
 
 
@@ -121,6 +127,9 @@ function PaymentForm({
   shippingError,
   onLinkAuthChange,
   paypalSlot,
+  paymentNoticeSlot,
+  socialProofSlot,
+  trustBadgesSlot,
 }: StripePaymentProps) {
   const stripe = useStripe()
   const elements = useElements()
@@ -981,6 +990,9 @@ function PaymentForm({
         </>
       )}
 
+      {/* Payment notice slot (e.g. months without interest) */}
+      {paymentNoticeSlot}
+
       {/* Unified Payment Element - shows card, OXXO, SPEI, wallets automatically */}
       <PaymentElement
         options={{
@@ -1014,6 +1026,9 @@ function PaymentForm({
       {/* Billing address slot */}
       {billingSlot}
 
+      {/* Social proof slot (e.g. ratings) */}
+      {socialProofSlot}
+
       {/* Submit button */}
       <Button
         onClick={handlePayment}
@@ -1026,8 +1041,11 @@ function PaymentForm({
             <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
             <span>Procesando...</span>
           </div>
-        ) : `Completar Compra - ${amountLabel}`}
+        ) : `Completar Compra · ${amountLabel}`}
       </Button>
+
+      {/* Trust badges slot (e.g. reassurances + payment logos) */}
+      {trustBadgesSlot}
 
       <div className="flex items-center justify-center gap-3 text-xs text-muted-foreground">
         <a href="/terminos-y-condiciones" target="_blank" className="underline hover:text-foreground">Condiciones</a>

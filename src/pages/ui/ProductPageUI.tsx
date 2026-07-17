@@ -362,7 +362,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
               {/* MSI — recordatorio pegado al precio */}
               <p className="text-sm text-muted-foreground pt-1">
-                o <span className="font-medium text-foreground/90">6 pagos de {logic.formatMoney(logic.currentPrice / 6)}</span> sin intereses con Mercado Pago
+                o <span className="font-medium text-foreground/90">6 pagos de {logic.formatMoney(logic.currentPrice / 6)}</span> a meses sin intereses
               </p>
 
               {/* Mini rating — prueba social arriba del fold */}

@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tag, X, ShoppingBag, Loader2, RefreshCw, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react";
+import { Tag, X, ShoppingBag, Loader2, RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Truck, Lock, CreditCard, Star, ShieldCheck } from "lucide-react";
+import { getReviewStats } from "@/data/reviews";
 import { Badge } from "@/components/ui/badge";
 import { CartAppliedRules } from "@/components/ui/CartAppliedRules";
 import { useNavigate } from "react-router-dom";
@@ -236,6 +237,11 @@ export default function CheckoutUI() {
 
                 {/* Pago section - includes email, address, delivery methods, and payment */}
                 <section>
+                  {/* Línea de seguridad */}
+                  <div className="flex items-center justify-center gap-2 mb-5 text-xs text-muted-foreground">
+                    <Lock className="h-3.5 w-3.5 text-dunaru-ambar" />
+                    <span><span className="font-medium text-foreground/80">Pago 100% seguro</span> · Cifrado SSL</span>
+                  </div>
                   {(() => {
                     const isStripeReady =
                       !isSettingsLoading &&
@@ -266,8 +272,60 @@ export default function CheckoutUI() {
                       chargeType,
                     ].join('|');
 
+                    // ── Slots de confianza / conversión ──
+                    const reviewStats = getReviewStats();
+                    const monthly = logic.finalTotal / 6;
+
+                    const paymentNoticeSlot = (
+                      <div className="rounded-lg border border-dunaru-champagne/40 bg-dunaru-arena/60 p-4">
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                          <CreditCard className="h-4 w-4 text-dunaru-ambar" />
+                          Págalo a meses sin intereses
+                        </div>
+                        <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
+                          Desde <span className="font-medium text-foreground/80">{formatMoney(monthly, logic.currencyCode)} al mes</span>, hasta 6 meses. Ingresa tu tarjeta y verás los plazos disponibles de tu banco.
+                        </p>
+                      </div>
+                    );
+
+                    const socialProofSlot = reviewStats.count > 0 ? (
+                      <div className="flex items-center justify-center gap-2 text-sm">
+                        <span className="flex items-center gap-0.5">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star key={i} className="h-4 w-4 fill-dunaru-champagne text-dunaru-champagne" />
+                          ))}
+                        </span>
+                        <span className="text-muted-foreground">
+                          <span className="font-semibold text-foreground">{reviewStats.average}</span> · {reviewStats.count} clientes felices
+                        </span>
+                      </div>
+                    ) : null;
+
+                    const trustBadgesSlot = (
+                      <div className="space-y-3 pt-1">
+                        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+                          <span className="flex items-center gap-1.5"><Truck className="h-4 w-4 text-dunaru-ambar" /> Envío gratis a todo México</span>
+                          <span className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-dunaru-ambar" /> Pago seguro</span>
+                          <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-dunaru-ambar" /> Garantía 30 días</span>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-1.5">
+                          {["VISA", "MASTERCARD", "AMEX", "APPLE PAY", "G PAY",
+                            ...(paymentMethods?.oxxo ? ["OXXO"] : []),
+                            ...(paymentMethods?.spei ? ["SPEI"] : []),
+                          ].map((brand) => (
+                            <span key={brand} className="rounded border border-border px-2 py-0.5 text-[10px] font-medium tracking-wide text-muted-foreground">
+                              {brand}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    );
+
                     return (
                       <StripePayment 
+                        paymentNoticeSlot={paymentNoticeSlot}
+                        socialProofSlot={socialProofSlot}
+                        trustBadgesSlot={trustBadgesSlot}
                         key={stripeKey}
                         amountCents={Math.round(logic.finalTotal * 100)} 
                         currency={logic.currencyCode.toLowerCase()} 
@@ -587,9 +645,11 @@ export default function CheckoutUI() {
 
 /* ─── Mobile Order Summary (collapsible, top of checkout) ─── */
 function MobileOrderSummary({ logic }: { logic: any }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   if (logic.summaryItems.length === 0) return null;
+
+  const isFreeShipping = logic.selectedPickupLocation || logic.shippingCost === 0;
 
   return (
     <div className="md:hidden mb-6 border rounded-lg bg-muted/50">
@@ -657,6 +717,18 @@ function MobileOrderSummary({ logic }: { logic: any }) {
               <span>Total</span>
               <span>{formatMoney(logic.finalTotal, logic.currencyCode)}</span>
             </div>
+          </div>
+
+          {/* Reaseguro de envío */}
+          <div className="flex items-center gap-2 pt-2 text-xs text-dunaru-ambar">
+            <Truck className="h-4 w-4 shrink-0" />
+            <span>
+              {isFreeShipping ? (
+                <><span className="font-semibold">Envío gratis</span> · Llega en 2 a 5 días hábiles</>
+              ) : (
+                <>Envío {formatMoney(logic.shippingCost, logic.currencyCode)} · Llega en 2 a 5 días hábiles</>
+              )}
+            </span>
           </div>
 
           {/* Código de descuento mobile */}
