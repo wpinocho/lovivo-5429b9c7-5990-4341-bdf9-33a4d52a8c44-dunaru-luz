@@ -17,6 +17,7 @@ import {
   Lock,
   ChevronRight,
   Star,
+  MessageCircle,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
@@ -699,6 +700,24 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   </div>
                 </div>
               )}
+
+              {/* Leyenda WhatsApp — asesoría antes de comprar */}
+              <a
+                href={`https://wa.me/525531215386?text=${encodeURIComponent(
+                  `Hola, tengo una duda sobre ${logic.product.title}`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center justify-center gap-2 pt-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <MessageCircle className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
+                <span>
+                  ¿Tienes dudas?{" "}
+                  <span className="font-medium text-foreground underline underline-offset-4 decoration-dunaru-champagne group-hover:decoration-dunaru-ambar">
+                    Escríbenos por WhatsApp
+                  </span>
+                </span>
+              </a>
             </div>
 
             {/* Detail accordions */}

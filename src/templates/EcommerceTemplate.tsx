@@ -14,7 +14,7 @@ import { ScrollLink } from '@/components/ScrollLink'
 
 const TOP_MESSAGES = [
   'Envío gratis en pedidos desde $899',
-  'Hasta 6 meses sin intereses con Mercado Pago',
+  'Hasta 6 meses sin intereses',
   'Hecho en México con cera vegetal',
   'Entregas en 2–5 días hábiles',
   'Garantía de satisfacción de 30 días',
@@ -194,12 +194,11 @@ export const EcommerceTemplate = ({
       {/* MSI bar */}
       <div className="border-b border-white/10 py-4 px-4">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-4 text-sm font-body opacity-80">
-          <span>Pagos seguros con</span>
-          <span className="font-semibold">Mercado Pago</span>
+          <span>Pagos 100% seguros</span>
           <span className="opacity-40">·</span>
           <span>Hasta 6 meses sin intereses</span>
           <span className="opacity-40">·</span>
-          <span>VISA · Mastercard · OXXO · Transferencia</span>
+          <span>VISA · Mastercard · AMEX</span>
         </div>
       </div>
 
@@ -259,12 +258,17 @@ export const EcommerceTemplate = ({
               href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 text-sm font-body text-dunaru-marfil/70 hover:text-dunaru-marfil transition-colors"
+              className="group inline-flex items-center gap-2 text-sm font-body text-dunaru-marfil/80 hover:text-dunaru-marfil transition-colors"
             >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp
+              <MessageCircle className="h-4 w-4 text-dunaru-champagne" strokeWidth={1.75} />
+              <span>
+                ¿Tienes dudas?{" "}
+                <span className="font-medium text-dunaru-marfil underline underline-offset-4 decoration-dunaru-champagne">
+                  Escríbenos por WhatsApp
+                </span>
+              </span>
             </a>
-            <p className="mt-2 text-xs text-dunaru-marfil/40 font-body">Lun–Vie 9–18 h (Tiempo del Centro)</p>
+            <p className="mt-2 text-xs text-dunaru-marfil/40 font-body">+52 55 3121 5386 · Lun–Vie 9–18 h</p>
           </div>
         </div>
 

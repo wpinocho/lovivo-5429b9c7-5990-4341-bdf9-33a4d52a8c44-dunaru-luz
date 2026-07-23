@@ -25,18 +25,21 @@
 - Tokens: `dunaru-marfil/arena/champagne/carbon/onix/ambar`
 - Estrellas de reseñas: `fill-dunaru-champagne text-dunaru-champagne` (vacías = `/30`).
 - Estética: editorial, mínima, mucho aire. Mobile-first.
+- **WHATSAPP**: leyenda "¿Tienes dudas? Escríbenos por WhatsApp" con ícono `MessageCircle`. En PDP ícono `text-dunaru-ambar` + underline champagne; en footer ícono `text-dunaru-champagne`. Link `https://wa.me/525531215386` con texto contextual. NUNCA verde (usar colores de marca).
 - **FAVICON**: `/favicon.png` (256x256) — monograma "d" serif champagne con glow ámbar sobre ónix. apple-touch-icon también apunta ahí. El viejo `favicon.svg` (L azul genérico) quedó huérfano.
 - **HERO responsive**: móvil usa imagen VERTICAL dedicada (`/hero-dunaru-mobile.webp`, 9:16, `md:hidden`), desktop usa la horizontal (`/hero-dunaru.webp`, `hidden md:block`).
 - **PDP layout**: `ProductPageUI.tsx`. Grid 7/5. Galería sticky desktop + carrusel móvil. Contenedor `-mt-4 md:mt-0`.
-- **PDP buy box**: MSI bajo el precio (ahora "a meses sin intereses", SIN nombrar proveedor) + reaseguros ETA + garantía bajo el CTA (íconos `text-dunaru-ambar`). Barra sticky con `StickyRating`.
+- **PDP buy box**: MSI bajo el precio (ahora "a meses sin intereses", SIN nombrar proveedor) + reaseguros ETA + garantía + leyenda WhatsApp bajo el CTA (íconos `text-dunaru-ambar`). Barra sticky con `StickyRating`.
 - **CHECKOUT layout** (`CheckoutUI.tsx` + `StripePayment.tsx`): 2 cols desktop (form + resumen sticky), 1 col móvil (resumen colapsable arriba ABIERTO por defecto + form). Botón de pago vive DENTRO de `StripePayment`.
 - **CHECKOUT slots** (StripePayment tiene props opcionales `React.ReactNode`): `paymentNoticeSlot` (arriba de PaymentElement), `socialProofSlot` (arriba del botón), `trustBadgesSlot` (debajo del botón). Se construyen en CheckoutUI dentro del IIFE de isStripeReady.
 
 ## 3. Active Plan — ✅ Sin plan activo. Foco sugerido: video demo (pending) + confirmar textos/nombres reales de reseñas.
 
 ## 4. Recent Changes
-- 2026-07-17 — ✅ FAVICON de marca: generado `/favicon.png` (256px, monograma "d" champagne + glow ámbar sobre ónix). Agregado apple-touch-icon. Corregida meta description en index.html (quitado "Mercado Pago" → "Paga a meses sin intereses").
-- 2026-07-17 — ✅ EJECUTADO checkout UI: resumen móvil abierto, línea seguridad SSL, slots StripePayment, callout meses sin intereses, prueba social REAL 4.9/15, trust badges VISA/MC/AMEX/APPLE PAY/G PAY.
+- 2026-07-23 — ✅ WHATSAPP: leyenda "¿Tienes dudas? Escríbenos por WhatsApp" en PDP (bajo reaseguros, ícono ámbar) y footer Contacto (ícono champagne + tel visible). Número real 525531215386.
+- 2026-07-23 — ✅ FIX INTEGRIDAD: quitado "Mercado Pago" del top bar rotativo y del MSI bar del footer (→ "Pagos 100% seguros · Hasta 6 meses sin intereses · VISA · Mastercard · AMEX").
+- 2026-07-17 — ✅ FAVICON de marca: generado `/favicon.png` (256px, monograma "d" champagne + glow ámbar sobre ónix). Agregado apple-touch-icon. Corregida meta description en index.html.
+- 2026-07-17 — ✅ EJECUTADO checkout UI: resumen móvil abierto, línea seguridad SSL, slots StripePayment, callout meses sin intereses, prueba social REAL 4.9/15, trust badges.
 - 2026-07-17 — ✅ PDP: quitado "Mercado Pago" del MSI → "6 pagos de {X} a meses sin intereses".
 - 2026-07-17 — ✅ CONVERSIÓN PDP: MSI + reaseguros ETA + garantía + rating champagne barra sticky.
 - 2026-07-17 — ✅ PDP: quitado botón "Seguir comprando" (móvil) + galería subida.
@@ -48,8 +51,6 @@
 - 2026-07-16 — ✅ FIX carrusel móvil PDP.
 - 2026-07-15 — ✅ FIX BUG galería PDP desktop.
 - 2026-07-15 — ✅ PDP PERLAS: 4 fotos editoriales + copy propio.
-- 2026-07-06 — ✅ SPRINT PRE-LANZAMIENTO.
-- 2026-07-03 — ✅ LANDING SINCRONIZADA con fotos reales.
 
 ## 5. Image Inventory
 - **FAVICON**: `/favicon.png` (256x256, ~52KB). Viejo `public/favicon.svg` huérfano (borrable).
@@ -60,10 +61,9 @@
 
 ## 6. Known Issues
 - 2026-07-17 — 🟡 Callout de meses en checkout NO promete "6 meses garantizados": copy = "verás los plazos disponibles de tu banco". Mantener.
-- 2026-07-17 — 🟡 Verificar en preview desplegado que los slots del checkout se ven bien en móvil (probar con 1 producto en carrito, NO screenshot directo a /pagar = vacío).
+- 2026-07-17 — 🟡 Verificar en preview desplegado que los slots del checkout se ven bien en móvil.
 - 2026-07-16 — 🟡 Textos reseñas #5–#12 RECONSTRUIDOS. User debe pegar exactos.
 - 2026-07-16 — 🟡 Nombres de reseñas = propuesta, confirmar reales antes de pauta.
-- 2026-07-16 — 🟡 `ReviewsInvite.tsx` huérfano. Se puede borrar.
 - 2026-06-24 — Descuento volumen: verificar recálculo total carrito end-to-end.
 - 2026-06-24 — Regla envío $99 solo Perlas: verificar config shipping.
 
