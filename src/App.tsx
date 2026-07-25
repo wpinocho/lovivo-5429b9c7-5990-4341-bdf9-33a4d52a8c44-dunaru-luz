@@ -30,6 +30,7 @@ const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const ReturnsPolicy = lazy(() => import('./pages/ReturnsPolicy'));
 const PendingPayment = lazy(() => import('./pages/PendingPayment'));
 const OrderTrack = lazy(() => import('./pages/OrderTrack'));
+const Collection = lazy(() => import('./pages/Collection'));
 
 const queryClient = new QueryClient();
 
@@ -70,6 +71,7 @@ const App = () => (
                       <Routes>
                         <Route path="/" element={<Index />} />
                         <Route path="/productos/:slug" element={<Product />} />
+                        <Route path="/categorias/:handle" element={<Collection />} />
                         <Route path="/paquete/:slug" element={<Bundle />} />
                         <Route path="/carrito" element={<Cart />} />
                         <Route path="/pagar" element={<Checkout />} />

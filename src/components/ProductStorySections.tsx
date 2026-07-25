@@ -52,7 +52,7 @@ interface FaqItem {
 }
 
 interface PdpContent {
-  steps: StoryStep[]
+  steps?: StoryStep[]
   blocks: StoryBlock[]
   compareRows: CompareRow[]
   faqs: FaqItem[]
@@ -130,7 +130,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       },
     ],
     compareRows: [
-      { label: "Recargable infinitamente", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Sin desperdicio ni cera pegada", dunaru: true, traditional: false },
       { label: "Libre de parafina", dunaru: true, traditional: false },
       { label: "Usa el recipiente que tú quieras", dunaru: true, traditional: false },
@@ -224,7 +224,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     ],
     compareRows: [
       { label: "Llega listo para encender", dunaru: true, traditional: false },
-      { label: "Recargable infinitamente", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Vaso reutilizable de diseño", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
@@ -295,7 +295,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
         bullets: [
           "Material que dura años, no se desecha",
           "Acabado mate que combina con todo",
-          "Recargable para siempre",
+          "Rellenable para siempre",
         ],
         image: PLACEHOLDER,
         flip: true,
@@ -312,7 +312,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     ],
     compareRows: [
       { label: "Objeto de diseño reutilizable", dunaru: true, traditional: false },
-      { label: "Recargable infinitamente", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Llega listo para regalar", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
@@ -338,6 +338,301 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       {
         q: "¿Es buen regalo?",
         a: "Es nuestro producto más elegido para regalar. Llega en una presentación cuidada y queda como objeto de diseño en la casa de quien lo recibe.",
+      },
+    ],
+  },
+
+  "reserva-1-kg": {
+    blocks: [
+      {
+        title: "El doble de luz, el mismo recipiente",
+        body: "1 kg de perlas de cera perlada: **el doble de duración** para quien ya ama dunaru. Llena recipientes más grandes o mantén varios encendidos a la vez, sin quedarte corto.",
+        bullets: [
+          "1 kg de perlas + 30 mechas de algodón",
+          "Rinde el doble que la bolsa original",
+          "Envío gratis a todo México",
+        ],
+        image: "/casa-real-sala.webp",
+        photo: true,
+      },
+      {
+        title: "Compra una vez, rellena para siempre",
+        body: "Cuando las perlas se consumen **no tiras nada**: solo vacías, vuelves a llenar tu recipiente y colocas una mecha nueva. La misma luz cálida, una y otra vez.",
+        bullets: [
+          "Rellenable en cualquier recipiente de +10 cm",
+          "Menos desperdicio, más ahorro",
+        ],
+        image: "/casa-real-comedor.webp",
+        photo: true,
+        flip: true,
+      },
+    ],
+    compareRows: [
+      { label: "El doble de duración", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+      { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
+      { label: "Envío gratis a todo México", dunaru: true, traditional: false },
+      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿Qué incluye la Reserva 1 kg?",
+        a: "1 kg de perlas de cera perlada (el doble de la bolsa original) más 30 mechas de algodón. Ideal para recipientes grandes o para tener varias velas encendidas.",
+      },
+      {
+        q: "¿Necesito un recipiente aparte?",
+        a: "Sí. La Reserva es solo perlas y mechas. Úsala con cualquier recipiente resistente al calor de más de 10 cm de diámetro, o con tu kit dunaru.",
+      },
+      {
+        q: "¿Cuánto dura 1 kg?",
+        a: "Hasta 240 horas de luz aproximadamente, dependiendo del tamaño del recipiente y la cantidad de mechas encendidas.",
+      },
+      {
+        q: "¿Tiene costo el envío?",
+        a: "No. La Reserva 1 kg incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+      },
+    ],
+  },
+
+  "d-o-de-tonos": {
+    blocks: [
+      {
+        title: "Dos tonos para combinar a tu gusto",
+        body: "Dos bolsas de 500 g en los colores que elijas: **combina, alterna o llena dos recipientes a la vez**. Marfil, Champagne u Ónix para crear el ambiente que se te antoje.",
+        bullets: [
+          "2 bolsas de 500 g + 60 mechas incluidas",
+          "Elige los tonos que más te gusten",
+          "Envío gratis a todo México",
+        ],
+        image: "/casa-real-recibidor.webp",
+        photo: true,
+      },
+      {
+        title: "Más valor que comprar por separado",
+        body: "El Dúo de Tonos te da **más perlas por menos**: perfecto para tu casa o para regalar. Una compra, luz para mucho tiempo en más de un rincón.",
+        bullets: [
+          "Ahorras frente a comprar dos bolsas sueltas",
+          "Rellenable infinitamente en tus recipientes",
+        ],
+        image: "/casa-real-sala.webp",
+        photo: true,
+        flip: true,
+      },
+    ],
+    compareRows: [
+      { label: "Dos tonos para combinar", dunaru: true, traditional: false },
+      { label: "Mejor precio que por separado", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+      { label: "Envío gratis a todo México", dunaru: true, traditional: false },
+      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿Qué incluye el Dúo de Tonos?",
+        a: "Dos bolsas de 500 g de perlas de cera perlada en los colores que elijas, más 60 mechas de algodón. Envío gratis.",
+      },
+      {
+        q: "¿Puedo elegir los colores?",
+        a: "Sí. Combina Marfil, Champagne y Ónix como prefieras: dos iguales o dos distintos para alternar según el ambiente.",
+      },
+      {
+        q: "¿Necesito recipiente aparte?",
+        a: "Sí. El Dúo es solo perlas y mechas. Úsalo con cualquier recipiente resistente al calor de más de 10 cm, o con tu kit dunaru.",
+      },
+      {
+        q: "¿Tiene costo el envío?",
+        a: "No. El Dúo de Tonos incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+      },
+    ],
+  },
+
+  "tr-o-de-tonos": {
+    blocks: [
+      {
+        title: "La colección completa, el mejor valor",
+        body: "Tres bolsas de 500 g, tres colores: **Marfil, Champagne y Ónix juntos**. La forma más completa de vivir dunaru y nuestro mejor precio por gramo.",
+        bullets: [
+          "3 bolsas de 500 g + 60 mechas incluidas",
+          "Los tres tonos de la colección",
+          "El mejor valor dunaru · envío gratis",
+        ],
+        image: "/casa-real-sala.webp",
+        photo: true,
+      },
+      {
+        title: "Un tono para cada momento",
+        body: "Cambia el ambiente según el día: **el marfil cálido, el champagne elegante, el ónix dramático**. Con el Trío tienes luz de diseño para toda la casa y para regalar.",
+        bullets: [
+          "Combina y alterna cuando quieras",
+          "Rellenable infinitamente en tus recipientes",
+        ],
+        image: "/casa-real-comedor.webp",
+        photo: true,
+        flip: true,
+      },
+    ],
+    compareRows: [
+      { label: "Los tres tonos de la colección", dunaru: true, traditional: false },
+      { label: "El mejor precio por gramo", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+      { label: "Envío gratis a todo México", dunaru: true, traditional: false },
+      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿Qué incluye el Trío de Tonos?",
+        a: "Tres bolsas de 500 g de perlas de cera perlada en Marfil, Champagne y Ónix, más 60 mechas de algodón. Es nuestro mejor valor. Envío gratis.",
+      },
+      {
+        q: "¿Es el mejor precio?",
+        a: "Sí. El Trío es la opción con mejor precio por gramo y la forma más completa de tener toda la colección de tonos dunaru.",
+      },
+      {
+        q: "¿Necesito recipiente aparte?",
+        a: "Sí. El Trío es solo perlas y mechas. Úsalo con cualquier recipiente resistente al calor de más de 10 cm, o con tu kit dunaru.",
+      },
+      {
+        q: "¿Tiene costo el envío?",
+        a: "No. El Trío de Tonos incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+      },
+    ],
+  },
+
+  "bowl-negro": {
+    blocks: [
+      {
+        title: "Un recipiente más para otro rincón",
+        body: "Bowl de cerámica negra, resistente al calor y reutilizable. **Úsalo con tus perlas dunaru** para encender en otro espacio, o como portavela y objeto de decoración.",
+        bullets: [
+          "Cerámica resistente al calor",
+          "Compatible con todas las perlas dunaru",
+          "Reutilizable infinitamente",
+        ],
+        image: "/casa-real-recibidor.webp",
+        photo: true,
+      },
+      {
+        title: "Objeto de diseño, encendido o apagado",
+        body: "El bowl negro **se ve increíble aunque no lo enciendas**. Como cuenco decorativo, portavela o detalle de mesa: una pieza mínima que combina con todo.",
+        bullets: [
+          "Acabado mate que combina con todo",
+          "Fácil de limpiar y reutilizar",
+        ],
+        image: PLACEHOLDER,
+        flip: true,
+      },
+    ],
+    compareRows: [
+      { label: "Reutilizable infinitamente", dunaru: true, traditional: false },
+      { label: "Compatible con perlas dunaru", dunaru: true, traditional: false },
+      { label: "Objeto de diseño por sí solo", dunaru: true, traditional: false },
+      { label: "Resistente al calor", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿El bowl incluye perlas?",
+        a: "No. El Bowl negro es solo el recipiente de cerámica. Úsalo con cualquier bolsa de perlas dunaru para encender tu vela.",
+      },
+      {
+        q: "¿Es seguro con el calor?",
+        a: "Sí. La cerámica resiste el calor de la llama sin deformarse. Úsalo siempre sobre una superficie plana y nunca lo dejes encendido sin supervisión.",
+      },
+      {
+        q: "¿Se puede reutilizar?",
+        a: "Por supuesto. El bowl se reutiliza infinitamente: cuando las perlas se consumen, lo vacías, lo limpias y vuelves a empezar.",
+      },
+    ],
+  },
+
+  "pack-30-mechas": {
+    blocks: [
+      {
+        title: "Para nunca quedarte sin luz",
+        body: "30 mechas de algodón de repuesto. Cuando una se consume, **colocas otra y tu vela sigue encendida**. Las perlas se reutilizan; solo cambias la mecha.",
+        bullets: [
+          "30 mechas de algodón natural",
+          "Compatible con todos los productos dunaru",
+          "El complemento para que tu vela nunca pare",
+        ],
+        image: PLACEHOLDER,
+        photo: false,
+      },
+      {
+        title: "Así funciona la renovación",
+        body: "La magia de dunaru: **la mecha se consume, no las perlas**. Con este pack tienes repuesto para muchísimas encendidas más, sin comprar cera nueva.",
+        bullets: [
+          "Menos desperdicio, más ahorro",
+          "Siempre lista para renovar",
+        ],
+        image: "/paso-renueva.webp",
+        photo: true,
+        flip: true,
+      },
+    ],
+    compareRows: [
+      { label: "Renueva sin comprar cera nueva", dunaru: true, traditional: false },
+      { label: "Algodón natural", dunaru: true, traditional: false },
+      { label: "Compatible con todo dunaru", dunaru: true, traditional: false },
+      { label: "Larga duración por mecha", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿Cuántas mechas incluye?",
+        a: "30 mechas de algodón natural, listas para reemplazar cuando la anterior se consuma.",
+      },
+      {
+        q: "¿Sirven para cualquier producto dunaru?",
+        a: "Sí. Las mechas son compatibles con todas las perlas, kits y recipientes dunaru.",
+      },
+      {
+        q: "¿Cuánto dura una mecha?",
+        a: "Cada mecha ofrece varias horas de luz. Cuando se consume, colocas una nueva y tu vela sigue encendida sin cambiar las perlas.",
+      },
+    ],
+  },
+
+  "vaso-extra-transparente": {
+    blocks: [
+      {
+        title: "Un recipiente más para otro rincón",
+        body: "Vaso de vidrio transparente de diseño, resistente al calor y reutilizable. **Úsalo con tus perlas dunaru** para encender en otro espacio, o como portavela donde quieras.",
+        bullets: [
+          "Vidrio transparente resistente al calor",
+          "Compatible con todas las perlas dunaru",
+          "Reutilizable infinitamente",
+        ],
+        image: "/casa-real-comedor.webp",
+        photo: true,
+      },
+      {
+        title: "Combina con cualquier decoración",
+        body: "El vidrio transparente **deja ver el tono de tus perlas** y encaja en cualquier estilo. Como portavela, florero pequeño o detalle de mesa cuando no es vela.",
+        bullets: [
+          "Transparente: combina con todo",
+          "Fácil de limpiar y reutilizar",
+        ],
+        image: PLACEHOLDER,
+        flip: true,
+      },
+    ],
+    compareRows: [
+      { label: "Reutilizable infinitamente", dunaru: true, traditional: false },
+      { label: "Compatible con perlas dunaru", dunaru: true, traditional: false },
+      { label: "Deja ver el tono de las perlas", dunaru: true, traditional: false },
+      { label: "Resistente al calor", dunaru: true, traditional: true },
+    ],
+    faqs: [
+      {
+        q: "¿El vaso incluye perlas?",
+        a: "No. El Vaso extra transparente es solo el recipiente de vidrio. Úsalo con cualquier bolsa de perlas dunaru para encender tu vela.",
+      },
+      {
+        q: "¿Es seguro con el calor?",
+        a: "Sí. El vidrio resiste el calor de la llama. Úsalo siempre sobre una superficie plana y nunca lo dejes encendido sin supervisión.",
+      },
+      {
+        q: "¿Se puede reutilizar?",
+        a: "Por supuesto. El vaso se reutiliza infinitamente: cuando las perlas se consumen, lo vacías, lo limpias y vuelves a empezar.",
       },
     ],
   },
@@ -373,7 +668,7 @@ const HOW_IT_WORKS_STEPS: StoryStep[] = [
 const GUARANTEES = [
   { icon: Leaf, label: "Libre de parafina" },
   { icon: Flame, label: "Larga duración" },
-  { icon: RefreshCw, label: "Recargable infinita" },
+  { icon: RefreshCw, label: "Rellenable infinita" },
   { icon: Sparkles, label: "Siempre como nueva" },
 ]
 
@@ -577,7 +872,7 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12 py-8 border-t border-border/60 text-sm text-muted-foreground">
           <div className="flex items-center gap-2.5">
             <ShieldCheck className="h-5 w-5 text-dunaru-champagne" strokeWidth={1.5} />
-            <span>Pago 100% seguro con Mercado Pago</span>
+            <span>Pago 100% seguro</span>
           </div>
           <div className="flex items-center gap-2.5">
             <CreditCard className="h-5 w-5 text-dunaru-champagne" strokeWidth={1.5} />

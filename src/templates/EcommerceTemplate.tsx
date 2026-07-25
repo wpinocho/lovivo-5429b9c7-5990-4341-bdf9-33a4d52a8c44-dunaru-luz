@@ -6,11 +6,18 @@ import { FloatingCart } from '@/components/FloatingCart'
 import { ProfileMenu } from '@/components/ProfileMenu'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, Package, MessageCircle } from 'lucide-react'
+import { ShoppingCart, Package, MessageCircle, ChevronDown } from 'lucide-react'
 import { useCartUISafe } from '@/components/CartProvider'
 import { useCart } from '@/contexts/CartContext'
 import { useCollections } from '@/hooks/useCollections'
 import { ScrollLink } from '@/components/ScrollLink'
+
+const PRODUCT_CATEGORIES = [
+  { to: '/categorias/todos', label: 'Todos los productos' },
+  { to: '/categorias/kits', label: 'Kits' },
+  { to: '/categorias/accesorios', label: 'Accesorios' },
+  { to: '/categorias/recipientes', label: 'Recipientes' },
+]
 
 const TOP_MESSAGES = [
   'Envío gratis en pedidos desde $899',
@@ -83,6 +90,29 @@ export const EcommerceTemplate = ({
 
             {/* Navigation — desktop */}
             <nav className="hidden md:flex items-center gap-8 font-body text-sm font-medium">
+              {/* Productos — dropdown de categorías */}
+              <div className="relative group">
+                <button
+                  type="button"
+                  className="flex items-center gap-1 text-foreground/60 hover:text-foreground transition-colors"
+                >
+                  Productos
+                  <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
+                </button>
+                <div className="absolute left-0 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 focus-within:opacity-100 focus-within:visible transition-all duration-200 z-50">
+                  <div className="min-w-[200px] rounded-xl border border-border bg-background shadow-lg p-2">
+                    {PRODUCT_CATEGORIES.map(({ to, label }) => (
+                      <Link
+                        key={to}
+                        to={to}
+                        className="block rounded-lg px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-muted transition-colors"
+                      >
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
               <ScrollLink
                 to="/#como-funciona"
                 className="text-foreground/60 hover:text-foreground transition-colors"
@@ -154,6 +184,21 @@ export const EcommerceTemplate = ({
           {/* Mobile menu */}
           {mobileMenuOpen && (
             <nav className="md:hidden pt-4 pb-2 border-t border-border mt-3 flex flex-col gap-3 font-body text-sm font-medium animate-fade-in">
+              <div className="pb-1">
+                <span className="block text-xs uppercase tracking-widest text-foreground/40 mb-2">Productos</span>
+                <div className="flex flex-col gap-2 pl-1">
+                  {PRODUCT_CATEGORIES.map(({ to, label }) => (
+                    <Link
+                      key={to}
+                      to={to}
+                      className="text-foreground/70 hover:text-foreground transition-colors"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
               {[
                 { to: '/#como-funciona', label: 'Cómo funciona' },
                 { to: '/#tonos', label: 'Elige tu tono' },
@@ -208,7 +253,7 @@ export const EcommerceTemplate = ({
           <div className="md:col-span-1">
             <span className="font-display text-2xl tracking-wide">dunaru</span>
             <p className="mt-3 text-sm text-dunaru-marfil/60 leading-relaxed font-body">
-              Luz de diseño que cambia contigo. Velas perladas recargables, hechas para el hogar mexicano contemporáneo.
+              Luz de diseño que cambia contigo. Velas perladas rellenables, hechas para el hogar mexicano contemporáneo.
             </p>
             <div className="mt-4">
               <SocialLinks />
