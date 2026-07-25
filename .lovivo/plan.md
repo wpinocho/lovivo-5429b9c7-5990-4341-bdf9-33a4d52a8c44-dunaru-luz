@@ -25,12 +25,13 @@
 - Tokens: `dunaru-marfil/arena/champagne/carbon/onix/ambar`
 - Estética: editorial, mínima, mucho aire. Mobile-first.
 - **MENÚ "Productos"**: dropdown en header (`EcommerceTemplate.tsx`) con `PRODUCT_CATEGORIES` → Todos / Kits / Accesorios / Recipientes. Desktop = hover `group` panel; móvil = sección con label.
-- **PDP secciones** (`ProductStorySections.tsx`): driven por `PDP_CONTENT[slug]`. Esquema fijo: garantías → "Crea tu vela en 4 pasos" (HOW_IT_WORKS_STEPS compartido) → bloques editoriales → "Esto hace diferente a dunaru" (tabla) → "Preguntas frecuentes" → "Opiniones de quienes ya la tienen" (Reviews). `steps` en el config es OPCIONAL y NO se renderiza (usa HOW_IT_WORKS_STEPS).
+- **PDP secciones** (`ProductStorySections.tsx`): driven por `PDP_CONTENT[slug]`. Esquema fijo: garantías → "Crea tu vela en 4 pasos" (HOW_IT_WORKS_STEPS compartido) → bloques editoriales → "Esto hace diferente a dunaru" (tabla) → "Preguntas frecuentes" → "Opiniones de quienes ya la tienen" (Reviews). `steps` en el config es OPCIONAL y NO se renderiza (usa HOW_IT_WORKS_STEPS). Bloques con `photo:true` usan object-cover.
 - **Categoría landing** (`src/pages/Collection.tsx`): grid 2/3 cols de ProductCard, header centrado con nombre+descripción, empty/notFound states, SEO. handle `todos` = todos los productos activos.
 
 ## 3. Active Plan — ✅ Sin plan activo.
 
 ## 4. Recent Changes
+- 2026-07-25 — ✅ IMÁGENES PDP: kit-vaso-de-vidrio "Tu vaso, también cuando no es vela" → `/pdp-vaso-decor.webp` (gen con ref producto). bowl-negro "Objeto de diseño…" → `/pdp-bowl-decor.webp` (gen con ref producto). pack-30-mechas "Para nunca quedarte sin luz" → foto subida por user (caja MECHAS DUNARU).
 - 2026-07-25 — ✅ MENÚ "Productos": dropdown desktop + móvil en `EcommerceTemplate.tsx` con 4 categorías (`/categorias/:handle`).
 - 2026-07-25 — ✅ Nueva página `src/pages/Collection.tsx` + ruta `/categorias/:handle` en App.tsx. `todos` = catálogo completo.
 - 2026-07-25 — ✅ PDP para TODOS los 9 productos: agregado `PDP_CONTENT` para reserva-1-kg, d-o-de-tonos, tr-o-de-tonos, bowl-negro, pack-30-mechas, vaso-extra-transparente (antes solo 3).
@@ -51,17 +52,18 @@
 - **FAVICON**: `/favicon.png` (256x256). Viejo `public/favicon.svg` huérfano.
 - **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos.
 - **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` · **Casa real**: `/casa-real-{sala,comedor,recibidor}.webp` · **4 pasos**: `/paso-{vierte,inserta,enciende,renueva}.webp`.
-- Bloques PDP nuevos (bowl, mechas, vaso) usan PLACEHOLDER en el 2º bloque — mejorables con fotos reales.
+- **Bloques PDP nuevos** (2026-07-25): `/pdp-vaso-decor.webp` (vaso decorativo), `/pdp-bowl-decor.webp` (bowl decorativo), mecha pack = URL supabase message-images (foto real user). Ya NO usan PLACEHOLDER.
+- Restante PLACEHOLDER en PDP: kit-vaso-de-concreto bloques 2 y 3 ("Por qué concreto" + "El regalo que se nota"), vaso-extra-transparente bloque 2 ("Combina con cualquier decoración").
 
 ## 6. Known Issues
-- 2026-07-25 — 🟡 Perlas Originales, Reserva 1kg, Dúo y Trío NO están en ninguna categoría del menú (solo en "Todos"). Es intencional (user pidió solo Kits/Accesorios/Recipientes). Reconsiderar si quiere categoría "Perlas".
-- 2026-07-25 — 🟡 Algunos bloques PDP de bowl/mechas/vaso usan PLACEHOLDER.svg. Reemplazar con fotos reales cuando se pueda.
+- 2026-07-25 — 🟡 Perlas Originales, Reserva 1kg, Dúo y Trío NO están en ninguna categoría del menú (solo en "Todos"). Intencional. Reconsiderar categoría "Perlas".
+- 2026-07-25 — 🟡 Quedan PLACEHOLDER en kit-vaso-de-concreto (2 bloques) y vaso-extra-transparente (1 bloque). Reemplazar con fotos reales cuando se pueda.
 - 2026-07-17 — 🟡 Verificar checkout móvil en deploy.
 - 2026-06-24 — Verificar recálculo descuento volumen + regla envío $99 solo Perlas.
 
 ## 7. Pending / Future Sessions
 - [high] VIDEO DEMO con `videogen`: vierte→inserta→enciende→renueva.
-- [med] Fotos reales para bloques PDP de bowl-negro / pack-30-mechas / vaso-extra-transparente (hoy PLACEHOLDER).
+- [med] Fotos/imágenes para PLACEHOLDER restantes: kit-vaso-de-concreto (2) + vaso-extra-transparente (1).
 - [med] Banners de colección (image null) para las landings de categoría.
 - [low] Verificar visualmente el dropdown "Productos" en móvil tras deploy.
 - [low] Borrar `public/favicon.svg`, `public/tmp-upload-hero.webp` huérfanos.
