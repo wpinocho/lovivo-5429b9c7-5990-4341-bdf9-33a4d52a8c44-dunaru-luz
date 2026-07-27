@@ -16,6 +16,7 @@
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - RUTAS EN ESPAÑOL: producto = `/productos/:slug`, paquete = `/paquete/:slug`, carrito = `/carrito`, checkout = `/pagar`, **categoría = `/categorias/:handle`** (`todos` = catálogo completo).
 - Competencia: **VelaVita.cl** (LATAM) y **Foton (US)**.
+- ⚠️ **kit-vaso-de-concreto** es en realidad de **CERÁMICA** (no concreto). El user corrigió 2026-07-27. Slug sigue siendo "concreto" pero el material real es cerámica negra mate.
 
 ## 2. Design System
 - Fondo: Marfil #FAF6EF → `--background` · Alterno: Arena #F1E9DC → `bg-dunaru-arena`
@@ -31,10 +32,11 @@
 ## 3. Active Plan — ✅ Sin plan activo.
 
 ## 4. Recent Changes
-- 2026-07-25 — ✅ IMÁGENES PDP: kit-vaso-de-vidrio "Tu vaso, también cuando no es vela" → `/pdp-vaso-decor.webp` (gen con ref producto). bowl-negro "Objeto de diseño…" → `/pdp-bowl-decor.webp` (gen con ref producto). pack-30-mechas "Para nunca quedarte sin luz" → foto subida por user (caja MECHAS DUNARU).
+- 2026-07-27 — ✅ IMÁGENES PDP (fotos reales user): bowl-negro "Un recipiente más para otro rincón" → yafqxd2xr9i. vaso-extra-transparente "Combina con cualquier decoración" → wovmtpzn66. kit-vaso-de-concreto: "Un objeto de diseño que da luz" → i54i3sm6qk, "Por qué concreto"→"Por qué cerámica" (texto concreto→cerámica) + u6xju9w4wjl, "El regalo que se nota" → 77nbrytmoii. Todos con photo:true. Ya NO quedan PLACEHOLDER en PDP.
+- 2026-07-25 — ✅ IMÁGENES PDP: kit-vaso-de-vidrio "Tu vaso, también cuando no es vela" → `/pdp-vaso-decor.webp`. bowl-negro "Objeto de diseño…" → `/pdp-bowl-decor.webp`. pack-30-mechas "Para nunca quedarte sin luz" → foto real user.
 - 2026-07-25 — ✅ MENÚ "Productos": dropdown desktop + móvil en `EcommerceTemplate.tsx` con 4 categorías (`/categorias/:handle`).
 - 2026-07-25 — ✅ Nueva página `src/pages/Collection.tsx` + ruta `/categorias/:handle` en App.tsx. `todos` = catálogo completo.
-- 2026-07-25 — ✅ PDP para TODOS los 9 productos: agregado `PDP_CONTENT` para reserva-1-kg, d-o-de-tonos, tr-o-de-tonos, bowl-negro, pack-30-mechas, vaso-extra-transparente (antes solo 3).
+- 2026-07-25 — ✅ PDP para TODOS los 9 productos: agregado `PDP_CONTENT` para reserva-1-kg, d-o-de-tonos, tr-o-de-tonos, bowl-negro, pack-30-mechas, vaso-extra-transparente.
 - 2026-07-25 — ✅ "recargable" → "rellenable" en ProductStorySections + footer. Quitado "Mercado Pago" del bloque pago seguro de la PDP.
 - 2026-07-25 — ✅ Colecciones creadas: Kits (2), Accesorios (1), Recipientes (2).
 - 2026-07-23 — ✅ WHATSAPP: leyenda en PDP + footer. Número real 525531215386.
@@ -45,25 +47,25 @@
 - 2026-07-17 — ✅ FIX HERO MÓVIL: imagen vertical `/hero-dunaru-mobile.webp`.
 - 2026-07-16 — ✅ RESEÑAS REALES LIVE: `src/data/reviews.ts` (15 reseñas). 4.9/15.
 - 2026-07-16 — ✅ FIX PDP sticky bar + carrusel móvil.
-- 2026-07-15 — ✅ FIX galería PDP desktop.
 
 ## 5. Image Inventory
 - **Colecciones**: sin imagen asignada (Kits/Accesorios/Recipientes image=null). Opcional: generar banners.
 - **FAVICON**: `/favicon.png` (256x256). Viejo `public/favicon.svg` huérfano.
 - **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos.
 - **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` · **Casa real**: `/casa-real-{sala,comedor,recibidor}.webp` · **4 pasos**: `/paso-{vierte,inserta,enciende,renueva}.webp`.
-- **Bloques PDP nuevos** (2026-07-25): `/pdp-vaso-decor.webp` (vaso decorativo), `/pdp-bowl-decor.webp` (bowl decorativo), mecha pack = URL supabase message-images (foto real user). Ya NO usan PLACEHOLDER.
-- Restante PLACEHOLDER en PDP: kit-vaso-de-concreto bloques 2 y 3 ("Por qué concreto" + "El regalo que se nota"), vaso-extra-transparente bloque 2 ("Combina con cualquier decoración").
+- **Bloques PDP fotos reales user** (message-images/.../): bowl-negro rincón = `1785182590879-yafqxd2xr9i.webp`. vaso-transparente decor = `1785182590879-wovmtpzn66.webp`. concreto objeto luz = `1785182590879-i54i3sm6qk.webp`. concreto cerámica = `1785182590879-u6xju9w4wjl.webp`. concreto regalo = `1785182590879-77nbrytmoii.webp`. mecha pack = `1785012509487-5bsut1tyt6c.webp`.
+- **Bloques PDP generados** (2026-07-25): `/pdp-vaso-decor.webp`, `/pdp-bowl-decor.webp`.
+- ✅ Ya NO quedan PLACEHOLDER en ninguna PDP.
 
 ## 6. Known Issues
+- 2026-07-27 — 🟡 FAQs de kit-vaso-de-concreto todavía dicen "concreto" (título producto + respuestas FAQ). El material real es CERÁMICA. Reconsiderar renombrar producto completo a "Kit Vaso de Cerámica" y actualizar FAQs.
 - 2026-07-25 — 🟡 Perlas Originales, Reserva 1kg, Dúo y Trío NO están en ninguna categoría del menú (solo en "Todos"). Intencional. Reconsiderar categoría "Perlas".
-- 2026-07-25 — 🟡 Quedan PLACEHOLDER en kit-vaso-de-concreto (2 bloques) y vaso-extra-transparente (1 bloque). Reemplazar con fotos reales cuando se pueda.
 - 2026-07-17 — 🟡 Verificar checkout móvil en deploy.
 - 2026-06-24 — Verificar recálculo descuento volumen + regla envío $99 solo Perlas.
 
 ## 7. Pending / Future Sessions
 - [high] VIDEO DEMO con `videogen`: vierte→inserta→enciende→renueva.
-- [med] Fotos/imágenes para PLACEHOLDER restantes: kit-vaso-de-concreto (2) + vaso-extra-transparente (1).
+- [med] Considerar renombrar "Kit Vaso de Concreto" → "Cerámica" en producto/FAQs.
 - [med] Banners de colección (image null) para las landings de categoría.
 - [low] Verificar visualmente el dropdown "Productos" en móvil tras deploy.
 - [low] Borrar `public/favicon.svg`, `public/tmp-upload-hero.webp` huérfanos.

@@ -281,34 +281,36 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     blocks: [
       {
         title: "Un objeto de diseño que da luz",
-        body: "El bowl de concreto gris mate es una pieza de decoración por mérito propio. **Encendido, transforma cualquier espacio**: una cena, un recibidor, una casa nueva.",
+        body: "El bowl de cerámica negra mate es una pieza de decoración por mérito propio. **Encendido, transforma cualquier espacio**: una cena, un recibidor, una casa nueva.",
         bullets: [
-          "Bowl artesanal de concreto mate",
+          "Bowl artesanal de cerámica mate",
           "500 g de perlas + 30 mechas incluidas",
           "Llega listo para regalar · envío gratis",
         ],
-        image: "/casa-real-recibidor.webp",
+        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785182590879-i54i3sm6qk.webp",
         photo: true,
       },
       {
-        title: "Por qué concreto",
-        body: "El concreto es **durable, pesado y mate**: aguanta el calor, no se deforma y envejece con elegancia. Se compra una vez y se rellena infinitamente.",
+        title: "Por qué cerámica",
+        body: "La cerámica es **durable, resistente y mate**: aguanta el calor, no se deforma y envejece con elegancia. Se compra una vez y se rellena infinitamente.",
         bullets: [
           "Material que dura años, no se desecha",
           "Acabado mate que combina con todo",
           "Rellenable para siempre",
         ],
-        image: PLACEHOLDER,
+        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785182590879-u6xju9w4wjl.webp",
+        photo: true,
         flip: true,
       },
       {
         title: "El regalo que se nota",
-        body: "Cuando buscas algo que diga \"pensé en ti\", un objeto de concreto con luz cálida **se siente distinto a una vela cualquiera**. Perfecto para estrenos de casa, cumpleaños o agradecimientos.",
+        body: "Cuando buscas algo que diga \"pensé en ti\", un objeto de cerámica con luz cálida **se siente distinto a una vela cualquiera**. Perfecto para estrenos de casa, cumpleaños o agradecimientos.",
         bullets: [
           "Presentación cuidada, lista para obsequiar",
           "Un detalle que se queda en la casa",
         ],
-        image: PLACEHOLDER,
+        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785182590879-77nbrytmoii.webp",
+        photo: true,
       },
     ],
     compareRows: [
@@ -509,7 +511,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
           "Compatible con todas las perlas dunaru",
           "Reutilizable infinitamente",
         ],
-        image: "/casa-real-recibidor.webp",
+        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785182590879-yafqxd2xr9i.webp",
         photo: true,
       },
       {
@@ -613,7 +615,8 @@ const PDP_CONTENT: Record<string, PdpContent> = {
           "Transparente: combina con todo",
           "Fácil de limpiar y reutilizar",
         ],
-        image: PLACEHOLDER,
+        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785182590879-wovmtpzn66.webp",
+        photo: true,
         flip: true,
       },
     ],
