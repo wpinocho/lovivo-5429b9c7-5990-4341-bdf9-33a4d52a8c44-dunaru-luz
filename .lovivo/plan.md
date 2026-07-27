@@ -27,12 +27,15 @@
 - Estética: editorial, mínima, mucho aire. Mobile-first.
 - **MENÚ "Productos"**: dropdown en header (`EcommerceTemplate.tsx`) con `PRODUCT_CATEGORIES` → Todos / Kits / Accesorios / Recipientes. Desktop = hover `group` panel; móvil = sección con label.
 - **PDP secciones** (`ProductStorySections.tsx`): driven por `PDP_CONTENT[slug]`. Esquema fijo: garantías → "Crea tu vela en 4 pasos" (HOW_IT_WORKS_STEPS compartido) → bloques editoriales → "Esto hace diferente a dunaru" (tabla) → "Preguntas frecuentes" → "Opiniones de quienes ya la tienen" (Reviews). `steps` en el config es OPCIONAL y NO se renderiza (usa HOW_IT_WORKS_STEPS). Bloques con `photo:true` usan object-cover.
+- **`PERLAS_BENEFIT_BLOCKS`** (const compartida en ProductStorySections.tsx): los 4 bloques de beneficios de Perlas Originales. Usada por perlas-originales-500-g, reserva-1-kg, d-o-de-tonos, tr-o-de-tonos. Editar aquí = cambia en los 4.
 - **Categoría landing** (`src/pages/Collection.tsx`): grid 2/3 cols de ProductCard, header centrado con nombre+descripción, empty/notFound states, SEO. handle `todos` = todos los productos activos.
 
 ## 3. Active Plan — ✅ Sin plan activo.
 
 ## 4. Recent Changes
-- 2026-07-27 — ✅ IMÁGENES PDP (fotos reales user): bowl-negro "Un recipiente más para otro rincón" → yafqxd2xr9i. vaso-extra-transparente "Combina con cualquier decoración" → wovmtpzn66. kit-vaso-de-concreto: "Un objeto de diseño que da luz" → i54i3sm6qk, "Por qué concreto"→"Por qué cerámica" (texto concreto→cerámica) + u6xju9w4wjl, "El regalo que se nota" → 77nbrytmoii. Todos con photo:true. Ya NO quedan PLACEHOLDER en PDP.
+- 2026-07-27 — ✅ PASO "Vierte": nueva foto real del user (arena de cera vertiéndose en vaso) descargada a `public/paso-vierte.webp` (sobrescrita). Aplica a los 4 pasos de TODAS las PDP + "Quiénes somos" (mismo archivo compartido).
+- 2026-07-27 — ✅ BENEFICIOS COMPARTIDOS: extraídos los 4 bloques de perlas a const `PERLAS_BENEFIT_BLOCKS`. Ahora reserva-1-kg, d-o-de-tonos y tr-o-de-tonos usan los mismos beneficios+imágenes que Perlas Originales (antes tenían bloques propios de "casa-real").
+- 2026-07-27 — ✅ IMÁGENES PDP (fotos reales user): bowl-negro "Un recipiente más para otro rincón" → yafqxd2xr9i. vaso-extra-transparente "Combina con cualquier decoración" → wovmtpzn66. kit-vaso-de-concreto: "Un objeto de diseño que da luz" → i54i3sm6qk, "Por qué concreto"→"Por qué cerámica" (texto concreto→cerámica) + u6xju9w4wjl, "El regalo que se nota" → 77nbrytmoii. Todos con photo:true.
 - 2026-07-25 — ✅ IMÁGENES PDP: kit-vaso-de-vidrio "Tu vaso, también cuando no es vela" → `/pdp-vaso-decor.webp`. bowl-negro "Objeto de diseño…" → `/pdp-bowl-decor.webp`. pack-30-mechas "Para nunca quedarte sin luz" → foto real user.
 - 2026-07-25 — ✅ MENÚ "Productos": dropdown desktop + móvil en `EcommerceTemplate.tsx` con 4 categorías (`/categorias/:handle`).
 - 2026-07-25 — ✅ Nueva página `src/pages/Collection.tsx` + ruta `/categorias/:handle` en App.tsx. `todos` = catálogo completo.
@@ -44,15 +47,14 @@
 - 2026-07-17 — ✅ FAVICON de marca `/favicon.png`.
 - 2026-07-17 — ✅ Checkout UI: resumen móvil abierto, slots StripePayment, prueba social REAL 4.9/15.
 - 2026-07-17 — ✅ CONVERSIÓN PDP: MSI + reaseguros ETA + garantía + rating champagne barra sticky.
-- 2026-07-17 — ✅ FIX HERO MÓVIL: imagen vertical `/hero-dunaru-mobile.webp`.
-- 2026-07-16 — ✅ RESEÑAS REALES LIVE: `src/data/reviews.ts` (15 reseñas). 4.9/15.
-- 2026-07-16 — ✅ FIX PDP sticky bar + carrusel móvil.
 
 ## 5. Image Inventory
 - **Colecciones**: sin imagen asignada (Kits/Accesorios/Recipientes image=null). Opcional: generar banners.
 - **FAVICON**: `/favicon.png` (256x256). Viejo `public/favicon.svg` huérfano.
 - **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos.
 - **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` · **Casa real**: `/casa-real-{sala,comedor,recibidor}.webp` · **4 pasos**: `/paso-{vierte,inserta,enciende,renueva}.webp`.
+- **`/paso-vierte.webp`** (actualizado 2026-07-27): foto real user de arena de cera vertiéndose en vaso de vidrio. Compartido por 4-pasos PDP + "Quiénes somos".
+- **`PERLAS_BENEFIT_BLOCKS` imgs** (Supabase message-images 1784141750637/750638): h29qq6dodik (siempre nueva), 4z1j2dq3ab9 (recipiente que amas), go7315yuax (se cae), c47lrhv7fa (recarga). Compartidas por perlas/reserva/dúo/trío.
 - **Bloques PDP fotos reales user** (message-images/.../): bowl-negro rincón = `1785182590879-yafqxd2xr9i.webp`. vaso-transparente decor = `1785182590879-wovmtpzn66.webp`. concreto objeto luz = `1785182590879-i54i3sm6qk.webp`. concreto cerámica = `1785182590879-u6xju9w4wjl.webp`. concreto regalo = `1785182590879-77nbrytmoii.webp`. mecha pack = `1785012509487-5bsut1tyt6c.webp`.
 - **Bloques PDP generados** (2026-07-25): `/pdp-vaso-decor.webp`, `/pdp-bowl-decor.webp`.
 - ✅ Ya NO quedan PLACEHOLDER en ninguna PDP.

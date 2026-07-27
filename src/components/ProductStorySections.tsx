@@ -60,6 +60,56 @@ interface PdpContent {
 
 const PLACEHOLDER = "/placeholder.svg"
 
+/**
+ * Bloques de beneficios "estrella" (los de Perlas Originales).
+ * Compartidos con Reserva 1kg, Dúo y Trío de Tonos para máxima consistencia.
+ */
+const PERLAS_BENEFIT_BLOCKS: StoryBlock[] = [
+  {
+    title: "Siempre luce como el primer día",
+    body: "Las velas de siempre se deforman, dejan cera pegada y acaban en la basura. Tu vela dunaru **nunca envejece**: se consume, la vacías, la limpias y empieza de cero.",
+    bullets: [
+      "Cero cera pegada ni recipientes manchados",
+      "Cambia de recipiente cuando se te antoje",
+      "Una sola compra, luz por años",
+    ],
+    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750637-h29qq6dodik.webp",
+    photo: true,
+  },
+  {
+    title: "El recipiente que ya amas, ahora da luz",
+    body: "Ese tazón de cerámica, el vaso de vidrio o el cuenco de concreto que tanto te gusta **pasa a ser una vela de diseño**. Tú eliges el estilo, nosotros ponemos la luz.",
+    bullets: [
+      "Funciona en cualquier recipiente de +10 cm",
+      "Combina colores y texturas a tu gusto",
+    ],
+    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750638-4z1j2dq3ab9.webp",
+    photo: true,
+    flip: true,
+  },
+  {
+    title: "Se cae y no pasa nada",
+    body: "Al ser perlas de cera, un golpe **no significa cera caliente encima ni manchas imposibles**. Las recoges y sigues. Pensadas para casas con vida, niños y mascotas.",
+    bullets: [
+      "Mucho menos riesgo que una vela común",
+      "Se recogen y se vuelven a usar",
+    ],
+    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750638-go7315yuax.webp",
+    photo: true,
+  },
+  {
+    title: "Recarga en vez de tirar",
+    body: "Cada vela común termina en el bote de basura. Con dunaru **rellenas las veces que quieras**: menos desperdicio, más ahorro y la misma luz cálida de siempre.",
+    bullets: [
+      "Rellenable con cualquier bolsa de perlas",
+      "Menos residuos, una decisión más consciente",
+    ],
+    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750638-c47lrhv7fa.webp",
+    photo: true,
+    flip: true,
+  },
+]
+
 const PDP_CONTENT: Record<string, PdpContent> = {
   "perlas-originales-500-g": {
     steps: [
@@ -84,51 +134,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
         image: PLACEHOLDER,
       },
     ],
-    blocks: [
-      {
-        title: "Siempre luce como el primer día",
-        body: "Las velas de siempre se deforman, dejan cera pegada y acaban en la basura. Tu vela dunaru **nunca envejece**: se consume, la vacías, la limpias y empieza de cero.",
-        bullets: [
-          "Cero cera pegada ni recipientes manchados",
-          "Cambia de recipiente cuando se te antoje",
-          "Una sola compra, luz por años",
-        ],
-        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750637-h29qq6dodik.webp",
-        photo: true,
-      },
-      {
-        title: "El recipiente que ya amas, ahora da luz",
-        body: "Ese tazón de cerámica, el vaso de vidrio o el cuenco de concreto que tanto te gusta **pasa a ser una vela de diseño**. Tú eliges el estilo, nosotros ponemos la luz.",
-        bullets: [
-          "Funciona en cualquier recipiente de +10 cm",
-          "Combina colores y texturas a tu gusto",
-        ],
-        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750638-4z1j2dq3ab9.webp",
-        photo: true,
-        flip: true,
-      },
-      {
-        title: "Se cae y no pasa nada",
-        body: "Al ser perlas de cera, un golpe **no significa cera caliente encima ni manchas imposibles**. Las recoges y sigues. Pensadas para casas con vida, niños y mascotas.",
-        bullets: [
-          "Mucho menos riesgo que una vela común",
-          "Se recogen y se vuelven a usar",
-        ],
-        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750638-go7315yuax.webp",
-        photo: true,
-      },
-      {
-        title: "Recarga en vez de tirar",
-        body: "Cada vela común termina en el bote de basura. Con dunaru **rellenas las veces que quieras**: menos desperdicio, más ahorro y la misma luz cálida de siempre.",
-        bullets: [
-          "Rellenable con cualquier bolsa de perlas",
-          "Menos residuos, una decisión más consciente",
-        ],
-        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750638-c47lrhv7fa.webp",
-        photo: true,
-        flip: true,
-      },
-    ],
+    blocks: PERLAS_BENEFIT_BLOCKS,
     compareRows: [
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Sin desperdicio ni cera pegada", dunaru: true, traditional: false },
@@ -346,30 +352,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
   },
 
   "reserva-1-kg": {
-    blocks: [
-      {
-        title: "El doble de luz, el mismo recipiente",
-        body: "1 kg de perlas de cera perlada: **el doble de duración** para quien ya ama dunaru. Llena recipientes más grandes o mantén varios encendidos a la vez, sin quedarte corto.",
-        bullets: [
-          "1 kg de perlas + 30 mechas de algodón",
-          "Rinde el doble que la bolsa original",
-          "Envío gratis a todo México",
-        ],
-        image: "/casa-real-sala.webp",
-        photo: true,
-      },
-      {
-        title: "Compra una vez, rellena para siempre",
-        body: "Cuando las perlas se consumen **no tiras nada**: solo vacías, vuelves a llenar tu recipiente y colocas una mecha nueva. La misma luz cálida, una y otra vez.",
-        bullets: [
-          "Rellenable en cualquier recipiente de +10 cm",
-          "Menos desperdicio, más ahorro",
-        ],
-        image: "/casa-real-comedor.webp",
-        photo: true,
-        flip: true,
-      },
-    ],
+    blocks: PERLAS_BENEFIT_BLOCKS,
     compareRows: [
       { label: "El doble de duración", dunaru: true, traditional: false },
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
@@ -398,30 +381,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
   },
 
   "d-o-de-tonos": {
-    blocks: [
-      {
-        title: "Dos tonos para combinar a tu gusto",
-        body: "Dos bolsas de 500 g en los colores que elijas: **combina, alterna o llena dos recipientes a la vez**. Marfil, Champagne u Ónix para crear el ambiente que se te antoje.",
-        bullets: [
-          "2 bolsas de 500 g + 60 mechas incluidas",
-          "Elige los tonos que más te gusten",
-          "Envío gratis a todo México",
-        ],
-        image: "/casa-real-recibidor.webp",
-        photo: true,
-      },
-      {
-        title: "Más valor que comprar por separado",
-        body: "El Dúo de Tonos te da **más perlas por menos**: perfecto para tu casa o para regalar. Una compra, luz para mucho tiempo en más de un rincón.",
-        bullets: [
-          "Ahorras frente a comprar dos bolsas sueltas",
-          "Rellenable infinitamente en tus recipientes",
-        ],
-        image: "/casa-real-sala.webp",
-        photo: true,
-        flip: true,
-      },
-    ],
+    blocks: PERLAS_BENEFIT_BLOCKS,
     compareRows: [
       { label: "Dos tonos para combinar", dunaru: true, traditional: false },
       { label: "Mejor precio que por separado", dunaru: true, traditional: false },
@@ -450,30 +410,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
   },
 
   "tr-o-de-tonos": {
-    blocks: [
-      {
-        title: "La colección completa, el mejor valor",
-        body: "Tres bolsas de 500 g, tres colores: **Marfil, Champagne y Ónix juntos**. La forma más completa de vivir dunaru y nuestro mejor precio por gramo.",
-        bullets: [
-          "3 bolsas de 500 g + 60 mechas incluidas",
-          "Los tres tonos de la colección",
-          "El mejor valor dunaru · envío gratis",
-        ],
-        image: "/casa-real-sala.webp",
-        photo: true,
-      },
-      {
-        title: "Un tono para cada momento",
-        body: "Cambia el ambiente según el día: **el marfil cálido, el champagne elegante, el ónix dramático**. Con el Trío tienes luz de diseño para toda la casa y para regalar.",
-        bullets: [
-          "Combina y alterna cuando quieras",
-          "Rellenable infinitamente en tus recipientes",
-        ],
-        image: "/casa-real-comedor.webp",
-        photo: true,
-        flip: true,
-      },
-    ],
+    blocks: PERLAS_BENEFIT_BLOCKS,
     compareRows: [
       { label: "Los tres tonos de la colección", dunaru: true, traditional: false },
       { label: "El mejor precio por gramo", dunaru: true, traditional: false },
