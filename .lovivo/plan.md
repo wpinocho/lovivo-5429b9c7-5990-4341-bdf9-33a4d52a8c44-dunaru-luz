@@ -33,6 +33,7 @@
 ## 3. Active Plan — ✅ Sin plan activo.
 
 ## 4. Recent Changes
+- 2026-07-27 — 🟠 DIAGNÓSTICO CHECKOUT: user ve "No realizamos envíos a esa dirección" en /pagar con dirección CDMX. Causa = backend `no_rate_for_destination` (store_settings tiene país MX con countries_count:1 PERO falta TARIFA de envío que cubra CDMX). NO es bug de código. Fix = Dashboard → Config Tienda → Envíos: crear tarifa MX ($99 Perlas / gratis desde $899) y/o incluir estado CDMX. store_settings es tabla interna, NO editable por Lovivo.
 - 2026-07-27 — ✅ HERO (IndexUI.tsx): "recargables"→"rellenables". Botón "Comprar ahora" ahora → /productos/perlas-originales-500-g (bestseller). Imagen móvil object-center→object-top (empieza arriba, sin espacio blanco). Sección centrada (items-center) + mejor espaciado título/subtítulo/CTA (py-24, mb-7/8/10-12, gap-4).
 - 2026-07-27 — ✅ PASO "Vierte": nueva foto real del user (arena de cera vertiéndose en vaso) descargada a `public/paso-vierte.webp` (sobrescrita). Aplica a los 4 pasos de TODAS las PDP + "Quiénes somos" (mismo archivo compartido).
 - 2026-07-27 — ✅ BENEFICIOS COMPARTIDOS: extraídos los 4 bloques de perlas a const `PERLAS_BENEFIT_BLOCKS`. Ahora reserva-1-kg, d-o-de-tonos y tr-o-de-tonos usan los mismos beneficios+imágenes que Perlas Originales (antes tenían bloques propios de "casa-real").
@@ -47,7 +48,6 @@
 - 2026-07-23 — ✅ FIX INTEGRIDAD: quitado "Mercado Pago" del top bar y MSI bar footer.
 - 2026-07-17 — ✅ FAVICON de marca `/favicon.png`.
 - 2026-07-17 — ✅ Checkout UI: resumen móvil abierto, slots StripePayment, prueba social REAL 4.9/15.
-- 2026-07-17 — ✅ CONVERSIÓN PDP: MSI + reaseguros ETA + garantía + rating champagne barra sticky.
 
 ## 5. Image Inventory
 - **Colecciones**: sin imagen asignada (Kits/Accesorios/Recipientes image=null). Opcional: generar banners.
@@ -61,12 +61,14 @@
 - ✅ Ya NO quedan PLACEHOLDER en ninguna PDP.
 
 ## 6. Known Issues
+- 2026-07-27 — 🟠 CHECKOUT BLOQUEA PAGO: "No realizamos envíos a esa dirección" (`no_rate_for_destination`) para CDMX. Falta TARIFA de envío para México (país sí está cubierto, countries_count:1). ARREGLAR en Dashboard → Config Tienda → Envíos: crear tarifa MX ($99 Perlas / gratis desde $899) e incluir estado CDMX. store_settings es interna, no editable por código. PENDIENTE confirmar con user tras agregar tarifa.
 - 2026-07-27 — 🟡 FAQs de kit-vaso-de-concreto todavía dicen "concreto" (título producto + respuestas FAQ). El material real es CERÁMICA. Reconsiderar renombrar producto completo a "Kit Vaso de Cerámica" y actualizar FAQs.
 - 2026-07-25 — 🟡 Perlas Originales, Reserva 1kg, Dúo y Trío NO están en ninguna categoría del menú (solo en "Todos"). Intencional. Reconsiderar categoría "Perlas".
 - 2026-07-17 — 🟡 Verificar checkout móvil en deploy.
 - 2026-06-24 — Verificar recálculo descuento volumen + regla envío $99 solo Perlas.
 
 ## 7. Pending / Future Sessions
+- [high] Confirmar con user que tarifa de envío MX/CDMX quedó creada y el checkout ya deja pagar.
 - [high] VIDEO DEMO con `videogen`: vierte→inserta→enciende→renueva.
 - [med] Considerar renombrar "Kit Vaso de Concreto" → "Cerámica" en producto/FAQs.
 - [med] Banners de colección (image null) para las landings de categoría.
