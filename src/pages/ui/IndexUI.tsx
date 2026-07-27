@@ -169,14 +169,14 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
     <EcommerceTemplate showCart={true} layout="full-width">
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex items-start md:items-center overflow-hidden bg-dunaru-carbon">
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-dunaru-carbon">
         {/* Background image */}
         <div className="absolute inset-0">
           {/* Mobile: dedicated vertical composition (product visible, text space on top) */}
           <img
             src="/hero-dunaru-mobile.webp"
             alt="Vela perlada dunaru encendida junto a la bolsa de perladas en un interior cálido"
-            className="w-full h-full object-cover object-center md:hidden"
+            className="w-full h-full object-cover object-top md:hidden"
             fetchPriority="high"
           />
           {/* Desktop: horizontal composition */}
@@ -193,21 +193,21 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-20">
           <div className="max-w-xl">
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-5 animate-fade-up">
-              Velas perladas recargables
+            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-6 sm:mb-7 animate-fade-up">
+              Velas perladas rellenables
             </p>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.1] text-dunaru-marfil mb-6 animate-fade-up delay-100">
+            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.1] text-dunaru-marfil mb-7 sm:mb-8 animate-fade-up delay-100">
               Crea una vela nueva en el recipiente que ya amas.
             </h1>
-            <p className="font-body text-base sm:text-lg text-dunaru-marfil/75 mb-8 leading-relaxed animate-fade-up delay-200">
+            <p className="font-body text-base sm:text-lg text-dunaru-marfil/75 mb-10 sm:mb-12 leading-relaxed animate-fade-up delay-200">
               Sin derretir, sin riesgo, sin comprar una vela nueva. Solo vierte las perlas, inserta una mecha y enciende.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3 animate-fade-up delay-300">
-              <Link to="/productos/kit-vaso-de-vidrio">
+            <div className="flex flex-col sm:flex-row gap-4 animate-fade-up delay-300">
+              <Link to="/productos/perlas-originales-500-g">
                 <Button size="lg" className="w-full sm:w-auto bg-dunaru-marfil text-dunaru-onix hover:bg-dunaru-arena font-body font-semibold px-8 py-4 text-base rounded-sm shadow-none border-0 transition-colors">
                   Comprar ahora
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -221,7 +221,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             </div>
 
             {/* Social proof mini */}
-            <div className="mt-8 flex items-center gap-3 animate-fade-up delay-400">
+            <div className="mt-10 sm:mt-12 flex items-center gap-3 animate-fade-up delay-400">
               <span className="badge-msi">Hasta 6 MSI</span>
               <span className="font-body text-xs text-dunaru-marfil/50">· Envío gratis desde $899</span>
             </div>

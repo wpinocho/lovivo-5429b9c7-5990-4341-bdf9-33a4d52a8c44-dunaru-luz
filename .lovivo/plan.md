@@ -33,6 +33,7 @@
 ## 3. Active Plan — ✅ Sin plan activo.
 
 ## 4. Recent Changes
+- 2026-07-27 — ✅ HERO (IndexUI.tsx): "recargables"→"rellenables". Botón "Comprar ahora" ahora → /productos/perlas-originales-500-g (bestseller). Imagen móvil object-center→object-top (empieza arriba, sin espacio blanco). Sección centrada (items-center) + mejor espaciado título/subtítulo/CTA (py-24, mb-7/8/10-12, gap-4).
 - 2026-07-27 — ✅ PASO "Vierte": nueva foto real del user (arena de cera vertiéndose en vaso) descargada a `public/paso-vierte.webp` (sobrescrita). Aplica a los 4 pasos de TODAS las PDP + "Quiénes somos" (mismo archivo compartido).
 - 2026-07-27 — ✅ BENEFICIOS COMPARTIDOS: extraídos los 4 bloques de perlas a const `PERLAS_BENEFIT_BLOCKS`. Ahora reserva-1-kg, d-o-de-tonos y tr-o-de-tonos usan los mismos beneficios+imágenes que Perlas Originales (antes tenían bloques propios de "casa-real").
 - 2026-07-27 — ✅ IMÁGENES PDP (fotos reales user): bowl-negro "Un recipiente más para otro rincón" → yafqxd2xr9i. vaso-extra-transparente "Combina con cualquier decoración" → wovmtpzn66. kit-vaso-de-concreto: "Un objeto de diseño que da luz" → i54i3sm6qk, "Por qué concreto"→"Por qué cerámica" (texto concreto→cerámica) + u6xju9w4wjl, "El regalo que se nota" → 77nbrytmoii. Todos con photo:true.
