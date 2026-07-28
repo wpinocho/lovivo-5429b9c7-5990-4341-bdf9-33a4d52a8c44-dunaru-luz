@@ -108,6 +108,17 @@ const PERLAS_BENEFIT_BLOCKS: StoryBlock[] = [
     photo: true,
     flip: true,
   },
+  {
+    title: "El aroma lo eliges tú",
+    body: "Nuestras velas nacen **sin perfume**: luz limpia y sin humo perfumado. ¿La quieres con aroma? Antes de encender, agrega unas gotas de la esencia o aceite que ya tienes en casa. Tú controlas qué tan fuerte y lo cambias cuando quieras.",
+    bullets: [
+      "Sin perfume de fábrica: tú decides el aroma",
+      "Cámbialo cuando quieras, sin comprar otra vela",
+      "Usa esencias aptas para velas y en poca cantidad",
+    ],
+    image: "/pdp-aroma.webp",
+    photo: true,
+  },
 ]
 
 const PDP_CONTENT: Record<string, PdpContent> = {
@@ -155,6 +166,10 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       {
         q: "¿Es seguro en casa?",
         a: "Sí. Al ser perlas, si se cae el recipiente no hay derrame de cera caliente como en una vela tradicional. Aun así, nunca dejes una vela encendida sin supervisión.",
+      },
+      {
+        q: "¿Las velas tienen aroma?",
+        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
       },
       {
         q: "¿Cuánto dura?",
@@ -374,6 +389,10 @@ const PDP_CONTENT: Record<string, PdpContent> = {
         a: "Hasta 240 horas de luz aproximadamente, dependiendo del tamaño del recipiente y la cantidad de mechas encendidas.",
       },
       {
+        q: "¿Las velas tienen aroma?",
+        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
+      },
+      {
         q: "¿Tiene costo el envío?",
         a: "No. La Reserva 1 kg incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
       },
@@ -397,6 +416,10 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       {
         q: "¿Puedo elegir los colores?",
         a: "Sí. Combina Marfil, Champagne y Ónix como prefieras: dos iguales o dos distintos para alternar según el ambiente.",
+      },
+      {
+        q: "¿Las velas tienen aroma?",
+        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
       },
       {
         q: "¿Necesito recipiente aparte?",
@@ -426,6 +449,10 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       {
         q: "¿Es el mejor precio?",
         a: "Sí. El Trío es la opción con mejor precio por gramo y la forma más completa de tener toda la colección de tonos dunaru.",
+      },
+      {
+        q: "¿Las velas tienen aroma?",
+        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
       },
       {
         q: "¿Necesito recipiente aparte?",
