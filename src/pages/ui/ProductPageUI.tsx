@@ -13,8 +13,6 @@ import {
   Minus,
   Truck,
   ShieldCheck,
-  RotateCcw,
-  Lock,
   ChevronRight,
   Star,
   MessageCircle,
@@ -36,7 +34,6 @@ import {
 } from "@/components/ui/accordion"
 
 import type { SellingPlan } from "@/lib/supabase"
-import { VolumeBadge } from "@/components/ui/VolumeBadge"
 import { BOGOLabel } from "@/components/ui/BOGOLabel"
 import { intervalLabel } from "@/lib/subscription-utils"
 import ProductExpressCheckout from "@/components/ProductExpressCheckout"
@@ -65,6 +62,22 @@ const PDP_HEADLINE: Record<string, string> = {
     "Dos tonos para combinar. Un kilo de cera para crear las velas que quieras.",
   "tr-o-de-tonos":
     "Tres tonos, kilo y medio de cera. Crea, combina y rellena sin límite.",
+}
+
+/**
+ * Ancla de valor honesta bajo el precio. NO inventamos precios tachados:
+ * comparamos contra algo verificable (horas de luz, comprar por separado).
+ */
+const PDP_VALUE_ANCHOR: Record<string, string> = {
+  "perlas-originales-500-g":
+    "120 horas de luz — menos de $5 por hora encendida.",
+  "reserva-1-kg": "240 horas de luz — el mejor precio por gramo del catálogo.",
+  "kit-vaso-de-vidrio":
+    "Vaso + cera + mechas: todo listo para encender hoy.",
+  "kit-vaso-de-concreto":
+    "Bowl de cerámica hecho a mano + cera + mechas incluidas.",
+  "d-o-de-tonos": "240 horas de luz en dos tonos para combinar.",
+  "tr-o-de-tonos": "360 horas de luz en tres tonos para combinar.",
 }
 
 /** Qué llega en la caja — se muestra pegado al precio, sin necesidad de scroll. */
@@ -231,6 +244,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     ? PDP_HEADLINE[logic.product.slug]
     : undefined
   const includes = (logic.product?.slug && PDP_INCLUDES[logic.product.slug]) || []
+  const valueAnchor = logic.product?.slug
+    ? PDP_VALUE_ANCHOR[logic.product.slug]
+    : undefined
 
   // Rating compacto reutilizable (móvil arriba del fold)
   const InlineRating =
@@ -285,7 +301,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
         jsonLd={[productSchema, breadcrumbs]}
       />
     <EcommerceTemplate hideFloatingCartOnMobile>
-      <div className="max-w-[1400px] mx-auto -mt-4 md:mt-0 pb-32 md:pb-0">
+      <div className="max-w-[1400px] mx-auto -mt-4 md:mt-0 pb-24 md:pb-0">
         {/* Breadcrumbs */}
         <nav
           aria-label="Migas de pan"
@@ -395,13 +411,13 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   <CarouselContent>
                     {logic.displayImages.map((img: string, index: number) => (
                       <CarouselItem key={index} className="basis-[88%]">
-                        <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted/30">
+                        <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
                           <img
                             src={img}
                             alt={`${logic.product.title} ${index + 1}`}
-                            loading="lazy"
+                            loading={index === 0 ? "eager" : "lazy"}
                             decoding="async"
-                            className="w-full h-full object-contain"
+                            className="w-full h-full object-cover"
                           />
                           {discountPct > 0 && index === 0 && (
                             <Badge className="absolute top-3 left-3 bg-foreground text-background">
@@ -415,11 +431,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </Carousel>
               </div>
             ) : (
-              <div className="md:hidden relative aspect-[4/3] rounded-lg overflow-hidden bg-muted/30">
+              <div className="md:hidden relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
                 <img
                   src={displayImage}
                   alt={logic.product.title}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-cover"
                 />
                 {discountPct > 0 && (
                   <Badge className="absolute top-3 left-3 bg-foreground text-background">
@@ -469,6 +485,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 o <span className="font-medium text-foreground/90">6 pagos de {logic.formatMoney(logic.currentPrice / 6)}</span> a meses sin intereses
               </p>
 
+              {/* Ancla de valor verificable (sustituye al precio tachado inventado) */}
+              {valueAnchor && (
+                <p className="text-sm text-foreground/70">{valueAnchor}</p>
+              )}
+
               {/* Mini rating — prueba social arriba del fold */}
               {(() => {
                 const stats = getReviewStats()
@@ -499,10 +520,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 )
               })()}
 
-              {/* Promo badges */}
+              {/* Promo badges — el descuento por volumen ya se explica en el
+                  selector "Lleva más y ahorra", así que aquí no lo repetimos. */}
               {logic.product?.id && (
                 <div className="flex flex-wrap gap-2 pt-1">
-                  <VolumeBadge productId={logic.product.id} />
                   <BOGOLabel productId={logic.product.id} />
                 </div>
               )}
@@ -908,10 +929,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
         <div
           className={cn(
             "fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t shadow-lg transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)]",
-            // Móvil: siempre visible desde el load (el CTA inline queda muy abajo del fold).
-            // Desktop: solo cuando el usuario ya scrolleó por encima del CTA.
-            "translate-y-0",
-            scrolledPastCta ? "md:translate-y-0" : "md:translate-y-full"
+            // Solo aparece cuando el usuario ya scrolleó por encima del CTA inline.
+            scrolledPastCta ? "translate-y-0" : "translate-y-full"
           )}
         >
           <div className="max-w-7xl mx-auto px-4 py-3">
