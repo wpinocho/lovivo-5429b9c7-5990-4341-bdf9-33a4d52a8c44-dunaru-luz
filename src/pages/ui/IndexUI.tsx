@@ -88,13 +88,13 @@ const STEPS = [
     n: '02',
     title: 'Inserta',
     desc: 'Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.',
-    img: '/paso-inserta.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743155-htw95tvbi4b.webp',
   },
   {
     n: '03',
     title: 'Enciende',
     desc: 'Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.',
-    img: '/paso-enciende.webp',
+    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-3qeskqe43gv.webp',
   },
   {
     n: '04',
@@ -139,7 +139,7 @@ const FAQ_ITEMS = [
   { q: '¿Qué pasa al encenderla?', a: 'La mecha se consume lentamente. Las perlas no se "derriten" como una vela tradicional — solo rodean la llama. Al terminar la mecha, agregas una nueva.' },
   { q: '¿Es seguro?', a: 'Sí. La vela se apaga si se vuelca porque la mecha pierde contacto. Úsala siempre sobre una superficie plana y estable, nunca sin supervisión cerca de telas o materiales inflamables.' },
   { q: '¿Cómo llega?', a: 'Enviamos desde CDMX con paquetería estándar. Entregas en 2–5 días hábiles en todo México. Envío gratis en pedidos desde $899.' },
-  { q: '¿Puedo pagar a meses?', a: 'Sí. Aceptamos hasta 6 meses sin intereses con Mercado Pago (VISA, Mastercard participantes). El banco puede aplicar condiciones propias.' },
+  { q: '¿Puedo pagar a meses?', a: 'Sí. Aceptamos hasta 6 meses sin intereses con tarjetas participantes (VISA y Mastercard). El banco puede aplicar condiciones propias.' },
 ];
 
 // ─── FAQ Accordion ───────────────────────────────────────────────────────────

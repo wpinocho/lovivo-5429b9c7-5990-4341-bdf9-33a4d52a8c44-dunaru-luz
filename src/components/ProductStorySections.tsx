@@ -116,7 +116,7 @@ const PERLAS_BENEFIT_BLOCKS: StoryBlock[] = [
       "Cámbialo cuando quieras, sin comprar otra vela",
       "Usa esencias aptas para velas y en poca cantidad",
     ],
-    image: "/pdp-aroma.webp",
+    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-7ucg5c0kwb7.webp",
     photo: true,
   },
 ]
@@ -620,12 +620,12 @@ const HOW_IT_WORKS_STEPS: StoryStep[] = [
   {
     title: "Inserta",
     text: "Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.",
-    image: "/paso-inserta.webp",
+    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743155-htw95tvbi4b.webp",
   },
   {
     title: "Enciende",
     text: "Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.",
-    image: "/paso-enciende.webp",
+    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-3qeskqe43gv.webp",
   },
   {
     title: "Renueva",
