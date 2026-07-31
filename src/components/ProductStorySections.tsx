@@ -177,7 +177,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       },
       {
         q: "¿Cuánto cuesta el envío y cuándo llega?",
-        a: "El envío de Perlas Originales tiene un costo de $99. El tiempo estimado de entrega es de 2 a 5 días hábiles a todo México.",
+        a: "El envío es gratis a todo México. El tiempo estimado de entrega es de 2 a 5 días hábiles.",
       },
       {
         q: "¿Puedo devolverlo?",
@@ -760,7 +760,10 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         ))}
       </section>
 
-      {/* 4 — Tabla comparativa */}
+      {/* 4 — Reseñas reales (prueba social ANTES de la tabla y el FAQ) */}
+      <Reviews title="Opiniones de quienes ya la tienen" />
+
+      {/* 5 — Tabla comparativa */}
       <section className="max-w-3xl mx-auto">
         <h2 className="font-display text-3xl md:text-4xl text-center mb-10">
           Esto hace diferente a dunaru
@@ -807,7 +810,7 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         </div>
       </section>
 
-      {/* 5 — FAQ */}
+      {/* 6 — FAQ */}
       <section className="max-w-2xl mx-auto">
         <h2 className="font-display text-3xl md:text-4xl text-center mb-3">
           Preguntas frecuentes
@@ -832,9 +835,6 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
           ))}
         </Accordion>
       </section>
-
-      {/* 6 — Reseñas reales (todas, para máxima prueba social) */}
-      <Reviews title="Opiniones de quienes ya la tienen" />
 
       {/* 7 — Pago seguro + MSI */}
       <section className="max-w-[1400px] mx-auto">

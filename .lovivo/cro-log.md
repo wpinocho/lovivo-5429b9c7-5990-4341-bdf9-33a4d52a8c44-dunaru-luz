@@ -26,6 +26,15 @@
 - **Top sources**: direct 45%, meta ads 30%, organic 25%
 -->
 
+### Baseline 2026-07-31 (tráfico pagado Meta)
+- **Period**: 7 días (2026-07-25 → 07-31)
+- **Móvil**: 156 personas · 212 viewcontent · 8 addtocart (**3.8%**) · 5 initiatecheckout · **0 purchase**
+- **Únicos móvil**: 151 vieron producto → 6 al carrito = **4.0%** (benchmark sano 8–12%)
+- **30d**: 372 viewcontent → 23 addtocart (6.2%) → 20 initiatecheckout → **1 purchase** (prueba del owner)
+- **172 sesiones sin carrito, 0.0 clics promedio, 0% errores JS** → problema de mensaje, no técnico
+- **Landing del tráfico**: /productos/perlas-originales-500-g (59 desde IG) · /productos/kit-vaso-de-concreto (57 desde IG) · kit-vaso-de-vidrio (4)
+- **Bottleneck**: viewcontent → addtocart en móvil + producto de aterrizaje equivocado
+
 ## Changes
 <!-- Log every CRO change. Format:
 ### YYYY-MM-DD — Short description
@@ -42,6 +51,21 @@
 - **Files**: IndexUI.tsx, CasaRealSection (assets), BrandStorySection.tsx (nuevo), ReviewsInvite.tsx (nuevo), ReturnsPolicy.tsx (nuevo), EcommerceTemplate.tsx, App.tsx, public/*.webp.
 - **Metric to watch**: viewcontent → addtocart (confianza), tiempo en home, scroll depth a secciones de confianza.
 - **Result**: (pendiente 5-7 días post-lanzamiento).
+
+### 2026-07-31 — PDP móvil: promesa arriba del fold, qué incluye, CTA sticky siempre visible
+- **Hypothesis**: En iPhone (390×844) lo único visible al cargar era foto (487px) + título + precio. Sin explicación de qué es el producto ni CTA visible, el usuario frío de Instagram no entiende el mecanismo y se va sin tocar nada (0.0 clics promedio en 172 sesiones). Si damos promesa + qué incluye + botón visible desde el primer segundo, sube addtocart.
+- **Change**:
+  1. Nuevo bloque `lg:hidden` ARRIBA de la galería con `<h1>` + **promesa por slug** (`PDP_HEADLINE`) + rating compacto. El título de la columna info pasa a `<p className="hidden lg:block">` (un solo `<h1>` en DOM, visible en mobile-first crawl).
+  2. Galería móvil `aspect-[4/5]` → **`aspect-[4/3]`** (~120px menos de altura).
+  3. **Sticky bar siempre visible en móvil** (`translate-y-0` base, condicional solo en `md:`). Añadido `pb-32 md:pb-0` al wrapper.
+  4. Nuevo bloque **"Qué incluye"** (`PDP_INCLUDES`, 3 bullets con check por slug) pegado al precio.
+  5. Reemplazados los 4 badges genéricos (Envío rápido / Pago seguro / etc.) por **3 concretos**: Envío gratis a todo México · Garantía de 30 días · Hasta 6 meses sin intereses.
+  6. **Reseñas movidas ARRIBA** de la tabla comparativa y del FAQ en todas las PDP.
+  7. FAQ de Perlas Originales: quitado "$99 de envío" → "envío gratis a todo México" (el owner eliminó el cargo).
+- **Files**: `src/pages/ui/ProductPageUI.tsx`, `src/components/ProductStorySections.tsx`
+- **Metric to watch**: viewcontent → addtocart en **móvil** (baseline 4.0%). Objetivo mínimo 8%.
+- **Result**: (pendiente 7 días — revisar 2026-08-07). Comparación secuencial antes/después; NO A/B test (volumen insuficiente).
+- **Nota**: no es aislable del cambio de segmentación de anuncios si el owner redirige el presupuesto al Kit Vidrio en la misma semana.
 
 ## Active Experiments
 <!-- A/B tests currently running. Include flag_key, start date, variants, and target metric. -->

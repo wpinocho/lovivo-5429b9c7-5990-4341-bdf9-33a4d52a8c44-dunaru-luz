@@ -18,6 +18,8 @@ import {
   ChevronRight,
   Star,
   MessageCircle,
+  Check,
+  CreditCard,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
@@ -45,6 +47,59 @@ import { ProductStorySections } from "@/components/ProductStorySections"
 
 // Slugs que usan el selector "Lleva más y ahorra" en lugar del stepper + add-ons
 const TIER_SELECTOR_SLUGS = ["perlas-originales-500-g"]
+
+/**
+ * Promesa de una línea que aparece DEBAJO del título, arriba del fold en móvil.
+ * Responde "¿qué es esto y por qué me importa?" antes de que el usuario scrollee.
+ */
+const PDP_HEADLINE: Record<string, string> = {
+  "kit-vaso-de-vidrio":
+    "Enciende tu primera vela hoy. Cuando se acabe, la vuelves a llenar — no la tiras.",
+  "kit-vaso-de-concreto":
+    "El objeto de diseño que nunca se acaba: se rellena, no se tira.",
+  "perlas-originales-500-g":
+    "Convierte cualquier recipiente que ya tienes en una vela. Hasta 120 horas de luz.",
+  "reserva-1-kg":
+    "Un kilo de cera perlada: hasta 240 horas de luz para rellenar todas tus velas.",
+  "d-o-de-tonos":
+    "Dos tonos para combinar. Un kilo de cera para crear las velas que quieras.",
+  "tr-o-de-tonos":
+    "Tres tonos, kilo y medio de cera. Crea, combina y rellena sin límite.",
+}
+
+/** Qué llega en la caja — se muestra pegado al precio, sin necesidad de scroll. */
+const PDP_INCLUDES: Record<string, string[]> = {
+  "kit-vaso-de-vidrio": [
+    "Vaso de vidrio de diseño, resistente al calor",
+    "500 g de cera perlada · hasta 120 h de luz",
+    "30 mechas de algodón incluidas",
+  ],
+  "kit-vaso-de-concreto": [
+    "Bowl de cerámica negra mate, hecho a mano",
+    "500 g de cera perlada · hasta 120 h de luz",
+    "30 mechas de algodón incluidas",
+  ],
+  "perlas-originales-500-g": [
+    "500 g de cera perlada · hasta 120 h de luz",
+    "Funciona en cualquier recipiente de +10 cm",
+    "Se rellena infinitas veces — no tiras nada",
+  ],
+  "reserva-1-kg": [
+    "1 kg de cera perlada · hasta 240 h de luz",
+    "Rinde para varios recipientes a la vez",
+    "Se rellena infinitas veces — no tiras nada",
+  ],
+  "d-o-de-tonos": [
+    "2 bolsas de 500 g en tonos distintos",
+    "Hasta 240 h de luz en total",
+    "Combina tonos en el mismo recipiente",
+  ],
+  "tr-o-de-tonos": [
+    "3 bolsas de 500 g en tonos distintos",
+    "Hasta 360 h de luz en total",
+    "Combina tonos en el mismo recipiente",
+  ],
+}
 import { useCart } from "@/contexts/CartContext"
 import type { Product } from "@/lib/supabase"
 import { SEO } from "@/components/SEO"
@@ -172,6 +227,35 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const useTierSelector =
     logic.product?.slug && TIER_SELECTOR_SLUGS.includes(logic.product.slug)
 
+  const headline = logic.product?.slug
+    ? PDP_HEADLINE[logic.product.slug]
+    : undefined
+  const includes = (logic.product?.slug && PDP_INCLUDES[logic.product.slug]) || []
+
+  // Rating compacto reutilizable (móvil arriba del fold)
+  const InlineRating =
+    stickyStats.count > 0 ? (
+      <a href="#resenas" className="flex items-center gap-2 w-fit group">
+        <span className="flex items-center gap-0.5">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star
+              key={i}
+              className={cn(
+                "h-3.5 w-3.5",
+                i < Math.round(stickyStats.average)
+                  ? "fill-dunaru-champagne text-dunaru-champagne"
+                  : "text-dunaru-champagne/30"
+              )}
+              strokeWidth={1.5}
+            />
+          ))}
+        </span>
+        <span className="text-xs font-medium text-foreground/70 underline-offset-4 group-hover:underline">
+          {stickyStats.average} ({stickyStats.count} opiniones)
+        </span>
+      </a>
+    ) : null
+
   const { storeName, currencyCode } = useSettings()
   const product = logic.product
   const seoTitle = product.title
@@ -201,7 +285,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
         jsonLd={[productSchema, breadcrumbs]}
       />
     <EcommerceTemplate hideFloatingCartOnMobile>
-      <div className="max-w-[1400px] mx-auto -mt-4 md:mt-0">
+      <div className="max-w-[1400px] mx-auto -mt-4 md:mt-0 pb-32 md:pb-0">
         {/* Breadcrumbs */}
         <nav
           aria-label="Migas de pan"
@@ -226,6 +310,24 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
           {/* ========== GALLERY (lg:col-span-7, sticky on desktop) ========== */}
           <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)]">
+            {/* Móvil/tablet: título + promesa ARRIBA de la foto (arriba del fold) */}
+            <div className="lg:hidden mb-4 space-y-2">
+              {vendor && (
+                <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
+                  {vendor}
+                </p>
+              )}
+              <h1 className="text-2xl sm:text-3xl font-light tracking-tight leading-[1.15]">
+                {logic.product.title}
+              </h1>
+              {headline && (
+                <p className="text-sm text-foreground/75 leading-snug max-w-md">
+                  {headline}
+                </p>
+              )}
+              {InlineRating}
+            </div>
+
             {/* Desktop: main image + horizontal thumbnails below */}
             <div className="hidden md:block">
               {/* Main image */}
@@ -293,7 +395,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   <CarouselContent>
                     {logic.displayImages.map((img: string, index: number) => (
                       <CarouselItem key={index} className="basis-[88%]">
-                        <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
+                        <div className="relative aspect-[4/3] rounded-lg overflow-hidden bg-muted/30">
                           <img
                             src={img}
                             alt={`${logic.product.title} ${index + 1}`}
@@ -313,7 +415,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </Carousel>
               </div>
             ) : (
-              <div className="md:hidden relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
+              <div className="md:hidden relative aspect-[4/3] rounded-lg overflow-hidden bg-muted/30">
                 <img
                   src={displayImage}
                   alt={logic.product.title}
@@ -333,13 +435,14 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             {/* Title block */}
             <div className="space-y-3">
               {vendor && (
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
+                <p className="hidden lg:block text-xs uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   {vendor}
                 </p>
               )}
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-light tracking-tight leading-[1.1]">
+              {/* El <h1> vive en el bloque de arriba (mobile-first). Aquí solo la versión desktop. */}
+              <p className="hidden lg:block text-3xl md:text-4xl lg:text-5xl font-light tracking-tight leading-[1.1]">
                 {logic.product.title}
-              </h1>
+              </p>
 
               {/* Price block */}
               <div className="flex items-baseline gap-3 pt-2">
@@ -373,7 +476,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 return (
                   <a
                     href="#resenas"
-                    className="flex items-center gap-2 pt-1 w-fit group"
+                    className="hidden lg:flex items-center gap-2 pt-1 w-fit group"
                   >
                     <span className="flex items-center gap-0.5">
                       {Array.from({ length: 5 }).map((_, i) => (
@@ -405,23 +508,42 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               )}
             </div>
 
-            {/* Highlights row */}
-            <div className="grid grid-cols-2 gap-3 py-4 border-y border-border/60">
+            {/* Qué incluye — responde "¿qué me llega?" sin scroll */}
+            {includes.length > 0 && (
+              <div className="space-y-2.5">
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  Qué incluye
+                </p>
+                <ul className="space-y-2">
+                  {includes.map((item) => (
+                    <li
+                      key={item}
+                      className="flex items-start gap-2.5 text-sm text-foreground/85"
+                    >
+                      <Check
+                        className="h-4 w-4 text-dunaru-champagne shrink-0 mt-0.5"
+                        strokeWidth={2.5}
+                      />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Reaseguros concretos y verificables */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 py-4 border-y border-border/60">
               <div className="flex items-center gap-2.5 text-xs">
-                <Truck className="h-4 w-4 text-muted-foreground shrink-0" />
-                <span className="text-foreground/80">Envío rápido</span>
+                <Truck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
+                <span className="text-foreground/80">Envío gratis a todo México</span>
               </div>
               <div className="flex items-center gap-2.5 text-xs">
-                <ShieldCheck className="h-4 w-4 text-muted-foreground shrink-0" />
-                <span className="text-foreground/80">Garantía 30 días</span>
+                <ShieldCheck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
+                <span className="text-foreground/80">Garantía de 30 días</span>
               </div>
               <div className="flex items-center gap-2.5 text-xs">
-                <RotateCcw className="h-4 w-4 text-muted-foreground shrink-0" />
-                <span className="text-foreground/80">Devolución sin costo</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs">
-                <Lock className="h-4 w-4 text-muted-foreground shrink-0" />
-                <span className="text-foreground/80">Pago seguro</span>
+                <CreditCard className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
+                <span className="text-foreground/80">Hasta 6 meses sin intereses</span>
               </div>
             </div>
 
@@ -786,7 +908,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
         <div
           className={cn(
             "fixed bottom-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-t shadow-lg transition-transform duration-300 ease-out pb-[env(safe-area-inset-bottom)]",
-            scrolledPastCta ? "translate-y-0" : "translate-y-full"
+            // Móvil: siempre visible desde el load (el CTA inline queda muy abajo del fold).
+            // Desktop: solo cuando el usuario ya scrolleó por encima del CTA.
+            "translate-y-0",
+            scrolledPastCta ? "md:translate-y-0" : "md:translate-y-full"
           )}
         >
           <div className="max-w-7xl mx-auto px-4 py-3">
