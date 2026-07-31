@@ -11,16 +11,27 @@
 - Market: México. Moneda MXN. Idioma: español de México.
 - Tono: claro, cálido, directo. Sin tecnicismos.
 - Pagos: **A meses sin intereses vía Stripe** (hasta 6 meses). ⚠️ NUNCA nombrar "Stripe" ni "Mercado Pago" en la UI — solo "a meses sin intereses" / "tarjetas participantes".
-- Envío: **2026-07-31 el owner eliminó el cargo de $99 de Perlas Originales.** Copy actual en PDP = "Envío gratis a todo México" para todos los productos. ⚠️ VERIFICAR en Dashboard que no haya umbral mínimo activo.
+- Envío: **ENVÍO GRATIS A TODO MÉXICO, SIN MÍNIMO.** El cargo de $99 de Perlas fue eliminado por el owner (2026-07-31) y el copy ya se limpió de landing + PDP + selector de volumen.
 - WhatsApp REAL: `525531215386` (+52 55 3121 5386).
 - REGLA DE INTEGRIDAD: **NUNCA reseñas falsas.** Las 15 reseñas SÍ son reales. Prueba social usa `getReviewStats()` (4.9 / 15).
-- REGLA DE INTEGRIDAD (precios): **NUNCA inventar precios tachados.** Un `compare_at_price` solo es válido si es (a) un precio de lista real que la tienda cobró/cobrará, o (b) la suma verificable de comprar los componentes por separado. Riesgo PROFECO.
+- REGLA DE INTEGRIDAD (precios): **NUNCA inventar precios tachados.** El owner los puso a mano en Dashboard el 2026-07-31 (ver §4).
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - RUTAS EN ESPAÑOL: producto = `/productos/:slug`, paquete = `/paquete/:slug`, carrito = `/carrito`, checkout = `/pagar`, **categoría = `/categorias/:handle`**.
 - Competencia: **VelaVita.cl** (LATAM) y **Foton (US)**.
-- ⚠️ **kit-vaso-de-concreto** es en realidad de **CERÁMICA**. Slug sigue diciendo "concreto".
-- CATÁLOGO (precios MXN): Perlas Originales 500g $599 · Kit Vaso de Vidrio $899 · Reserva 1kg $999 · Dúo de Tonos $1,099 (de $1,398) · Kit bowl de Cerámica $1,099 · Trío de Tonos $1,499 (de $1,797) · Bowl negro $399 · Vaso extra transparente $249 · Pack 30 mechas $99.
-- **NOMBRES DE PRODUCTO — decisión abierta 2026-07-31**: el owner duda si "Perlas Originales 500 g" comunica. Propuesta pendiente de aprobación: **"Cera Perlada Rellenable 500 g"** (descriptivo + keyword SEO), manteniendo el slug actual para no romper enlaces/anuncios.
+- ⚠️ **kit-vaso-de-concreto** es en realidad de **CERÁMICA**. Slug sigue diciendo "concreto"; el título ya dice Cerámica.
+
+### CATÁLOGO (nombres nuevos 2026-07-31 · slugs INTACTOS)
+| Slug | Título nuevo | Precio | Antes |
+|---|---|---|---|
+| perlas-originales-500-g | Cera Perlada Rellenable 500 g | $599 | $799 |
+| reserva-1-kg | Cera Perlada Rellenable 1 kg | $999 | — (falta) |
+| kit-vaso-de-vidrio | Kit Vela Rellenable · Vaso de Vidrio | $899 | $999 |
+| kit-vaso-de-concreto | Kit Vela Rellenable · Bowl de Cerámica | $1,099 | $1,199 |
+| d-o-de-tonos | Dúo de Tonos · 1 kg de Cera Perlada | $1,099 | $1,398 |
+| tr-o-de-tonos | Trío de Tonos · 1.5 kg de Cera Perlada | $1,499 | $1,797 |
+| bowl-negro | Bowl de Cerámica Negro | $399 | — |
+| vaso-extra-transparente | Vaso de Vidrio Transparente | $249 | — |
+| pack-30-mechas | Pack de 30 Mechas de Algodón | $99 | — |
 
 ## 2. Design System
 - Fondo: Marfil #FAF6EF → `--background` · Alterno: Arena #F1E9DC → `bg-dunaru-arena`
@@ -34,23 +45,15 @@
 - **`PERLAS_BENEFIT_BLOCKS`**: 5 bloques compartidos por perlas-originales-500-g, reserva-1-kg, d-o-de-tonos, tr-o-de-tonos.
 - **4 PASOS duplicados en 2 lugares**: `HOW_IT_WORKS_STEPS` en `ProductStorySections.tsx` (PDP) y `STEPS` en `src/pages/ui/IndexUI.tsx` (landing). ⚠️ Cambiar imágenes/textos SIEMPRE en ambos.
 - **Categoría landing** (`src/pages/Collection.tsx`): grid 2/3 cols; handle `todos` = catálogo completo.
-- **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402 px)**. TODOS los contenedores de galería deben usar `aspect-[4/5]`. Usar `object-cover` (las fotos ya vienen en ratio exacto → no recorta). ⚠️ Cualquier otro aspect ratio + `object-contain` produce huecos laterales feos en móvil (error cometido y corregido el 2026-07-31).
-- **PDP arriba del fold (post 2026-07-31)** en `src/pages/ui/ProductPageUI.tsx`:
-  - Bloque `lg:hidden` ANTES de la galería: `<h1>` + promesa (`PDP_HEADLINE[slug]`) + rating compacto (`InlineRating`).
-  - ⚠️ El `<h1>` vive SOLO en ese bloque móvil. La columna info usa `<p className="hidden lg:block">` para evitar doble h1.
-  - Galería móvil = `aspect-[4/5]` + `object-cover`. Carrusel `basis-[88%]` (peek de la siguiente).
-  - `PDP_INCLUDES[slug]` = bloque "Qué incluye" (3 bullets) pegado al precio.
-  - `PDP_VALUE_ANCHOR[slug]` = ancla de valor honesta bajo el precio (horas de luz / todo incluido). Sustituye al precio tachado inventado.
-  - 3 reaseguros: Envío gratis a todo México · Garantía de 30 días · Hasta 6 meses sin intereses.
-  - **Sticky bar SOLO tras scrollear más allá del CTA inline** (`scrolledPastCta ? translate-y-0 : translate-y-full`). Wrapper lleva `pb-24 md:pb-0`. ⚠️ NO volver a dejarla siempre visible: el owner la rechazó explícitamente.
-  - `VolumeBadge` ELIMINADO de la PDP (el "2+ → 10% OFF" no se entendía). El descuento por volumen se explica en `ProductQuantityTiers`.
-- `ProductCardUI.tsx` YA muestra estrellas + conteo por slug (`getReviewStats(slug)`).
+- **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402 px)**. TODOS los contenedores de galería deben usar `aspect-[4/5]` + `object-cover`. ⚠️ Otro ratio + `object-contain` = huecos laterales en móvil (error corregido 2026-07-31).
+- **PDP arriba del fold** en `src/pages/ui/ProductPageUI.tsx`: bloque `lg:hidden` con h1 + `PDP_HEADLINE[slug]` + `InlineRating`; `PDP_INCLUDES[slug]`; `PDP_VALUE_ANCHOR[slug]`; 3 reaseguros; sticky bar SOLO tras pasar el CTA inline; `VolumeBadge` eliminado.
+- ⚠️ **Nombres de producto hardcodeados en `IndexUI.tsx`** (arrays `PRODUCTS`, `BUNDLES`, cards de "¿Cómo quieres empezar?" y chips de volumen). Si se renombra en Dashboard, hay que sincronizar aquí a mano.
 
 ---
 
 ## 3. Active Plan — Medir el efecto de los cambios CRO (revisar 2026-08-07)
 
-**Estado**: Pasos 1, 2 y 4 de la auditoría → ✅ IMPLEMENTADOS 2026-07-31 + ronda de correcciones del owner el mismo día. Paso 3 (video) lo genera el user.
+**Estado**: Auditoría CRO implementada + ronda de correcciones del owner + limpieza de envío + renombre de catálogo (todo 2026-07-31). Falta el video demo (lo genera el user).
 
 ### Baseline a batir (ver `.lovivo/cro-log.md`)
 - Móvil 7d: 151 únicos vieron producto → 6 addtocart = **4.0%** → **0 compras**.
@@ -60,39 +63,32 @@
 1. `posthog-query`: viewcontent → addtocart en móvil, 7 días post-cambio vs 7 días previos.
 2. `posthog-session-list` móvil: ¿siguen las sesiones con 0 clics?
 3. initiatecheckout → purchase: ¿mejoró tras arreglar el envío?
-
-### Pendiente del user (Dashboard, NO código)
-1. **Poner los precios tachados a mano en el Dashboard** — el tool `ecommerce--update-product` NO persiste `compare_at_price` (bug reportado). Valores honestos sugeridos: Reserva 1 kg → antes **$1,198** (= 2× Perlas 500 g) · Kit Vaso de Vidrio → antes **$947** (= perlas $599 + vaso $249 + mechas $99). [ALTA]
-2. **Redirigir presupuesto Meta** de Perlas Originales $599 → **Kit Vaso de Vidrio $899**. [ALTA]
-3. **Verificar tarifa de envío nacional** — probar checkout con CP 64000 (MTY) y 97000 (Mérida). [ALTA]
-4. **Confirmar que "Envío gratis a todo México" es cierto sin umbral**. [ALTA]
-5. Grabar/subir el **video demo** (vierte → inserta mecha → enciende → renueva).
-6. **Decidir el renombre de producto** (ver sección 1).
+4. ¿Cambió el CTR/tiempo en página tras el renombre de productos?
 
 ---
 
 ## 4. Recent Changes
-- 2026-07-31 — ✅ **CORRECCIONES DEL OWNER sobre la ronda CRO** en `ProductPageUI.tsx`: (a) galería móvil `aspect-[4/3]`+`object-contain` → **`aspect-[4/5]`+`object-cover`** (había huecos laterales, las fotos son 1122×1402); (b) **sticky bar revertida** a aparecer solo tras pasar el CTA (`translate-y-full` por defecto), wrapper `pb-32`→`pb-24`; (c) **`VolumeBadge` eliminado** ("2+ → 10% OFF" no se entendía); (d) nuevo `PDP_VALUE_ANCHOR` con anclas de valor honestas bajo el precio; (e) limpiados imports muertos `RotateCcw`, `Lock`, `VolumeBadge`; (f) primera imagen del carrusel con `loading="eager"`.
-- 2026-07-31 — 🐛 **BUG REPORTADO**: `ecommerce--update-product` devuelve success pero NO persiste `compare_at_price` (ID 365f54ae). Precios tachados quedan pendientes de hacerse a mano en Dashboard.
-- 2026-07-31 — ✅ **CRO PASO 1+2+4 IMPLEMENTADOS**: bloque promesa `lg:hidden` con h1 + `PDP_HEADLINE` + rating; sticky CTA; bloque "Qué incluye" (`PDP_INCLUDES`); 4 badges genéricos → 3 concretos; Reviews movidas arriba de tabla comparativa y FAQ; FAQ Perlas "$99 de envío" → "envío gratis".
-- 2026-07-31 — 🔍 **AUDITORÍA CRO COMPLETA**. Embudo móvil: 151 personas → 6 al carrito (4%) → 0 compras. Anuncios Meta mandan 59 a Perlas Originales y 57 a Cerámica $1,099; Kit Vidrio $899 recibió 4.
+- 2026-07-31 — ✅ **RENOMBRE DE CATÁLOGO (9 productos, slugs intactos)**: nombres descriptivos + keyword SEO ("Cera Perlada Rellenable", "Kit Vela Rellenable · …"). Ver tabla en §1. Sincronizados también los títulos hardcodeados de `IndexUI.tsx`.
+- 2026-07-31 — ✅ **LIMPIEZA DEL CARGO DE $99**: `ProductQuantityTiers.tsx` ("Envío de Perlas Originales: +$99" → "Envío gratis a todo México") y `IndexUI.tsx` (card de Perlas "+$99 envío" → "envío gratis", hero "Envío gratis desde $899" → "a todo México", FAQ "desde $899" → "sin monto mínimo"). También FAQ "(vidrio o concreto)" → "(vaso de vidrio o bowl de cerámica)".
+- 2026-07-31 — ✅ **El owner puso los `compare_at_price` a mano en Dashboard**: Perlas $799 · Kit Vidrio $999 · Cerámica $1,199 · Dúo $1,398 · Trío $1,797. ⚠️ **Reserva 1 kg sigue SIN precio tachado** (sugerido: $1,198 = 2× 500 g).
+- 2026-07-31 — ✅ **CORRECCIONES DEL OWNER sobre la ronda CRO** en `ProductPageUI.tsx`: galería móvil `aspect-[4/5]`+`object-cover`; sticky bar revertida a aparecer solo tras pasar el CTA; `VolumeBadge` eliminado; nuevo `PDP_VALUE_ANCHOR`; imports muertos limpiados.
+- 2026-07-31 — 🐛 **BUG REPORTADO**: `ecommerce--update-product` devuelve success pero NO persiste `compare_at_price` (ID 365f54ae). El campo `title` SÍ persiste correctamente.
+- 2026-07-31 — ✅ **CRO PASO 1+2+4 IMPLEMENTADOS**: bloque promesa `lg:hidden` con h1 + `PDP_HEADLINE` + rating; sticky CTA; `PDP_INCLUDES`; 3 badges concretos; Reviews arriba de tabla comparativa y FAQ.
+- 2026-07-31 — 🔍 **AUDITORÍA CRO COMPLETA**. Embudo móvil: 151 personas → 6 al carrito (4%) → 0 compras.
 - 2026-07-31 — ✅ IMÁGENES REALES del user: paso "Inserta", paso "Enciende" y bloque "El aroma lo eliges tú".
 - 2026-07-31 — ✅ FAQ landing: quitado "Mercado Pago" → "tarjetas participantes (VISA y Mastercard)".
 - 2026-07-28 — ✅ AROMA en PDP rellenables: bloque compartido + FAQ en los 4 productos.
-- 2026-07-27 — 🟠 DIAGNÓSTICO CHECKOUT: "No realizamos envíos a esa dirección". Causa = falta TARIFA de envío MX.
 - 2026-07-27 — ✅ HERO: "recargables"→"rellenables". CTA → /productos/perlas-originales-500-g.
 - 2026-07-27 — ✅ PASO "Vierte": foto real en `public/paso-vierte.webp`.
 - 2026-07-27 — ✅ BENEFICIOS COMPARTIDOS: const `PERLAS_BENEFIT_BLOCKS`.
-- 2026-07-27 — ✅ IMÁGENES PDP (fotos reales user): bowl-negro, vaso-transparente, kit-cerámica.
 - 2026-07-25 — ✅ MENÚ "Productos": dropdown desktop + móvil con 4 categorías.
-- 2026-07-25 — ✅ Nueva página `src/pages/Collection.tsx` + ruta `/categorias/:handle`.
 - 2026-07-25 — ✅ PDP para TODOS los 9 productos (`PDP_CONTENT`).
 
 ## 5. Image Inventory
 - **📐 Todas las fotos de producto son 1122×1402 px (4:5), webp.**
 - **Colecciones**: sin imagen asignada (Kits/Accesorios/Recipientes image=null).
 - **FAVICON**: `/favicon.png` (256x256).
-- **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos, 76 imágenes.
+- **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos, 75 imágenes.
 - **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` · **Casa real**: `/casa-real-{sala,comedor,recibidor}.webp`
 - **4 PASOS** — base URL `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`:
   - Vierte → `/paso-vierte.webp` (repo, foto real user)
@@ -101,30 +97,29 @@
   - Renueva → `/paso-renueva.webp` (generada, pendiente foto real)
 - **Bloque "El aroma lo eliges tú"** → `1785521743156-7ucg5c0kwb7.webp` (foto real user).
 - **`PERLAS_BENEFIT_BLOCKS` imgs**: h29qq6dodik, 4z1j2dq3ab9, go7315yuax, c47lrhv7fa + la de aroma.
-- **Bloques PDP fotos reales user**: bowl-negro = yafqxd2xr9i · vaso-transparente = wovmtpzn66 · concreto luz = i54i3sm6qk · cerámica = u6xju9w4wjl · regalo = 77nbrytmoii · mecha pack = 5bsut1tyt6c.
 - 🔴 **FALTA: video demo del mecanismo** (lo genera el user).
 
 ## 6. Known Issues
+- 2026-07-31 — 🟠 **Sin verificar si quedan nombres viejos hardcodeados** en `ProductStorySections.tsx` (tabla comparativa / FAQ por slug). Revisar en la próxima sesión.
 - 2026-07-31 — 🔴 **`ecommerce--update-product` NO persiste `compare_at_price`** (reportado, ID 365f54ae). Workaround: Dashboard manual.
 - 2026-07-31 — 🟠 **Checkout: 20 inicios → 1 compra en 30d con 0 errores JS.** Verificar cobertura de envío nacional (CP 64000 y 97000).
-- 2026-07-31 — 🟠 **Copy "Envío gratis a todo México"** aparece en TODAS las PDP. Si existe umbral mínimo, es promesa falsa → ajustar.
 - 2026-07-31 — 🟡 `lov-search-files` devuelve 0 resultados incluso para strings triviales (índice roto). Usar `lov-view` con rutas directas.
-- 2026-07-31 — 🟡 Autocapture de clics parece desactivado en PostHog (`click_count`=0 en TODAS las sesiones). No confiar en esa métrica.
+- 2026-07-31 — 🟡 Autocapture de clics parece desactivado en PostHog (`click_count`=0 en TODAS las sesiones).
 - 2026-07-27 — 🟡 FAQs de kit-vaso-de-concreto dicen "concreto"; material real es CERÁMICA.
 - 2026-07-25 — 🟡 Perlas/Reserva/Dúo/Trío NO están en categoría del menú (solo "Todos").
 
 ## 7. Pending / Future Sessions
+- [ALTA] Revisar `ProductStorySections.tsx` y `EcommerceTemplate.tsx` por nombres de producto viejos hardcodeados.
+- [ALTA] User: poner `compare_at_price` de **Reserva 1 kg = $1,198** en Dashboard (único que falta).
 - [ALTA] 2026-08-07: medir addtocart móvil post-cambio vs baseline 4.0% y registrar Result en `cro-log.md`.
-- [ALTA] User: poner `compare_at_price` a mano en Dashboard (Reserva $1,198 · Kit Vidrio $947).
-- [ALTA] User: redirigir anuncios Meta al Kit Vaso de Vidrio $899.
+- [ALTA] User: redirigir anuncios Meta al Kit Vela Rellenable · Vaso de Vidrio $899.
 - [ALTA] User: verificar tarifa de envío nacional y probar checkout desde MTY/Mérida.
 - [ALTA] VIDEO DEMO (lo graba el user) → primer slide del carrusel móvil de la PDP y en "Cómo funciona" de `IndexUI.tsx`.
-- [MED] Decidir renombre "Perlas Originales 500 g" → "Cera Perlada Rellenable 500 g" (mantener slug).
+- [MED] Actualizar descripciones de producto para que digan "cerámica" en kit-vaso-de-concreto (la description sigue diciendo "concreto gris mate").
 - [MED] Cambiar CTA del hero de `IndexUI.tsx` → `/productos/kit-vaso-de-vidrio`.
 - [MED] Encuesta PostHog de salida en PDP móvil: "¿Qué te frenó de comprar hoy?".
 - [MED] Añadir `PDP_HEADLINE` / `PDP_INCLUDES` / `PDP_VALUE_ANCHOR` para bowl-negro, vaso-transparente y pack de mechas.
 - [MED] Pedir al user foto real del paso "Renueva".
 - [MED] FASE AROMAS: lanzar esencias propias dunaru.
-- [MED] Considerar renombrar slug "kit-vaso-de-concreto" → cerámica.
 - [BAJA] Banners de colección (image null).
 - [BAJA] Borrar huérfanos: `public/favicon.svg`, `public/tmp-upload-hero.webp`, `public/pdp-aroma.webp`, `public/paso-inserta.webp`, `public/paso-enciende.webp`.

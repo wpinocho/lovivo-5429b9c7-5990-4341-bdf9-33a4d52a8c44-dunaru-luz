@@ -18,16 +18,16 @@ interface IndexUIProps {
 const PRODUCTS = [
   {
     slug: 'perlas-originales-500-g',
-    title: 'Perlas Originales 500 g',
+    title: 'Cera Perlada Rellenable 500 g',
     subtitle: 'Para el recipiente que ya tienes',
     price: '$599',
-    shipping: '+$99 envío',
+    shipping: 'Envío gratis',
     badge: null,
     img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp',
   },
   {
     slug: 'kit-vaso-de-vidrio',
-    title: 'Kit Vaso de Vidrio',
+    title: 'Kit Vela Rellenable · Vaso de Vidrio',
     subtitle: 'Todo listo para encender hoy',
     price: '$899',
     shipping: 'Envío gratis',
@@ -36,7 +36,7 @@ const PRODUCTS = [
   },
   {
     slug: 'kit-vaso-de-concreto',
-    title: 'Kit Vaso de Concreto',
+    title: 'Kit Vela Rellenable · Bowl de Cerámica',
     subtitle: 'El regalo con más presencia',
     price: '$1,099',
     shipping: 'Envío gratis',
@@ -45,7 +45,7 @@ const PRODUCTS = [
   },
   {
     slug: 'reserva-1-kg',
-    title: 'Reserva 1 kg',
+    title: 'Cera Perlada Rellenable 1 kg',
     subtitle: 'El doble de duración',
     price: '$999',
     shipping: 'Envío gratis',
@@ -57,7 +57,7 @@ const PRODUCTS = [
 const BUNDLES = [
   {
     slug: 'd-o-de-tonos',
-    title: 'Dúo de Tonos',
+    title: 'Dúo de Tonos · 1 kg',
     subtitle: '2 bolsas 500 g · 60 mechas',
     price: '$1,099',
     compare: '$1,398',
@@ -67,7 +67,7 @@ const BUNDLES = [
   },
   {
     slug: 'tr-o-de-tonos',
-    title: 'Trío de Tonos',
+    title: 'Trío de Tonos · 1.5 kg',
     subtitle: '3 bolsas 500 g · 60 mechas',
     price: '$1,499',
     compare: '$1,797',
@@ -132,13 +132,13 @@ const TONOS = [
 ];
 
 const FAQ_ITEMS = [
-  { q: '¿Qué incluye cada bolsa?', a: '500 g de perlas de cera perlada + 30 mechas de algodón. Los kits incluyen además el recipiente (vidrio o concreto).' },
+  { q: '¿Qué incluye cada bolsa?', a: '500 g de perlas de cera perlada + 30 mechas de algodón. Los kits incluyen además el recipiente (vaso de vidrio o bowl de cerámica).' },
   { q: '¿Qué recipiente puedo usar?', a: 'Cualquier recipiente resistente al calor de mínimo 10 cm de diámetro y 5 cm de alto. Vasos, bowls, copas, jarras — lo que ya tienes en casa.' },
   { q: '¿Cuántas mechas incluye?', a: '30 mechas por bolsa de 500 g. Los bundles Dúo y Trío incluyen 60 mechas.' },
   { q: '¿Cuánto dura una bolsa?', a: 'Aproximadamente 120 horas de luz por bolsa de 500 g, dependiendo del tamaño de tu recipiente.' },
   { q: '¿Qué pasa al encenderla?', a: 'La mecha se consume lentamente. Las perlas no se "derriten" como una vela tradicional — solo rodean la llama. Al terminar la mecha, agregas una nueva.' },
   { q: '¿Es seguro?', a: 'Sí. La vela se apaga si se vuelca porque la mecha pierde contacto. Úsala siempre sobre una superficie plana y estable, nunca sin supervisión cerca de telas o materiales inflamables.' },
-  { q: '¿Cómo llega?', a: 'Enviamos desde CDMX con paquetería estándar. Entregas en 2–5 días hábiles en todo México. Envío gratis en pedidos desde $899.' },
+  { q: '¿Cómo llega?', a: 'Enviamos desde CDMX con paquetería estándar. Entregas en 2–5 días hábiles. Envío gratis a todo México, sin monto mínimo.' },
   { q: '¿Puedo pagar a meses?', a: 'Sí. Aceptamos hasta 6 meses sin intereses con tarjetas participantes (VISA y Mastercard). El banco puede aplicar condiciones propias.' },
 ];
 
@@ -223,7 +223,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             {/* Social proof mini */}
             <div className="mt-10 sm:mt-12 flex items-center gap-3 animate-fade-up delay-400">
               <span className="badge-msi">Hasta 6 MSI</span>
-              <span className="font-body text-xs text-dunaru-marfil/50">· Envío gratis desde $899</span>
+              <span className="font-body text-xs text-dunaru-marfil/50">· Envío gratis a todo México</span>
             </div>
           </div>
         </div>
@@ -314,10 +314,10 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                 </div>
                 <div className="p-6">
                   <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Ya tengo un recipiente que amo</p>
-                  <h3 className="font-display text-2xl text-foreground mb-2">Perlas Originales 500 g</h3>
+                  <h3 className="font-display text-2xl text-foreground mb-2">Cera Perlada Rellenable 500 g</h3>
                   <p className="font-body text-sm text-foreground/60 mb-4">Solo las perlas y las mechas. Pon la vela en tu vaso favorito hoy.</p>
                   <div className="flex items-center justify-between">
-                    <span className="font-body font-bold text-xl text-foreground">$599 <span className="text-sm font-normal text-foreground/50">+$99 envío</span></span>
+                    <span className="font-body font-bold text-xl text-foreground">$599 <span className="text-sm font-normal text-foreground/50">envío gratis</span></span>
                     <span className="font-body text-sm text-dunaru-champagne font-medium flex items-center gap-1">Ver producto <ArrowRight className="h-3.5 w-3.5" /></span>
                   </div>
                 </div>
@@ -339,7 +339,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                     </div>
                     <div className="p-5 flex flex-col justify-center">
                       <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Quiero algo listo</p>
-                      <h3 className="font-display text-xl text-dunaru-marfil mb-2">Kit Vaso de Vidrio</h3>
+                      <h3 className="font-display text-xl text-dunaru-marfil mb-2">Kit · Vaso de Vidrio</h3>
                       <p className="font-body text-xs text-dunaru-marfil/60 mb-3">Vaso + perlas + mechas. Listo para usar o regalar.</p>
                       <span className="font-body font-bold text-lg text-dunaru-marfil">$899 <span className="text-xs font-normal text-dunaru-marfil/50">envío gratis</span></span>
                     </div>
@@ -359,8 +359,8 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                     </div>
                     <div className="p-5 flex flex-col justify-center">
                       <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Para regalar</p>
-                      <h3 className="font-display text-xl text-foreground mb-2">Kit de Concreto</h3>
-                      <p className="font-body text-xs text-foreground/60 mb-3">Bowl de diseño + perlas. Llega listo para regalar.</p>
+                      <h3 className="font-display text-xl text-foreground mb-2">Kit · Bowl de Cerámica</h3>
+                      <p className="font-body text-xs text-foreground/60 mb-3">Bowl de cerámica + perlas. Llega listo para regalar.</p>
                       <span className="font-body font-bold text-lg text-foreground">$1,099 <span className="text-xs font-normal text-foreground/50">envío gratis</span></span>
                     </div>
                   </div>
@@ -374,7 +374,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-3 text-center">Quiero decorar más o llenar varios recipientes</p>
             <div className="flex flex-wrap justify-center gap-4">
               {[
-                { slug: 'reserva-1-kg', label: 'Reserva 1 kg', price: '$999' },
+                { slug: 'reserva-1-kg', label: 'Cera Rellenable 1 kg', price: '$999' },
                 { slug: 'd-o-de-tonos', label: 'Dúo de Tonos', price: '$1,099', badge: 'Más elegido' },
                 { slug: 'tr-o-de-tonos', label: 'Trío de Tonos', price: '$1,499', badge: 'Mejor valor' },
               ].map(({ slug, label, price, badge }) => (

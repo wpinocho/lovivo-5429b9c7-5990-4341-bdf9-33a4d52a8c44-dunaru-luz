@@ -113,7 +113,7 @@ export const ProductQuantityTiers = ({
       </div>
 
       <p className="text-[11px] text-muted-foreground leading-snug">
-        El descuento se aplica automáticamente al pagar. Envío de Perlas Originales: +$99.
+        El descuento se aplica automáticamente al pagar. Envío gratis a todo México.
       </p>
     </div>
   )
