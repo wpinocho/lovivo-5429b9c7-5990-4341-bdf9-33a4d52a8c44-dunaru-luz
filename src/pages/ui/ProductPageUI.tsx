@@ -47,6 +47,27 @@ import { DeliveryEstimate, PdpSocialProof } from "@/components/PdpTrust"
 // Slugs que usan el selector "Lleva más y ahorra" en lugar del stepper + add-ons
 const TIER_SELECTOR_SLUGS = ["perlas-originales-500-g"]
 
+// Productos que NO llevan cera: en ellos "Color" sí se refiere al recipiente.
+const CONTAINER_ONLY_SLUGS = [
+  "bowl-negro",
+  "vaso-extra-transparente",
+  "pack-30-mechas",
+]
+
+/**
+ * Etiqueta visible del selector de variantes.
+ * En los kits, "Color" se leía como el color del recipiente (sobre todo en el
+ * bowl de cerámica). Aquí lo desambiguamos: el color que se elige es el de la cera.
+ */
+const optionLabel = (name: string, slug?: string) => {
+  const normalized = name.trim().toLowerCase()
+  const isColor = normalized === "color" || normalized === "colores"
+  if (isColor && slug && !CONTAINER_ONLY_SLUGS.includes(slug)) {
+    return "Color de la cera"
+  }
+  return name
+}
+
 /**
  * Promesa de una línea que aparece DEBAJO del título, arriba del fold en móvil.
  * Responde "¿qué es esto y por qué me importa?" antes de que el usuario scrollee.
@@ -626,7 +647,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   <div key={option.name} className="space-y-2.5">
                     <div className="flex items-baseline justify-between">
                       <Label className="text-sm font-medium uppercase tracking-wider">
-                        {option.name}
+                        {optionLabel(option.name, logic.product?.slug)}
                       </Label>
                       {logic.selected[option.name] && (
                         <span className="text-sm text-muted-foreground">

@@ -272,7 +272,7 @@ export const EcommerceTemplate = ({
               {[
                 { to: '/productos/perlas-originales-500-g', label: 'Perlas Originales' },
                 { to: '/productos/kit-vaso-de-vidrio', label: 'Kit Vaso de Vidrio' },
-                { to: '/productos/kit-vaso-de-concreto', label: 'Kit de Concreto' },
+                { to: '/productos/kit-vaso-de-concreto', label: 'Kit Bowl de Cerámica' },
                 { to: '/productos/reserva-1-kg', label: 'Reserva 1 kg' },
               ].map(({ to, label }) => (
                 <Link key={to} to={to} className="block text-dunaru-marfil/70 hover:text-dunaru-marfil transition-colors py-0.5">

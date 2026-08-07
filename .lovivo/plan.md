@@ -20,7 +20,7 @@
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - RUTAS EN ESPAÑOL: producto = `/productos/:slug`, paquete = `/paquete/:slug`, carrito = `/carrito`, checkout = `/pagar`, **categoría = `/categorias/:handle`**.
 - Competencia: **VelaVita.cl** (LATAM) y **Foton (US)**. Referencia de UI de PDP que le gusta al owner: **rodata.mx**.
-- ⚠️ **kit-vaso-de-concreto** es en realidad de **CERÁMICA**. Slug sigue diciendo "concreto".
+- ⚠️ **kit-vaso-de-concreto** es en realidad de **CERÁMICA**. El slug sigue diciendo "concreto" y **NO se puede cambiar con las tools** (`ecommerce--update-product` acepta `slug` solo como identificador, no lo edita). Todo el COPY visible ya dice cerámica (2026-08-07). Si el owner lo cambia desde el Dashboard, hay que crear redirect del slug viejo y actualizar los anuncios de Meta.
 - ⚠️ **PRODUCTO ANCLA DE PAUTA = `kit-vaso-de-vidrio`.**
 - ⚠️ El owner renombra y repriza productos desde el Dashboard con frecuencia. **NUNCA hardcodear precios ni títulos.**
 - ⚠️ **STAGING**: los cambios se commitean AL FINAL del turno. Si el owner dice "no se aplicó", casi siempre es caché: pedir refresh duro antes de re-implementar.
@@ -54,6 +54,7 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
   5. Add-ons / `ProductQuantityTiers` · 6. `<DeliveryEstimate />` · 7. CTA primario `h-12` con precio
   8. CTA secundario `h-11` outline · 9. Micro-línea `Lock` "Pago seguro · Compra protegida"
   10. 3 badges · 11. `<PdpSocialProof />` · 12. WhatsApp · 13. Acordeones (Descripción, Envío) CERRADOS
+- **SELECTOR DE VARIANTES**: `optionLabel(name, slug)` en `ProductPageUI.tsx` renombra la opción "Color" a **"Color de la cera"** en todos los productos con cera. Se excluyen los recipientes puros vía `CONTAINER_ONLY_SLUGS` (bowl-negro, vaso-extra-transparente, pack-30-mechas), donde "Color" sí es del objeto.
 - **`src/components/PdpTrust.tsx`** exporta:
   - `getDeliveryRange()` → string "11 y el 14 de agosto" (días hábiles, +2/+5). **Fuente única de la promesa de entrega; se usa en PDP y en checkout.**
   - `DeliveryEstimate` (punto verde pulsante)
@@ -61,7 +62,7 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 - **📄 ORDEN OFICIAL DE LA PDP** (`ProductStorySections.tsx`): garantías → `ProductStepsCarousel` → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402 px)** + `object-cover`.
 - **LANDING — PRECIOS DINÁMICOS**: `IndexUI.tsx` usa `buildCatalog(logic.products)`.
-- ⚠️ Aún hay nombres de producto hardcodeados en el **footer de `EcommerceTemplate.tsx`**.
+- ⚠️ Aún hay nombres de producto hardcodeados en el **footer de `EcommerceTemplate.tsx`** (ya corregido el de cerámica, faltan los otros 3 → dinámicos).
 
 ### 🧾 CHECKOUT (`src/pages/ui/CheckoutUI.tsx`) — reglas fijas (2026-08-07)
 - Header minimal, **solo logo**. Sin nav, sin top bar promocional. Es intencional: en checkout todo link es una fuga.
@@ -97,7 +98,8 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 ---
 
 ## 4. Recent Changes
-- 2026-08-07 — ✅ **AUDITORÍA DE CHECKOUT**: (a) `ShippingPromise` nuevo, elimina el "Envío: Pendiente" y muestra fecha real de entrega desde el primer render; (b) resumen móvil CERRADO por defecto con reaseguro siempre visible; (c) cupón unificado en `CouponSection`, colapsado y gris, también en escritorio (antes era un input abierto con label); (d) MSI reencuadrado como micro-línea bajo el Total en ambos resúmenes; (e) `PdpSocialProof linkable={false}` bajo el resumen; (f) link de WhatsApp de soporte bajo el CTA; (g) `getDeliveryRange()` extraído en `PdpTrust.tsx` como fuente única de la promesa de entrega.
+- 2026-08-07 — ✅ **CLARIDAD DE VARIANTE + CERÁMICA**: (a) `optionLabel()` en `ProductPageUI.tsx` → el selector "Color" ahora dice **"Color de la cera"** (excepto en recipientes puros); (b) barrido de "concreto" → "cerámica" en `ProductStorySections.tsx` (4 pasos + 4 FAQs del kit) y en el bloque compartido `PERLAS_BENEFIT_BLOCKS` ("cuenco de barro"); (c) footer de `EcommerceTemplate.tsx`: "Kit de Concreto" → "Kit Bowl de Cerámica". El SLUG sigue siendo `kit-vaso-de-concreto` (las tools no permiten renombrarlo).
+- 2026-08-07 — ✅ **AUDITORÍA DE CHECKOUT**: (a) `ShippingPromise` nuevo, elimina el "Envío: Pendiente" y muestra fecha real de entrega desde el primer render; (b) resumen móvil CERRADO por defecto con reaseguro siempre visible; (c) cupón unificado en `CouponSection`, colapsado y gris, también en escritorio; (d) MSI reencuadrado como micro-línea bajo el Total; (e) `PdpSocialProof linkable={false}` bajo el resumen; (f) link de WhatsApp bajo el CTA; (g) `getDeliveryRange()` extraído en `PdpTrust.tsx`.
 - 2026-08-07 — ✅ **AUDITORÍA PDP kit-vaso-de-vidrio**: `DeliveryEstimate`, `PdpSocialProof`, acordeón "Cuidado del producto" → `SHARED_FAQS`, acordeones cerrados por defecto.
 - 2026-08-07 — ✅ **BUY BOX REDISEÑADO**: `PDP_BENEFITS`, cantidad compacta, CTA primario `h-12` con precio.
 - 2026-08-07 — ✅ **PASOS EN CARRUSEL**: `ProductStepsCarousel.tsx`.
@@ -120,32 +122,34 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 - **Bloque aroma** → `1785521743156-7ucg5c0kwb7.webp`
 - 🟡 `/pdp-vaso-decor.webp` quedó huérfana.
 - 🔴 **FALTA: video demo del mecanismo** (lo genera el user).
+- 🟡 Los `steps` de `kit-vaso-de-concreto` siguen usando `PLACEHOLDER` (`/placeholder.svg`): falta foto real del bowl de cerámica para el carrusel de pasos.
 
 ## 6. Known Issues
+- 2026-08-07 — 🟠 **SLUG `kit-vaso-de-concreto` es incorrecto** (el producto es de cerámica). `ecommerce--update-product` NO permite renombrar slugs. Cambiarlo desde el Dashboard rompería los anuncios de Meta y los links existentes salvo que se agregue un redirect del slug viejo. Decisión actual: **dejarlo**.
 - 2026-08-07 — 🟠 **"+200 clientes felices" sin verificar** contra órdenes reales (top bar, `PdpSocialProof`).
-- 2026-08-07 — 🟡 El desktop coupon ya no usa `logic.couponInputRef` (se eliminó el input abierto). Si algún día el backend quiere hacer focus programático al cupón, hay que reconectarlo dentro de `CouponSection`.
-- 2026-08-07 — 🟡 `ShippingPromise` asume envío gratis cuando `shippingCost === 0`. Correcto hoy porque el envío es gratis a todo México sin mínimo. Si el owner activa cobro de envío, revisar el copy.
+- 2026-08-07 — 🟡 El desktop coupon ya no usa `logic.couponInputRef`. Si el backend quiere hacer focus programático, reconectarlo dentro de `CouponSection`.
+- 2026-08-07 — 🟡 `ShippingPromise` asume envío gratis cuando `shippingCost === 0`. Si el owner activa cobro de envío, revisar el copy.
 - 2026-08-07 — 🟠 Los títulos del catálogo en la DB contienen guion largo.
 - 2026-08-07 — 🟡 `PDP_BENEFITS` solo cubre 6 slugs (faltan bowl-negro, vaso-extra-transparente, pack-30-mechas).
-- 2026-07-31 — 🟠 Nombres viejos hardcodeados en el **footer de `EcommerceTemplate.tsx`**; FAQ de PDP dice "concreto".
+- 2026-07-31 — 🟠 Footer de `EcommerceTemplate.tsx`: 3 nombres de producto siguen hardcodeados.
 - 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price`. Workaround: Dashboard manual.
-- 2026-07-31 — 🟡 `lov-search-files` devuelve 0 resultados incluso para strings triviales. Usar `lov-view` con rutas directas.
+- 2026-07-31 — 🟡 `lov-search-files` devuelve 0 resultados incluso para strings triviales (ej. "concreto"). Usar `lov-view` con rutas directas.
 - 2026-07-31 — 🟡 Autocapture de clics parece desactivado en PostHog.
 - 2026-07-25 — 🟡 Perlas/Reserva/Dúo/Trío NO están en categoría del menú (solo "Todos").
 
 ## 7. Pending / Future Sessions
-- [ALTA] Registrar en `.lovivo/cro-log.md` DOS hipótesis pendientes: (1) ronda PDP del 07-ago (delivery estimate + social proof + acordeones cerrados); (2) ronda CHECKOUT del 07-ago (shipping resuelto + resumen cerrado + cupón degradado + MSI en resumen + social proof).
+- [ALTA] Registrar en `.lovivo/cro-log.md` DOS hipótesis pendientes: (1) ronda PDP del 07-ago; (2) ronda CHECKOUT del 07-ago.
 - [ALTA] Medir el 2026-08-14: addtocart móvil vs 4.0% y initiatecheckout→purchase vs 5%.
-- [ALTA] Probar el checkout end-to-end con `browser-test` (producto → carrito → /pagar) para confirmar que el resumen cerrado no rompe nada en móvil real.
+- [ALTA] Probar el checkout end-to-end con `browser-test` (producto → carrito → /pagar).
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
 - [ALTA] User: redirigir anuncios Meta al Kit Vela Rellenable · Vaso de Vidrio.
 - [ALTA] VIDEO DEMO (lo graba el user) → primer slide del carrusel de pasos.
-- [MED] Considerar barra sticky de pago en móvil dentro del checkout (total + CTA) si el scroll sigue siendo largo.
+- [MED] Fotos reales para los `steps` de kit-vaso-de-concreto (hoy placeholder).
+- [MED] Considerar barra sticky de pago en móvil dentro del checkout.
 - [MED] Encuesta PostHog de salida en `/pagar`: "¿Qué te frenó de completar tu compra?".
 - [MED] Aplicar `ProductStepsCarousel` también en la landing.
 - [MED] Reseñas: pedir al owner los nombres reales de clientas antes de escalar pauta.
-- [MED] FAQ de kit-vaso-de-concreto sigue diciendo "concreto" → cambiar a cerámica.
 - [MED] CTA del hero de `IndexUI.tsx` → `/productos/kit-vaso-de-vidrio`.
 - [MED] Barrer el resto del sitio buscando guiones largos (—) en copy.
 - [BAJA] Banners de colección (image null) y borrar imágenes huérfanas.

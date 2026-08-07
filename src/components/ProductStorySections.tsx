@@ -90,7 +90,7 @@ const PERLAS_BENEFIT_BLOCKS: StoryBlock[] = [
   },
   {
     title: "El recipiente que ya amas, ahora da luz",
-    body: "Ese tazón de cerámica, el vaso de vidrio o el cuenco de concreto que tanto te gusta **pasa a ser una vela de diseño**. Tú eliges el estilo, nosotros ponemos la luz.",
+    body: "Ese tazón de cerámica, el vaso de vidrio o el cuenco de barro que tanto te gusta **pasa a ser una vela de diseño**. Tú eliges el estilo, nosotros ponemos la luz.",
     bullets: [
       "Funciona en cualquier recipiente de +10 cm",
       "Combina colores y texturas a tu gusto",
@@ -284,22 +284,22 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     steps: [
       {
         title: "Recibe el objeto",
-        text: "Un bowl de concreto mate, hecho a mano. Llega listo para regalar o estrenar en tu mesa.",
+        text: "Un bowl de cerámica negra mate, hecho a mano. Llega listo para regalar o estrenar en tu mesa.",
         image: PLACEHOLDER,
       },
       {
         title: "Vierte las perlas",
-        text: "Llena el cuenco de concreto con las perlas. La pieza ya se ve increíble apagada.",
+        text: "Llena el bowl de cerámica con las perlas. La pieza ya se ve increíble apagada.",
         image: PLACEHOLDER,
       },
       {
         title: "Enciende y presume",
-        text: "Coloca la mecha y enciende. Una luz cálida sobre concreto: presencia pura.",
+        text: "Coloca la mecha y enciende. Una luz cálida sobre cerámica mate: presencia pura.",
         image: PLACEHOLDER,
       },
       {
         title: "Rellena para siempre",
-        text: "El concreto dura años. Solo recargas perlas y mechas cuando se acaben.",
+        text: "La cerámica dura años. Solo recargas perlas y mechas cuando se acaben.",
         image: PLACEHOLDER,
       },
     ],
@@ -350,19 +350,19 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     faqs: [
       {
         q: "¿Qué incluye el kit?",
-        a: "Un bowl de concreto gris mate hecho a mano, 500 g de perlas de cera perlada y 30 mechas de algodón. Listo para regalar o estrenar.",
+        a: "Un bowl de cerámica negra mate hecho a mano, 500 g de perlas de cera perlada y 30 mechas de algodón. Listo para regalar o estrenar.",
       },
       {
         q: "¿Tiene costo el envío?",
-        a: "No. El Kit Vaso de Concreto incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+        a: "No. El Kit Bowl de Cerámica incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
       },
       {
-        q: "¿El concreto es seguro con el calor?",
-        a: "Sí. El concreto resiste el calor de la llama sin deformarse. Úsalo siempre sobre una superficie plana y nunca lo dejes encendido sin supervisión.",
+        q: "¿La cerámica es segura con el calor?",
+        a: "Sí. La cerámica resiste el calor de la llama sin deformarse. Úsalo siempre sobre una superficie plana y nunca lo dejes encendido sin supervisión.",
       },
       {
         q: "¿Se puede recargar?",
-        a: "Por supuesto. El bowl de concreto se reutiliza infinitamente: solo agregas más perlas y mechas cuando se consuman.",
+        a: "Por supuesto. El bowl de cerámica se reutiliza infinitamente: solo agregas más perlas y mechas cuando se consuman.",
       },
       {
         q: "¿Es buen regalo?",
