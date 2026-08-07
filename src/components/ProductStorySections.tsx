@@ -5,8 +5,6 @@ import {
   Sparkles,
   Check,
   X,
-  ShieldCheck,
-  CreditCard,
 } from "lucide-react"
 import {
   Accordion,
@@ -642,10 +640,10 @@ const HOW_IT_WORKS_STEPS: StoryStep[] = [
 ]
 
 const GUARANTEES = [
-  { icon: Leaf, label: "Libre de parafina" },
+  { icon: Leaf, label: "Sin parafina" },
   { icon: Flame, label: "Larga duración" },
-  { icon: RefreshCw, label: "Rellenable infinita" },
-  { icon: Sparkles, label: "Siempre como nueva" },
+  { icon: RefreshCw, label: "Rellenable" },
+  { icon: Sparkles, label: "Siempre nueva" },
 ]
 
 interface ProductStorySectionsProps {
@@ -657,16 +655,16 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
   if (!content) return null
 
   return (
-    <div className="mt-16 lg:mt-24 space-y-16 lg:space-y-24">
-      {/* 1 — Tira de garantías */}
+    <div className="mt-10 lg:mt-16 space-y-14 lg:space-y-20">
+      {/* 1 — Tira de garantías (compacta, 1 sola fila también en móvil) */}
       <section className="max-w-[1400px] mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-8 gap-x-4 py-8 border-y border-border/60">
+        <div className="grid grid-cols-4 gap-x-1 sm:gap-x-4 py-5 border-y border-border/60">
           {GUARANTEES.map(({ icon: Icon, label }) => (
-            <div key={label} className="flex flex-col items-center text-center gap-3 px-2">
-              <span className="h-12 w-12 rounded-full border border-dunaru-champagne/50 flex items-center justify-center text-dunaru-champagne">
-                <Icon className="h-5 w-5" strokeWidth={1.5} />
+            <div key={label} className="flex flex-col items-center text-center gap-2">
+              <span className="h-9 w-9 sm:h-10 sm:w-10 rounded-full border border-dunaru-champagne/50 flex items-center justify-center text-dunaru-champagne shrink-0">
+                <Icon className="h-4 w-4" strokeWidth={1.5} />
               </span>
-              <span className="text-sm font-medium text-foreground/80 leading-tight">
+              <span className="text-[11px] sm:text-sm font-medium text-foreground/80 leading-tight">
                 {label}
               </span>
             </div>
@@ -675,7 +673,7 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
       </section>
 
       {/* 2 — Crea tu vela en 4 pasos */}
-      <section className="bg-dunaru-arena py-16 lg:py-20 -mx-4 px-4 md:-mx-6 md:px-6">
+      <section className="bg-dunaru-arena py-12 lg:py-16 -mx-4 px-4 md:-mx-6 md:px-6">
         <div className="max-w-[1400px] mx-auto">
           <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-center mb-3">
             Crea tu vela en 4 pasos
@@ -709,7 +707,10 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         </div>
       </section>
 
-      {/* 3 — Bloques editoriales alternados */}
+      {/* 3 — Prueba social: reseñas reales, justo después de entender el producto */}
+      <Reviews title="Opiniones de quienes ya la tienen" />
+
+      {/* 4 — Bloques editoriales alternados */}
       <section className="max-w-[1400px] mx-auto space-y-16 lg:space-y-24">
         {content.blocks.map((block, i) => (
           <div
@@ -766,9 +767,6 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
           </div>
         ))}
       </section>
-
-      {/* 4 — Reseñas reales (prueba social ANTES de la tabla y el FAQ) */}
-      <Reviews title="Opiniones de quienes ya la tienen" />
 
       {/* 5 — Tabla comparativa */}
       <section className="max-w-3xl mx-auto">
@@ -858,17 +856,24 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         </Accordion>
       </section>
 
-      {/* 7 — Pago seguro + MSI */}
+      {/* 7 — Cierre: devolver al usuario a la compra */}
       <section className="max-w-[1400px] mx-auto">
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12 py-8 border-t border-border/60 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2.5">
-            <ShieldCheck className="h-5 w-5 text-dunaru-champagne" strokeWidth={1.5} />
-            <span>Pago 100% seguro</span>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <CreditCard className="h-5 w-5 text-dunaru-champagne" strokeWidth={1.5} />
-            <span>Hasta 6 meses sin intereses</span>
-          </div>
+        <div className="rounded-xl bg-dunaru-arena px-6 py-10 text-center">
+          <h2 className="font-display text-2xl md:text-3xl text-foreground">
+            ¿Lista para encender la tuya?
+          </h2>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Envío gratis a todo México, llega en 2 a 5 días · 30 días de garantía
+          </p>
+          <button
+            type="button"
+            onClick={() =>
+              window.scrollTo({ top: 0, behavior: "smooth" })
+            }
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-8 py-3.5 font-body text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
+          >
+            Elegir mi vela
+          </button>
         </div>
       </section>
     </div>

@@ -67,6 +67,19 @@
 - **Result**: (pendiente 7 días — revisar 2026-08-07). Comparación secuencial antes/después; NO A/B test (volumen insuficiente).
 - **Nota**: no es aislable del cambio de segmentación de anuncios si el owner redirige el presupuesto al Kit Vidrio en la misma semana.
 
+### 2026-08-07 — PDP: reorden de secciones (prueba social en posición 3) + densidad
+- **Hypothesis**: El producto tiene un **mecanismo nuevo** (perlas de cera rellenables). En tráfico frío de Meta la secuencia mental es *entender → creer → desear → decidir*. Hoy la prueba social vive en la posición 5 de 7, detrás de 5 bloques editoriales largos: la mayoría de móviles nunca la ve. Además el aire vertical (tira de garantías en 2 filas con py-8, bloque de reseñas ocupando casi una pantalla completa antes de la primera opinión) alarga el scroll sin aportar información. Subir reseñas justo después de "Cómo funciona" y compactar debería aumentar el % de usuarios expuestos a prueba social y, con ello, addtocart.
+- **Change** (orden nuevo de `ProductStorySections`):
+  1. Garantías (compacta) → 2. Crea tu vela en 4 pasos → **3. Reseñas** → 4. Bloques editoriales → 5. Tabla comparativa → 6. FAQ → 7. **CTA de cierre**.
+  - Tira de garantías: `grid-cols-2` (2 filas en móvil) → `grid-cols-4` en una sola fila, `py-8`→`py-5`, iconos 48→36px, labels acortados ("Libre de parafina"→"Sin parafina").
+  - Wrapper `mt-16 space-y-16` → `mt-10 space-y-14`; sección de 4 pasos `py-16`→`py-12`.
+  - `Reviews.tsx` compactado: eliminado el subtítulo, eliminada la tarjeta con borde del resumen (ahora promedio a la izquierda + distribución a la derecha, siempre en fila, también en móvil), eliminado el label "Opiniones con foto", eliminados los **títulos de reseña** ("Facilidad de uso", "Transformación del espacio"…) que sonaban a categoría interna y no a voz de cliente. Padding de sección `section-pad-sm`→`py-12`.
+  - Eliminada la franja duplicada "Pago 100% seguro / MSI" (ya existe idéntica en el footer negro global) y reemplazada por un **CTA de cierre** que devuelve al buy box (`scrollTo top`) con línea de riesgo cero (envío gratis, 2-5 días, 30 días de garantía).
+- **Files**: `src/components/ProductStorySections.tsx`, `src/components/Reviews.tsx`
+- **Metric to watch**: viewcontent → addtocart en móvil (baseline 4.0%, objetivo 8%). Secundaria: scroll depth hasta `#resenas` y clics en el CTA de cierre.
+- **Result**: (pendiente 7 días — revisar 2026-08-14).
+- **Nota**: se acumula con el cambio del 2026-07-31, cuyo Result sigue sin medirse. Al medir, tratar ambos como un solo paquete.
+
 ## Active Experiments
 <!-- A/B tests currently running. Include flag_key, start date, variants, and target metric. -->
 None

@@ -43,52 +43,63 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 - CTA: Ónix #1E1C1A → `--primary` · Detalle llama: Ámbar #D89A57 → `text-dunaru-ambar`
 - Display: Instrument Serif → `font-display` · Body/UI: Manrope → `font-body`
 - Tokens: `dunaru-marfil/arena/champagne/carbon/onix/ambar`
-- Estética: editorial, mínima, mucho aire. Mobile-first.
+- Estética: editorial, mínima, mucho aire. Mobile-first. **Pero en la PDP la densidad gana al aire** (ver §3).
 - **TOP BAR** (`EcommerceTemplate.tsx`): barra fija carbón, 2 items: Truck "Envío gratis a todo México" · Heart ámbar "+200 clientes felices".
-- **HEADER OVERLAY** (nuevo 2026-08-07): `EcommerceTemplate` y `PageTemplate` aceptan prop `headerOverlay`. Cuando es true: header `fixed top-0`, translúcido (`bg-background/55 backdrop-blur-md`) y sólido al hacer scroll o abrir el menú móvil; el wrapper de contenido pierde el `py-6` (que causaba la franja blanca). **Solo `IndexUI` lo usa** (hero a sangre).
+- **HEADER OVERLAY**: `EcommerceTemplate` y `PageTemplate` aceptan prop `headerOverlay`. Solo `IndexUI` lo usa (hero a sangre).
 - **MENÚ "Productos"**: dropdown en header con `PRODUCT_CATEGORIES`.
-- **PDP secciones** (`ProductStorySections.tsx`): garantías → 4 pasos → bloques editoriales → Reviews → tabla comparativa → FAQ → pago seguro.
+- **📄 ORDEN OFICIAL DE LA PDP** (`ProductStorySections.tsx`, actualizado 2026-08-07):
+  1. Tira de garantías compacta (4 en una fila, también en móvil)
+  2. Crea tu vela en 4 pasos (comprensión del mecanismo)
+  3. **Reseñas / prueba social** ← subida desde la posición 5
+  4. Bloques editoriales de beneficios
+  5. Tabla comparativa "Esto hace diferente a dunaru"
+  6. FAQ
+  7. CTA de cierre (vuelve al buy box con `scrollTo top`)
+  Lógica: entender → creer → desear → decidir. NO volver a bajar las reseñas.
+- **`Reviews.tsx` (compacto)**: sin subtítulo, sin tarjeta con borde en el resumen, promedio a la izquierda + distribución a la derecha SIEMPRE en fila, sin label "Opiniones con foto", **sin `r.title`** (los títulos tipo "Facilidad de uso" sonaban a categoría interna). El campo `title` sigue en `reviews.ts` pero ya NO se renderiza.
+- **Franja "Pago 100% seguro / MSI"**: existe UNA sola vez, en el **footer negro global**. No duplicarla en la PDP.
 - **Tabla comparativa**: `CompareRow.dunaru/traditional` acepta `boolean | string`.
 - **`ProductQuantityTiers`**: labels genéricos vía props (`unitLabel` "Bolsa", `extraPerUnit` 30, `extraLabel` "mechas").
 - **`PERLAS_BENEFIT_BLOCKS`**: 5 bloques compartidos por los 4 productos de cera.
 - **4 PASOS duplicados en 2 lugares**: `HOW_IT_WORKS_STEPS` (PDP) y `STEPS` en `IndexUI.tsx` (landing). Cambiar en ambos.
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402 px)** + `object-cover`.
-- **LANDING — PRECIOS DINÁMICOS (2026-08-07)**: `IndexUI.tsx` ya NO hardcodea precios/títulos. Usa `buildCatalog(logic.products)` → mapa `slug → {title, price, compare, img}` con `formatMoney(x, 'MXN')`. `CATALOG_FALLBACK` solo es respaldo mientras carga la red. Secciones dinámicas: "¿Cómo quieres empezar?", "Quiero decorar más" (`VOLUME_META`), "Combina tonos" (`BUNDLE_META`).
+- **LANDING — PRECIOS DINÁMICOS**: `IndexUI.tsx` usa `buildCatalog(logic.products)` → mapa `slug → {title, price, compare, img}`. `CATALOG_FALLBACK` solo es respaldo mientras carga la red.
 - ⚠️ Aún hay nombres de producto hardcodeados en el **footer de `EcommerceTemplate.tsx`**.
 
 ---
 
 ## 3. Active Plan — Medir el efecto de los cambios CRO
 
-**Estado**: 3ª ronda de ajustes (landing) implementada 2026-08-07. Falta el video demo (lo graba el user).
+**Estado**: 4ª ronda implementada 2026-08-07 (reorden PDP). Falta el video demo (lo graba el user).
 
 ### Baseline a batir (ver `.lovivo/cro-log.md`)
 - Móvil 7d: 151 únicos vieron producto → 6 addtocart = **4.0%** → **0 compras**.
 - Objetivo mínimo: **8% addtocart en móvil**.
 
-### Qué medir en la próxima sesión
+### Qué medir el 2026-08-14
 1. `posthog-query`: viewcontent → addtocart en móvil, 7 días post-cambio vs previos.
-2. `posthog-session-list` móvil: ¿siguen las sesiones con 0 clics?
+2. Scroll depth hasta `#resenas` (¿ahora sí llegan?).
 3. initiatecheckout → purchase.
+⚠️ Los cambios del 31-jul y del 07-ago se acumulan: medirlos como un solo paquete.
 
 ---
 
 ## 4. Recent Changes
-- 2026-08-07 — ✅ **LANDING: precios y nombres desde la DB**. `IndexUI.tsx` ahora deriva título/precio/precio tachado/imagen de `logic.products` (`buildCatalog`). Se eliminaron los arrays `PRODUCTS` (código muerto) y `BUNDLES` hardcodeados.
-- 2026-08-07 — ✅ **"Quiero decorar más"**: los 3 pills de distinto ancho → grid de 3 tarjetas de igual altura, badge flotante arriba a la izquierda, precio + tachado + flecha.
-- 2026-08-07 — ✅ **HEADER OVERLAY**: eliminada la franja blanca entre menú y hero. Header fijo translúcido sobre la imagen (prop `headerOverlay` en `EcommerceTemplate` + `PageTemplate`; `py-6` del wrapper de `PageTemplate` era la causa).
-- 2026-08-07 — ✅ **COPY sin guiones largos**: `BrandStorySection.tsx` ("tu vela, ni el recipiente que amas,") + 2 FAQ de la landing. También "recargables" → "rellenables".
-- 2026-08-07 — ✅ **TABLA COMPARATIVA**: fila "Costo por hora de luz" ($ vs $$$) + "El aroma lo eliges tú" (✓/✗).
-- 2026-08-07 — ✅ **TOP BAR estático**: "Envío gratis a todo México" · "+200 clientes felices".
-- 2026-08-07 — ✅ **Selector "Lleva más y ahorra"**: "1 Bolsa de 500 g / + 30 mechas incluidas".
+- 2026-08-07 — ✅ **PDP REORDENADA**: prueba social sube de la posición 5 a la 3 (justo después de "Crea tu vela en 4 pasos"). Nuevo CTA de cierre en la posición 7.
+- 2026-08-07 — ✅ **PDP más densa**: garantías en 1 fila (`grid-cols-4`, `py-5`, iconos 36px, labels cortos), wrapper `mt-10 space-y-14`, 4 pasos `py-12`.
+- 2026-08-07 — ✅ **`Reviews.tsx` compacto**: sin subtítulo, resumen en fila (4.9 izquierda / distribución derecha), sin label "Opiniones con foto", **sin títulos de reseña**.
+- 2026-08-07 — ✅ **Eliminada la franja de pago duplicada** de la PDP (quedaba justo encima de la idéntica del footer negro).
+- 2026-08-07 — ✅ **LANDING: precios y nombres desde la DB** (`buildCatalog`). Eliminados arrays hardcodeados.
+- 2026-08-07 — ✅ **"Quiero decorar más"**: 3 pills desiguales → grid de 3 tarjetas iguales con badge flotante.
+- 2026-08-07 — ✅ **HEADER OVERLAY**: eliminada la franja blanca entre menú y hero.
+- 2026-08-07 — ✅ **COPY sin guiones largos** en `BrandStorySection.tsx` y FAQ de la landing.
+- 2026-08-07 — ✅ **TABLA COMPARATIVA**: "Costo por hora de luz" ($ vs $$$) + "El aroma lo eliges tú".
+- 2026-08-07 — ✅ **TOP BAR estático** de 2 items.
 - 2026-07-31 — ✅ **RENOMBRE DE CATÁLOGO (9 productos, slugs intactos)**.
 - 2026-07-31 — ✅ **LIMPIEZA DEL CARGO DE $99**.
 - 2026-07-31 — 🐛 `ecommerce--update-product` no persiste `compare_at_price`.
-- 2026-07-31 — ✅ **CRO PASO 1+2+4**: bloque promesa móvil, sticky CTA, `PDP_INCLUDES`, Reviews arriba de tabla y FAQ.
+- 2026-07-31 — ✅ **CRO PASO 1+2+4**: bloque promesa móvil, sticky CTA, `PDP_INCLUDES`.
 - 2026-07-31 — 🔍 **AUDITORÍA CRO COMPLETA**. Embudo móvil: 151 → 6 al carrito (4%) → 0 compras.
-- 2026-07-31 — ✅ IMÁGENES REALES del user: pasos "Inserta"/"Enciende" y bloque aroma.
-- 2026-07-28 — ✅ AROMA en PDP rellenables.
-- 2026-07-25 — ✅ PDP para los 9 productos (`PDP_CONTENT`).
 
 ## 5. Image Inventory
 - **📐 Todas las fotos de producto son 1122×1402 px (4:5), webp.**
@@ -103,7 +114,8 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 
 ## 6. Known Issues
 - 2026-08-07 — 🟠 **"+200 clientes felices" sin verificar** contra órdenes reales.
-- 2026-08-07 — 🟠 Los títulos del catálogo en la DB contienen guion largo ("Recarga para vela rellenable — 500 g"). La landing los muestra tal cual. Si el owner quiere quitarlos, hay que renombrar desde el Dashboard.
+- 2026-08-07 — 🟠 Los títulos del catálogo en la DB contienen guion largo. La landing los muestra tal cual; hay que renombrarlos desde el Dashboard.
+- 2026-08-07 — 🟡 `Review.title` ya no se renderiza en ningún lado, pero sigue en la interfaz y en los 15 registros de `reviews.ts` (no rompe nada).
 - 2026-07-31 — 🟠 Nombres viejos hardcodeados en el **footer de `EcommerceTemplate.tsx`** y FAQ de PDP dice "concreto".
 - 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price`. Workaround: Dashboard manual.
 - 2026-07-31 — 🟠 Checkout: 20 inicios → 1 compra en 30d con 0 errores JS.
@@ -112,11 +124,11 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 - 2026-07-25 — 🟡 Perlas/Reserva/Dúo/Trío NO están en categoría del menú (solo "Todos").
 
 ## 7. Pending / Future Sessions
+- [ALTA] Medir addtocart móvil el 2026-08-14 vs baseline 4.0% y registrar Result en `cro-log.md`.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto viejos → hacerlos dinámicos o actualizar a mano.
-- [ALTA] Medir addtocart móvil post-cambio vs baseline 4.0% y registrar Result en `cro-log.md`.
 - [ALTA] User: redirigir anuncios Meta al Kit Vela Rellenable · Vaso de Vidrio.
-- [ALTA] User: verificar tarifa de envío nacional y probar checkout desde MTY/Mérida.
 - [ALTA] VIDEO DEMO (lo graba el user) → primer slide del carrusel móvil de la PDP y en "Cómo funciona".
+- [MED] Reseñas: pedir al owner los nombres reales de clientas antes de escalar pauta.
 - [MED] FAQ de kit-vaso-de-concreto sigue diciendo "concreto" → cambiar a cerámica.
 - [MED] Cambiar CTA del hero de `IndexUI.tsx` → `/productos/kit-vaso-de-vidrio`.
 - [MED] Encuesta PostHog de salida en PDP móvil: "¿Qué te frenó de comprar hoy?".
