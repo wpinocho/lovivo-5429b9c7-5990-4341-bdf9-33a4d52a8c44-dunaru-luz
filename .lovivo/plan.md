@@ -20,7 +20,7 @@
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - RUTAS EN ESPAÑOL: producto = `/productos/:slug`, paquete = `/paquete/:slug`, carrito = `/carrito`, checkout = `/pagar`, **categoría = `/categorias/:handle`**.
 - Competencia: **VelaVita.cl** (LATAM) y **Foton (US)**. Referencia de UI de PDP que le gusta al owner: **rodata.mx**.
-- ⚠️ **kit-vaso-de-concreto** es en realidad de **CERÁMICA**. El slug sigue diciendo "concreto" y **NO se puede cambiar con las tools** (`ecommerce--update-product` acepta `slug` solo como identificador, no lo edita). Todo el COPY visible ya dice cerámica (2026-08-07). Si el owner lo cambia desde el Dashboard, hay que crear redirect del slug viejo y actualizar los anuncios de Meta.
+- ⚠️ **kit-vaso-de-concreto** es en realidad de **CERÁMICA**. El slug sigue diciendo "concreto" y **NO se puede cambiar con las tools**. Todo el COPY visible ya dice cerámica (2026-08-07).
 - ⚠️ **PRODUCTO ANCLA DE PAUTA = `kit-vaso-de-vidrio`.**
 - ⚠️ El owner renombra y repriza productos desde el Dashboard con frecuencia. **NUNCA hardcodear precios ni títulos.**
 - ⚠️ **STAGING**: los cambios se commitean AL FINAL del turno. Si el owner dice "no se aplicó", casi siempre es caché: pedir refresh duro antes de re-implementar.
@@ -45,67 +45,77 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 - CTA: Ónix #1E1C1A → `--primary` · Detalle llama: Ámbar #D89A57 → `text-dunaru-ambar`
 - Display: Instrument Serif → `font-display` · Body/UI: Manrope → `font-body`
 - Tokens: `dunaru-marfil/arena/champagne/carbon/onix/ambar`
-- Estética: editorial, mínima, mucho aire. Mobile-first. **Pero en PDP y checkout la densidad gana al aire.**
-- **TOP BAR** (`EcommerceTemplate.tsx`): barra fija carbón, 2 items: Truck "Envío gratis a todo México" · Heart ámbar "+200 clientes felices". ⚠️ **NO se replica en el checkout a propósito** (ver sección 3).
+- Estética: editorial, mínima, mucho aire. Mobile-first. **Pero en PDP, landing y checkout la densidad gana al aire.**
+- **TOP BAR** (`EcommerceTemplate.tsx`): barra fija carbón, 2 items: Truck "Envío gratis a todo México" · Heart ámbar "+200 clientes felices". **NO se replica en el checkout a propósito.**
 - **HEADER OVERLAY**: `EcommerceTemplate` y `PageTemplate` aceptan prop `headerOverlay`. Solo `IndexUI` lo usa.
 - **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`):
   1. Título + precio + "6 pagos de $X a meses sin intereses" + rating
-  2. `PDP_BENEFITS[slug]` = 3 bullets de beneficio · 3. Selector de variantes · 4. Cantidad compacta
+  2. `PDP_BENEFITS[slug]` = 3 bullets · 3. Selector de variantes · 4. Cantidad compacta
   5. Add-ons / `ProductQuantityTiers` · 6. `<DeliveryEstimate />` · 7. CTA primario `h-12` con precio
   8. CTA secundario `h-11` outline · 9. Micro-línea `Lock` "Pago seguro · Compra protegida"
-  10. 3 badges · 11. `<PdpSocialProof />` · 12. WhatsApp · 13. Acordeones (Descripción, Envío) CERRADOS
-- **SELECTOR DE VARIANTES**: `optionLabel(name, slug)` en `ProductPageUI.tsx` renombra la opción "Color" a **"Color de la cera"** en todos los productos con cera. Se excluyen los recipientes puros vía `CONTAINER_ONLY_SLUGS` (bowl-negro, vaso-extra-transparente, pack-30-mechas), donde "Color" sí es del objeto.
-- **`src/components/PdpTrust.tsx`** exporta:
-  - `getDeliveryRange()` → string "11 y el 14 de agosto" (días hábiles, +2/+5). **Fuente única de la promesa de entrega; se usa en PDP y en checkout.**
-  - `DeliveryEstimate` (punto verde pulsante)
-  - `PdpSocialProof({ slug?, linkable? })` — `linkable={false}` renderiza `<div>` en vez de `<a href="#resenas">` (para el checkout).
+  10. 3 badges · 11. `<PdpSocialProof />` · 12. WhatsApp · 13. Acordeones CERRADOS
+- **SELECTOR DE VARIANTES**: `optionLabel(name, slug)` renombra "Color" → **"Color de la cera"**, excepto en `CONTAINER_ONLY_SLUGS` (bowl-negro, vaso-extra-transparente, pack-30-mechas).
+- **`src/components/PdpTrust.tsx`** exporta `getDeliveryRange()`, `DeliveryEstimate`, `PdpSocialProof({ slug?, linkable? })`.
 - **📄 ORDEN OFICIAL DE LA PDP** (`ProductStorySections.tsx`): garantías → `ProductStepsCarousel` → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402 px)** + `object-cover`.
-- **LANDING — PRECIOS DINÁMICOS**: `IndexUI.tsx` usa `buildCatalog(logic.products)`.
-- ⚠️ Aún hay nombres de producto hardcodeados en el **footer de `EcommerceTemplate.tsx`** (ya corregido el de cerámica, faltan los otros 3 → dinámicos).
+- **`ProductStepsCarousel.tsx`** es **compartido PDP + landing**. Props: `steps`, `title`, `eyebrow`, `id`, `bleed` (default `true` = full-bleed dentro de un contenedor ya paddeado, como la PDP; `false` = sección propia de ancho completo, como la landing), `background`, `footer`.
+
+### 🏠 LANDING (`src/pages/ui/IndexUI.tsx`) — orden oficial (2026-08-07)
+1. **Hero** (`min-h-[92vh]`, imagen dedicada móvil `object-top`)
+2. **Tira de beneficios** · `grid-cols-4` en UNA sola fila también en móvil. Labels cortos obligatorios.
+3. **Cómo funciona** → `<ProductStepsCarousel bleed={false} background="bg-background" />`
+4. **Elige tu vela** (`id="comprar"`) → `SHOP_CARDS`, rejilla `grid-cols-2 lg:grid-cols-3`, 6 tarjetas uniformes 4:5. **Única sección de producto de la landing.**
+5. **`<Reviews />`** (prueba social, subida a propósito)
+6. **Elige tu tono** → carrusel horizontal snap, peek 70%
+7. **`<CasaRealSection />`** (ya era carrusel)
+8. **`<BrandStorySection />`**
+9. **FAQ** · 10. **Cierre newsletter + WhatsApp**
+- ⚠️ **Prohibido volver a duplicar SKUs en varias secciones de la landing.** Dúo, Trío y Reserva 1 kg viven SOLO en `SHOP_CARDS`.
+- Precios y títulos SIEMPRE dinámicos vía `buildCatalog(logic.products)`.
 
 ### 🧾 CHECKOUT (`src/pages/ui/CheckoutUI.tsx`) — reglas fijas (2026-08-07)
-- Header minimal, **solo logo**. Sin nav, sin top bar promocional. Es intencional: en checkout todo link es una fuga.
-- **Móvil, orden**: `MobileOrderSummary` (CERRADO por defecto) → `ShippingPromise` siempre visible → `PdpSocialProof linkable={false}` → línea SSL → PayPal → wallets → email → dirección → aviso MSI → tarjeta → estrellas → CTA → badges + WhatsApp + tarjetas.
-- **`ShippingPromise`**: componente único que resuelve el envío desde el primer render ("Envío gratis · Llega entre el X y el Y"). Reemplazó el "Envío: Pendiente". **Nunca volver a poner "Pendiente".**
-- La fila "Envío" de totales dice **GRATIS**, nunca "Pendiente".
-- **`CouponSection`** (antes `MobileCouponSection`): colapsado, texto `text-muted-foreground`, copy "Agregar código de descuento", SIEMPRE al final del resumen. Se usa en móvil Y escritorio. **Prohibido volver a exponer el input abierto.**
-- **MSI en el resumen**: micro-línea "Desde $X al mes a 6 meses sin intereses" debajo del Total (reencuadre de precio). Se mantiene además el `paymentNoticeSlot` arriba de la tarjeta (contexto de acción).
-- **Prueba social duplicada a propósito**: `PdpSocialProof` bajo el resumen (arriba, antes de invertir tiempo) + estrellas 4.9 pegadas al CTA (abajo, antes de pagar).
-- WhatsApp de soporte en `trustBadgesSlot`, debajo del CTA.
+- Header minimal, **solo logo**. Sin nav, sin top bar promocional.
+- **Móvil, orden**: `MobileOrderSummary` (CERRADO) → `ShippingPromise` → `PdpSocialProof linkable={false}` → SSL → PayPal → wallets → email → dirección → aviso MSI → tarjeta → estrellas → CTA → badges + WhatsApp + tarjetas.
+- **`ShippingPromise`** resuelve el envío desde el primer render. **Nunca volver a poner "Pendiente".**
+- **`CouponSection`**: colapsado, gris, al final del resumen, móvil Y escritorio. **Prohibido exponer el input abierto.**
+- MSI como micro-línea bajo el Total + `paymentNoticeSlot` arriba de la tarjeta.
 
 ---
 
-## 3. Active Plan — Auditoría de CHECKOUT implementada, falta medir
+## 3. Active Plan — Medir el paquete PDP + Checkout + Landing
 
-**Estado**: cambios de checkout implementados 2026-08-07 (misma sesión que la 7ª ronda de PDP).
+**Estado**: 3 rondas implementadas el 2026-08-07 (PDP, checkout, landing). Ninguna medida todavía.
 
 ### Baseline a batir
 - PDP móvil 7d: 151 únicos → 6 addtocart = **4.0%** → **0 compras**.
 - Checkout 30d: **20 initiatecheckout → 1 purchase = 5%**. Objetivo mínimo: **15%**.
+- Landing: sin baseline de scroll depth. Medir antes/después con `posthog-query`.
 
 ### Qué medir el 2026-08-14
 1. `posthog-query`: initiatecheckout → purchase (7d post-cambio vs previos).
 2. viewcontent → addtocart en móvil.
-3. Si hay tráfico suficiente, encuesta de salida en `/pagar`.
-⚠️ Los cambios de PDP y checkout se acumulan: medirlos como un solo paquete.
+3. Scroll depth en `/` móvil y clics home → PDP.
+⚠️ Los cambios de PDP, checkout y landing se acumulan. La landing es aislable-ish: el tráfico pagado aterriza directo en PDP.
 
-### Decisiones de esta ronda (razonamiento, para no revertirlas por accidente)
-- **NO se puso banner promocional en el checkout.** Best practice (Baymard/Shopify): el checkout debe tener el menor número de elementos y cero links de navegación. El reaseguro se integró DENTRO del resumen del pedido, que es donde el usuario ya está mirando.
-- **Resumen cerrado por defecto en móvil**: la cabecera ya muestra artículos + total, así el pago express (PayPal/GPay) queda visible sin scroll.
-- **Cupón degradado**: en tráfico frío un campo de cupón visible manda a la gente a Google. Riesgo de abandono > beneficio.
+### Decisiones que NO hay que revertir por accidente
+- **Sin banner promocional en el checkout** (cero links de navegación).
+- **Resumen cerrado por defecto en móvil.**
+- **Cupón degradado.**
+- **Landing sin secciones duplicadas de producto** (ver sección 2).
+- **"Por qué no es una vela normal" y "Combina tonos" eliminadas** de la landing por redundancia. Si alguien pide "más argumentos en la home", reforzar `BrandStorySection`, no crear secciones nuevas.
 
 ---
 
 ## 4. Recent Changes
-- 2026-08-07 — ✅ **CLARIDAD DE VARIANTE + CERÁMICA**: (a) `optionLabel()` en `ProductPageUI.tsx` → el selector "Color" ahora dice **"Color de la cera"** (excepto en recipientes puros); (b) barrido de "concreto" → "cerámica" en `ProductStorySections.tsx` (4 pasos + 4 FAQs del kit) y en el bloque compartido `PERLAS_BENEFIT_BLOCKS` ("cuenco de barro"); (c) footer de `EcommerceTemplate.tsx`: "Kit de Concreto" → "Kit Bowl de Cerámica". El SLUG sigue siendo `kit-vaso-de-concreto` (las tools no permiten renombrarlo).
-- 2026-08-07 — ✅ **AUDITORÍA DE CHECKOUT**: (a) `ShippingPromise` nuevo, elimina el "Envío: Pendiente" y muestra fecha real de entrega desde el primer render; (b) resumen móvil CERRADO por defecto con reaseguro siempre visible; (c) cupón unificado en `CouponSection`, colapsado y gris, también en escritorio; (d) MSI reencuadrado como micro-línea bajo el Total; (e) `PdpSocialProof linkable={false}` bajo el resumen; (f) link de WhatsApp bajo el CTA; (g) `getDeliveryRange()` extraído en `PdpTrust.tsx`.
-- 2026-08-07 — ✅ **AUDITORÍA PDP kit-vaso-de-vidrio**: `DeliveryEstimate`, `PdpSocialProof`, acordeón "Cuidado del producto" → `SHARED_FAQS`, acordeones cerrados por defecto.
-- 2026-08-07 — ✅ **BUY BOX REDISEÑADO**: `PDP_BENEFITS`, cantidad compacta, CTA primario `h-12` con precio.
+- 2026-08-07 — ✅ **AUDITORÍA DE LANDING MÓVIL**: 13 secciones → 9. (a) beneficios en 1 fila `grid-cols-4`; (b) "Cómo funciona" → `ProductStepsCarousel` (nuevas props `bleed`/`background`/`eyebrow`/`id`/`footer`); (c) 3 bloques de producto fusionados en **"Elige tu vela"** (`SHOP_CARDS`, rejilla 2 col, 6 tarjetas uniformes); (d) `<Reviews />` subido a la posición 5; (e) "Elige tu tono" → carrusel snap; (f) eliminadas "Por qué no es una vela normal" y "Combina tonos"; (g) micro-ayuda WhatsApp bajo la rejilla. Scroll móvil ≈ 40% más corto.
+- 2026-08-07 — ✅ **CLARIDAD DE VARIANTE + CERÁMICA**: `optionLabel()` → "Color de la cera"; barrido "concreto" → "cerámica" en `ProductStorySections.tsx` y footer.
+- 2026-08-07 — ✅ **AUDITORÍA DE CHECKOUT**: `ShippingPromise`, resumen móvil cerrado, `CouponSection`, MSI bajo el Total, `PdpSocialProof`, WhatsApp bajo el CTA.
+- 2026-08-07 — ✅ **AUDITORÍA PDP kit-vaso-de-vidrio**: `DeliveryEstimate`, `PdpSocialProof`, acordeones cerrados.
+- 2026-08-07 — ✅ **BUY BOX REDISEÑADO**: `PDP_BENEFITS`, cantidad compacta, CTA `h-12` con precio.
 - 2026-08-07 — ✅ **PASOS EN CARRUSEL**: `ProductStepsCarousel.tsx`.
 - 2026-08-07 — ✅ **kit-vaso-de-vidrio**: eliminado el bloque "Tu vaso, también cuando no es vela".
 - 2026-08-07 — ✅ **PDP REORDENADA**: prueba social de la posición 5 a la 3.
-- 2026-08-07 — ✅ **PDP más densa** + **`Reviews.tsx` compacto** + franja de pago duplicada eliminada.
+- 2026-08-07 — ✅ **PDP más densa** + **`Reviews.tsx` compacto**.
 - 2026-08-07 — ✅ **LANDING: precios y nombres desde la DB** (`buildCatalog`).
 - 2026-08-07 — ✅ **HEADER OVERLAY** + **COPY sin guiones largos** + **TABLA COMPARATIVA**.
 - 2026-07-31 — ✅ **RENOMBRE DE CATÁLOGO (9 productos, slugs intactos)**.
@@ -115,41 +125,41 @@ Snapshot 2026-08-07 (solo referencia; la fuente de verdad es la DB):
 - **📐 Todas las fotos de producto son 1122×1402 px (4:5), webp.**
 - **Colecciones**: sin imagen asignada. **FAVICON**: `/favicon.png` (256x256).
 - **FOTOS REALES catálogo**: `product-images/products/<hash>.webp`. 9 productos, 75 imágenes.
-- **UGC de clientas** (5 fotos): constante `UGC` en `src/data/reviews.ts`. Se usan en `Reviews.tsx` y como avatares en `PdpSocialProof` (PDP y checkout).
-- **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` · **Casa real**: `/casa-real-{sala,comedor,recibidor}.webp`
+- **UGC de clientas** (5 fotos): constante `UGC` en `src/data/reviews.ts`.
+- **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` · **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`
 - **4 PASOS** — base `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`:
   - Vierte → `/paso-vierte.webp` · Inserta → `1785521743155-htw95tvbi4b.webp` · Enciende → `1785521743156-3qeskqe43gv.webp` · Renueva → `/paso-renueva.webp`
 - **Bloque aroma** → `1785521743156-7ucg5c0kwb7.webp`
 - 🟡 `/pdp-vaso-decor.webp` quedó huérfana.
 - 🔴 **FALTA: video demo del mecanismo** (lo genera el user).
-- 🟡 Los `steps` de `kit-vaso-de-concreto` siguen usando `PLACEHOLDER` (`/placeholder.svg`): falta foto real del bowl de cerámica para el carrusel de pasos.
+- 🟡 Los `steps` de `kit-vaso-de-concreto` siguen usando `PLACEHOLDER`.
 
 ## 6. Known Issues
-- 2026-08-07 — 🟠 **SLUG `kit-vaso-de-concreto` es incorrecto** (el producto es de cerámica). `ecommerce--update-product` NO permite renombrar slugs. Cambiarlo desde el Dashboard rompería los anuncios de Meta y los links existentes salvo que se agregue un redirect del slug viejo. Decisión actual: **dejarlo**.
-- 2026-08-07 — 🟠 **"+200 clientes felices" sin verificar** contra órdenes reales (top bar, `PdpSocialProof`).
-- 2026-08-07 — 🟡 El desktop coupon ya no usa `logic.couponInputRef`. Si el backend quiere hacer focus programático, reconectarlo dentro de `CouponSection`.
-- 2026-08-07 — 🟡 `ShippingPromise` asume envío gratis cuando `shippingCost === 0`. Si el owner activa cobro de envío, revisar el copy.
+- 2026-08-07 — 🟡 Las fotos de `TONOS` en la landing son packshots de producto, no escenas de ambiente. El copy promete "tres ambientes" pero la imagen no lo entrega. Candidato a generar 3 lifestyle reales.
+- 2026-08-07 — 🟠 **SLUG `kit-vaso-de-concreto` es incorrecto** (el producto es de cerámica). Decisión actual: **dejarlo** (rompería los anuncios de Meta).
+- 2026-08-07 — 🟠 **"+200 clientes felices" sin verificar** contra órdenes reales.
+- 2026-08-07 — 🟡 El desktop coupon ya no usa `logic.couponInputRef`.
+- 2026-08-07 — 🟡 `ShippingPromise` asume envío gratis cuando `shippingCost === 0`.
 - 2026-08-07 — 🟠 Los títulos del catálogo en la DB contienen guion largo.
-- 2026-08-07 — 🟡 `PDP_BENEFITS` solo cubre 6 slugs (faltan bowl-negro, vaso-extra-transparente, pack-30-mechas).
+- 2026-08-07 — 🟡 `PDP_BENEFITS` solo cubre 6 slugs.
 - 2026-07-31 — 🟠 Footer de `EcommerceTemplate.tsx`: 3 nombres de producto siguen hardcodeados.
 - 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price`. Workaround: Dashboard manual.
-- 2026-07-31 — 🟡 `lov-search-files` devuelve 0 resultados incluso para strings triviales (ej. "concreto"). Usar `lov-view` con rutas directas.
+- 2026-07-31 — 🟡 `lov-search-files` devuelve 0 resultados incluso para strings triviales. Usar `lov-view` con rutas directas.
 - 2026-07-31 — 🟡 Autocapture de clics parece desactivado en PostHog.
 - 2026-07-25 — 🟡 Perlas/Reserva/Dúo/Trío NO están en categoría del menú (solo "Todos").
 
 ## 7. Pending / Future Sessions
-- [ALTA] Registrar en `.lovivo/cro-log.md` DOS hipótesis pendientes: (1) ronda PDP del 07-ago; (2) ronda CHECKOUT del 07-ago.
-- [ALTA] Medir el 2026-08-14: addtocart móvil vs 4.0% y initiatecheckout→purchase vs 5%.
-- [ALTA] Probar el checkout end-to-end con `browser-test` (producto → carrito → /pagar).
+- [ALTA] Medir el 2026-08-14: addtocart móvil vs 4.0%, initiatecheckout→purchase vs 5%, scroll depth en `/`.
+- [ALTA] Probar la landing y el checkout end-to-end con `browser-test` tras el deploy.
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
 - [ALTA] User: redirigir anuncios Meta al Kit Vela Rellenable · Vaso de Vidrio.
 - [ALTA] VIDEO DEMO (lo graba el user) → primer slide del carrusel de pasos.
-- [MED] Fotos reales para los `steps` de kit-vaso-de-concreto (hoy placeholder).
+- [MED] Generar 3 fotos lifestyle reales para "Elige tu tono" (hoy son packshots).
+- [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.
 - [MED] Considerar barra sticky de pago en móvil dentro del checkout.
-- [MED] Encuesta PostHog de salida en `/pagar`: "¿Qué te frenó de completar tu compra?".
-- [MED] Aplicar `ProductStepsCarousel` también en la landing.
+- [MED] Encuesta PostHog de salida en `/pagar`.
 - [MED] Reseñas: pedir al owner los nombres reales de clientas antes de escalar pauta.
-- [MED] CTA del hero de `IndexUI.tsx` → `/productos/kit-vaso-de-vidrio`.
+- [MED] CTA del hero de `IndexUI.tsx` → `/productos/kit-vaso-de-vidrio` (hoy apunta a perlas).
 - [MED] Barrer el resto del sitio buscando guiones largos (—) en copy.
 - [BAJA] Banners de colección (image null) y borrar imágenes huérfanas.

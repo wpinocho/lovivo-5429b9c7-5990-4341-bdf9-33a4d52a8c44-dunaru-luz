@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, type ReactNode } from "react"
 import {
   Carousel,
   CarouselApi,
@@ -18,6 +18,19 @@ export interface Step {
 interface ProductStepsCarouselProps {
   steps: Step[]
   title?: string
+  /** Eyebrow opcional encima del título */
+  eyebrow?: string
+  /** id para anclas (#como-funciona) */
+  id?: string
+  /**
+   * `true` (default) = full-bleed dentro de un contenedor ya paddeado (PDP).
+   * `false` = sección propia de ancho completo (landing).
+   */
+  bleed?: boolean
+  /** Clase de fondo de la sección */
+  background?: string
+  /** Slot opcional debajo del carrusel (CTA) */
+  footer?: ReactNode
 }
 
 /**
@@ -27,6 +40,11 @@ interface ProductStepsCarouselProps {
 export const ProductStepsCarousel = ({
   steps,
   title = "Crea tu vela en 4 pasos",
+  eyebrow,
+  id,
+  bleed = true,
+  background = "bg-dunaru-arena",
+  footer,
 }: ProductStepsCarouselProps) => {
   const [api, setApi] = useState<CarouselApi>()
   const [selected, setSelected] = useState(0)
@@ -48,8 +66,25 @@ export const ProductStepsCarousel = ({
   }, [api])
 
   return (
-    <section className="bg-dunaru-arena py-12 lg:py-16 -mx-4 px-4 md:-mx-6 md:px-6">
-      <div className="max-w-[1400px] mx-auto">
+    <section
+      id={id}
+      className={cn(
+        background,
+        "py-12 lg:py-16",
+        bleed && "-mx-4 px-4 md:-mx-6 md:px-6"
+      )}
+    >
+      <div
+        className={cn(
+          "mx-auto",
+          bleed ? "max-w-[1400px]" : "max-w-7xl px-4 sm:px-6 lg:px-8"
+        )}
+      >
+        {eyebrow && (
+          <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3 text-center">
+            {eyebrow}
+          </p>
+        )}
         <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-center mb-8">
           {title}
         </h2>
@@ -110,6 +145,8 @@ export const ProductStepsCarousel = ({
             ))}
           </div>
         )}
+
+        {footer && <div className="mt-8 text-center">{footer}</div>}
       </div>
     </section>
   )

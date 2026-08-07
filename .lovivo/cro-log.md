@@ -80,6 +80,21 @@
 - **Result**: (pendiente 7 días — revisar 2026-08-14).
 - **Nota**: se acumula con el cambio del 2026-07-31, cuyo Result sigue sin medirse. Al medir, tratar ambos como un solo paquete.
 
+### 2026-08-07 — Landing móvil: de 13 secciones a 9, carruseles y prueba social arriba
+- **Hypothesis**: La home móvil medía ~11,000 px (unas 13 pantallas de iPhone). El tráfico frío de Meta que aterriza en la home no llega ni a la mitad. Tres problemas concretos: (1) los **mismos 6 SKUs se mostraban en 3 bloques distintos** ("¿Cómo quieres empezar?", "Quiero decorar más", "Combina tonos") con 3 diseños de tarjeta diferentes, lo que lee como catálogo desordenado y no como una decisión; (2) "Cómo funciona" y "Elige tu tono" apilaban 4 y 3 imágenes grandes en vertical, ~3,500 px de puro scroll; (3) la **prueba social (Reviews) vivía en la posición 10 de 13**, prácticamente invisible en móvil. Comprimir el scroll y adelantar la prueba social debería subir el % de usuarios que llegan a un producto y el CTR a PDP.
+- **Change**:
+  1. **Tira de beneficios**: `grid-cols-2` (2 filas en móvil) → `grid-cols-4` en una sola fila, labels acortados ("Hasta 120 h de luz"→"120 h de luz", "Renueva cuando quieras"→"Rellenable"), `py-5`→`py-4`.
+  2. **"Cómo funciona" → carrusel**: reutiliza `ProductStepsCarousel` (el mismo de la PDP), ahora con props `bleed`, `background`, `eyebrow`, `id` y `footer`. Móvil: 1 paso con peek + puntos. Ahorro ≈ 1,500 px. CTA de cierre apunta al producto ancla (`kit-vaso-de-vidrio`) en vez de a las perlas.
+  3. **Consolidación de compra**: los 3 bloques de producto se fusionan en una sola sección **"Elige tu vela"** (`SHOP_CARDS`): rejilla de 2 columnas, 6 tarjetas idénticas 4:5 con eyebrow de segmentación ("Todo incluido", "Ya tengo recipiente", "Para regalar", "2 tonos · 1 kg"…), badge y precio. Elimina las secciones "Quiero decorar más" y "Combina tonos".
+  4. **Reviews subido** de la posición 10 a la 5, justo antes de "Elige tu tono".
+  5. **"Elige tu tono" → carrusel** horizontal con snap y peek al 70%.
+  6. **Eliminada "Por qué no es una vela normal"**: sus 3 argumentos ya estaban en la tira de beneficios y en `BrandStorySection`.
+  7. Añadida micro-ayuda "¿No sabes cuál? Te ayudamos por WhatsApp" bajo la rejilla de producto.
+- **Files**: `src/pages/ui/IndexUI.tsx`, `src/components/ProductStepsCarousel.tsx`
+- **Metric to watch**: scroll depth en `/` móvil, clics home → PDP, y `viewcontent` originado en la home. Secundaria: addtocart móvil (baseline 4.0%).
+- **Result**: (pendiente 7 días — revisar 2026-08-14).
+- **Nota**: la mayoría del tráfico pagado aterriza directo en PDP, no en la home. El impacto de este cambio se verá sobre todo en tráfico orgánico/directo y en usuarios que vuelven al logo. No mezclarlo con los cambios de PDP/checkout al medir.
+
 ## Active Experiments
 <!-- A/B tests currently running. Include flag_key, start date, variants, and target metric. -->
 None

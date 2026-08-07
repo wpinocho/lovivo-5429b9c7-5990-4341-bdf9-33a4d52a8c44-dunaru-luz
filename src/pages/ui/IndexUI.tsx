@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Flame, RotateCcw, Layers, Clock, ChevronDown, MessageCircle, Check } from 'lucide-react';
+import { ArrowRight, Flame, RotateCcw, Layers, Clock, ChevronDown, MessageCircle } from 'lucide-react';
 import { FloatingCart } from '@/components/FloatingCart';
+import { ProductStepsCarousel } from '@/components/ProductStepsCarousel';
 import { DunaruNewsletterForm } from '@/components/DunaruNewsletterForm';
 import { CasaRealSection } from '@/components/CasaRealSection';
 import { BrandStorySection } from '@/components/BrandStorySection';
@@ -69,41 +70,38 @@ const buildCatalog = (products: UseIndexLogicReturn['products']): Record<string,
   return entries;
 };
 
-const BUNDLE_META: { slug: string; subtitle: string; badge: string; badgeClass: string }[] = [
-  { slug: 'd-o-de-tonos', subtitle: '2 bolsas de 500 g · 60 mechas', badge: 'Más elegido', badgeClass: 'badge-mas-elegido' },
-  { slug: 'tr-o-de-tonos', subtitle: '3 bolsas de 500 g · 60 mechas', badge: 'Mejor valor', badgeClass: 'badge-mejor-valor' },
-];
-
-const VOLUME_META: { slug: string; badge?: string; badgeClass?: string }[] = [
-  { slug: 'reserva-1-kg' },
-  { slug: 'd-o-de-tonos', badge: 'Más elegido', badgeClass: 'badge-mas-elegido' },
-  { slug: 'tr-o-de-tonos', badge: 'Mejor valor', badgeClass: 'badge-mejor-valor' },
+// Una sola rejilla de compra. Sustituye a los antiguos bloques
+// "¿Cómo quieres empezar?" + "Quiero decorar más" + "Combina tonos",
+// que mostraban los mismos SKUs tres veces.
+const SHOP_CARDS: { slug: string; tag: string; badge?: string; badgeClass?: string }[] = [
+  { slug: 'kit-vaso-de-vidrio', tag: 'Todo incluido', badge: 'Más elegido', badgeClass: 'badge-mas-elegido' },
+  { slug: 'perlas-originales-500-g', tag: 'Ya tengo recipiente' },
+  { slug: 'kit-vaso-de-concreto', tag: 'Para regalar' },
+  { slug: 'd-o-de-tonos', tag: '2 tonos · 1 kg', badge: 'Mejor valor', badgeClass: 'badge-mejor-valor' },
+  { slug: 'tr-o-de-tonos', tag: '3 tonos · 1.5 kg' },
+  { slug: 'reserva-1-kg', tag: 'Rinde el doble' },
 ];
 
 const STEPS = [
   {
-    n: '01',
     title: 'Vierte',
-    desc: 'Llena tu recipiente favorito con las perlas. Cualquier vaso, bowl o copa de mínimo 10 cm de diámetro.',
-    img: '/paso-vierte.webp',
+    text: 'Llena tu recipiente favorito con las perlas. Cualquier vaso, bowl o copa de mínimo 10 cm.',
+    image: '/paso-vierte.webp',
   },
   {
-    n: '02',
     title: 'Inserta',
-    desc: 'Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743155-htw95tvbi4b.webp',
+    text: 'Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.',
+    image: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743155-htw95tvbi4b.webp',
   },
   {
-    n: '03',
     title: 'Enciende',
-    desc: 'Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-3qeskqe43gv.webp',
+    text: 'Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.',
+    image: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-3qeskqe43gv.webp',
   },
   {
-    n: '04',
     title: 'Renueva',
-    desc: 'Cuando la mecha se consume, agrega una nueva. Las perlas se reutilizan. Tu recipiente también.',
-    img: '/paso-renueva.webp',
+    text: 'Cuando la mecha se consume, agrega una nueva. Las perlas se reutilizan. Tu recipiente también.',
+    image: '/paso-renueva.webp',
   },
 ];
 
@@ -169,9 +167,6 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 // ─── Main Component ───────────────────────────────────────────────────────────
 export const IndexUI = ({ logic }: IndexUIProps) => {
   const catalog = useMemo(() => buildCatalog(logic.products), [logic.products]);
-  const perlas = catalog['perlas-originales-500-g'];
-  const kitVidrio = catalog['kit-vaso-de-vidrio'];
-  const kitCeramica = catalog['kit-vaso-de-concreto'];
 
   return (
     <EcommerceTemplate showCart={true} layout="full-width" headerOverlay>
@@ -245,16 +240,16 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       {/* ── BENEFICIOS ────────────────────────────────────────────────────── */}
       <section className="bg-dunaru-arena border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-border">
+          <div className="grid grid-cols-4 divide-x divide-border">
             {[
-              { icon: <Clock className="h-4 w-4" />, text: 'Hasta 120 h de luz' },
-              { icon: <Flame className="h-4 w-4" />, text: '30 mechas incluidas' },
-              { icon: <Layers className="h-4 w-4" />, text: 'En cualquier recipiente' },
-              { icon: <RotateCcw className="h-4 w-4" />, text: 'Renueva cuando quieras' },
+              { icon: <Clock className="h-4 w-4" />, text: '120 h de luz' },
+              { icon: <Flame className="h-4 w-4" />, text: '30 mechas' },
+              { icon: <Layers className="h-4 w-4" />, text: 'Cualquier recipiente' },
+              { icon: <RotateCcw className="h-4 w-4" />, text: 'Rellenable' },
             ].map(({ icon, text }, i) => (
-              <div key={i} className="flex flex-col sm:flex-row items-center gap-2 py-5 px-4 sm:px-6 text-center sm:text-left">
+              <div key={i} className="flex flex-col md:flex-row items-center justify-center gap-1.5 py-4 px-1.5 sm:px-4 text-center md:text-left">
                 <span className="text-dunaru-champagne shrink-0">{icon}</span>
-                <span className="font-body text-xs sm:text-sm font-medium text-foreground/80">{text}</span>
+                <span className="font-body text-[11px] leading-tight sm:text-sm font-medium text-foreground/80">{text}</span>
               </div>
             ))}
           </div>
@@ -262,177 +257,99 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── CÓMO FUNCIONA ─────────────────────────────────────────────────── */}
-      <section id="como-funciona" className="section-pad bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
-              Simple desde el primer día
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Cómo funciona</h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {STEPS.map((step, i) => (
-              <div key={i} className="group">
-                <div className="relative aspect-square overflow-hidden rounded-sm mb-4">
-                  <img
-                    src={step.img}
-                    alt={`Paso ${step.n}: ${step.title} — vela perlada dunaru`}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                  <span className="absolute top-3 left-3 font-body text-xs font-bold tracking-widest text-dunaru-onix bg-dunaru-marfil/90 backdrop-blur-sm rounded-full h-8 w-8 flex items-center justify-center">
-                    {step.n}
-                  </span>
-                </div>
-                <h3 className="font-display text-xl text-foreground mb-1.5">{step.title}</h3>
-                <p className="font-body text-sm text-foreground/60 leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-12 text-center">
-            <Link to="/productos/perlas-originales-500-g">
-              <Button variant="outline" className="font-body font-medium rounded-sm border-foreground/30 hover:border-foreground text-foreground transition-colors">
-                Ver el producto completo
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      <ProductStepsCarousel
+        id="como-funciona"
+        eyebrow="Simple desde el primer día"
+        title="Crea tu vela en 4 pasos"
+        steps={STEPS}
+        bleed={false}
+        background="bg-background"
+        footer={
+          <Link to="/productos/kit-vaso-de-vidrio">
+            <Button variant="outline" className="font-body font-medium rounded-sm border-foreground/30 hover:border-foreground text-foreground transition-colors">
+              Ver el kit completo
+            </Button>
+          </Link>
+        }
+      />
 
       {/* ── INTENCIÓN DE COMPRA ───────────────────────────────────────────── */}
       <section id="comprar" className="section-pad-sm bg-dunaru-arena">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground">¿Cómo quieres empezar?</h2>
+          <div className="text-center mb-8">
+            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
+              Empieza por aquí
+            </p>
+            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Elige tu vela</h2>
+            <p className="font-body text-sm text-foreground/60 max-w-sm mx-auto mt-3">
+              Envío gratis a todo México, sin mínimo. Hasta 6 meses sin intereses.
+            </p>
           </div>
 
-          {/* Two main paths */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
-            {/* Path A */}
-            <Link to="/productos/perlas-originales-500-g" className="group block h-full">
-              <div className="relative flex flex-col h-full overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
-                <div className="flex-1 min-h-[260px] overflow-hidden">
-                  <img
-                    src={perlas.img}
-                    alt={perlas.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-6">
-                  <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Ya tengo un recipiente que amo</p>
-                  <h3 className="font-display text-2xl text-foreground mb-2">{perlas.title}</h3>
-                  <p className="font-body text-sm text-foreground/60 mb-4">Solo las perlas y las mechas. Pon la vela en tu vaso favorito hoy.</p>
-                  <div className="flex items-center justify-between">
-                    <span className="font-body font-bold text-xl text-foreground">
-                      {perlas.price}
-                      {perlas.compare && <span className="ml-2 text-sm font-normal text-foreground/40 line-through">{perlas.compare}</span>}
-                      <span className="ml-2 text-sm font-normal text-foreground/50">envío gratis</span>
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+            {SHOP_CARDS.map(({ slug, tag, badge, badgeClass }) => {
+              const p = catalog[slug];
+              if (!p) return null;
+              return (
+                <Link
+                  key={slug}
+                  to={`/productos/${slug}`}
+                  className="group flex flex-col overflow-hidden rounded-sm border border-border bg-background transition-all hover:border-dunaru-champagne/60 hover:shadow-md"
+                >
+                  <div className="relative aspect-[4/5] overflow-hidden bg-dunaru-arena">
+                    <img
+                      src={p.img}
+                      alt={p.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    {badge && <span className={`absolute top-2.5 left-2.5 ${badgeClass}`}>{badge}</span>}
+                  </div>
+                  <div className="flex flex-1 flex-col p-3 sm:p-4">
+                    <span className="font-body text-[10px] font-semibold uppercase tracking-widest text-dunaru-champagne mb-1">
+                      {tag}
                     </span>
-                    <span className="font-body text-sm text-dunaru-champagne font-medium flex items-center gap-1">Ver producto <ArrowRight className="h-3.5 w-3.5" /></span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-
-            {/* Path B */}
-            <div className="flex flex-col gap-5">
-              <Link to="/productos/kit-vaso-de-vidrio" className="group block flex-1">
-                <div className="relative overflow-hidden rounded-sm bg-dunaru-onix border border-dunaru-onix hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg h-full">
-                  <div className="absolute top-4 left-4 badge-mas-elegido z-10">Más elegido</div>
-                  <div className="grid grid-cols-2 h-full">
-                    <div className="overflow-hidden">
-                      <img
-                        src={kitVidrio.img}
-                        alt={kitVidrio.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 min-h-[160px]"
-                      />
-                    </div>
-                    <div className="p-5 flex flex-col justify-center">
-                      <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Quiero algo listo</p>
-                      <h3 className="font-display text-xl text-dunaru-marfil mb-2">{kitVidrio.title}</h3>
-                      <p className="font-body text-xs text-dunaru-marfil/60 mb-3">Vaso + perlas + mechas. Listo para usar o regalar.</p>
-                      <span className="font-body font-bold text-lg text-dunaru-marfil">
-                        {kitVidrio.price}
-                        {kitVidrio.compare && <span className="ml-1.5 text-xs font-normal text-dunaru-marfil/40 line-through">{kitVidrio.compare}</span>}
-                        <span className="ml-1.5 text-xs font-normal text-dunaru-marfil/50">envío gratis</span>
-                      </span>
+                    <h3 className="font-body text-sm font-medium leading-snug text-foreground mb-2">{p.title}</h3>
+                    <div className="mt-auto flex items-baseline gap-2">
+                      <span className="font-body text-base font-bold text-foreground">{p.price}</span>
+                      {p.compare && (
+                        <span className="font-body text-xs text-foreground/40 line-through">{p.compare}</span>
+                      )}
                     </div>
                   </div>
-                </div>
-              </Link>
-
-              <Link to="/productos/kit-vaso-de-concreto" className="group block">
-                <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
-                  <div className="grid grid-cols-2">
-                    <div className="overflow-hidden">
-                      <img
-                        src={kitCeramica.img}
-                        alt={kitCeramica.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 min-h-[140px]"
-                      />
-                    </div>
-                    <div className="p-5 flex flex-col justify-center">
-                      <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Para regalar</p>
-                      <h3 className="font-display text-xl text-foreground mb-2">{kitCeramica.title}</h3>
-                      <p className="font-body text-xs text-foreground/60 mb-3">Bowl de cerámica + perlas. Llega listo para regalar.</p>
-                      <span className="font-body font-bold text-lg text-foreground">
-                        {kitCeramica.price}
-                        {kitCeramica.compare && <span className="ml-1.5 text-xs font-normal text-foreground/40 line-through">{kitCeramica.compare}</span>}
-                        <span className="ml-1.5 text-xs font-normal text-foreground/50">envío gratis</span>
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </div>
+                </Link>
+              );
+            })}
           </div>
 
-          {/* Volume path */}
-          <div className="mt-4 p-5 sm:p-6 bg-background/60 rounded-sm border border-border">
-            <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-5 text-center">Quiero decorar más o llenar varios recipientes</p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
-              {VOLUME_META.map(({ slug, badge, badgeClass }) => {
-                const p = catalog[slug];
-                return (
-                  <Link
-                    key={slug}
-                    to={`/productos/${slug}`}
-                    className="group relative flex h-full flex-col justify-between rounded-sm border border-border bg-background p-5 pt-6 hover:border-dunaru-champagne/60 hover:shadow-md transition-all"
-                  >
-                    {badge && (
-                      <span className={`absolute -top-2.5 left-4 ${badgeClass}`}>{badge}</span>
-                    )}
-                    <h3 className="font-body text-sm font-medium leading-snug text-foreground">{p.title}</h3>
-                    <div className="mt-5 flex items-end justify-between gap-2">
-                      <div className="flex items-baseline gap-2">
-                        <span className="font-body text-lg font-bold text-foreground">{p.price}</span>
-                        {p.compare && (
-                          <span className="font-body text-xs text-foreground/40 line-through">{p.compare}</span>
-                        )}
-                      </div>
-                      <ArrowRight className="h-4 w-4 shrink-0 text-foreground/35 group-hover:text-dunaru-champagne transition-colors" />
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
+          <p className="text-center font-body text-xs text-foreground/50 mt-6">
+            ¿No sabes cuál?{' '}
+            <a
+              href="https://wa.me/525531215386?text=Hola%2C%20no%20s%C3%A9%20cu%C3%A1l%20vela%20elegir"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-dunaru-champagne font-medium hover:underline"
+            >
+              Te ayudamos por WhatsApp
+            </a>
+          </p>
         </div>
       </section>
 
       {/* ── ELIGE TU TONO ─────────────────────────────────────────────────── */}
-      <section id="tonos" className="section-pad bg-background">
+      <Reviews />
+
+      {/* Elige tu tono (carrusel) */}
+      <section id="tonos" className="section-pad-sm bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">Tres tonos, tres ambientes</p>
             <h2 className="font-display text-3xl sm:text-4xl text-foreground">Elige tu tono</h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0 md:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {TONOS.map((tono) => (
-              <Link key={tono.name} to={`/productos/${tono.slug}`} className="group block">
+              <Link key={tono.name} to={`/productos/${tono.slug}`} className="group block shrink-0 w-[70%] sm:w-[45%] md:w-auto snap-start">
                 <div className="relative overflow-hidden rounded-sm">
                   <div className="aspect-[3/4] overflow-hidden">
                     <img
@@ -463,98 +380,18 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       <CasaRealSection />
 
       {/* ── POR QUÉ NO ES UNA VELA NORMAL ────────────────────────────────── */}
-      <section className="section-pad-sm bg-dunaru-onix">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-10">
-            <h2 className="font-display text-3xl sm:text-4xl text-dunaru-marfil">Por qué no es una vela normal</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: 'No tiras tus recipientes favoritos',
-                desc: 'Pones las perlas en el vaso que ya tienes y amas. Sin comprar una nueva pieza de decoración que no encaja.',
-              },
-              {
-                title: 'Se renueva, no se reemplaza',
-                desc: 'Cuando se consume la mecha, agregas una nueva. Las perlas duran. Tu inversión también.',
-              },
-              {
-                title: 'Cambia según tu espacio o tu momento',
-                desc: 'Marfil para el día, Champagne para la cena, Ónix para la noche. El mismo recipiente, otra emoción.',
-              },
-            ].map((item, i) => (
-              <div key={i} className="flex gap-4">
-                <div className="shrink-0 w-6 h-6 rounded-full bg-dunaru-champagne/20 flex items-center justify-center mt-0.5">
-                  <Check className="h-3 w-3 text-dunaru-champagne" />
-                </div>
-                <div>
-                  <h3 className="font-display text-lg text-dunaru-marfil mb-2">{item.title}</h3>
-                  <p className="font-body text-sm text-dunaru-marfil/60 leading-relaxed">{item.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Sección "Por qué no es una vela normal" eliminada: repetía la tira de
+          beneficios del inicio y la historia de marca de más abajo. */}
 
       {/* ── BUNDLES ───────────────────────────────────────────────────────── */}
-      <section className="section-pad bg-dunaru-arena">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">Más colores, más valor</p>
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Combina tonos</h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {BUNDLE_META.map((meta) => {
-              const bundle = { ...catalog[meta.slug], ...meta };
-              return (
-              <Link key={bundle.slug} to={`/productos/${bundle.slug}`} className="group block">
-                <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 hover:shadow-lg transition-all duration-300">
-                  <div className="absolute top-4 left-4 z-10">
-                    <span className={bundle.badgeClass}>{bundle.badge}</span>
-                  </div>
-                  <div className="aspect-square overflow-hidden">
-                    <img
-                      src={bundle.img}
-                      alt={bundle.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  </div>
-                  <div className="p-5">
-                    <h3 className="font-display text-2xl text-foreground mb-0.5">{bundle.title}</h3>
-                    <p className="font-body text-sm text-foreground/55 mb-3">{bundle.subtitle}</p>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-baseline gap-2">
-                        <span className="font-body font-bold text-xl text-foreground">{bundle.price}</span>
-                        {bundle.compare && (
-                          <span className="font-body text-sm text-foreground/40 line-through">{bundle.compare}</span>
-                        )}
-                      </div>
-                      <span className="font-body text-xs text-dunaru-marfil bg-dunaru-onix rounded-sm px-2 py-1">Envío gratis</span>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-              );
-            })}
-          </div>
-
-          <div className="text-center mt-8">
-            <Link to="/productos/reserva-1-kg">
-              <Button variant="outline" className="font-body font-medium rounded-sm border-foreground/30 hover:border-foreground text-foreground transition-colors">
-                Ver también: recarga de 1 kg · {catalog['reserva-1-kg'].price}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* Sección "Combina tonos" eliminada: Dúo, Trío y Reserva 1 kg ya viven
+          en la rejilla "Elige tu vela", arriba. */}
 
       {/* ── HISTORIA DE MARCA + HECHO EN MÉXICO + GARANTÍA ────────────────── */}
       <BrandStorySection />
 
       {/* ── RESEÑAS (HONESTO — MARCA NUEVA) ──────────────────────────────── */}
-      <Reviews />
+      {/* (movido arriba: ahora va justo antes de "Elige tu tono") */}
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section id="faq" className="section-pad bg-background">
