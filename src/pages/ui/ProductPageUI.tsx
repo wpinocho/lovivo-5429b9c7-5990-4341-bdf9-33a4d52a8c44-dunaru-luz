@@ -18,6 +18,7 @@ import {
   MessageCircle,
   Check,
   CreditCard,
+  Lock,
 } from "lucide-react"
 import { Link } from "react-router-dom"
 import { cn } from "@/lib/utils"
@@ -65,52 +66,39 @@ const PDP_HEADLINE: Record<string, string> = {
 }
 
 /**
- * Ancla de valor honesta bajo el precio. NO inventamos precios tachados:
- * comparamos contra algo verificable (horas de luz, comprar por separado).
+ * Beneficios del producto, arriba del selector de variantes.
+ * Copy orientado a "qué gano yo", no a lista de contenido de caja.
  */
-const PDP_VALUE_ANCHOR: Record<string, string> = {
-  "perlas-originales-500-g":
-    "120 horas de luz — menos de $5 por hora encendida.",
-  "reserva-1-kg": "240 horas de luz — el mejor precio por gramo del catálogo.",
-  "kit-vaso-de-vidrio":
-    "Vaso + cera + mechas: todo listo para encender hoy.",
-  "kit-vaso-de-concreto":
-    "Bowl de cerámica hecho a mano + cera + mechas incluidas.",
-  "d-o-de-tonos": "240 horas de luz en dos tonos para combinar.",
-  "tr-o-de-tonos": "360 horas de luz en tres tonos para combinar.",
-}
-
-/** Qué llega en la caja — se muestra pegado al precio, sin necesidad de scroll. */
-const PDP_INCLUDES: Record<string, string[]> = {
+const PDP_BENEFITS: Record<string, string[]> = {
   "kit-vaso-de-vidrio": [
-    "Vaso de vidrio de diseño, resistente al calor",
-    "500 g de cera perlada · hasta 120 h de luz",
-    "30 mechas de algodón incluidas",
+    "Llega completo: vaso, cera y mechas. Enciendes tu vela el mismo día",
+    "Cuando se acaba la rellenas, no la tiras: el mismo vaso te dura años",
+    "Hasta 120 horas de luz cálida con los 500 g que vienen incluidos",
   ],
   "kit-vaso-de-concreto": [
-    "Bowl de cerámica negra mate, hecho a mano",
-    "500 g de cera perlada · hasta 120 h de luz",
-    "30 mechas de algodón incluidas",
+    "Bowl de cerámica negra mate hecho a mano: se ve bien encendido y apagado",
+    "Llega listo para regalar, con 500 g de cera y 30 mechas dentro",
+    "Se rellena infinitas veces: compras una vez y sigue dando luz",
   ],
   "perlas-originales-500-g": [
-    "500 g de cera perlada · hasta 120 h de luz",
-    "Funciona en cualquier recipiente de +10 cm",
-    "Se rellena infinitas veces — no tiras nada",
+    "Convierte el vaso o bowl que ya tienes en una vela de diseño",
+    "Hasta 120 horas de luz por bolsa, con 30 mechas incluidas",
+    "Sin cera pegada: se vacía, se limpia y empieza de cero",
   ],
   "reserva-1-kg": [
-    "1 kg de cera perlada · hasta 240 h de luz",
-    "Rinde para varios recipientes a la vez",
-    "Se rellena infinitas veces — no tiras nada",
+    "1 kg de cera: hasta 240 horas de luz, el mejor precio por gramo",
+    "Rinde para varias velas encendidas al mismo tiempo",
+    "60 mechas incluidas: rellenas cuando quieras, sin comprar nada más",
   ],
   "d-o-de-tonos": [
-    "2 bolsas de 500 g en tonos distintos",
-    "Hasta 240 h de luz en total",
-    "Combina tonos en el mismo recipiente",
+    "Dos tonos para combinar en el mismo recipiente o en dos velas distintas",
+    "1 kg de cera en total: hasta 240 horas de luz",
+    "60 mechas incluidas y mejor precio que comprarlas por separado",
   ],
   "tr-o-de-tonos": [
-    "3 bolsas de 500 g en tonos distintos",
-    "Hasta 360 h de luz en total",
-    "Combina tonos en el mismo recipiente",
+    "Los tres tonos de la colección: Marfil, Champagne y Ónix",
+    "1.5 kg de cera: hasta 360 horas de luz para toda la casa",
+    "90 mechas incluidas y el mejor precio por gramo del catálogo",
   ],
 }
 import { useCart } from "@/contexts/CartContext"
@@ -243,10 +231,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const headline = logic.product?.slug
     ? PDP_HEADLINE[logic.product.slug]
     : undefined
-  const includes = (logic.product?.slug && PDP_INCLUDES[logic.product.slug]) || []
-  const valueAnchor = logic.product?.slug
-    ? PDP_VALUE_ANCHOR[logic.product.slug]
-    : undefined
+  const benefits = (logic.product?.slug && PDP_BENEFITS[logic.product.slug]) || []
 
   // Rating compacto reutilizable (móvil arriba del fold)
   const InlineRating =
@@ -447,7 +432,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           </div>
 
           {/* ========== INFO COLUMN (lg:col-span-5, scrolls while gallery sticks) ========== */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-6">
             {/* Title block */}
             <div className="space-y-3">
               {vendor && (
@@ -485,10 +470,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 o <span className="font-medium text-foreground/90">6 pagos de {logic.formatMoney(logic.currentPrice / 6)}</span> a meses sin intereses
               </p>
 
-              {/* Ancla de valor verificable (sustituye al precio tachado inventado) */}
-              {valueAnchor && (
-                <p className="text-sm text-foreground/70">{valueAnchor}</p>
-              )}
 
               {/* Mini rating — prueba social arriba del fold */}
               {(() => {
@@ -529,44 +510,25 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               )}
             </div>
 
-            {/* Qué incluye — responde "¿qué me llega?" sin scroll */}
-            {includes.length > 0 && (
-              <div className="space-y-2.5">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  Qué incluye
-                </p>
-                <ul className="space-y-2">
-                  {includes.map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-2.5 text-sm text-foreground/85"
-                    >
+            {/* Beneficios del producto — el argumento de compra, arriba del selector */}
+            {benefits.length > 0 && (
+              <ul className="space-y-2.5 pb-6 border-b border-border/60">
+                {benefits.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 text-sm text-foreground/85 leading-snug"
+                  >
+                    <span className="mt-px h-[18px] w-[18px] rounded-full bg-dunaru-champagne/15 border border-dunaru-champagne/40 flex items-center justify-center shrink-0">
                       <Check
-                        className="h-4 w-4 text-dunaru-champagne shrink-0 mt-0.5"
-                        strokeWidth={2.5}
+                        className="h-2.5 w-2.5 text-dunaru-champagne"
+                        strokeWidth={3.5}
                       />
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+                    </span>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
             )}
-
-            {/* Reaseguros concretos y verificables */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 py-4 border-y border-border/60">
-              <div className="flex items-center gap-2.5 text-xs">
-                <Truck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
-                <span className="text-foreground/80">Envío gratis a todo México</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs">
-                <ShieldCheck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
-                <span className="text-foreground/80">Garantía de 30 días</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs">
-                <CreditCard className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
-                <span className="text-foreground/80">Hasta 6 meses sin intereses</span>
-              </div>
-            </div>
 
             {/* Selling Plan Selector */}
             {logic.sellingPlans && logic.sellingPlans.length > 0 && (
@@ -718,12 +680,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               />
             ) : (
               <>
-                {/* Quantity stepper */}
-                <div className="space-y-2.5">
-                  <Label className="text-sm font-medium uppercase tracking-wider">
+                {/* Quantity stepper — compacto, en línea */}
+                <div className="flex items-center gap-4">
+                  <Label className="text-sm font-medium text-foreground/80">
                     Cantidad
                   </Label>
-                  <div className="inline-flex items-center border border-border rounded-md overflow-hidden">
+                  <div className="inline-flex items-center rounded-lg bg-muted/50 border border-border/70 p-0.5">
                     <button
                       type="button"
                       onClick={() =>
@@ -732,23 +694,23 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                         )
                       }
                       disabled={logic.quantity <= 1}
-                      className="w-11 h-11 flex items-center justify-center hover:bg-muted/60 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      className="w-9 h-9 rounded-md flex items-center justify-center text-foreground/70 hover:bg-background hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-transparent"
                       aria-label="Disminuir cantidad"
                     >
-                      <Minus className="h-4 w-4" />
+                      <Minus className="h-3.5 w-3.5" strokeWidth={2.25} />
                     </button>
-                    <div className="w-12 h-11 flex items-center justify-center font-medium tabular-nums border-x border-border">
+                    <span className="w-9 text-center text-sm font-semibold tabular-nums">
                       {logic.quantity}
-                    </div>
+                    </span>
                     <button
                       type="button"
                       onClick={() =>
                         logic.handleQuantityChange(logic.quantity + 1)
                       }
-                      className="w-11 h-11 flex items-center justify-center hover:bg-muted/60 transition-colors"
+                      className="w-9 h-9 rounded-md flex items-center justify-center text-foreground/70 hover:bg-background hover:text-foreground transition-colors"
                       aria-label="Aumentar cantidad"
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-3.5 w-3.5" strokeWidth={2.25} />
                     </button>
                   </div>
                 </div>
@@ -765,7 +727,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             )}
 
             {/* CTAs */}
-            <div ref={ctaRef} className="flex flex-col gap-3">
+            <div ref={ctaRef} className="flex flex-col gap-2.5">
               {logic.inStock &&
                 logic.canAddToCart &&
                 !logic.selectedPlan && (
@@ -793,10 +755,18 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               {logic.inStock && (
                 <Button
                   onClick={logic.handleBuyNow}
-                  className="w-full h-14 text-base tracking-wide rounded-md"
+                  className="w-full h-12 text-[15px] font-semibold rounded-lg shadow-sm"
                   size="lg"
                 >
                   Comprar ahora
+                  {!useTierSelector && (
+                    <span className="font-normal opacity-80">
+                      {" · "}
+                      {logic.formatMoney(
+                        logic.currentPrice * (logic.quantity || 1)
+                      )}
+                    </span>
+                  )}
                 </Button>
               )}
 
@@ -804,8 +774,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 onClick={handleAddToCartWithAddOns}
                 disabled={!logic.inStock}
                 variant={logic.inStock ? "outline" : "default"}
-                className="w-full h-14 text-base tracking-wide rounded-md"
-                size="lg"
+                className="w-full h-11 text-sm font-medium rounded-lg border-border/80 bg-transparent text-foreground/90 hover:bg-muted/60"
               >
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 {logic.inStock
@@ -826,22 +795,37 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </Badge>
               )}
 
-              {/* Reaseguros pegados al buy box */}
+              {/* Badges de confianza — una sola vez, debajo de los botones */}
               {logic.inStock && (
-                <div className="space-y-2 pt-1">
-                  <div className="flex items-center gap-2.5 text-sm text-foreground/80">
-                    <Truck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
-                    <span>
-                      <span className="font-medium text-foreground">Pídelo hoy</span> y llega en 2 a 5 días hábiles
-                    </span>
+                <>
+                  <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
+                    <Lock className="h-3 w-3 shrink-0" strokeWidth={2} />
+                    Pago seguro · Llega en 2 a 5 días hábiles
+                  </p>
+
+                  <div className="grid grid-cols-3 gap-2 pt-3 mt-1 border-t border-border/60">
+                    {[
+                      { icon: Truck, title: "Envío gratis", sub: "A todo México" },
+                      { icon: ShieldCheck, title: "30 días", sub: "De garantía" },
+                      { icon: CreditCard, title: "6 meses", sub: "Sin intereses" },
+                    ].map(({ icon: Icon, title, sub }) => (
+                      <div
+                        key={title}
+                        className="flex flex-col items-center text-center gap-1.5"
+                      >
+                        <span className="h-9 w-9 rounded-full bg-dunaru-champagne/12 border border-dunaru-champagne/35 flex items-center justify-center text-dunaru-ambar shrink-0">
+                          <Icon className="h-4 w-4" strokeWidth={1.75} />
+                        </span>
+                        <span className="text-xs font-medium text-foreground/90 leading-none">
+                          {title}
+                        </span>
+                        <span className="text-[11px] text-muted-foreground leading-none">
+                          {sub}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                  <div className="flex items-center gap-2.5 text-sm text-foreground/80">
-                    <ShieldCheck className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
-                    <span>
-                      <span className="font-medium text-foreground">Garantía de 30 días</span> o te devolvemos tu dinero
-                    </span>
-                  </div>
-                </div>
+                </>
               )}
 
               {/* Leyenda WhatsApp — asesoría antes de comprar */}
