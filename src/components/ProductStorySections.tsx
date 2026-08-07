@@ -61,6 +61,18 @@ interface PdpContent {
 const PLACEHOLDER = "/placeholder.svg"
 
 /**
+ * FAQ que aplica a todos los productos. Antes vivía como acordeón
+ * "Cuidado del producto" arriba, junto al botón de compra: ahí solo
+ * estorbaba. Aquí sí responde una duda real.
+ */
+const SHARED_FAQS: FaqItem[] = [
+  {
+    q: "¿Cómo cuido mi vela para que dure más?",
+    a: "Guárdala en un lugar fresco y seco, lejos del sol directo. Cada vez que la enciendas, deja que la mecha queme entre 2 y 3 horas y luego apágala. Cuando se consuma la cera, vacía el recipiente, lávalo con agua tibia y vuelve a llenarlo.",
+  },
+]
+
+/**
  * Bloques de beneficios "estrella" (los de Perlas Originales).
  * Compartidos con Reserva 1kg, Dúo y Trío de Tonos para máxima consistencia.
  */
@@ -798,7 +810,7 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
           Todo lo que necesitas saber antes de tu primera vela dunaru.
         </p>
         <Accordion type="single" collapsible className="space-y-3">
-          {content.faqs.map((faq, i) => (
+          {[...content.faqs, ...SHARED_FAQS].map((faq, i) => (
             <AccordionItem
               key={i}
               value={`faq-${i}`}

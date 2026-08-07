@@ -42,6 +42,7 @@ import { ProductAddOns } from "@/components/ProductAddOns"
 import { ProductQuantityTiers } from "@/components/ProductQuantityTiers"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
+import { DeliveryEstimate, PdpSocialProof } from "@/components/PdpTrust"
 
 // Slugs que usan el selector "Lleva más y ahorra" en lugar del stepper + add-ons
 const TIER_SELECTOR_SLUGS = ["perlas-originales-500-g"]
@@ -726,6 +727,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </>
             )}
 
+            {/* Disponibilidad + fecha concreta de entrega */}
+            {logic.inStock && <DeliveryEstimate />}
+
             {/* CTAs */}
             <div ref={ctaRef} className="flex flex-col gap-2.5">
               {logic.inStock &&
@@ -800,7 +804,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 <>
                   <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                     <Lock className="h-3 w-3 shrink-0" strokeWidth={2} />
-                    Pago seguro · Llega en 2 a 5 días hábiles
+                    Pago seguro · Compra protegida
                   </p>
 
                   <div className="grid grid-cols-3 gap-2 pt-3 mt-1 border-t border-border/60">
@@ -824,6 +828,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                         </span>
                       </div>
                     ))}
+                  </div>
+
+                  {/* Prueba social con fotos reales de clientas */}
+                  <div className="pt-2">
+                    <PdpSocialProof slug={logic.product?.slug} />
                   </div>
                 </>
               )}
@@ -851,7 +860,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             <Accordion
               type="single"
               collapsible
-              defaultValue="description"
               className="border-t border-border/60"
             >
               {logic.product.description && (
@@ -886,18 +894,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </AccordionContent>
               </AccordionItem>
 
-              <AccordionItem value="care">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
-                  Cuidado del producto
-                </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground">
-                  <p>
-                    Conserva en lugar fresco y seco, alejado de la luz solar
-                    directa. Sigue las indicaciones de uso descritas en el
-                    empaque.
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
             </Accordion>
           </div>
         </div>
