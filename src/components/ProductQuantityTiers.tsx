@@ -20,6 +20,9 @@ interface ProductQuantityTiersProps {
   quantity: number
   unitLabel?: string
   unitSuffix?: string
+  /** Piezas extra incluidas por unidad (ej. 30 mechas por bolsa). 0 = ocultar */
+  extraPerUnit?: number
+  extraLabel?: string
   onQuantityChange: (quantity: number) => void
   formatMoney: (n: number) => string
 }
@@ -30,8 +33,10 @@ export const ProductQuantityTiers = ({
   productId,
   basePrice,
   quantity,
-  unitLabel = "Kit",
+  unitLabel = "Bolsa",
   unitSuffix = "de 500 g",
+  extraPerUnit = 30,
+  extraLabel = "mechas",
   onQuantityChange,
   formatMoney,
 }: ProductQuantityTiersProps) => {
@@ -95,6 +100,11 @@ export const ProductQuantityTiers = ({
                     </span>
                   )}
                 </div>
+                {extraPerUnit > 0 && (
+                  <span className="block text-xs text-muted-foreground mt-0.5">
+                    + {extraPerUnit * n} {extraLabel} incluidas
+                  </span>
+                )}
               </div>
 
               <div className="shrink-0 text-right">

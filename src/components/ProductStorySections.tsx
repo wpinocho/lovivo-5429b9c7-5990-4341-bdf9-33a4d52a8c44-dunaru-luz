@@ -42,8 +42,9 @@ interface StoryBlock {
 
 interface CompareRow {
   label: string
-  dunaru: boolean
-  traditional: boolean
+  /** boolean = palomita/tache · string = valor comparativo (ej. "$" vs "$$$") */
+  dunaru: boolean | string
+  traditional: boolean | string
 }
 
 interface FaqItem {
@@ -152,7 +153,8 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Libre de parafina", dunaru: true, traditional: false },
       { label: "Usa el recipiente que tú quieras", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
-      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
       {
@@ -250,7 +252,8 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Vaso reutilizable de diseño", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
-      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
       {
@@ -340,7 +343,8 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Llega listo para regalar", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
-      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
       {
@@ -373,7 +377,8 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Envío gratis a todo México", dunaru: true, traditional: false },
-      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
       {
@@ -406,7 +411,8 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Mejor precio que por separado", dunaru: true, traditional: false },
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Envío gratis a todo México", dunaru: true, traditional: false },
-      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
       {
@@ -439,7 +445,8 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "El mejor precio por gramo", dunaru: true, traditional: false },
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Envío gratis a todo México", dunaru: true, traditional: false },
-      { label: "Luz cálida y aroma neutro", dunaru: true, traditional: true },
+      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
       {
@@ -792,14 +799,22 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
                 {row.label}
               </span>
               <span className="px-4 py-4 flex justify-center w-24">
-                {row.dunaru ? (
+                {typeof row.dunaru === "string" ? (
+                  <span className="font-display text-lg leading-none text-dunaru-champagne">
+                    {row.dunaru}
+                  </span>
+                ) : row.dunaru ? (
                   <Check className="h-5 w-5 text-dunaru-champagne" strokeWidth={2.5} />
                 ) : (
                   <X className="h-5 w-5 text-muted-foreground/40" />
                 )}
               </span>
               <span className="px-4 py-4 flex justify-center w-24">
-                {row.traditional ? (
+                {typeof row.traditional === "string" ? (
+                  <span className="font-display text-lg leading-none text-muted-foreground/70">
+                    {row.traditional}
+                  </span>
+                ) : row.traditional ? (
                   <Check className="h-5 w-5 text-muted-foreground/60" strokeWidth={2.5} />
                 ) : (
                   <X className="h-5 w-5 text-muted-foreground/40" />
@@ -808,6 +823,13 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
             </div>
           ))}
         </div>
+        {content.compareRows.some((r) => typeof r.dunaru === "string") && (
+          <p className="mt-4 px-2 text-xs text-muted-foreground leading-relaxed text-center">
+            Una bolsa de 500 g rinde hasta 120 horas de luz. Como rellenas el
+            mismo recipiente en vez de comprar una vela nueva cada vez, cada hora
+            de luz te sale mucho más barata.
+          </p>
+        )}
       </section>
 
       {/* 6 — FAQ */}

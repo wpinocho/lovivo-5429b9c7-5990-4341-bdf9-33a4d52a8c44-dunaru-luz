@@ -6,7 +6,7 @@ import { FloatingCart } from '@/components/FloatingCart'
 import { ProfileMenu } from '@/components/ProfileMenu'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, Package, MessageCircle, ChevronDown } from 'lucide-react'
+import { ShoppingCart, Package, MessageCircle, ChevronDown, Truck, Heart } from 'lucide-react'
 import { useCartUISafe } from '@/components/CartProvider'
 import { useCart } from '@/contexts/CartContext'
 import { useCollections } from '@/hooks/useCollections'
@@ -19,13 +19,6 @@ const PRODUCT_CATEGORIES = [
   { to: '/categorias/recipientes', label: 'Recipientes' },
 ]
 
-const TOP_MESSAGES = [
-  'Envío gratis en pedidos desde $899',
-  'Hasta 6 meses sin intereses',
-  'Hecho en México con cera vegetal',
-  'Entregas en 2–5 días hábiles',
-  'Garantía de satisfacción de 30 días',
-]
 
 interface EcommerceTemplateProps {
   children: ReactNode
@@ -54,7 +47,6 @@ export const EcommerceTemplate = ({
   const totalItems = getTotalItems()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [topMsgIndex, setTopMsgIndex] = useState(0)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -62,20 +54,22 @@ export const EcommerceTemplate = ({
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    const id = setInterval(
-      () => setTopMsgIndex((i) => (i + 1) % TOP_MESSAGES.length),
-      3500
-    )
-    return () => clearInterval(id)
-  }, [])
-
-  // Top bar rotativo (urgencia + envío + pagos + confianza)
+  // Top bar fijo: envío gratis (objeción #1) + prueba social
   const topBar = (
-    <div className="bg-dunaru-carbon text-dunaru-marfil text-xs font-body font-medium py-2 px-4 text-center overflow-hidden">
-      <span key={topMsgIndex} className="inline-block animate-fade-in">
-        {TOP_MESSAGES[topMsgIndex]}
-      </span>
+    <div className="bg-dunaru-carbon text-dunaru-marfil font-body py-2 px-3">
+      <div className="flex items-center justify-center gap-2.5 sm:gap-5 text-[11px] sm:text-xs font-medium">
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          <Truck className="h-3.5 w-3.5 text-dunaru-champagne shrink-0" strokeWidth={1.75} />
+          Envío gratis a todo México
+        </span>
+        <span className="h-3 w-px bg-dunaru-marfil/25 shrink-0" />
+        <span className="flex items-center gap-1.5 whitespace-nowrap">
+          <Heart className="h-3 w-3 text-dunaru-ambar fill-dunaru-ambar shrink-0" />
+          <span>
+            <span className="font-semibold">+200 clientes</span> felices
+          </span>
+        </span>
+      </div>
     </div>
   )
 
