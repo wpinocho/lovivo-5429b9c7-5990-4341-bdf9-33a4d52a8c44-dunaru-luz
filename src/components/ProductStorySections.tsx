@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/accordion"
 import { cn } from "@/lib/utils"
 import { Reviews } from "@/components/Reviews"
+import { ProductStepsCarousel } from "@/components/ProductStepsCarousel"
 
 /**
  * ProductStorySections — Secciones editoriales full-width de la PDP.
@@ -232,16 +233,6 @@ const PDP_CONTENT: Record<string, PdpContent> = {
         image: "/casa-real-sala.webp",
         photo: true,
         flip: true,
-      },
-      {
-        title: "Tu vaso, también cuando no es vela",
-        body: "El vaso de vidrio es una pieza de diseño por sí sola. Úsalo como **portavela, florero pequeño o detalle de mesa** cuando quieras.",
-        bullets: [
-          "Vidrio transparente que combina con todo",
-          "Fácil de limpiar y reutilizar",
-        ],
-        image: "/pdp-vaso-decor.webp",
-        photo: true,
       },
     ],
     compareRows: [
@@ -672,40 +663,8 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         </div>
       </section>
 
-      {/* 2 — Crea tu vela en 4 pasos */}
-      <section className="bg-dunaru-arena py-12 lg:py-16 -mx-4 px-4 md:-mx-6 md:px-6">
-        <div className="max-w-[1400px] mx-auto">
-          <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-center mb-3">
-            Crea tu vela en 4 pasos
-          </h2>
-          <p className="text-center text-muted-foreground max-w-xl mx-auto mb-12">
-            Sin moldes, sin desperdicio. Así de simple es tener luz de diseño en casa.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {HOW_IT_WORKS_STEPS.map((step, i) => (
-              <div key={i} className="space-y-4">
-                <div className="relative aspect-square rounded-lg overflow-hidden bg-background/60">
-                  <img
-                    src={step.image}
-                    alt={`Paso ${i + 1}: ${step.title} — vela perlada dunaru`}
-                    loading="lazy"
-                    className="w-full h-full object-cover"
-                  />
-                  <span className="absolute top-3 left-3 h-8 w-8 rounded-full bg-foreground text-background flex items-center justify-center font-display text-lg">
-                    {i + 1}
-                  </span>
-                </div>
-                <div className="space-y-1.5">
-                  <h3 className="font-medium text-base">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-snug">
-                    {step.text}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* 2 — Crea tu vela en 4 pasos (carrusel navegable) */}
+      <ProductStepsCarousel steps={HOW_IT_WORKS_STEPS} />
 
       {/* 3 — Prueba social: reseñas reales, justo después de entender el producto */}
       <Reviews title="Opiniones de quienes ya la tienen" />
