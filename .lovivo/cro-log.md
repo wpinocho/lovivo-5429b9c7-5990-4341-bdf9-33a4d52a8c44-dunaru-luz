@@ -95,6 +95,24 @@
 - **Result**: (pendiente 7 días — revisar 2026-08-14).
 - **Nota**: la mayoría del tráfico pagado aterriza directo en PDP, no en la home. El impacto de este cambio se verá sobre todo en tráfico orgánico/directo y en usuarios que vuelven al logo. No mezclarlo con los cambios de PDP/checkout al medir.
 
+### 2026-08-07 — 🔍 AUDITORÍA PDP `perlas-originales-500-g` (diagnóstico, sin cambios aún)
+- **Datos (30d, pathname `/productos/perlas-originales-500-g`)**:
+  - Móvil: 123 personas · 122 viewcontent · **5 addtocart = 4.1%**
+  - Desktop: 7 personas · 6 viewcontent · 2 addtocart (casi seguro el owner)
+  - Tablet: 3 personas · 0 addtocart
+  - Benchmark de PDP con tráfico pagado: 8–12%. Estamos a menos de la mitad.
+- **Hallazgo 1 (el más grave)**: el producto se llama **"Recarga para vela rellenable"**. Una recarga es por definición un producto de RECOMPRA y se lo estamos sirviendo a tráfico frío de Instagram que nunca ha visto una vela perlada. VelaVita llama al SKU equivalente **"Velas Perladas 500 g - 120 horas de luz"** (vende el resultado, no el rol en el ciclo de vida) y tiene 115 reseñas ahí.
+- **Hallazgo 2**: la **primera imagen de la galería es un packshot de la bolsa** (`x3azemqdof.webp`: bolsa + montón de cera suelta con 3 mechas sobre una mesa). Vende materia prima, no el resultado deseado.
+- **Hallazgo 3**: la objeción #1 del producto ("¿me sirve el recipiente que YA tengo?") solo vive en la descripción de la DB (≥10 cm diámetro, ≥5 cm alto). No está en el buy box.
+- **Hallazgo 4**: la galería son 13 packshots. VelaVita mete **infografías dentro de la galería** (`Beneficios.jpg`, `Guia_Aromas.jpg`). En móvil el carrusel es el elemento con más engagement y lo estamos desperdiciando.
+- **Hallazgo 5 (técnico)**: `TIER_SELECTOR_SLUGS` incluye este slug, y el selector "Lleva más y ahorra" se muestra **en lugar** de `ProductAddOns`. Es decir: en la PDP con más tráfico de la tienda **no hay cross-sell de recipiente**. Hueco de AOV directo.
+- **Hallazgo 6 (oferta)**: la price rule de volumen es REAL y correcta (2 = 10%, 3 = 15%). Pero 3 bolsas **del mismo color** no es un deseo natural. Además la escalera de precio por gramo está rota: perlas 500 g = $1.00/g · Reserva 1 kg = $0.80/g · **Dúo 1 kg = $1.10/g** (el Dúo es más caro por gramo que la Reserva).
+- **Hallazgo 7**: prueba social genérica. `getReviewStats()` devuelve 4.9/15 global para TODAS las fichas, no reseñas de este SKU.
+- **Hallazgo 8**: falta el ángulo AROMA. VelaVita vende variantes con aroma (Lavanda, Canela, Bergamota, Mango) + esencias sueltas como accesorio de AOV. Foton vende "Scent Samples" a $2.99 como producto de entrada.
+- **Referentes analizados**: velavita.cl (LATAM, mismo producto, mismo precio ≈$500 MXN) y fotoncandle.com (US: Bundle Builder, calculadora "How much Foton do I need?", barra de progreso a envío gratis, regalo gratis en carrito, 3,771 reseñas en su SKU ancla).
+- **Nota de método**: 122 usuarios/mes en esta PDP → **volumen insuficiente para A/B test**. Medición secuencial antes/después únicamente.
+- **Result**: n/a (auditoría, sin cambios implementados).
+
 ## Active Experiments
 <!-- A/B tests currently running. Include flag_key, start date, variants, and target metric. -->
 None
