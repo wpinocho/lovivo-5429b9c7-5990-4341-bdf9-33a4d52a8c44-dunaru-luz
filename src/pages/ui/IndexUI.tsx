@@ -8,73 +8,76 @@ import { BrandStorySection } from '@/components/BrandStorySection';
 import { Reviews } from '@/components/Reviews';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
-import { useState } from 'react';
+import { formatMoney } from '@/lib/money';
+import { useMemo, useState } from 'react';
 
 interface IndexUIProps {
   logic: UseIndexLogicReturn;
 }
 
-// ─── Static product data matching real slugs ───────────────────────────────
-const PRODUCTS = [
-  {
-    slug: 'perlas-originales-500-g',
-    title: 'Cera Perlada Rellenable 500 g',
-    subtitle: 'Para el recipiente que ya tienes',
-    price: '$599',
-    shipping: 'Envío gratis',
-    badge: null,
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp',
-  },
-  {
-    slug: 'kit-vaso-de-vidrio',
-    title: 'Kit Vela Rellenable · Vaso de Vidrio',
-    subtitle: 'Todo listo para encender hoy',
-    price: '$899',
-    shipping: 'Envío gratis',
-    badge: 'Más elegido',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/21sy3747vik.webp',
-  },
-  {
-    slug: 'kit-vaso-de-concreto',
-    title: 'Kit Vela Rellenable · Bowl de Cerámica',
-    subtitle: 'El regalo con más presencia',
-    price: '$1,099',
-    shipping: 'Envío gratis',
-    badge: 'Premio regalo',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/c47q4wicqvv.webp',
-  },
-  {
-    slug: 'reserva-1-kg',
-    title: 'Cera Perlada Rellenable 1 kg',
-    subtitle: 'El doble de duración',
-    price: '$999',
-    shipping: 'Envío gratis',
-    badge: null,
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/vjtp9uzft8.webp',
-  },
+// ─── Catálogo ───────────────────────────────────────────────────────────────
+// Títulos, precios y precios tachados vienen SIEMPRE de la base de datos
+// (Dashboard). Los valores de abajo solo se usan como respaldo mientras carga.
+const STORE_CURRENCY = 'MXN';
+
+interface CatalogEntry {
+  slug: string;
+  title: string;
+  price: string;
+  compare: string | null;
+  img: string;
+}
+
+const IMG = 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/';
+
+const CATALOG_FALLBACK: Record<string, { title: string; price: number; compare?: number; img: string }> = {
+  'perlas-originales-500-g': { title: 'Recarga para vela rellenable — 500 g + 30 mechas', price: 499, compare: 599, img: `${IMG}x3azemqdof.webp` },
+  'reserva-1-kg': { title: 'Recarga para vela rellenable — 1 Kg + 60 mechas', price: 799, compare: 999, img: `${IMG}vjtp9uzft8.webp` },
+  'kit-vaso-de-vidrio': { title: 'Kit Vela Rellenable · Vaso de Vidrio', price: 799, compare: 899, img: `${IMG}21sy3747vik.webp` },
+  'kit-vaso-de-concreto': { title: 'Kit Vela Rellenable · Bowl de Cerámica', price: 999, compare: 1199, img: `${IMG}c47q4wicqvv.webp` },
+  'd-o-de-tonos': { title: 'Dúo de Tonos · 1 kg de Cera Perlada', price: 1099, compare: 1398, img: `${IMG}yuq5htx9eol.webp` },
+  'tr-o-de-tonos': { title: 'Trío de Tonos · 1.5 kg de Cera Perlada', price: 1399, compare: 1499, img: `${IMG}bfh3fau5iyv.webp` },
+};
+
+const buildCatalog = (products: UseIndexLogicReturn['products']): Record<string, CatalogEntry> => {
+  const entries: Record<string, CatalogEntry> = {};
+
+  Object.entries(CATALOG_FALLBACK).forEach(([slug, f]) => {
+    entries[slug] = {
+      slug,
+      title: f.title,
+      price: formatMoney(f.price, STORE_CURRENCY),
+      compare: f.compare && f.compare > f.price ? formatMoney(f.compare, STORE_CURRENCY) : null,
+      img: f.img,
+    };
+  });
+
+  products.forEach((raw) => {
+    const p = raw as any;
+    if (!p?.slug || !entries[p.slug]) return;
+    const price = Number(p.price) || 0;
+    const compare = Number(p.compare_at_price) || 0;
+    entries[p.slug] = {
+      slug: p.slug,
+      title: p.title || entries[p.slug].title,
+      price: formatMoney(price, STORE_CURRENCY),
+      compare: compare > price ? formatMoney(compare, STORE_CURRENCY) : null,
+      img: Array.isArray(p.images) && p.images[0] ? p.images[0] : entries[p.slug].img,
+    };
+  });
+
+  return entries;
+};
+
+const BUNDLE_META: { slug: string; subtitle: string; badge: string; badgeClass: string }[] = [
+  { slug: 'd-o-de-tonos', subtitle: '2 bolsas de 500 g · 60 mechas', badge: 'Más elegido', badgeClass: 'badge-mas-elegido' },
+  { slug: 'tr-o-de-tonos', subtitle: '3 bolsas de 500 g · 60 mechas', badge: 'Mejor valor', badgeClass: 'badge-mejor-valor' },
 ];
 
-const BUNDLES = [
-  {
-    slug: 'd-o-de-tonos',
-    title: 'Dúo de Tonos · 1 kg',
-    subtitle: '2 bolsas 500 g · 60 mechas',
-    price: '$1,099',
-    compare: '$1,398',
-    badge: 'Más elegido',
-    badgeClass: 'badge-mas-elegido',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/yuq5htx9eol.webp',
-  },
-  {
-    slug: 'tr-o-de-tonos',
-    title: 'Trío de Tonos · 1.5 kg',
-    subtitle: '3 bolsas 500 g · 60 mechas',
-    price: '$1,499',
-    compare: '$1,797',
-    badge: 'Mejor valor',
-    badgeClass: 'badge-mejor-valor',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/bfh3fau5iyv.webp',
-  },
+const VOLUME_META: { slug: string; badge?: string; badgeClass?: string }[] = [
+  { slug: 'reserva-1-kg' },
+  { slug: 'd-o-de-tonos', badge: 'Más elegido', badgeClass: 'badge-mas-elegido' },
+  { slug: 'tr-o-de-tonos', badge: 'Mejor valor', badgeClass: 'badge-mejor-valor' },
 ];
 
 const STEPS = [
@@ -133,10 +136,10 @@ const TONOS = [
 
 const FAQ_ITEMS = [
   { q: '¿Qué incluye cada bolsa?', a: '500 g de perlas de cera perlada + 30 mechas de algodón. Los kits incluyen además el recipiente (vaso de vidrio o bowl de cerámica).' },
-  { q: '¿Qué recipiente puedo usar?', a: 'Cualquier recipiente resistente al calor de mínimo 10 cm de diámetro y 5 cm de alto. Vasos, bowls, copas, jarras — lo que ya tienes en casa.' },
+  { q: '¿Qué recipiente puedo usar?', a: 'Cualquier recipiente resistente al calor de mínimo 10 cm de diámetro y 5 cm de alto. Vasos, bowls, copas o jarras: lo que ya tienes en casa.' },
   { q: '¿Cuántas mechas incluye?', a: '30 mechas por bolsa de 500 g. Los bundles Dúo y Trío incluyen 60 mechas.' },
   { q: '¿Cuánto dura una bolsa?', a: 'Aproximadamente 120 horas de luz por bolsa de 500 g, dependiendo del tamaño de tu recipiente.' },
-  { q: '¿Qué pasa al encenderla?', a: 'La mecha se consume lentamente. Las perlas no se "derriten" como una vela tradicional — solo rodean la llama. Al terminar la mecha, agregas una nueva.' },
+  { q: '¿Qué pasa al encenderla?', a: 'La mecha se consume lentamente. Las perlas no se "derriten" como una vela tradicional, solo rodean la llama. Al terminar la mecha, agregas una nueva.' },
   { q: '¿Es seguro?', a: 'Sí. La vela se apaga si se vuelca porque la mecha pierde contacto. Úsala siempre sobre una superficie plana y estable, nunca sin supervisión cerca de telas o materiales inflamables.' },
   { q: '¿Cómo llega?', a: 'Enviamos desde CDMX con paquetería estándar. Entregas en 2–5 días hábiles. Envío gratis a todo México, sin monto mínimo.' },
   { q: '¿Puedo pagar a meses?', a: 'Sí. Aceptamos hasta 6 meses sin intereses con tarjetas participantes (VISA y Mastercard). El banco puede aplicar condiciones propias.' },
@@ -165,8 +168,13 @@ const FaqItem = ({ q, a }: { q: string; a: string }) => {
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 export const IndexUI = ({ logic }: IndexUIProps) => {
+  const catalog = useMemo(() => buildCatalog(logic.products), [logic.products]);
+  const perlas = catalog['perlas-originales-500-g'];
+  const kitVidrio = catalog['kit-vaso-de-vidrio'];
+  const kitCeramica = catalog['kit-vaso-de-concreto'];
+
   return (
-    <EcommerceTemplate showCart={true} layout="full-width">
+    <EcommerceTemplate showCart={true} layout="full-width" headerOverlay>
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
       <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-dunaru-carbon">
@@ -193,7 +201,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 md:pt-28 md:pb-20">
           <div className="max-w-xl">
             <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-6 sm:mb-7 animate-fade-up">
               Velas perladas rellenables
@@ -307,17 +315,21 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               <div className="relative flex flex-col h-full overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 transition-all duration-300 hover:shadow-lg">
                 <div className="flex-1 min-h-[260px] overflow-hidden">
                   <img
-                    src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp"
-                    alt="Perlas Originales dunaru"
+                    src={perlas.img}
+                    alt={perlas.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
                 <div className="p-6">
                   <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Ya tengo un recipiente que amo</p>
-                  <h3 className="font-display text-2xl text-foreground mb-2">Cera Perlada Rellenable 500 g</h3>
+                  <h3 className="font-display text-2xl text-foreground mb-2">{perlas.title}</h3>
                   <p className="font-body text-sm text-foreground/60 mb-4">Solo las perlas y las mechas. Pon la vela en tu vaso favorito hoy.</p>
                   <div className="flex items-center justify-between">
-                    <span className="font-body font-bold text-xl text-foreground">$599 <span className="text-sm font-normal text-foreground/50">envío gratis</span></span>
+                    <span className="font-body font-bold text-xl text-foreground">
+                      {perlas.price}
+                      {perlas.compare && <span className="ml-2 text-sm font-normal text-foreground/40 line-through">{perlas.compare}</span>}
+                      <span className="ml-2 text-sm font-normal text-foreground/50">envío gratis</span>
+                    </span>
                     <span className="font-body text-sm text-dunaru-champagne font-medium flex items-center gap-1">Ver producto <ArrowRight className="h-3.5 w-3.5" /></span>
                   </div>
                 </div>
@@ -332,16 +344,20 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                   <div className="grid grid-cols-2 h-full">
                     <div className="overflow-hidden">
                       <img
-                        src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/21sy3747vik.webp"
-                        alt="Kit Vaso de Vidrio dunaru"
+                        src={kitVidrio.img}
+                        alt={kitVidrio.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 min-h-[160px]"
                       />
                     </div>
                     <div className="p-5 flex flex-col justify-center">
                       <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Quiero algo listo</p>
-                      <h3 className="font-display text-xl text-dunaru-marfil mb-2">Kit · Vaso de Vidrio</h3>
+                      <h3 className="font-display text-xl text-dunaru-marfil mb-2">{kitVidrio.title}</h3>
                       <p className="font-body text-xs text-dunaru-marfil/60 mb-3">Vaso + perlas + mechas. Listo para usar o regalar.</p>
-                      <span className="font-body font-bold text-lg text-dunaru-marfil">$899 <span className="text-xs font-normal text-dunaru-marfil/50">envío gratis</span></span>
+                      <span className="font-body font-bold text-lg text-dunaru-marfil">
+                        {kitVidrio.price}
+                        {kitVidrio.compare && <span className="ml-1.5 text-xs font-normal text-dunaru-marfil/40 line-through">{kitVidrio.compare}</span>}
+                        <span className="ml-1.5 text-xs font-normal text-dunaru-marfil/50">envío gratis</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -352,16 +368,20 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                   <div className="grid grid-cols-2">
                     <div className="overflow-hidden">
                       <img
-                        src="https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/c47q4wicqvv.webp"
-                        alt="Kit Concreto dunaru"
+                        src={kitCeramica.img}
+                        alt={kitCeramica.title}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 min-h-[140px]"
                       />
                     </div>
                     <div className="p-5 flex flex-col justify-center">
                       <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-1">Para regalar</p>
-                      <h3 className="font-display text-xl text-foreground mb-2">Kit · Bowl de Cerámica</h3>
+                      <h3 className="font-display text-xl text-foreground mb-2">{kitCeramica.title}</h3>
                       <p className="font-body text-xs text-foreground/60 mb-3">Bowl de cerámica + perlas. Llega listo para regalar.</p>
-                      <span className="font-body font-bold text-lg text-foreground">$1,099 <span className="text-xs font-normal text-foreground/50">envío gratis</span></span>
+                      <span className="font-body font-bold text-lg text-foreground">
+                        {kitCeramica.price}
+                        {kitCeramica.compare && <span className="ml-1.5 text-xs font-normal text-foreground/40 line-through">{kitCeramica.compare}</span>}
+                        <span className="ml-1.5 text-xs font-normal text-foreground/50">envío gratis</span>
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -370,25 +390,33 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </div>
 
           {/* Volume path */}
-          <div className="mt-4 p-5 bg-background/60 rounded-sm border border-border">
-            <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-3 text-center">Quiero decorar más o llenar varios recipientes</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {[
-                { slug: 'reserva-1-kg', label: 'Cera Rellenable 1 kg', price: '$999' },
-                { slug: 'd-o-de-tonos', label: 'Dúo de Tonos', price: '$1,099', badge: 'Más elegido' },
-                { slug: 'tr-o-de-tonos', label: 'Trío de Tonos', price: '$1,499', badge: 'Mejor valor' },
-              ].map(({ slug, label, price, badge }) => (
-                <Link
-                  key={slug}
-                  to={`/productos/${slug}`}
-                  className="flex items-center gap-3 px-4 py-3 rounded-sm border border-border hover:border-dunaru-champagne/50 bg-background hover:bg-dunaru-arena/50 transition-all font-body text-sm"
-                >
-                  <span className="font-medium text-foreground">{label}</span>
-                  <span className="font-bold text-foreground">{price}</span>
-                  {badge && <span className={badge === 'Mejor valor' ? 'badge-mejor-valor' : 'badge-mas-elegido'}>{badge}</span>}
-                  <ArrowRight className="h-3.5 w-3.5 text-foreground/40" />
-                </Link>
-              ))}
+          <div className="mt-4 p-5 sm:p-6 bg-background/60 rounded-sm border border-border">
+            <p className="font-body text-xs font-semibold tracking-widest text-dunaru-champagne uppercase mb-5 text-center">Quiero decorar más o llenar varios recipientes</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+              {VOLUME_META.map(({ slug, badge, badgeClass }) => {
+                const p = catalog[slug];
+                return (
+                  <Link
+                    key={slug}
+                    to={`/productos/${slug}`}
+                    className="group relative flex h-full flex-col justify-between rounded-sm border border-border bg-background p-5 pt-6 hover:border-dunaru-champagne/60 hover:shadow-md transition-all"
+                  >
+                    {badge && (
+                      <span className={`absolute -top-2.5 left-4 ${badgeClass}`}>{badge}</span>
+                    )}
+                    <h3 className="font-body text-sm font-medium leading-snug text-foreground">{p.title}</h3>
+                    <div className="mt-5 flex items-end justify-between gap-2">
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-body text-lg font-bold text-foreground">{p.price}</span>
+                        {p.compare && (
+                          <span className="font-body text-xs text-foreground/40 line-through">{p.compare}</span>
+                        )}
+                      </div>
+                      <ArrowRight className="h-4 w-4 shrink-0 text-foreground/35 group-hover:text-dunaru-champagne transition-colors" />
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -478,7 +506,9 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
-            {BUNDLES.map((bundle) => (
+            {BUNDLE_META.map((meta) => {
+              const bundle = { ...catalog[meta.slug], ...meta };
+              return (
               <Link key={bundle.slug} to={`/productos/${bundle.slug}`} className="group block">
                 <div className="relative overflow-hidden rounded-sm bg-background border border-border hover:border-dunaru-champagne/50 hover:shadow-lg transition-all duration-300">
                   <div className="absolute top-4 left-4 z-10">
@@ -497,20 +527,23 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                     <div className="flex items-center justify-between">
                       <div className="flex items-baseline gap-2">
                         <span className="font-body font-bold text-xl text-foreground">{bundle.price}</span>
-                        <span className="font-body text-sm text-foreground/40 line-through">{bundle.compare}</span>
+                        {bundle.compare && (
+                          <span className="font-body text-sm text-foreground/40 line-through">{bundle.compare}</span>
+                        )}
                       </div>
                       <span className="font-body text-xs text-dunaru-marfil bg-dunaru-onix rounded-sm px-2 py-1">Envío gratis</span>
                     </div>
                   </div>
                 </div>
               </Link>
-            ))}
+              );
+            })}
           </div>
 
           <div className="text-center mt-8">
             <Link to="/productos/reserva-1-kg">
               <Button variant="outline" className="font-body font-medium rounded-sm border-foreground/30 hover:border-foreground text-foreground transition-colors">
-                Ver también: Reserva 1 kg — $999
+                Ver también: recarga de 1 kg · {catalog['reserva-1-kg'].price}
               </Button>
             </Link>
           </div>

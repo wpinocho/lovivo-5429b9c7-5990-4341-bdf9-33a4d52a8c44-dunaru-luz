@@ -58,12 +58,12 @@ export const BrandStorySection = () => {
             <div className="space-y-4 font-body text-[15px] text-foreground/70 leading-relaxed">
               <p>
                 dunaru nació en la Ciudad de México con una idea simple: no deberías tirar tu
-                vela —ni el recipiente que amas— cada vez que se acaba. Creamos las perlas de
-                cera recargables para que la misma pieza viva contigo por años.
+                vela, ni el recipiente que amas, cada vez que se acaba. Creamos las perlas de
+                cera rellenables para que la misma pieza viva contigo por años.
               </p>
               <p>
                 Preparamos y empacamos cada pedido a mano, aquí en México. Somos una marca
-                joven, y por eso cuidamos cada detalle: queremos que tu primera dunaru sea
+                joven y por eso cuidamos cada detalle: queremos que tu primera dunaru sea
                 justo lo que imaginaste.
               </p>
             </div>

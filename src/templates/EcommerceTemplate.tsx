@@ -29,6 +29,8 @@ interface EcommerceTemplateProps {
   footerClassName?: string
   layout?: 'default' | 'full-width' | 'centered'
   hideFloatingCartOnMobile?: boolean
+  /** El header flota encima del hero (sin franja blanca entre menú e imagen) */
+  headerOverlay?: boolean
 }
 
 export const EcommerceTemplate = ({
@@ -39,7 +41,8 @@ export const EcommerceTemplate = ({
   headerClassName,
   footerClassName,
   layout = 'default',
-  hideFloatingCartOnMobile = false
+  hideFloatingCartOnMobile = false,
+  headerOverlay = false
 }: EcommerceTemplateProps) => {
   const cartUI = useCartUISafe()
   const openCart = cartUI?.openCart ?? (() => {})
@@ -76,7 +79,15 @@ export const EcommerceTemplate = ({
   const header = (
     <div className={headerClassName}>
       {topBar}
-      <div className={`transition-all duration-300 ${scrolled ? 'py-3' : 'py-4'}`}>
+      <div
+        className={`transition-all duration-300 ${scrolled ? 'py-3' : 'py-4'} ${
+          headerOverlay
+            ? scrolled || mobileMenuOpen
+              ? 'bg-background/95 backdrop-blur border-b border-border'
+              : 'bg-background/55 backdrop-blur-md'
+            : ''
+        }`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -326,6 +337,7 @@ export const EcommerceTemplate = ({
         footer={footer}
         className={className}
         layout={layout}
+        headerOverlay={headerOverlay}
       >
         {children}
       </PageTemplate>

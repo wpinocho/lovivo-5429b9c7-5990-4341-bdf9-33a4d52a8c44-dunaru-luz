@@ -16,6 +16,8 @@ interface PageTemplateProps {
   className?: string
   contentClassName?: string
   layout?: 'default' | 'full-width' | 'sidebar-left' | 'sidebar-right' | 'centered'
+  /** El header flota encima del contenido (hero a pantalla completa, sin franja blanca) */
+  headerOverlay?: boolean
 }
 
 export const PageTemplate = ({ 
@@ -25,7 +27,8 @@ export const PageTemplate = ({
   footer, 
   className,
   contentClassName,
-  layout = 'default'
+  layout = 'default',
+  headerOverlay = false
 }: PageTemplateProps) => {
   const layoutClasses = {
     'default': 'max-w-7xl mx-auto px-4 sm:px-6 lg:px-8',
@@ -78,12 +81,19 @@ export const PageTemplate = ({
   return (
     <div className={cn("min-h-screen bg-background", className)}>
       {header && (
-        <header className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+        <header
+          className={cn(
+            'z-40',
+            headerOverlay
+              ? 'fixed top-0 left-0 right-0'
+              : 'sticky top-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b'
+          )}
+        >
           {header}
         </header>
       )}
-      
-      <div className="flex-1 py-6">
+
+      <div className={cn('flex-1', headerOverlay ? 'py-0' : 'py-6')}>
         {renderContent()}
       </div>
 
