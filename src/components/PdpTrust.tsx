@@ -27,14 +27,23 @@ function addBusinessDays(days: number) {
   return date
 }
 
-export function DeliveryEstimate() {
+/**
+ * Devuelve el rango de entrega ya formateado: "11 y el 14 de agosto".
+ * Se reutiliza en la PDP y en el checkout para que el usuario vea
+ * exactamente la misma promesa en los dos lugares.
+ */
+export function getDeliveryRange() {
   const from = addBusinessDays(2)
   const to = addBusinessDays(5)
   const sameMonth = from.getMonth() === to.getMonth()
 
-  const range = sameMonth
+  return sameMonth
     ? `${from.getDate()} y el ${to.getDate()} de ${MESES[to.getMonth()]}`
     : `${from.getDate()} de ${MESES[from.getMonth()]} y el ${to.getDate()} de ${MESES[to.getMonth()]}`
+}
+
+export function DeliveryEstimate() {
+  const range = getDeliveryRange()
 
   return (
     <p className="flex items-center gap-2 text-sm text-foreground/80">
@@ -54,7 +63,14 @@ export function DeliveryEstimate() {
  * Barra de prueba social bajo los CTA.
  * Las fotos son de clientas reales (UGC enviado por ellas).
  */
-export function PdpSocialProof({ slug }: { slug?: string }) {
+export function PdpSocialProof({
+  slug,
+  linkable = true,
+}: {
+  slug?: string
+  /** En el checkout no existe `#resenas`, así que se renderiza estático. */
+  linkable?: boolean
+}) {
   const stats = getReviewStats()
   if (stats.count === 0) return null
 
@@ -65,10 +81,14 @@ export function PdpSocialProof({ slug }: { slug?: string }) {
   const avatars = (relevant.length >= 3 ? relevant : withPhoto).slice(0, 3)
   const firstName = (relevant[0] || withPhoto[0] || reviews[0]).name
 
+  const Wrapper = linkable ? "a" : "div"
+
   return (
-    <a
-      href="#resenas"
-      className="flex items-center gap-3 rounded-lg border border-border/70 bg-muted/40 px-3 py-2.5 transition-colors hover:bg-muted/70"
+    <Wrapper
+      {...(linkable ? { href: "#resenas" } : {})}
+      className={`flex items-center gap-3 rounded-lg border border-border/70 bg-muted/40 px-3 py-2.5 ${
+        linkable ? "transition-colors hover:bg-muted/70" : ""
+      }`}
     >
       {avatars.length > 0 && (
         <span className="flex -space-x-2 shrink-0">
@@ -99,6 +119,6 @@ export function PdpSocialProof({ slug }: { slug?: string }) {
           <span>de {stats.count} opiniones reales</span>
         </span>
       </span>
-    </a>
+    </Wrapper>
   )
 }

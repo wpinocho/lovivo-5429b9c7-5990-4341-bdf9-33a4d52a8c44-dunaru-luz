@@ -8,6 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tag, X, ShoppingBag, Loader2, RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Truck, Lock, CreditCard, Star, ShieldCheck } from "lucide-react";
 import { getReviewStats } from "@/data/reviews";
+import { PdpSocialProof, getDeliveryRange } from "@/components/PdpTrust";
 import { Badge } from "@/components/ui/badge";
 import { CartAppliedRules } from "@/components/ui/CartAppliedRules";
 import { useNavigate } from "react-router-dom";
@@ -308,6 +309,16 @@ export default function CheckoutUI() {
                           <span className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-dunaru-ambar" /> Pago seguro</span>
                           <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-dunaru-ambar" /> Garantía 30 días</span>
                         </div>
+                        <div className="flex justify-center">
+                          <a
+                            href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20duda%20con%20mi%20pedido%20en%20dunaru"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+                          >
+                            ¿Algo no te cuadra? Escríbenos por WhatsApp
+                          </a>
+                        </div>
                         <div className="flex flex-wrap items-center justify-center gap-1.5">
                           {["VISA", "MASTERCARD", "AMEX", "APPLE PAY", "G PAY",
                             ...(paymentMethods?.oxxo ? ["OXXO"] : []),
@@ -555,46 +566,6 @@ export default function CheckoutUI() {
                     ))
                   )}
 
-                  {/* Código de descuento */}
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">Código de descuento</div>
-                    {!logic.discount ? (
-                      <div className="flex gap-2">
-                        <Input 
-                          placeholder="Ingresa tu cupón" 
-                          value={logic.couponCode} 
-                          onChange={e => logic.setCouponCode(e.target.value.toUpperCase())} 
-                          className="text-sm" 
-                          ref={logic.couponInputRef} 
-                          onKeyDown={(e) => { if (e.key === 'Enter') logic.validateCoupon(); }} 
-                        />
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={logic.validateCoupon} 
-                          disabled={logic.isValidatingCoupon || !logic.couponCode.trim()}
-                        >
-                          <Tag className="h-4 w-4 mr-1" />
-                          {logic.isValidatingCoupon ? '...' : 'Aplicar'}
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-between text-sm bg-muted/50 border border-border p-3 rounded-lg">
-                        <span className="text-foreground font-medium">
-                          Cupón aplicado: {logic.couponCode}
-                        </span>
-                        <Button 
-                          variant="ghost" 
-                          size="sm" 
-                          onClick={logic.removeCoupon} 
-                          className="text-muted-foreground hover:text-foreground p-1 h-auto"
-                        >
-                          <X className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-
                   {/* Totales */}
                   <div className="space-y-2 pt-4 border-t">
                     <div className="flex justify-between">
@@ -631,7 +602,21 @@ export default function CheckoutUI() {
                         <span>{formatMoney(logic.finalTotal, logic.currencyCode)}</span>
                       </div>
                     </div>
+
+                    {/* Reencuadre de precio: el total mensual junto al total */}
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <CreditCard className="h-3.5 w-3.5 shrink-0 text-dunaru-ambar" />
+                      Desde <span className="font-medium text-foreground/80">{formatMoney(logic.finalTotal / 6, logic.currencyCode)} al mes</span> a 6 meses sin intereses
+                    </p>
                   </div>
+
+                  {/* Promesa de envío resuelta, sin esperar dirección */}
+                  <ShippingPromise logic={logic} />
+
+                  {/* Cupón, discreto y hasta el final */}
+                  <CouponSection logic={logic} />
+
+                  <PdpSocialProof linkable={false} />
                 </div>
               </div>
             </div>
@@ -643,16 +628,41 @@ export default function CheckoutUI() {
   );
 }
 
+/* ─── Promesa de envío: resuelta desde el primer render ─── */
+function ShippingPromise({ logic }: { logic: any }) {
+  const isFree = logic.selectedPickupLocation || logic.shippingCost === 0;
+
+  if (logic.selectedPickupLocation) {
+    return (
+      <div className="flex items-center gap-2 text-xs text-dunaru-ambar">
+        <ShoppingBag className="h-4 w-4 shrink-0" />
+        <span><span className="font-semibold">Recoger en tienda</span> · Sin costo</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2 text-xs text-dunaru-ambar">
+      <Truck className="h-4 w-4 shrink-0" />
+      <span>
+        {isFree ? <span className="font-semibold">Envío gratis</span> : <>Envío {formatMoney(logic.shippingCost, logic.currencyCode)}</>}
+        {" · Llega entre el "}{getDeliveryRange()}
+      </span>
+    </div>
+  );
+}
+
 /* ─── Mobile Order Summary (collapsible, top of checkout) ─── */
 function MobileOrderSummary({ logic }: { logic: any }) {
-  const [open, setOpen] = useState(true);
+  // Cerrado por defecto: la cabecera ya muestra artículos + total, y así
+  // el pago express queda visible sin scroll.
+  const [open, setOpen] = useState(false);
 
   if (logic.summaryItems.length === 0) return null;
 
-  const isFreeShipping = logic.selectedPickupLocation || logic.shippingCost === 0;
-
   return (
-    <div className="md:hidden mb-6 border rounded-lg bg-muted/50">
+    <div className="md:hidden mb-6 space-y-3">
+    <div className="border rounded-lg bg-muted/50">
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -665,6 +675,11 @@ function MobileOrderSummary({ logic }: { logic: any }) {
         </span>
         <span className="font-semibold">{formatMoney(logic.finalTotal, logic.currencyCode)}</span>
       </button>
+
+      {/* Siempre visible, también con el resumen cerrado */}
+      <div className="px-4 pb-3">
+        <ShippingPromise logic={logic} />
+      </div>
 
       {open && (
         <div className="px-4 pb-4 space-y-3 border-t">
@@ -699,12 +714,10 @@ function MobileOrderSummary({ logic }: { logic: any }) {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">Envío</span>
-              <span>
-                {logic.selectedPickupLocation
-                  ? "GRATIS"
-                  : logic.shippingCost > 0
+              <span className="font-medium">
+                {logic.shippingCost > 0
                   ? formatMoney(logic.shippingCost, logic.currencyCode)
-                  : "Pendiente"}
+                  : "GRATIS"}
               </span>
             </div>
             {logic.discountAmount > 0 && (
@@ -719,22 +732,19 @@ function MobileOrderSummary({ logic }: { logic: any }) {
             </div>
           </div>
 
-          {/* Reaseguro de envío */}
-          <div className="flex items-center gap-2 pt-2 text-xs text-dunaru-ambar">
-            <Truck className="h-4 w-4 shrink-0" />
-            <span>
-              {isFreeShipping ? (
-                <><span className="font-semibold">Envío gratis</span> · Llega en 2 a 5 días hábiles</>
-              ) : (
-                <>Envío {formatMoney(logic.shippingCost, logic.currencyCode)} · Llega en 2 a 5 días hábiles</>
-              )}
-            </span>
-          </div>
+          {/* Reencuadre de precio */}
+          <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <CreditCard className="h-3.5 w-3.5 shrink-0 text-dunaru-ambar" />
+            Desde <span className="font-medium text-foreground/80">{formatMoney(logic.finalTotal / 6, logic.currencyCode)} al mes</span> a 6 meses sin intereses
+          </p>
 
-          {/* Código de descuento mobile */}
-          <MobileCouponSection logic={logic} />
+          {/* Código de descuento */}
+          <CouponSection logic={logic} />
         </div>
       )}
+    </div>
+
+      <PdpSocialProof linkable={false} />
     </div>
   );
 }
@@ -845,8 +855,11 @@ function BillingCheckboxSection({ logic }: { logic: any }) {
   );
 }
 
-/* ─── Mobile Coupon Section (collapsible) ─── */
-function MobileCouponSection({ logic }: { logic: any }) {
+/* ─── Coupon Section (colapsada y discreta a propósito) ───
+ * En tráfico frío un campo de cupón visible manda a la gente a Google a
+ * buscar un código y muchos no vuelven. Se queda como link pequeño y gris.
+ */
+function CouponSection({ logic }: { logic: any }) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -856,10 +869,10 @@ function MobileCouponSection({ logic }: { logic: any }) {
           <button
             type="button"
             onClick={() => setOpen(!open)}
-            className="text-xs text-primary font-medium flex items-center gap-1"
+            className="text-xs text-muted-foreground flex items-center gap-1 hover:text-foreground transition-colors"
           >
             <Tag className="h-3 w-3" />
-            ¿Tienes un cupón?
+            Agregar código de descuento
             {open ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           </button>
           {open && (
