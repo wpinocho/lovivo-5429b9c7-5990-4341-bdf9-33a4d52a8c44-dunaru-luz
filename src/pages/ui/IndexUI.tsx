@@ -1,11 +1,13 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Flame, RotateCcw, Layers, Clock, ChevronDown, MessageCircle } from 'lucide-react';
+import { ArrowRight, ChevronDown, MessageCircle } from 'lucide-react';
 import { FloatingCart } from '@/components/FloatingCart';
 import { ProductStepsCarousel } from '@/components/ProductStepsCarousel';
 import { DunaruNewsletterForm } from '@/components/DunaruNewsletterForm';
 import { CasaRealSection } from '@/components/CasaRealSection';
 import { BrandStorySection } from '@/components/BrandStorySection';
+import { RitualSection } from '@/components/RitualSection';
+import { Reveal } from '@/components/Reveal';
 import { Reviews } from '@/components/Reviews';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
@@ -73,14 +75,16 @@ const buildCatalog = (products: UseIndexLogicReturn['products']): Record<string,
 // Una sola rejilla de compra. Sustituye a los antiguos bloques
 // "¿Cómo quieres empezar?" + "Quiero decorar más" + "Combina tonos",
 // que mostraban los mismos SKUs tres veces.
-const SHOP_CARDS: { slug: string; tag: string; badge?: string; badgeClass?: string }[] = [
-  { slug: 'kit-vaso-de-vidrio', tag: 'Todo incluido', badge: 'Más elegido', badgeClass: 'badge-mas-elegido' },
+const SHOP_CARDS: { slug: string; tag: string; badge?: string }[] = [
+  { slug: 'kit-vaso-de-vidrio', tag: 'Todo incluido', badge: 'Más elegido' },
   { slug: 'perlas-originales-500-g', tag: 'Ya tengo recipiente' },
   { slug: 'kit-vaso-de-concreto', tag: 'Para regalar' },
-  { slug: 'd-o-de-tonos', tag: '2 tonos · 1 kg', badge: 'Mejor valor', badgeClass: 'badge-mejor-valor' },
+  { slug: 'd-o-de-tonos', tag: '2 tonos · 1 kg' },
   { slug: 'tr-o-de-tonos', tag: '3 tonos · 1.5 kg' },
   { slug: 'reserva-1-kg', tag: 'Rinde el doble' },
 ];
+
+const BENEFITS = ['120 h de luz', '30 mechas', 'Cualquier recipiente', 'Rellenable'];
 
 const STEPS = [
   {
@@ -172,7 +176,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
     <EcommerceTemplate showCart={true} layout="full-width" headerOverlay>
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-dunaru-carbon">
+      <section className="relative min-h-screen flex items-center overflow-hidden bg-dunaru-tabaco">
         {/* Background image */}
         <div className="absolute inset-0">
           {/* Mobile: dedicated vertical composition (product visible, text space on top) */}
@@ -190,34 +194,34 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             fetchPriority="high"
           />
           {/* Gradient overlay — desktop: dark on the left for text */}
-          <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-dunaru-carbon/75 via-dunaru-carbon/40 to-transparent" />
+          <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-dunaru-tabaco/90 via-dunaru-tabaco/55 to-dunaru-tabaco/10" />
           {/* Gradient overlay — mobile: dark on top for text */}
-          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-carbon/90 via-dunaru-carbon/40 to-dunaru-carbon/5" />
+          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-tabaco/95 via-dunaru-tabaco/50 to-dunaru-tabaco/20" />
         </div>
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 md:pt-28 md:pb-20">
           <div className="max-w-xl">
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-6 sm:mb-7 animate-fade-up">
+            <p className="eyebrow eyebrow-light mb-6 sm:mb-7 animate-fade-up">
               Velas perladas rellenables
             </p>
-            <h1 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.1] text-dunaru-marfil mb-7 sm:mb-8 animate-fade-up delay-100">
-              Crea una vela nueva en el recipiente que ya amas.
+            <h1 className="lockup text-4xl sm:text-5xl md:text-6xl leading-[1.12] text-dunaru-marfil mb-7 sm:mb-8 animate-fade-up delay-100">
+              CREA LUZ <em className="text-dunaru-champagne">en el</em> RECIPIENTE QUE YA AMAS
             </h1>
-            <p className="font-body text-base sm:text-lg text-dunaru-marfil/75 mb-10 sm:mb-12 leading-relaxed animate-fade-up delay-200">
+            <p className="font-body text-base sm:text-lg text-dunaru-marfil/70 mb-10 sm:mb-12 leading-relaxed animate-fade-up delay-200 max-w-md">
               Sin derretir, sin riesgo, sin comprar una vela nueva. Solo vierte las perlas, inserta una mecha y enciende.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4 animate-fade-up delay-300">
-              <Link to="/productos/perlas-originales-500-g">
-                <Button size="lg" className="w-full sm:w-auto bg-dunaru-marfil text-dunaru-onix hover:bg-dunaru-arena font-body font-semibold px-8 py-4 text-base rounded-sm shadow-none border-0 transition-colors">
+            <div className="flex flex-col sm:flex-row gap-3 animate-fade-up delay-300">
+              <Link to="/productos/kit-vaso-de-vidrio">
+                <Button size="lg" className="w-full sm:w-auto bg-dunaru-marfil text-dunaru-onix hover:bg-dunaru-arena font-body font-semibold uppercase tracking-[0.12em] text-xs px-9 py-4 h-auto shadow-none border-0 transition-editorial">
                   Comprar ahora
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-3.5 w-3.5" />
                 </Button>
               </Link>
               <a href="#como-funciona">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto border-dunaru-marfil/40 text-dunaru-marfil hover:bg-dunaru-marfil/10 font-body font-medium px-8 py-4 text-base rounded-sm bg-transparent transition-colors">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto border-dunaru-marfil/35 text-dunaru-marfil hover:bg-dunaru-marfil/10 hover:text-dunaru-marfil font-body font-medium uppercase tracking-[0.12em] text-xs px-9 py-4 h-auto bg-transparent transition-editorial">
                   Ver cómo funciona
                 </Button>
               </a>
@@ -238,18 +242,14 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── BENEFICIOS ────────────────────────────────────────────────────── */}
-      <section className="bg-dunaru-arena border-b border-border">
+      <section className="bg-dunaru-arena border-b border-foreground/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-4 divide-x divide-border">
-            {[
-              { icon: <Clock className="h-4 w-4" />, text: '120 h de luz' },
-              { icon: <Flame className="h-4 w-4" />, text: '30 mechas' },
-              { icon: <Layers className="h-4 w-4" />, text: 'Cualquier recipiente' },
-              { icon: <RotateCcw className="h-4 w-4" />, text: 'Rellenable' },
-            ].map(({ icon, text }, i) => (
-              <div key={i} className="flex flex-col md:flex-row items-center justify-center gap-1.5 py-4 px-1.5 sm:px-4 text-center md:text-left">
-                <span className="text-dunaru-champagne shrink-0">{icon}</span>
-                <span className="font-body text-[11px] leading-tight sm:text-sm font-medium text-foreground/80">{text}</span>
+          <div className="grid grid-cols-4 divide-x divide-foreground/10">
+            {BENEFITS.map((text, i) => (
+              <div key={i} className="flex items-center justify-center py-5 px-1.5 sm:px-4 text-center">
+                <span className="font-body text-[9px] sm:text-[11px] uppercase leading-tight tracking-[0.16em] sm:tracking-[0.2em] text-foreground/70">
+                  {text}
+                </span>
               </div>
             ))}
           </div>
@@ -276,48 +276,48 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       {/* ── INTENCIÓN DE COMPRA ───────────────────────────────────────────── */}
       <section id="comprar" className="section-pad-sm bg-dunaru-arena">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
-              Empieza por aquí
-            </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Elige tu vela</h2>
-            <p className="font-body text-sm text-foreground/60 max-w-sm mx-auto mt-3">
+          <Reveal className="text-center mb-10 sm:mb-14">
+            <p className="eyebrow mb-4">Empieza por aquí</p>
+            <h2 className="lockup text-3xl sm:text-4xl text-foreground">
+              ELIGE <em>tu</em> VELA
+            </h2>
+            <p className="font-body text-sm text-foreground/55 max-w-sm mx-auto mt-4">
               Envío gratis a todo México, sin mínimo. Hasta 6 meses sin intereses.
             </p>
-          </div>
+          </Reveal>
 
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
-            {SHOP_CARDS.map(({ slug, tag, badge, badgeClass }) => {
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-10 sm:gap-x-6 sm:gap-y-14">
+            {SHOP_CARDS.map(({ slug, tag, badge }, i) => {
               const p = catalog[slug];
               if (!p) return null;
               return (
-                <Link
-                  key={slug}
-                  to={`/productos/${slug}`}
-                  className="group flex flex-col overflow-hidden rounded-sm border border-border bg-background transition-all hover:border-dunaru-champagne/60 hover:shadow-md"
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden bg-dunaru-arena">
-                    <img
-                      src={p.img}
-                      alt={p.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    {badge && <span className={`absolute top-2.5 left-2.5 ${badgeClass}`}>{badge}</span>}
-                  </div>
-                  <div className="flex flex-1 flex-col p-3 sm:p-4">
-                    <span className="font-body text-[10px] font-semibold uppercase tracking-widest text-dunaru-champagne mb-1">
-                      {tag}
-                    </span>
-                    <h3 className="font-body text-sm font-medium leading-snug text-foreground mb-2">{p.title}</h3>
-                    <div className="mt-auto flex items-baseline gap-2">
-                      <span className="font-body text-base font-bold text-foreground">{p.price}</span>
-                      {p.compare && (
-                        <span className="font-body text-xs text-foreground/40 line-through">{p.compare}</span>
+                <Reveal key={slug} delay={(i % 3) * 90}>
+                  <Link to={`/productos/${slug}`} className="group flex h-full flex-col">
+                    <div className="relative aspect-[4/5] overflow-hidden bg-dunaru-marfil">
+                      <img
+                        src={p.img}
+                        alt={p.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-editorial group-hover:scale-[1.04]"
+                      />
+                      {badge && (
+                        <span className="absolute top-3 left-3 font-body text-[10px] uppercase tracking-[0.2em] text-dunaru-marfil drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
+                          {badge}
+                        </span>
                       )}
                     </div>
-                  </div>
-                </Link>
+                    <div className="flex flex-1 flex-col pt-4">
+                      <span className="eyebrow mb-2">{tag}</span>
+                      <h3 className="font-body text-sm leading-snug text-foreground mb-2">{p.title}</h3>
+                      <div className="mt-auto flex items-baseline gap-2">
+                        <span className="font-body text-sm text-foreground">{p.price}</span>
+                        {p.compare && (
+                          <span className="font-body text-[11px] text-foreground/35 line-through">{p.compare}</span>
+                        )}
+                      </div>
+                    </div>
+                  </Link>
+                </Reveal>
               );
             })}
           </div>
@@ -337,37 +337,42 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── ELIGE TU TONO ─────────────────────────────────────────────────── */}
+      <RitualSection />
+
       <Reviews />
 
       {/* Elige tu tono (carrusel) */}
       <section id="tonos" className="section-pad-sm bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-8">
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">Tres tonos, tres ambientes</p>
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Elige tu tono</h2>
-          </div>
+          <Reveal className="text-center mb-10 sm:mb-14">
+            <p className="eyebrow mb-4">Tres tonos, tres ambientes</p>
+            <h2 className="lockup text-3xl sm:text-4xl text-foreground">
+              ELIGE <em>tu</em> TONO
+            </h2>
+          </Reveal>
 
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0 md:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {TONOS.map((tono) => (
               <Link key={tono.name} to={`/productos/${tono.slug}`} className="group block shrink-0 w-[70%] sm:w-[45%] md:w-auto snap-start">
-                <div className="relative overflow-hidden rounded-sm">
-                  <div className="aspect-[3/4] overflow-hidden">
+                <div className="relative overflow-hidden">
+                  <div className="aspect-[3/4] overflow-hidden bg-dunaru-tabaco">
                     <img
                       src={tono.img}
                       alt={`Dunaru tono ${tono.name}`}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-editorial"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-dunaru-tabaco via-dunaru-tabaco/25 to-transparent" />
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <div className="flex items-center gap-2 mb-1">
+                    <div className="flex items-center gap-2.5 mb-1.5">
                       <span
-                        className="w-4 h-4 rounded-full border border-white/30 shrink-0"
+                        className="w-3 h-3 rounded-full border border-dunaru-marfil/30 shrink-0"
                         style={{ backgroundColor: tono.hex }}
                       />
-                      <span className="font-display text-xl text-white">{tono.name}</span>
+                      <span className="lockup text-lg text-dunaru-marfil">{tono.name}</span>
                     </div>
-                    <p className="font-body text-xs text-white/70">{tono.mood}</p>
+                    <p className="font-body text-xs leading-relaxed text-dunaru-marfil/65">{tono.mood}</p>
                   </div>
                 </div>
               </Link>
@@ -396,9 +401,11 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
       <section id="faq" className="section-pad bg-background">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground">Preguntas frecuentes</h2>
-          </div>
+          <Reveal className="text-center mb-12">
+            <h2 className="lockup text-2xl sm:text-3xl text-foreground">
+              PREGUNTAS <em>frecuentes</em>
+            </h2>
+          </Reveal>
           <div className="divide-y divide-border border-t border-border">
             {FAQ_ITEMS.map((item, i) => (
               <FaqItem key={i} q={item.q} a={item.a} />
@@ -408,9 +415,12 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── CIERRE — NEWSLETTER + WHATSAPP ───────────────────────────────── */}
-      <section className="section-pad-sm bg-dunaru-carbon">
+      <section className="section-pad-sm bg-dunaru-tabaco">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="font-display text-3xl text-dunaru-marfil mb-3">Algo nuevo viene.</h2>
+          <p className="eyebrow eyebrow-light mb-4">Boletín dunaru</p>
+          <h2 className="lockup text-2xl sm:text-3xl text-dunaru-marfil mb-4">
+            ALGO NUEVO <em>viene</em>
+          </h2>
           <p className="font-body text-sm text-dunaru-marfil/60 mb-8 leading-relaxed">
             Nuevos tonos, ediciones especiales y consejos para sacarle más a tu vela. Sé la primera en saber.
           </p>

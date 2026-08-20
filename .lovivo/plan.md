@@ -47,20 +47,20 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 - Fondo: Marfil #FAF6EF → `--background` · Alterno: Arena #F1E9DC → `bg-dunaru-arena`
 - Texto: Carbón #2B2A27 → `--foreground` · Acento: Champagne #C2A878 → `text-dunaru-champagne`
 - CTA: Ónix #1E1C1A → `--primary` · Detalle llama: Ámbar #D89A57 → `text-dunaru-ambar`
-- 🆕 **Oscuros atmosféricos (2026-08-20)**: `bg-dunaru-tabaco` (24 22% 14%) y `bg-dunaru-cacao` (22 26% 22%). Solo para secciones editoriales full-bleed.
+- **Oscuros atmosféricos**: `bg-dunaru-tabaco` (24 22% 14%) y `bg-dunaru-cacao` (22 26% 22%). Solo para secciones editoriales.
 - Display: Instrument Serif → `font-display` · Body/UI: Manrope → `font-body`
 - Tokens: `dunaru-marfil/arena/champagne/carbon/onix/ambar/tabaco/cacao`
-- 🆕 **`--radius: 0rem`** (2026-08-20). `rounded-sm|md|lg` = 0 en todo el sitio. **Excepción: `rounded-field` (0.25rem)** ya aplicado a `ui/input.tsx` y `ui/textarea.tsx` para no endurecer el checkout. Círculos (`rounded-full`) no se tocan.
+- **`--radius: 0rem`**. Excepción: `rounded-field` (0.25rem) en `ui/input.tsx` y `ui/textarea.tsx`. Círculos (`rounded-full`) no se tocan.
 - Estética: editorial, mínima, mucho aire. Mobile-first. **Pero en PDP, landing y checkout la densidad gana al aire.**
 
-### 🆕 Utilidades editoriales disponibles (index.css, desde 2026-08-20)
-- `.lockup` → serif + versalitas + `tracking .14em`. `.lockup em` → itálica minúscula. Uso: `<h2 className="lockup">DONDE LA CASA <em>se vuelve</em> SANTUARIO</h2>`
-- `.eyebrow` → Manrope 10px, `tracking .28em`, champagne. Sustituye a `text-xs font-semibold tracking-[0.2em]`. Variante `.eyebrow-light` para fondos oscuros.
+### Utilidades editoriales (index.css)
+- `.lockup` → serif + versalitas + `tracking .14em`. `.lockup em` → itálica minúscula.
+- `.eyebrow` → Manrope 10px, `tracking .28em`, champagne. Variante `.eyebrow-light` para fondos oscuros.
 - `.h-editorial` → escala display grande (30px → 48px → 60px). Solo secciones de marca.
 - `.transition-editorial` → 700ms cubic-bezier(.22,1,.36,1).
-- `.reveal` / `.reveal-in` → fade+slide 900ms. Usar vía **`<Reveal delay={120}>`** (`src/components/Reveal.tsx`) o el hook **`useReveal()`** (`src/hooks/useReveal.ts`). Respeta `prefers-reduced-motion`.
-- `.full-bleed` → rompe el contenedor centrado a 100vw.
-- `.hairline` / `.hairline-dark` → separadores de 1px.
+- `.reveal` / `.reveal-in` → usar vía **`<Reveal delay={120}>`** (`src/components/Reveal.tsx`) o el hook **`useReveal()`**. Respeta `prefers-reduced-motion`.
+- `.full-bleed` → 100vw. ⚠️ **NO usar dentro de `layout="full-width"`**: la sección ya es ancho completo y `100vw` mete scroll horizontal por el ancho de la scrollbar.
+- ⚠️ **`.hairline` / `.hairline-dark` son DIVISORES (`height: 1px`), NO utilidades de borde.** Se usan como `<div className="hairline" />`. Para bordes usar `border-t border-border`.
 
 ### Reglas de layout existentes
 - **TOP BAR** (`EcommerceTemplate.tsx`): barra fija carbón, 2 items. **NO se replica en el checkout a propósito.**
@@ -77,10 +77,12 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 - **📄 ORDEN OFICIAL DE LA PDP** (`ProductStorySections.tsx`): garantías → `ProductStepsCarousel` → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402 px)** + `object-cover`.
 - **`ProductStepsCarousel.tsx`** es compartido PDP + landing. Props: `steps`, `title`, `eyebrow`, `id`, `bleed`, `background`, `footer`.
+- 🆕 **`src/components/RitualSection.tsx`** — bloque editorial oscuro reutilizable (home + cierre de PDP). Props: `image`, `linkLabel`, `linkTo`, `className`. Fondo `dunaru-tabaco` con imagen al 40% de opacidad.
 
-### 🏠 LANDING (`src/pages/ui/IndexUI.tsx`) — orden oficial
-1. Hero · 2. Tira de beneficios (`grid-cols-4`, 1 fila) · 3. Cómo funciona (`ProductStepsCarousel bleed={false}`) · 4. **Elige tu vela** (`SHOP_CARDS`, 6 tarjetas 4:5) · 5. `<Reviews />` · 6. Elige tu tono (carrusel snap) · 7. `<CasaRealSection />` · 8. `<BrandStorySection />` · 9. FAQ · 10. Cierre newsletter + WhatsApp
+### 🏠 LANDING (`src/pages/ui/IndexUI.tsx`) — orden oficial (actualizado 2026-08-20)
+1. Hero (lockup, `min-h-screen`, gradientes tabaco) · 2. Tira de beneficios (4 columnas, solo texto en versalitas) · 3. Cómo funciona (`ProductStepsCarousel bleed={false}`) · 4. **Elige tu vela** (`SHOP_CARDS`, 6 tarjetas 4:5 SIN caja) · 5. **`<RitualSection />`** (oscura) · 6. `<Reviews />` · 7. Elige tu tono (carrusel snap) · 8. `<CasaRealSection />` · 9. `<BrandStorySection />` · 10. FAQ · 11. Cierre newsletter (tabaco) + WhatsApp
 - ⚠️ **Prohibido duplicar SKUs en varias secciones.** Precios y títulos SIEMPRE dinámicos vía `buildCatalog(logic.products)`.
+- Ritmo claro/oscuro: hero(oscuro) → arena → marfil → arena → **ritual(oscuro)** → marfil → marfil → marfil → arena → marfil → **newsletter(oscuro)**.
 
 ### 🧾 CHECKOUT (`src/pages/ui/CheckoutUI.tsx`) — reglas fijas
 - Header minimal, solo logo. Sin nav, sin top bar promocional.
@@ -93,7 +95,7 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 
 ## 3. Active Plan — REDISEÑO "HIGH END" INSPIRADO EN SENSATE
 
-**Estado**: ✅ Fase 1 IMPLEMENTADA (2026-08-20). Fases 2, 3 y 4 pendientes.
+**Estado**: ✅ Fase 1 y ✅ Fase 2 IMPLEMENTADAS (2026-08-20). Fases 3 y 4 pendientes.
 **Referencia**: sensatehomes.com (Exhibea). **Idioma**: TODO en español de México.
 
 ### 3.0 REGLA MAESTRA
@@ -104,44 +106,45 @@ Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 - Contexto de riesgo: Sensate vende a $95 USD con marca prestada de Beverly Hills. Dunaru vende a tráfico frío de Meta con 4.1% de ATC.
 
 ### 3.1 Diagnóstico: qué separa hoy a dunaru de Sensate
-1. **Luz.** Sensate vive en penumbra cálida (noche, dorados). Dunaru es marfil a mediodía. ~70% de la diferencia percibida de precio.
-2. **Cajas.** Dunaru encierra productos en tarjetas con borde/radius/shadow. Sensate no tiene ni una caja.
-3. **Tipografía plana** vs. lockups de Sensate. → resuelto a nivel sistema en Fase 1.
-4. **Ruido promocional**: 6 precios tachados + badges en un scroll.
-5. **Densidad de microcopy**: Dunaru explica todo; Sensate guarda el detalle en acordeones.
-6. **Ritmo**: Dunaru alterna dos claros casi iguales. Sensate alterna claro/oscuro/full-bleed.
-7. **Movimiento**: `animate-fade-up` en carga vs. reveals lentos al scroll. → resuelto en Fase 1.
+1. **Luz.** Sensate vive en penumbra cálida (noche, dorados). Dunaru es marfil a mediodía. ~70% de la diferencia percibida de precio. → **sigue pendiente, es la Fase 4.**
+2. **Cajas.** → ✅ resuelto en home (Fase 2). Pendiente en PDP.
+3. **Tipografía plana** vs. lockups. → ✅ resuelto (Fases 1 y 2).
+4. **Ruido promocional**: precios tachados + badges. → ✅ silenciado en home. Pendiente en PDP.
+5. **Densidad de microcopy**: Dunaru explica todo. → parcialmente resuelto.
+6. **Ritmo**: → ✅ resuelto en home con `RitualSection`.
+7. **Movimiento**: → ✅ resuelto (`Reveal`).
 
 ### 3.2 ✅ FASE 1 — Sistema de diseño (HECHA 2026-08-20)
-Archivos tocados: `src/index.css`, `tailwind.config.ts`, `src/hooks/useReveal.ts` (nuevo), `src/components/Reveal.tsx` (nuevo), `ui/input.tsx`, `ui/textarea.tsx`.
+Archivos: `src/index.css`, `tailwind.config.ts`, `src/hooks/useReveal.ts` (nuevo), `src/components/Reveal.tsx` (nuevo), `ui/input.tsx`, `ui/textarea.tsx`.
 Entregado: radius 0 + `rounded-field`, tokens `tabaco`/`cacao`, `.lockup`, `.eyebrow`, `.h-editorial`, `.transition-editorial`, `.reveal` + `<Reveal>`, `.full-bleed`, `.hairline`.
-⚠️ **Pendiente de barrido**: los componentes siguen usando los eyebrows viejos (`text-xs font-semibold tracking-[0.2em]`) y `duration-500`. Se migran en Fase 2 y 3.
 
-### 3.3 FASE 2 — Home (`src/pages/ui/IndexUI.tsx`) — SIGUIENTE
-Mantener el orden de 9 secciones. Cambia el **tratamiento**, no la arquitectura.
-1. **Hero**: `min-h-screen`. H1 a lockup: `CREA LUZ <em>en el</em> RECIPIENTE QUE YA AMAS`. Gradiente con `dunaru-tabaco`. CTA sharp, uppercase, `tracking-[0.12em]`, `text-xs`. **Conservar los dos CTA y el badge de MSI + envío gratis.**
-2. **Tira de beneficios**: quitar iconos de Lucide, solo texto en versalitas + separadores hairline.
-3. **Tarjetas "Elige tu vela"**: quitar borde, fondo y hover-shadow. Imagen 4:5 a sangre + eyebrow/título/precio debajo. Hover = zoom 700ms sin sombra. Badges a texto plano `text-[10px] tracking-[0.2em]` sobre la imagen. **Quitar "Mejor valor"**, dejar solo "Más elegido".
-4. **Precios tachados**: a `text-[11px] text-foreground/35`. Silenciar, no eliminar.
-5. **NUEVA sección oscura full-bleed "El ritual"** entre "Elige tu vela" y `<Reviews />`: fondo `dunaru-tabaco`, frase en lockup grande, imagen a sangre de vela encendida de noche, link fino subrayado. Copy: `EN UN MUNDO QUE VA MUY RÁPIDO, <em>te invitamos a</em> ENCENDER DESPACIO.`
-6. **"Elige tu tono"**: `aspect-[3/4]`, gradiente más profundo, nombre en lockup. **Depende de fotos nuevas (3.5).**
-7. **`CasaRealSection`**: full-bleed real, 4 escenas a sangre, texto flotando en marfil.
-8. **`BrandStorySection`** — variante **materia y oficio, sin rostros**: 2 columnas asimétricas, imagen grande a sangre. Sujetos: manos anónimas vertiendo gránulos, macro de la cera, mecha encendiéndose, taller, vela en casa real de noche. Voz en "nosotros". Copy en 3 bloques: qué es la cera perlada · por qué rellenable en vez de desechable · qué pasa en tu casa cuando la enciendes. Fondo posible `dunaru-cacao` (validar ritmo claro/oscuro contra 3.3.5).
-9. **Cierre newsletter**: fondo `dunaru-tabaco`, input hairline, botón texto uppercase.
+### 3.3 ✅ FASE 2 — Home (HECHA 2026-08-20)
+Archivos: `src/pages/ui/IndexUI.tsx`, `src/components/RitualSection.tsx` (nuevo), `src/components/CasaRealSection.tsx`, `src/components/BrandStorySection.tsx`.
+Entregado:
+1. **Hero**: `min-h-screen`, H1 en lockup `CREA LUZ <em>en el</em> RECIPIENTE QUE YA AMAS`, gradientes `dunaru-tabaco`, CTAs uppercase `tracking-[0.12em]` `text-xs`. **CTA primario redirigido a `/productos/kit-vaso-de-vidrio`** (antes iba a perlas). Badge MSI + envío gratis conservados.
+2. **Tira de beneficios**: iconos de Lucide eliminados, solo texto en versalitas con divisores verticales.
+3. **Tarjetas "Elige tu vela"**: sin borde, sin fondo, sin shadow. Imagen 4:5 a sangre, hover `scale-[1.04]` a 700ms. Badge "Más elegido" como texto plano sobre la imagen. **"Mejor valor" eliminado.** Precio tachado a `text-[11px] text-foreground/35`. Reveal escalonado por fila.
+4. **`RitualSection`** insertada entre "Elige tu vela" y `<Reviews />`. Copy: `EN UN MUNDO QUE VA MUY RÁPIDO, te invitamos a ENCENDER DESPACIO.` Imagen temporal = paso "Enciende".
+5. **"Elige tu tono"**: gradiente a `dunaru-tabaco`, nombre en lockup, swatch más pequeño, sin radius.
+6. **`CasaRealSection`**: 4 escenas a sangre en grid sin gaps (2 cols móvil, 4 desktop), texto flotando en marfil, "Ver producto" en hover eliminado. Franja de confianza intacta.
+7. **`BrandStorySection`** reescrita como **materia y oficio**: 2 columnas asimétricas (7/5), imagen grande a sangre, 3 bloques de copy (La materia · El oficio · En tu casa), voz en "nosotros", pilares sin cajas ni iconos, fondo `dunaru-arena`.
+8. **Cierre newsletter**: fondo `dunaru-tabaco`, eyebrow + lockup `ALGO NUEVO viene`.
+9. **FAQ**: título a lockup.
 
-### 3.4 FASE 3 — PDP (`ProductPageUI.tsx` + `ProductStorySections.tsx`)
+### 3.4 FASE 3 — PDP (`ProductPageUI.tsx` + `ProductStorySections.tsx`) — SIGUIENTE
 🔒 **El orden del buy box NO cambia.** Solo tratamiento visual + dos añadidos.
 1. **Galería** a sangre en móvil, sin borde ni radius. En desktop, columna apilada con scroll si el esfuerzo lo permite.
 2. **Título** a lockup. Precio en `font-body`, discreto.
 3. **Acordeones** renombrados a lenguaje de ritual, cerrados: `El ritual` · `Cuidado y seguridad` · `Materiales y medidas` · `Atención a clientes` (WhatsApp real dentro).
 4. **NUEVO "Combina bien con"**: `ProductAddOns` como fila editorial de 3 productos con "Agregar" inline, **debajo del buy box** → resuelve la falta de cross-sell en `perlas-originales-500-g`.
-5. **Bloque de cierre oscuro** al final (mismo componente que 3.3.5).
+5. **`<RitualSection />` al final de la PDP** (componente ya existe, solo importarlo).
+6. Barrido de eyebrows viejos (`text-xs font-semibold tracking-[0.2em]`) → `.eyebrow`.
 
 ### 3.5 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
 El 70% del efecto Sensate es dirección de arte. Sin esto, las fases 1 a 3 rinden la mitad.
 - Set de **imágenes atmosféricas nocturnas**: penumbra, luz dorada, interiores saturados (madera, lino, cerámica), sombras largas.
 - ⛔ **SIN ROSTROS.** Manos, siluetas, objetos e interiores.
-- Slots: (a) hero desktop + móvil, (b) sección oscura "El ritual", (c) 3 ambientes para "Elige tu tono", (d) 2 editoriales de materia/oficio para `BrandStorySection`.
+- Slots: (a) hero desktop + móvil, (b) **fondo de `RitualSection`** (hoy usa el paso "Enciende" como provisional), (c) 3 ambientes para "Elige tu tono" (hoy packshots), (d) imagen editorial de `BrandStorySection` (hoy `/paso-vierte.webp`).
 - Generar con `imagegen--generate_image` + `reference_images` de productos reales. Cargar antes la skill `media.product-imagery`.
 - ⚠️ **Las fotos de producto del catálogo (4:5, fondo claro) NO se cambian.** Las usan los anuncios de Meta.
 
@@ -161,8 +164,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-20 — ✅ **FASE 1 DEL REDISEÑO HIGH END IMPLEMENTADA**: `--radius: 0rem` global con excepción `rounded-field` para inputs/textarea, tokens `dunaru-tabaco`/`dunaru-cacao`, utilidades `.lockup`, `.eyebrow`, `.h-editorial`, `.transition-editorial`, `.full-bleed`, `.hairline`. Nuevos `src/hooks/useReveal.ts` y `src/components/Reveal.tsx`.
-- 2026-08-20 — ⛔ **DECISIÓN: dunaru NO será founder-led.** `BrandStorySection` se reencuadra como historia de materia y oficio, sin rostros. Las 2 imágenes sueltas del hilo quedan descartadas.
+- 2026-08-20 — ✅ **FASE 2 DEL REDISEÑO HIGH END IMPLEMENTADA** (home). Hero lockup `min-h-screen`, tira de beneficios sin iconos, tarjetas sin caja, nueva `RitualSection` oscura, `CasaRealSection` a sangre, `BrandStorySection` reescrita como materia y oficio, newsletter en tabaco. Detalle en 3.3.
+- 2026-08-20 — 🐞 **Aprendizaje**: `.hairline` es `height:1px`, NO un borde. Usarlo como clase de sección colapsa el contenido. Y `.full-bleed` sobra dentro de `layout="full-width"`.
+- 2026-08-20 — ✅ **FASE 1 DEL REDISEÑO HIGH END IMPLEMENTADA**: `--radius: 0rem` global con excepción `rounded-field`, tokens `dunaru-tabaco`/`dunaru-cacao`, utilidades editoriales, `useReveal.ts` y `Reveal.tsx`.
+- 2026-08-20 — ⛔ **DECISIÓN: dunaru NO será founder-led.** `BrandStorySection` reencuadrada como historia de materia y oficio, sin rostros.
 - 2026-08-20 — 📐 **PLAN DE REDISEÑO "HIGH END" (Sensate)** por 4 fases con regla maestra "elevar marca, no tocar conversión".
 - 2026-08-07 — 🔍 **AUDITORÍA PDP `perlas-originales-500-g`**. 8 hallazgos. Detalle en `.lovivo/cro-log.md`.
 - 2026-08-07 — ✅ **AUDITORÍA DE LANDING MÓVIL**: 13 secciones → 9. Scroll móvil ≈ 40% más corto.
@@ -172,9 +177,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-07 — ✅ **BUY BOX REDISEÑADO**: `PDP_BENEFITS`, cantidad compacta, CTA `h-12` con precio.
 - 2026-08-07 — ✅ **PASOS EN CARRUSEL**: `ProductStepsCarousel.tsx`.
 - 2026-08-07 — ✅ **PDP REORDENADA**: prueba social de la posición 5 a la 3.
-- 2026-08-07 — ✅ **PDP más densa** + **`Reviews.tsx` compacto**.
 - 2026-08-07 — ✅ **LANDING: precios y nombres desde la DB** (`buildCatalog`).
-- 2026-08-07 — ✅ **HEADER OVERLAY** + **COPY sin guiones largos** + **TABLA COMPARATIVA**.
 - 2026-07-31 — ✅ **RENOMBRE DE CATÁLOGO (9 productos, slugs intactos)**.
 
 ## 5. Image Inventory
@@ -185,16 +188,18 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - **Hero desktop**: `/hero-dunaru.webp` · **Hero móvil**: `/hero-dunaru-mobile.webp` · **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`
 - **4 PASOS** — base `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`:
   - Vierte → `/paso-vierte.webp` · Inserta → `1785521743155-htw95tvbi4b.webp` · Enciende → `1785521743156-3qeskqe43gv.webp` · Renueva → `/paso-renueva.webp`
+- **`RitualSection`** usa provisionalmente la imagen de "Enciende". **`BrandStorySection`** usa `/paso-vierte.webp`. Ambas se reemplazan en Fase 4.
 - **Bloque aroma** → `1785521743156-7ucg5c0kwb7.webp`
 - 🟡 `/pdp-vaso-decor.webp` quedó huérfana.
 - 🔴 **FALTA: video demo del mecanismo** (lo genera el user).
 - 🟡 Los `steps` de `kit-vaso-de-concreto` siguen usando `PLACEHOLDER`.
-- 🔴 **FALTAN las imágenes atmosféricas nocturnas de la Fase 4** (hero nuevo, "El ritual", 3 tonos de ambiente, 2 editoriales de materia/oficio). **SIN ROSTROS.** Bloquean el 70% del efecto.
+- 🔴 **FALTAN las imágenes atmosféricas nocturnas de la Fase 4.** **SIN ROSTROS.** Bloquean el 70% del efecto.
 - ⛔ Las imágenes `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp` fueron **DESCARTADAS por el owner**.
 
 ## 6. Known Issues
-- 2026-08-20 — 🟡 **Barrido de radius pendiente**: hay componentes con `rounded-full`, `rounded-[Npx]` y `rounded-xl/2xl` hardcodeados que NO se vieron afectados por `--radius: 0`. Revisar caso por caso en Fases 2 y 3 (los círculos se conservan a propósito).
-- 2026-08-20 — 🟠 **Riesgo del rediseño high end**: quitar cajas, badges y bajar densidad puede reducir el ATC móvil (hoy 4.1%). Mitigación en 3.0 y 3.7.
+- 2026-08-20 — 🟡 **Barrido de radius pendiente en la PDP**: quedan `rounded-full`, `rounded-[Npx]` y `rounded-xl/2xl` hardcodeados. Revisar en Fase 3 (los círculos se conservan a propósito).
+- 2026-08-20 — 🟠 **Riesgo del rediseño high end**: quitar cajas, badges y bajar densidad puede reducir el ATC móvil (hoy 4.1%). Mitigación en 3.0 y 3.7. **Home ya desplegada sin baseline capturado.**
+- 2026-08-20 — 🟡 La home mezcla ahora `.eyebrow` nuevo con eyebrows viejos que aún viven en `ProductStepsCarousel`, `Reviews` y la PDP. Unificar en Fase 3.
 - 2026-08-07 — 🔴 **`perlas-originales-500-g` se llama "Recarga"** y recibe el grueso del tráfico frío de Meta.
 - 2026-08-07 — 🟠 **Sin cross-sell en `perlas-originales-500-g`**. → Se resuelve en 3.4 punto 4.
 - 2026-08-07 — 🟠 **Escalera de precio por gramo rota**: Dúo 1 kg ($1.10/g) más caro que Reserva 1 kg ($0.80/g).
@@ -212,9 +217,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Ejecutar FASE 2 (home)**: hero lockup, tarjetas sin caja, sección oscura "El ritual", `BrandStorySection` materia/oficio.
-- [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página) antes de medir el impacto.
-- [ALTA] Generar el set de imágenes atmosféricas de la Fase 4 (sin rostros). Bloquea la calidad de la Fase 2.
+- [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre.
+- [ALTA] **Ejecutar FASE 4 (fotos atmosféricas nocturnas)**, sin rostros. Es la palanca más grande y ya hay 4 slots esperando imagen.
+- [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página) para medir el impacto del rediseño de la home.
 - [ALTA] Ejecutar P0 de la PDP de perlas (renombrar sin "Recarga", foto #1 = resultado, bloque "¿te sirve tu recipiente?", tiers como "elige tus tonos"). **Combinable con la Fase 3.**
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
@@ -223,6 +228,5 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.
 - [MED] Encuesta PostHog de salida en `/pagar` y en la PDP de perlas.
 - [MED] Reseñas: pedir al owner los nombres reales de clientas antes de escalar pauta.
-- [MED] CTA del hero de `IndexUI.tsx` → `/productos/kit-vaso-de-vidrio`.
 - [MED] Barrer el resto del sitio buscando guiones largos (—) en copy.
 - [BAJA] Banners de colección y borrar imágenes huérfanas.

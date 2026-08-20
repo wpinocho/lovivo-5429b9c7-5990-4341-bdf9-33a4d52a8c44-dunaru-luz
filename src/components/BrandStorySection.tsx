@@ -1,90 +1,91 @@
 import { Link } from 'react-router-dom';
-import { ShieldCheck, Leaf, HandHeart, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { Reveal } from '@/components/Reveal';
 
 /**
- * BrandStorySection — "Hecho en México" + historia de marca + garantía.
- * Reemplaza la falta de reseñas (marca nueva) con confianza emocional:
- * historia real de la marca, origen mexicano y garantía visible.
- * Sin datos inventados ni testimonios falsos.
+ * BrandStorySection — historia de materia y oficio.
+ * Sin rostros, sin fundadora, sin primera persona del singular.
+ * Voz en "nosotros". Tres bloques: qué es la cera perlada,
+ * por qué rellenable, y qué pasa en tu casa cuando la enciendes.
  */
 
 const PILLARS = [
+  { title: 'Cera vegetal', desc: 'Gránulos de origen vegetal, sin parafina.' },
+  { title: 'Hecho en México', desc: 'Preparamos y empacamos cada pedido en la CDMX.' },
+  { title: 'Garantía de 30 días', desc: 'Si llega roto o no te enamora, lo resolvemos.' },
+];
+
+const BLOCKS = [
   {
-    icon: <Leaf className="h-5 w-5" />,
-    title: 'Cera vegetal',
-    desc: 'Perlas de cera de origen vegetal, sin parafina.',
+    kicker: 'La materia',
+    text: 'Nuestra cera no viene en bloque ni en molde. Son gránulos finos, casi como arena, que se acomodan solos a la forma de lo que ya tienes en casa. Sin derretir, sin temperatura, sin instrumentos.',
   },
   {
-    icon: <HandHeart className="h-5 w-5" />,
-    title: 'Hecho en México',
-    desc: 'Preparamos y empacamos cada pedido en la CDMX.',
+    kicker: 'El oficio',
+    text: 'Preparamos y empacamos cada pedido a mano en la Ciudad de México. Hacemos velas rellenables en vez de desechables porque nos parece absurdo tirar un recipiente bonito cada vez que se acaba la luz.',
   },
   {
-    icon: <ShieldCheck className="h-5 w-5" />,
-    title: 'Garantía de 30 días',
-    desc: 'Si llega roto o no te enamora, lo resolvemos.',
+    kicker: 'En tu casa',
+    text: 'Viertes, insertas una mecha y enciendes. Cuando la mecha se consume, pones otra. La misma pieza en tu mesa, en tu buró o en tu baño, encendiéndose una y otra vez durante años.',
   },
 ];
 
 export const BrandStorySection = () => {
   return (
-    <section className="section-pad bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
-          {/* Imagen */}
-          <div className="relative order-1 lg:order-none">
-            <div className="aspect-[4/5] overflow-hidden rounded-sm">
-              <img
-                src="/paso-vierte.webp"
-                alt="Perlas de cera dunaru hechas en México, vertidas a mano en un recipiente de vidrio"
-                loading="lazy"
-                className="w-full h-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-4 -right-4 hidden sm:block bg-dunaru-onix text-dunaru-marfil px-5 py-4 rounded-sm shadow-lg">
-              <p className="font-display text-2xl leading-none">Hecho</p>
-              <p className="font-body text-xs tracking-widest uppercase text-dunaru-champagne mt-1">en México</p>
-            </div>
+    <section className="bg-dunaru-arena">
+      <div className="grid grid-cols-1 lg:grid-cols-12 lg:items-stretch">
+        {/* Imagen grande a sangre */}
+        <div className="lg:col-span-7 relative overflow-hidden bg-dunaru-tabaco">
+          <div className="aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[38rem]">
+            <img
+              src="/paso-vierte.webp"
+              alt="Gránulos de cera perlada dunaru vertidos a mano en un recipiente de vidrio"
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
           </div>
-
-          {/* Texto */}
-          <div>
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
-              Quiénes somos
+          <div className="absolute bottom-0 left-0 p-6 sm:p-8">
+            <p className="lockup text-xl sm:text-2xl text-dunaru-marfil drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+              HECHO <em>en</em> MÉXICO
             </p>
-            <h2 className="font-display text-3xl sm:text-4xl text-foreground leading-tight mb-5">
-              Una marca mexicana que cree en la luz que se queda.
-            </h2>
-            <div className="space-y-4 font-body text-[15px] text-foreground/70 leading-relaxed">
-              <p>
-                dunaru nació en la Ciudad de México con una idea simple: no deberías tirar tu
-                vela, ni el recipiente que amas, cada vez que se acaba. Creamos las perlas de
-                cera rellenables para que la misma pieza viva contigo por años.
-              </p>
-              <p>
-                Preparamos y empacamos cada pedido a mano, aquí en México. Somos una marca
-                joven y por eso cuidamos cada detalle: queremos que tu primera dunaru sea
-                justo lo que imaginaste.
-              </p>
+          </div>
+        </div>
+
+        {/* Texto */}
+        <div className="lg:col-span-5 flex items-center px-4 py-16 sm:px-8 sm:py-20 lg:px-14">
+          <div className="max-w-md">
+            <Reveal>
+              <p className="eyebrow mb-4">Quiénes somos</p>
+              <h2 className="lockup text-2xl sm:text-3xl text-foreground mb-8">
+                LA LUZ <em>que</em> SE QUEDA
+              </h2>
+            </Reveal>
+
+            <div className="space-y-7">
+              {BLOCKS.map(({ kicker, text }, i) => (
+                <Reveal key={kicker} delay={100 + i * 90}>
+                  <p className="eyebrow mb-2">{kicker}</p>
+                  <p className="font-body text-[15px] leading-relaxed text-foreground/70">{text}</p>
+                </Reveal>
+              ))}
             </div>
 
-            {/* Pilares de confianza */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
-              {PILLARS.map(({ icon, title, desc }, i) => (
-                <div key={i} className="border-l-2 border-dunaru-champagne/40 pl-3">
-                  <span className="text-dunaru-champagne">{icon}</span>
-                  <h3 className="font-body font-semibold text-sm text-foreground mt-2">{title}</h3>
-                  <p className="font-body text-xs text-foreground/55 leading-snug mt-0.5">{desc}</p>
+            {/* Pilares de confianza, sin cajas */}
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4">
+              {PILLARS.map(({ title, desc }) => (
+                <div key={title} className="border-t border-foreground/15 pt-3">
+                  <h3 className="font-body text-xs uppercase tracking-[0.14em] text-foreground">{title}</h3>
+                  <p className="font-body text-xs leading-snug text-foreground/50 mt-1.5">{desc}</p>
                 </div>
               ))}
             </div>
 
             <Link
               to="/devoluciones"
-              className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-dunaru-champagne hover:underline mt-7"
+              className="mt-9 inline-flex items-center gap-1.5 border-b border-dunaru-champagne/50 pb-1 font-body text-xs uppercase tracking-[0.16em] text-foreground transition-editorial hover:border-dunaru-champagne"
             >
-              Conoce nuestra garantía y cambios
-              <ArrowRight className="h-3.5 w-3.5" />
+              Garantía y cambios
+              <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
         </div>

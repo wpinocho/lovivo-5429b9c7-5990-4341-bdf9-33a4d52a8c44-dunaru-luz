@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, ShieldCheck, Truck, MessageCircle } from 'lucide-react';
+import { ShieldCheck, Truck, MessageCircle } from 'lucide-react';
+import { Reveal } from '@/components/Reveal';
 
 /**
  * CasaRealSection — "Así se ve en una casa real".
@@ -43,56 +44,43 @@ const TRUST = [
 
 export const CasaRealSection = () => {
   return (
-    <section className="section-pad bg-background">
+    <section className="bg-background pt-16 sm:pt-24">
+      <Reveal className="text-center mb-10 sm:mb-14 px-4">
+        <p className="eyebrow mb-4">En espacios reales</p>
+        <h2 className="lockup text-3xl sm:text-4xl text-foreground">
+          ASÍ SE VE <em>en una</em> CASA REAL
+        </h2>
+        <p className="font-body text-sm text-foreground/55 max-w-md mx-auto mt-4">
+          La misma luz, en recámaras, comedores y recibidores como el tuyo. Toca una escena para llevártela.
+        </p>
+      </Reveal>
+
+      {/* Cuatro escenas a sangre, sin marcos ni separaciones */}
+      <div className="grid grid-cols-2 md:grid-cols-4">
+        {SCENES.map((scene, i) => (
+          <Link key={i} to={`/productos/${scene.slug}`} className="group relative block overflow-hidden">
+            <div className="aspect-[3/4] overflow-hidden bg-dunaru-tabaco">
+              <img
+                src={scene.img}
+                alt={`Vela dunaru tono ${scene.tono}, ${scene.space}`}
+                loading="lazy"
+                className="w-full h-full object-cover group-hover:scale-[1.04] transition-editorial"
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-dunaru-tabaco/85 via-dunaru-tabaco/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+              <span className="eyebrow eyebrow-light">{scene.tono}</span>
+              <p className="lockup text-sm sm:text-base text-dunaru-marfil leading-snug mt-1.5">
+                {scene.space}
+              </p>
+            </div>
+          </Link>
+        ))}
+      </div>
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
-            En espacios reales
-          </p>
-          <h2 className="font-display text-3xl sm:text-4xl text-foreground">
-            Así se ve en una casa real
-          </h2>
-          <p className="font-body text-sm text-foreground/55 max-w-md mx-auto mt-3">
-            La misma luz, en recámaras, comedores y recibidores como el tuyo. Toca una escena para llevártela.
-          </p>
-        </div>
-
-        {/* Carrusel horizontal en mobile, grid en desktop */}
-        <div className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-4 md:gap-6 md:overflow-visible md:mx-0 md:px-0 md:pb-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          {SCENES.map((scene, i) => (
-            <Link
-              key={i}
-              to={`/productos/${scene.slug}`}
-              className="group block shrink-0 w-[72%] sm:w-[48%] md:w-auto snap-start"
-            >
-              <div className="relative overflow-hidden rounded-sm">
-                <div className="aspect-[3/4] overflow-hidden">
-                  <img
-                    src={scene.img}
-                    alt={`Vela dunaru tono ${scene.tono} — ${scene.space}`}
-                    loading="lazy"
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <span className="font-body text-[11px] font-semibold tracking-widest uppercase text-dunaru-champagne">
-                    {scene.tono}
-                  </span>
-                  <p className="font-display text-lg text-white leading-snug mt-0.5">
-                    {scene.space}
-                  </p>
-                  <span className="font-body text-xs text-white/70 flex items-center gap-1 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Ver producto <ArrowRight className="h-3 w-3" />
-                  </span>
-                </div>
-              </div>
-            </Link>
-          ))}
-        </div>
-
         {/* Franja de confianza honesta (sin reseñas inventadas) */}
-        <div className="mt-12 border-t border-border pt-8">
+        <div className="mt-12 sm:mt-16 border-t border-border pt-8 pb-16 sm:pb-24">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-2">
             {TRUST.map(({ icon, text }, i) => (
               <div key={i} className="flex items-center justify-center gap-2.5 text-center">
