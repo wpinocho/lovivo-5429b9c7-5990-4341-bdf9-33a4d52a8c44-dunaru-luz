@@ -799,7 +799,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 onClick={handleAddToCartWithAddOns}
                 disabled={!logic.inStock}
                 variant={logic.inStock ? "outline" : "default"}
-                className="w-full h-11 text-sm font-medium rounded-lg border-border/80 bg-transparent text-foreground/90 hover:bg-muted/60"
+                className="w-full h-11 text-sm font-medium rounded-lg border-border/80 bg-transparent text-foreground/90 hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]"
               >
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 {logic.inStock
