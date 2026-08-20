@@ -865,12 +865,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex items-center justify-center gap-2 pt-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="group flex items-center justify-center gap-2 pt-1 text-sm text-muted-foreground hover:text-[hsl(var(--dunaru-periwinkle-deep))] transition-colors"
               >
                 <MessageCircle className="h-4 w-4 text-dunaru-ambar shrink-0" strokeWidth={1.75} />
                 <span>
                   ¿Tienes dudas?{" "}
-                  <span className="font-medium text-foreground underline underline-offset-4 decoration-dunaru-champagne group-hover:decoration-dunaru-ambar">
+                  <span className="font-medium text-foreground underline underline-offset-4 decoration-dunaru-champagne group-hover:text-[hsl(var(--dunaru-periwinkle-deep))] group-hover:decoration-[hsl(var(--dunaru-periwinkle-deep))]">
                     Escríbenos por WhatsApp
                   </span>
                 </span>

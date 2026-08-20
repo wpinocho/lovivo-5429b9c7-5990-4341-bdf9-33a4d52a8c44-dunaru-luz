@@ -841,7 +841,7 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
             onClick={() =>
               window.scrollTo({ top: 0, behavior: "smooth" })
             }
-            className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-8 py-3.5 font-body text-sm font-medium text-primary-foreground hover:opacity-90 transition-opacity"
+            className="mt-6 inline-flex items-center justify-center rounded-full bg-primary px-8 py-3.5 font-body text-sm font-medium text-primary-foreground hover:text-dunaru-periwinkle transition-colors"
           >
             Elegir mi vela
           </button>

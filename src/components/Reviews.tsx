@@ -209,7 +209,7 @@ export const Reviews = ({ slug, title }: ReviewsProps) => {
             href="https://wa.me/525531215386?text=Hola%2C%20quiero%20compartir%20mi%20experiencia%20y%20una%20foto%20de%20mi%20vela%20dunaru"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 font-body font-medium text-sm text-foreground/70 hover:text-foreground transition-colors"
+            className="inline-flex items-center gap-2 font-body font-medium text-sm text-foreground/70 hover:text-[hsl(var(--dunaru-periwinkle-deep))] transition-colors"
           >
             <Camera className="h-4 w-4" />
             ¿Ya tienes tu dunaru? Comparte tu experiencia
