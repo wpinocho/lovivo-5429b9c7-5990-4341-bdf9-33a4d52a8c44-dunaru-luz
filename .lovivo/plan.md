@@ -12,6 +12,7 @@
 - Market: México. Moneda MXN. Idioma: español de México.
 - Tono: claro, cálido, directo. Sin tecnicismos.
 - 🆕 **DIRECCIÓN DE MARCA 2026-08-20: subir a registro "high end" / editorial atmosférico.** Referencia aprobada por el owner: **sensatehomes.com** (agencia Exhibea). Ver sección 3.
+- ⛔ **2026-08-20 DECISIÓN DEL OWNER: la marca NO es founder-led. La owner NO quiere aparecer como fundadora (ni retrato, ni voz en primera persona, ni página "sobre mí" personal).** El storytelling se construye con producto, materia prima, manos anónimas, taller y casa. NO volver a proponer contenido de fundadora.
 - Pagos: **A meses sin intereses vía Stripe** (hasta 6 meses). ⚠️ NUNCA nombrar "Stripe" ni "Mercado Pago" en la UI.
 - Envío: **ENVÍO GRATIS A TODO MÉXICO, SIN MÍNIMO.**
 - WhatsApp REAL: `525531215386` (+52 55 3121 5386).
@@ -80,7 +81,7 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 
 ## 3. Active Plan — 🆕 REDISEÑO "HIGH END" INSPIRADO EN SENSATE
 
-**Estado**: plan aprobado en concepto por el owner el 2026-08-20. **Sin implementar.** Ejecutar por fases en Craft Mode.
+**Estado**: plan aprobado por el owner el 2026-08-20. Preguntas abiertas RESUELTAS (ver 3.0b). **Sin implementar.** Ejecutar por fases en Craft Mode.
 **Referencia**: sensatehomes.com (Exhibea). Analizada home + PDP `alchemy-candle` el 2026-08-20 vía `lov-fetch-website`.
 **Idioma**: TODO en español de México. Nada de copy en inglés.
 
@@ -91,6 +92,10 @@ Dunaru hoy está optimizada para conversión (densidad, badges, precios tachados
 - ✅ SÍ elevar: hero, secciones editoriales, `CasaRealSection`, `BrandStorySection`, footer, tipografía, tratamiento de imagen, transiciones, galería de PDP.
 - 🔒 NO tocar: buy box de la PDP (orden oficial intacto), checkout, `DeliveryEstimate`, `PdpSocialProof`, avisos MSI, envío gratis, WhatsApp.
 - Si un cambio estético reduce claridad de precio, disponibilidad o envío → **no se hace**.
+
+### 3.0b Decisiones cerradas del owner (2026-08-20)
+1. ⛔ **NADA de founder-led storytelling.** La owner no quiere aparecer. No retrato, no primera persona, no página "sobre la fundadora". → `BrandStorySection` se resuelve como **historia de MATERIA y OFICIO**: manos anónimas trabajando la cera, macro de los gránulos, el taller, la vela encendida en una casa real. Voz de marca en tercera persona / "nosotros". **La Fase 2.8 queda desbloqueada con esta variante.**
+2. 🗑️ **Las 2 imágenes sueltas del hilo (`1786132713652-czg3jwwtcrv.webp`, `1786129807292-5eb2uq5pl0m.webp`) se IGNORAN.** No usarlas en ningún slot. Descartadas por el owner.
 
 ### 3.1 Diagnóstico visual: qué separa hoy a dunaru de Sensate
 Comparación de screenshots (home dunaru mobile+desktop vs home y PDP Sensate):
@@ -127,7 +132,12 @@ Mantener el orden de 9 secciones ya optimizado. Cambia el **tratamiento**, no la
 5. **NUEVA sección oscura full-bleed "El ritual"** entre "Elige tu vela" y `<Reviews />`: fondo `dunaru-tabaco`, una sola frase en lockup grande centrada, una imagen a sangre de vela encendida de noche, un link fino subrayado. Es el clímax visual que hoy no existe. Copy propuesto: `EN UN MUNDO QUE VA MUY RÁPIDO, <em>te invitamos a</em> ENCENDER DESPACIO.` (sin guiones largos).
 6. **"Elige tu tono"**: ya es carrusel; subir la imagen a `aspect-[3/4]`, gradiente más profundo, nombre del tono en lockup. **Depende de fotos nuevas (ver 3.5).**
 7. **`CasaRealSection`**: convertir a full-bleed real (romper el `max-w-7xl`), con las 4 escenas a sangre y el texto flotando encima en marfil.
-8. **`BrandStorySection`**: reencuadrar como historia de fundadora al estilo Sensate (retrato + texto en primera persona). ⚠️ **Requiere que el owner decida si quiere aparecer.** Si no, mantener como historia de marca pero con retrato de "manos y taller".
+8. **`BrandStorySection`** ✅ **DESBLOQUEADA con variante SIN fundadora** (decisión 3.0b.1). Reencuadrar como **historia de materia y oficio**, con la misma ambición editorial de Sensate pero sin persona:
+   - Layout editorial a 2 columnas asimétricas, imagen grande a sangre por un lado.
+   - Sujetos fotográficos permitidos: manos anónimas vertiendo los gránulos, macro de la cera tipo arena, mecha encendiéndose, el taller, la vela terminada en una casa real de noche. **Nunca un rostro identificable.**
+   - Voz: tercera persona / "nosotros". Nada de "yo fundé", "mi casa", "mi historia".
+   - Estructura de copy sugerida (3 bloques cortos, sin guiones largos): qué es la cera perlada · por qué rellenable en vez de desechable · qué pasa en tu casa cuando la enciendes.
+   - Fondo: puede ser el segundo momento oscuro de la home (`dunaru-cacao`) si "El ritual" (3.3.5) queda muy lejos en el scroll. Validar ritmo claro/oscuro completo antes de decidir.
 9. **Cierre newsletter**: fondo `dunaru-tabaco`, input hairline sin caja, botón texto uppercase.
 
 ### 3.4 FASE 3 — PDP (`ProductPageUI.tsx` + `ProductStorySections.tsx`)
@@ -136,16 +146,18 @@ Mantener el orden de 9 secciones ya optimizado. Cambia el **tratamiento**, no la
 2. **Título del producto** a lockup (versalitas + tracking). Precio en `font-body`, discreto, al estilo Sensate.
 3. **Acordeones**: renombrar a lenguaje de ritual y mantenerlos cerrados. Sensate usa: Fragrance Notes / Care / Materials & Size / Customer Care. Equivalente dunaru: `El ritual` · `Cuidado y seguridad` · `Materiales y medidas` · `Atención a clientes` (con el WhatsApp real dentro).
 4. **NUEVO bloque "Combina bien con"** (= "Pairs well with" de Sensate): reutilizar `ProductAddOns` pero presentado como fila editorial de 3 productos con botón "Agregar" inline. **Esto también resuelve el issue conocido de que `perlas-originales-500-g` no tiene cross-sell**: mostrarlo DEBAJO del buy box, para que conviva con `ProductQuantityTiers` en vez de sustituirlo.
-5. **Bloque de cierre oscuro** al final de la PDP (mismo componente que 3.5 de la home) para que la ficha no termine en FAQ blanco.
+5. **Bloque de cierre oscuro** al final de la PDP (mismo componente que 3.3.5 de la home) para que la ficha no termine en FAQ blanco.
 
 ### 3.5 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
 El 70% del efecto Sensate es dirección de arte, no código. Sin esto, las fases 1 a 3 rinden la mitad.
 - Necesitamos un set de **imágenes atmosféricas nocturnas**: vela encendida en penumbra, luz dorada, interiores saturados (madera, lino, cerámica), sombras largas. Nada de fondo beige plano a mediodía.
-- Slots prioritarios: (a) hero nuevo desktop + móvil, (b) imagen de la sección oscura "El ritual", (c) 3 fotos de ambiente para "Elige tu tono" (hoy son packshots, ya listado en Known Issues), (d) retrato/editorial para `BrandStorySection`.
+- ⛔ **Restricción de casting: SIN ROSTROS.** Manos, siluetas, objetos e interiores solamente. Deriva de la decisión 3.0b.1.
+- Slots prioritarios: (a) hero nuevo desktop + móvil, (b) imagen de la sección oscura "El ritual", (c) 3 fotos de ambiente para "Elige tu tono" (hoy son packshots, ya listado en Known Issues), (d) 2 imágenes editoriales de materia/oficio para `BrandStorySection` (manos + macro de cera).
 - Generar en Craft Mode con `imagegen--generate_image` usando `reference_images` de los productos reales para mantener consistencia. Cargar antes la skill `media.product-imagery`.
 - ⚠️ **Las fotos de producto del catálogo (4:5, fondo claro) NO se cambian.** Son las que usan los anuncios de Meta y las que dan claridad de producto. Lo atmosférico va en las secciones editoriales.
 
 ### 3.6 Lo que NO copiamos de Sensate (decisiones explícitas)
+- ❌ **Su founder-led storytelling** (retrato de Rayni, About editorial personal): descartado por el owner el 2026-08-20. Se sustituye por historia de materia y oficio.
 - ❌ Su grid de "6 sentidos" con marquee infinito: es puro branding, no aporta a un catálogo de 9 SKUs.
 - ❌ Esconder el precio o quitar los tachados: dunaru compite por valor, no por prestigio.
 - ❌ Quitar los badges de confianza, MSI y envío gratis: son los que sostienen el 4.1% actual.
@@ -160,6 +172,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-20 — ⛔ **DECISIÓN: dunaru NO será founder-led.** La owner no quiere aparecer. `BrandStorySection` se reencuadra como historia de materia y oficio (manos, macro de cera, taller, casa), sin rostros. Fase 2.8 desbloqueada. Las 2 imágenes sueltas del hilo quedan descartadas.
 - 2026-08-20 — 📐 **PLAN DE REDISEÑO "HIGH END" (Sensate)**. Analizada home + PDP de sensatehomes.com. Plan por 4 fases con regla maestra "elevar marca, no tocar conversión". Sin implementar.
 - 2026-08-07 — 🔍 **AUDITORÍA PDP `perlas-originales-500-g`** (sin cambios). 8 hallazgos + análisis de velavita.cl y fotoncandle.com. Detalle completo en `.lovivo/cro-log.md`.
 - 2026-08-07 — ✅ **AUDITORÍA DE LANDING MÓVIL**: 13 secciones → 9. Scroll móvil ≈ 40% más corto.
@@ -187,8 +200,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🟡 `/pdp-vaso-decor.webp` quedó huérfana.
 - 🔴 **FALTA: video demo del mecanismo** (lo genera el user).
 - 🟡 Los `steps` de `kit-vaso-de-concreto` siguen usando `PLACEHOLDER`.
-- 🆕 2026-08-20 — **FALTAN las imágenes atmosféricas nocturnas de la Fase 4** (hero nuevo, sección "El ritual", 3 tonos de ambiente, retrato de marca). Sin ellas el rediseño rinde la mitad.
-- 🆕 2026-08-20 — Hay 2 uploads del owner sin identificar en el hilo (`1786132713652-czg3jwwtcrv.webp`, `1786129807292-5eb2uq5pl0m.webp`). Confirmar con él qué son antes de usarlas.
+- 🆕 2026-08-20 — **FALTAN las imágenes atmosféricas nocturnas de la Fase 4** (hero nuevo, sección "El ritual", 3 tonos de ambiente, 2 editoriales de materia/oficio). **SIN ROSTROS.** Sin ellas el rediseño rinde la mitad.
+- ⛔ 2026-08-20 — Las imágenes `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp` fueron **DESCARTADAS por el owner**. No usarlas ni volver a preguntar por ellas.
 
 ## 6. Known Issues
 - 2026-08-20 — 🟠 **Riesgo del rediseño high end**: quitar cajas, badges y bajar densidad puede reducir el ATC móvil (hoy 4.1%). Mitigación en 3.0 y 3.7.
@@ -209,15 +222,15 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview (`Failed to send a request to the Edge Function`).
 
 ## 7. Pending / Future Sessions
-- [ALTA] 🆕 Ejecutar FASE 1 del rediseño high end (tokens, radius 0, lockups, reveal on scroll). Es la base de todo.
-- [ALTA] 🆕 Preguntar al owner: ¿quiere aparecer como fundadora en `BrandStorySection` (modelo Sensate)? Bloquea la Fase 2.8.
 - [ALTA] 🆕 Capturar baseline de PostHog ANTES de tocar nada (ATC móvil, scroll depth, tiempo en página).
+- [ALTA] 🆕 Ejecutar FASE 1 del rediseño high end (tokens, radius 0, lockups, reveal on scroll). Es la base de todo.
+- [ALTA] 🆕 Ejecutar FASE 2 (home). `BrandStorySection` con variante materia/oficio, sin rostros.
 - [ALTA] Ejecutar P0 de la PDP de perlas (renombrar sin "Recarga", foto #1 = resultado, bloque "¿te sirve tu recipiente?", tiers como "elige tus tonos"). **Combinable con la Fase 3.**
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
 - [ALTA] User: redirigir anuncios Meta al Kit Vela Rellenable · Vaso de Vidrio.
 - [ALTA] VIDEO DEMO (lo graba el user) → primer slide del carrusel de pasos.
-- [MED] 🆕 Generar el set de imágenes atmosféricas de la Fase 4.
+- [MED] 🆕 Generar el set de imágenes atmosféricas de la Fase 4 (sin rostros).
 - [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.
 - [MED] Encuesta PostHog de salida en `/pagar` y en la PDP de perlas.
 - [MED] Reseñas: pedir al owner los nombres reales de clientas antes de escalar pauta.
