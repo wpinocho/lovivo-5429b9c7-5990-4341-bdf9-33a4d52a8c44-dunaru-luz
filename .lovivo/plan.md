@@ -58,40 +58,37 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 
 ### 🖱️ ESTADOS HOVER (regla de marca, desde 2026-08-20, ajustada 2026-08-20 x2)
 - **Botón `default` (CTA principal "Comprar ahora", en TODAS las PDP vía `Button`)**: reposo `bg-[hsl(var(--dunaru-oliva-cta))]` + `text-dunaru-marfil` (verde oliva vivo, texto BEIGE/marfil — ⚠️ NO periwinkle, se probó y se revirtió 2026-08-20); hover pasa a Burnt Terracotta (`bg-secondary` + `text-secondary-foreground`). Vive en `src/components/ui/button.tsx`.
-- **Botón "Agregar al carrito" de la PDP** (`ProductPageUI.tsx`, variant `outline`, h-11, debajo del CTA principal): tiene className custom que SOBRESCRIBE el hover terracota genérico del outline. Hover propio = **periwinkle** (`hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]`). Esto es una EXCEPCIÓN puntual pedida por el owner, no el patrón general de `outline`.
-- Otras variantes de `ui/button.tsx` (sin className custom que las tape): `outline` borde+texto terracota + fill 10% al hover · `secondary` terracota/85 al hover · `ghost` fill terracota 10% + texto terracota al hover · `link` texto terracota al hover.
-  ⚠️ Cualquier CTA con `bg-*`/`hover:*` hardcodeado en className NO hereda esto — hay que revisarlo caso por caso (ver "Agregar al carrito" arriba).
+- **Botón "Agregar al carrito" de la PDP** (`ProductPageUI.tsx`, variant `outline`, h-11, debajo del CTA principal): className custom que SOBRESCRIBE el hover terracota genérico. Hover propio = **periwinkle**. Excepción puntual del owner.
+- Otras variantes de `ui/button.tsx`: `outline` borde+texto terracota + fill 10% al hover · `secondary` terracota/85 · `ghost` fill terracota 10% + texto terracota · `link` texto terracota.
+  ⚠️ Cualquier CTA con `bg-*`/`hover:*` hardcodeado en className NO hereda esto.
 - **PATRÓN OFICIAL "INVERSIÓN MARFIL ↔ TERRACOTA"** (botones claros sobre fondo oscuro O CTA secundario en tarjeta):
   reposo `bg-dunaru-marfil` + `text-dunaru-terracota`; hover `bg-dunaru-terracota` + `text-dunaru-marfil`. **Sin borde.**
-  Usado en: CTA del hero (`IndexUI`), botón "Agregar" de `ProductCardUI` (tarjetas de grid, NO es el mismo botón que "Agregar al carrito" de la PDP).
+  Usado en: CTA del hero (`IndexUI`), botón "Agregar" de `ProductCardUI`.
+- **PATRÓN "OUTLINE TERRACOTA"** (CTA secundario sobre fondo claro, desde 2026-08-20):
+  `rounded-none border-dunaru-terracota/45 bg-transparent text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil hover:border-dunaru-terracota` + uppercase `tracking-[0.12em] text-xs`.
+  Usado en: footer del carrusel de pasos ("Ver el kit completo"), flechas del carrusel.
 - **SELECTOR DE VARIANTE (pill) — patrón oficial, sin borde**:
   activo `bg-dunaru-onix` + `text-dunaru-marfil`; reposo `bg-dunaru-arena/70` + `text-dunaru-carbon`;
   hover `bg-dunaru-periwinkle/25` + `text-[hsl(var(--dunaru-periwinkle-deep))]`.
-  Swatch de color: seleccionado = `ring-2 ring-offset-2 ring-dunaru-terracota` (nunca borde negro).
-  ⚠️ **`ProductPageUI.tsx` (selector de opciones ~línea 675) TODAVÍA usa `bg-foreground`/`border-foreground` hardcodeado, NO este patrón.** Pendiente Fase 3.
-- **NAVEGACIÓN → MUTED PERIWINKLE.** Clases en `index.css` (`@layer components`):
-  | Clase | Uso |
-  |---|---|
-  | `.nav-link` | header desktop; color periwinkle-deep + subrayado 1px que crece de izq a der. Soporta `.group:hover` para el dropdown |
-  | `.nav-link-mobile` | menú móvil; solo color, sin subrayado |
-  | `.nav-link-dark` | footer sobre olivo; periwinkle claro (64%) |
-  | `.nav-item` | filas del dropdown; texto periwinkle-deep + fondo periwinkle 14% |
+  Swatch de color: seleccionado = `ring-2 ring-offset-2 ring-dunaru-terracota`.
+  ⚠️ **`ProductPageUI.tsx` (~línea 675) TODAVÍA usa `bg-foreground`/`border-foreground`.** Pendiente Fase 3.
+- **NAVEGACIÓN → MUTED PERIWINKLE.** Clases en `index.css` (`@layer components`): `.nav-link`, `.nav-link-mobile`, `.nav-link-dark`, `.nav-item`.
 - ⚠️ `.nav-link` usa `position: relative` → vive en `@layer components`. No sacarla de ahí.
-- 🎯 Reparto de roles: **oliva/periwinkle = selección, navegación y CTA principal** · **terracota/marfil = hover de CTA y acción secundaria** · EXCEPCIÓN puntual: hover de "Agregar al carrito" en periwinkle (pedido explícito del owner).
+- 🎯 Reparto de roles: **oliva/periwinkle = selección, navegación y CTA principal** · **terracota/marfil = hover de CTA y acción secundaria** · **terracota + periwinkle juntos = acentos editoriales de sección** (numerales, reglas, dots) · EXCEPCIÓN: hover de "Agregar al carrito" en periwinkle.
 
 ### 🪨 MATERIALES / TEXTURAS (index.css, `@layer components`)
-Todas pintan un `::before` con `z-index:-1` dentro de un stacking context aislado, así nunca tapan el contenido.
+Todas pintan un `::before` con `z-index:-1` dentro de un stacking context aislado.
 | Clase | Material | Uso |
 |---|---|---|
 | `.texture-grain` | grano de papel sutil | cualquier sección clara neutra |
-| `.texture-arena` | cera en arena, granular fina | textura protagonista: "Elige tu vela", reseñas |
-| `.texture-travertino` | piedra porosa, veteada | superficies base: tira de beneficios, historia de marca |
+| `.texture-arena` | cera en arena, granular fina | "Elige tu vela", reseñas |
+| `.texture-travertino` | piedra porosa, veteada | tira de beneficios, historia de marca |
 | `.texture-terracota` | cerámica mineral mate | insignias y bloques terracota |
-| `.texture-ambar` | vidrio ámbar (blend `screen`) | **solo sobre fondos oscuros**: hero, RitualSection, newsletter |
-| `.texture-metal` | metal cepillado satinado | ribetes, badges, detalles pequeños |
+| `.texture-ambar` | vidrio ámbar (blend `screen`) | **solo sobre fondos oscuros** |
+| `.texture-metal` | metal cepillado satinado | ribetes, badges, detalles |
 | `.hairline-metal` | divisor con reflejo de latón | separadores en secciones oscuras |
 - El `<body>` lleva el grano de papel base (`--grain`, SVG feTurbulence inline, `background-attachment: fixed`).
-- ⚠️ Las clases `texture-*` fuerzan `position: relative`. Están en `@layer components` para que `absolute`/`fixed` sigan ganando. **No sacarlas de esa capa.**
+- ⚠️ Las clases `texture-*` fuerzan `position: relative`. **No sacarlas de `@layer components`.**
 
 ### Utilidades editoriales
 - `.lockup` → serif + versalitas + `tracking .14em`. `.lockup em` → itálica minúscula.
@@ -100,32 +97,41 @@ Todas pintan un `::before` con `z-index:-1` dentro de un stacking context aislad
 - `.full-bleed` → ⚠️ NO usar dentro de `layout="full-width"`.
 - ⚠️ `.hairline` / `.hairline-dark` / `.hairline-metal` son DIVISORES (`height: 1px`), NO bordes.
 
+### 🔢 CARRUSEL DE PASOS (`ProductStepsCarousel.tsx`) — patrón terracota + periwinkle (2026-08-20)
+Componente COMPARTIDO: home (`IndexUI`, `bg-background`, con eyebrow y footer CTA) + todas las PDP (`ProductStorySections`, `bg-dunaru-arena`, sin eyebrow). Un solo archivo = cambio replicado en todo el sitio.
+- Eyebrow en `text-dunaru-terracota` (antes champagne).
+- Bajo el título: ornamento centrado = línea terracota/50 + rombo periwinkle + línea terracota/50.
+- Numeral del paso: **cuadrado** (sin radius) `bg-dunaru-terracota` + `text-dunaru-marfil`, anclado a la esquina; al hover del grupo pasa a `--dunaru-periwinkle-deep`.
+- Imagen: sin radius, fondo `dunaru-marfil`, zoom 1.04 en 700ms al hover.
+- Título del paso: `font-display` precedido de una regla periwinkle de 20px que crece a 32px y se vuelve terracota al hover.
+- Dots: activo `w-8 bg-dunaru-terracota`; inactivo `w-4 bg-dunaru-periwinkle/45` con hover periwinkle sólido.
+- Flechas: patrón "outline terracota".
+
 ### Reglas de layout existentes
 - **TOP BAR** (`EcommerceTemplate.tsx`): barra fija, 2 items. NO se replica en el checkout a propósito.
 - **HEADER OVERLAY**: prop `headerOverlay` en `EcommerceTemplate`/`PageTemplate`. Solo `IndexUI` lo usa.
-- **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes · 4 cantidad · 5 add-ons/`ProductQuantityTiers` · 6 `<DeliveryEstimate />` · 7 CTA `h-12` con precio (`Button` default = oliva/marfil) · 8 CTA outline `h-11` "Agregar al carrito" (hover periwinkle, excepción) · 9 micro-línea `Lock` · 10 badges · 11 `<PdpSocialProof />` · 12 WhatsApp · 13 acordeones cerrados.
+- **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes · 4 cantidad · 5 add-ons/`ProductQuantityTiers` · 6 `<DeliveryEstimate />` · 7 CTA `h-12` con precio · 8 CTA outline `h-11` "Agregar al carrito" · 9 micro-línea `Lock` · 10 badges · 11 `<PdpSocialProof />` · 12 WhatsApp · 13 acordeones cerrados.
 - ⚠️ `TIER_SELECTOR_SLUGS` (solo `perlas-originales-500-g`) reemplaza `ProductAddOns` → esa PDP no tiene cross-sell.
 - `optionLabel(name, slug)` renombra "Color" → "Color de la cera", excepto en `CONTAINER_ONLY_SLUGS`.
 - `PdpTrust.tsx` exporta `getDeliveryRange()`, `DeliveryEstimate`, `PdpSocialProof({ slug?, linkable? })`.
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → `ProductStepsCarousel` → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre.
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
-- `ProductStepsCarousel.tsx` compartido PDP + landing. `RitualSection.tsx` reutilizable (home + cierre de PDP).
-- **`ProductCardUI.tsx`** (tarjeta de TODAS las grids): sin borde de card, imagen sobre `bg-dunaru-arena/40`, título `font-display`, estrellas en `dunaru-ambar`, pills y CTA según los patrones de hover de arriba.
+- **`ProductCardUI.tsx`**: sin borde de card, imagen sobre `bg-dunaru-arena/40`, título `font-display`, estrellas en `dunaru-ambar`.
 
 ### 🏠 LANDING (`src/pages/ui/IndexUI.tsx`) — orden oficial
-1. Hero (`min-h-screen`, tabaco + `texture-ambar`) · 2. Beneficios (`texture-travertino`) · 3. Cómo funciona · 4. **Elige tu vela** (`SHOP_CARDS`, 6 tarjetas 4:5 sin caja, `texture-arena`) · 5. `<RitualSection />` · 6. `<Reviews />` (`texture-arena`) · 7. Elige tu tono (`texture-grain`) · 8. `<CasaRealSection />` · 9. `<BrandStorySection />` (`texture-travertino`) · 10. FAQ (`texture-grain`) · 11. Newsletter tabaco (`texture-ambar`) + WhatsApp.
+1. Hero (`min-h-screen`, tabaco + `texture-ambar`) · 2. Beneficios (`texture-travertino`) · 3. Cómo funciona (`ProductStepsCarousel`) · 4. **Elige tu vela** (`SHOP_CARDS`, `texture-arena`) · 5. `<RitualSection />` · 6. `<Reviews />` · 7. Elige tu tono · 8. `<CasaRealSection />` · 9. `<BrandStorySection />` · 10. FAQ · 11. Newsletter tabaco + WhatsApp.
 - ⚠️ Prohibido duplicar SKUs en varias secciones. Precios y títulos SIEMPRE dinámicos vía `buildCatalog(logic.products)`.
 
 ### 🧾 CHECKOUT (`src/pages/ui/CheckoutUI.tsx`) — reglas fijas
 - Header minimal, solo logo. Sin nav, sin top bar promocional.
 - Móvil: `MobileOrderSummary` (CERRADO) → `ShippingPromise` → `PdpSocialProof linkable={false}` → SSL → PayPal → wallets → email → dirección → aviso MSI → tarjeta → estrellas → CTA → badges + WhatsApp.
-- `CouponSection` colapsado y gris al final. 🔒 **El checkout NO se toca en el rediseño: solo hereda tokens** (incluye el nuevo verde oliva/marfil del botón `default`, si el checkout usa esa variante en su CTA principal — pendiente auditar).
+- 🔒 **El checkout NO se toca en el rediseño: solo hereda tokens.**
 
 ---
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ Fase 2.5 (paleta + texturas) · ✅ Fase 2.6 (estados hover + tarjeta de producto) · ✅ Fase 2.7 (CTA "Comprar ahora" oliva/marfil, ajustado 2 veces) · ✅ Fase 2.8 (hover periwinkle en "Agregar al carrito"). ⏭️ Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ Fase 2.5 · ✅ Fase 2.6 · ✅ Fase 2.7 · ✅ Fase 2.8 · ✅ Fase 2.9 (carrusel de pasos terracota+periwinkle). ⏭️ Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
@@ -133,64 +139,52 @@ Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 - 🔒 No tocar: buy box, checkout, `DeliveryEstimate`, `PdpSocialProof`, avisos MSI, envío gratis, WhatsApp.
 - Si un cambio estético reduce claridad de precio, disponibilidad o envío → **no se hace**.
 
-### 3.1 ✅ FASE 1 — Sistema de diseño base (2026-08-20)
-Radius 0 + `rounded-field`, tokens oscuros, `.lockup`, `.eyebrow`, `.h-editorial`, `.transition-editorial`, `Reveal`, `.full-bleed`, `.hairline`.
+### 3.1–3.6 ✅ Completadas (2026-08-20)
+Fase 1 sistema base · Fase 2 home · Fase 2.5 paleta + texturas · Fase 2.6 hovers + `ProductCardUI` · Fase 2.7 CTA oliva/marfil · Fase 2.8 hover periwinkle en "Agregar al carrito".
 
-### 3.2 ✅ FASE 2 — Home (2026-08-20)
-Hero `min-h-screen` con lockup y CTA a `kit-vaso-de-vidrio`; beneficios sin iconos; tarjetas sin caja; `RitualSection`; `CasaRealSection` a sangre; `BrandStorySection` como materia y oficio; newsletter en tabaco.
-
-### 3.3 ✅ FASE 2.5 — Paleta 2026 + materiales (2026-08-20)
-Ver sección 2. Paleta terracota/olivo/saffron + 6 clases de textura + grano global. PDP y checkout heredan la paleta automáticamente; **todavía NO tienen texturas aplicadas**.
-
-### 3.4 ✅ FASE 2.6 — Estados hover + tarjeta de producto (2026-08-20)
-Terracota en todos los hovers de botón (`ui/button.tsx`), periwinkle en toda la navegación. CTA claro del hero con inversión marfil ↔ terracota. `ProductCardUI` migrada a la paleta: pills oliva/periwinkle, CTA marfil ↔ terracota, cero bordes negros.
-
-### 3.5 ✅ FASE 2.7 — CTA "Comprar ahora" oliva (2026-08-20, 2 iteraciones)
-1ª iteración: token `--dunaru-oliva-cta` (75 24% 25%) + texto periwinkle. El owner probó esa versión y NO le gustó.
-2ª iteración (actual): se mantiene el mismo verde oliva (`--dunaru-oliva-cta`), pero el texto cambia a **`text-dunaru-marfil`** (beige). Hover sigue igual (Burnt Terracotta). `--primary` (top bar/footer) NO se tocó.
-
-### 3.6 ✅ FASE 2.8 — Hover periwinkle en "Agregar al carrito" (2026-08-20)
-El botón "Agregar al carrito" de la PDP (`ProductPageUI.tsx`, variant `outline`, h-11) tenía un hover custom gris (`hover:bg-muted/60`) que tapaba el hover terracota genérico del design system. A pedido del owner, se cambió a hover **periwinkle**: `hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]`. Es una excepción puntual, no se tocó la variante `outline` genérica de `ui/button.tsx` (sigue en terracota para el resto de usos).
+### 3.6b ✅ FASE 2.9 — Carrusel de pasos (2026-08-20)
+`ProductStepsCarousel.tsx` migrado a acentos terracota + periwinkle (ver sección 2). Footer CTA de la home ("Ver el kit completo") al patrón "outline terracota". Al ser componente compartido, el cambio se replica en home y en TODAS las PDP.
 
 ### 3.7 FASE 3 — PDP — SIGUIENTE
 🔒 El orden del buy box NO cambia. Solo tratamiento visual + dos añadidos.
 1. Galería a sangre en móvil, sin borde ni radius.
 2. Título a lockup; precio en `font-body`, discreto.
 3. Acordeones con lenguaje de ritual, cerrados: `El ritual` · `Cuidado y seguridad` · `Materiales y medidas` · `Atención a clientes`.
-4. **NUEVO "Combina bien con"**: `ProductAddOns` como fila editorial debajo del buy box → resuelve la falta de cross-sell en `perlas-originales-500-g`.
+4. **NUEVO "Combina bien con"**: `ProductAddOns` debajo del buy box → resuelve la falta de cross-sell en `perlas-originales-500-g`.
 5. `<RitualSection />` al cierre de la PDP.
-6. Barrer eyebrows viejos → `.eyebrow`; aplicar `texture-arena` / `texture-travertino` a las secciones de historia.
-7. **Migrar el selector de variantes de `ProductPageUI.tsx` (~línea 675) al patrón oficial de pills** (hoy usa `bg-foreground`/`border-foreground` hardcodeado en negro).
+6. Barrer eyebrows viejos → `.eyebrow`; aplicar texturas a las secciones de historia.
+7. **Migrar el selector de variantes de `ProductPageUI.tsx` (~línea 675) al patrón oficial de pills**.
+8. Migrar `ProductStorySections.tsx` (garantías, bloques, tabla comparativa) de `dunaru-champagne` a terracota/periwinkle, igual que el carrusel.
 
 ### 3.8 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
-Set de **imágenes atmosféricas nocturnas**: penumbra, luz dorada, interiores saturados (madera, lino, cerámica, travertino, vidrio ámbar, metal cepillado), sombras largas. ⛔ **SIN ROSTROS.**
+Set de **imágenes atmosféricas nocturnas**: penumbra, luz dorada, interiores saturados, sombras largas. ⛔ **SIN ROSTROS.**
 - Slots: (a) hero desktop + móvil, (b) fondo de `RitualSection`, (c) 3 ambientes para "Elige tu tono", (d) imagen de `BrandStorySection`.
 - Generar con `imagegen--generate_image` + `reference_images` de productos reales. Cargar antes `media.product-imagery`.
 - ⚠️ Las fotos de catálogo (4:5, fondo claro) NO se cambian: las usan los anuncios de Meta.
 
 ### 3.9 Lo que NO copiamos de Sensate
-Founder-led · marquee de "6 sentidos" · esconder precios o quitar tachados · quitar badges de confianza/MSI/envío gratis · su densidad de texto casi nula en la PDP · video en loop en el hero (pendiente del video del owner).
+Founder-led · marquee de "6 sentidos" · esconder precios o quitar tachados · quitar badges de confianza/MSI/envío gratis · densidad de texto casi nula en la PDP.
 
 ### 3.10 Medición
-Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`: baseline de `viewcontent → addtocart` móvil, scroll depth y tiempo en página. Si el ATC móvil cae por debajo de 3.5%, revertir badges y densidad primero.
+Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`. Si el ATC móvil cae por debajo de 3.5%, revertir badges y densidad primero.
 
 ---
 
 ## 4. Recent Changes
-- 2026-08-20 — 🟢 **"Agregar al carrito" (PDP) ahora tiene hover periwinkle** (excepción puntual pedida por el owner). Antes tenía un hover gris custom (`hover:bg-muted/60`) que tapaba el terracota genérico del design system. Archivo: `ProductPageUI.tsx`.
-- 2026-08-20 — 🟢 **CTA "Comprar ahora" — texto cambiado de periwinkle a BEIGE/marfil** (`text-dunaru-marfil`). Se mantiene el mismo fondo verde oliva vivo (`--dunaru-oliva-cta`) y el hover terracota. El owner probó periwinkle primero y pidió revertir solo el color de texto. Afecta a TODAS las PDP vía `ui/button.tsx` variant `default`.
-- 2026-08-20 — 🟢 **CTA "Comprar ahora" ya no se ve negro**: nuevo token `--dunaru-oliva-cta` (75 24% 25%) como bg del botón `default` en `ui/button.tsx`. Afecta a TODAS las PDP (componente compartido) y a otros CTA principales del sitio (cart, checkout, thank you) que usan la misma variante. `--primary` (top bar/footer) no se tocó.
-- 2026-08-20 — 🎴 **`ProductCardUI` a la paleta 2026** (tarjeta usada en TODAS las grids). Fuera el `border border-gray-200` de la card, el `bg-gray-100` de la imagen (ahora `dunaru-arena/40`), los negros y los grises de Tailwind. Pills de variante: activo olivo/marfil, hover periwinkle (25% fondo + periwinkle-deep en texto), **sin borde**. Swatch seleccionado con `ring` terracota en vez de borde negro. Botón "Agregar": `variant="ghost"` + inversión marfil ↔ terracota, sin borde. Título a `font-display`, estrellas a `dunaru-ambar`.
-- 2026-08-20 — 🖱️ **CTA del hero con inversión de color**. `IndexUI.tsx` "Comprar ahora": reposo `bg-dunaru-marfil` + `text-dunaru-terracota`, hover invertido. Nuevo patrón oficial para botones claros sobre fondo oscuro.
-- 2026-08-20 — 🖱️ **ESTADOS HOVER DE MARCA**. `ui/button.tsx`: las 5 variantes van a Burnt Terracotta al hover. `index.css`: `.nav-link`, `.nav-link-mobile`, `.nav-link-dark`, `.nav-item` con Muted Periwinkle + subrayado animado; nuevo token `--dunaru-periwinkle-deep` (230 27% 45%).
-- 2026-08-20 — 🎨 **PALETA 2026 + SISTEMA DE MATERIALES**. Warm Ivory / Travertino / Burnt Terracotta / Deep Olive / Saffron Gold / Muted Periwinkle. 6 clases `texture-*` + `.hairline-metal` + grano global.
+- 2026-08-20 — 🔢 **Carrusel "Crea tu vela en 4 pasos" a terracota + periwinkle** (`ProductStepsCarousel.tsx`, compartido home + todas las PDP): eyebrow terracota, ornamento terracota/rombo periwinkle bajo el título, numeral cuadrado terracota→periwinkle al hover, imagen sin radius con zoom lento, regla periwinkle antes del título del paso, dots terracota/periwinkle, flechas outline terracota. En `IndexUI.tsx` el CTA "Ver el kit completo" pasó al patrón outline terracota.
+- 2026-08-20 — 🟢 **"Agregar al carrito" (PDP) con hover periwinkle** (excepción puntual del owner).
+- 2026-08-20 — 🟢 **CTA "Comprar ahora" — texto BEIGE/marfil** sobre verde oliva (`--dunaru-oliva-cta`), hover terracota.
+- 2026-08-20 — 🎴 **`ProductCardUI` a la paleta 2026** (pills oliva/periwinkle, CTA marfil ↔ terracota, sin bordes).
+- 2026-08-20 — 🖱️ **CTA del hero con inversión de color** marfil ↔ terracota.
+- 2026-08-20 — 🖱️ **ESTADOS HOVER DE MARCA** en `ui/button.tsx` + navegación periwinkle en `index.css`.
+- 2026-08-20 — 🎨 **PALETA 2026 + SISTEMA DE MATERIALES** (6 clases `texture-*` + grano global).
 - 2026-08-20 — ⚠️ **Aprendizaje**: `dunaru-champagne` pasó a latón oscuro, ilegible sobre fondos oscuros → usar `dunaru-ambar`.
 - 2026-08-20 — ⚠️ **Aprendizaje**: las clases con `position: relative` deben ir en `@layer components`.
-- 2026-08-20 — ✅ **FASE 2 (home)**: hero lockup `min-h-screen`, beneficios sin iconos, tarjetas sin caja, `RitualSection`, `CasaRealSection` a sangre, `BrandStorySection` reescrita, newsletter en tabaco.
-- 2026-08-20 — 🐞 `.hairline` es `height:1px`, NO un borde. `.full-bleed` sobra dentro de `layout="full-width"`.
-- 2026-08-20 — ✅ **FASE 1**: `--radius: 0rem`, tokens oscuros, utilidades editoriales, `useReveal.ts`, `Reveal.tsx`.
+- 2026-08-20 — ✅ **FASE 2 (home)** completa.
+- 2026-08-20 — 🐞 `.hairline` es `height:1px`, NO un borde.
+- 2026-08-20 — ✅ **FASE 1**: `--radius: 0rem`, tokens oscuros, utilidades editoriales.
 - 2026-08-20 — ⛔ **DECISIÓN: dunaru NO será founder-led.**
-- 2026-08-07 — 🔍 Auditoría PDP `perlas-originales-500-g` (8 hallazgos, ver `.lovivo/cro-log.md`).
+- 2026-08-07 — 🔍 Auditoría PDP `perlas-originales-500-g` (ver `.lovivo/cro-log.md`).
 - 2026-08-07 — ✅ Auditoría de landing móvil: 13 secciones → 9.
 
 ## 5. Image Inventory
@@ -205,19 +199,19 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - Bloque aroma → `1785521743156-7ucg5c0kwb7.webp`. 🟡 `/pdp-vaso-decor.webp` huérfana.
 - 🔴 **FALTA: video demo del mecanismo** (lo genera el user).
 - 🟡 Los `steps` de `kit-vaso-de-concreto` siguen con `PLACEHOLDER`.
-- 🔴 **FALTAN las imágenes atmosféricas nocturnas de la Fase 4** (sin rostros). Bloquean el 70% del efecto.
+- 🔴 **FALTAN las imágenes atmosféricas nocturnas de la Fase 4** (sin rostros).
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-20 — 🟠 **La PDP sigue con hovers y colores hardcodeados** (negros, grises Tailwind) en selectores de variante (`ProductPageUI.tsx` ~línea 675: `bg-foreground`/`border-foreground`) y algunos CTAs. Aplicar los patrones de la sección 2 en Fase 3.
-- 2026-08-20 — 🟠 **La paleta nueva no se ha auditado en carrito ni checkout.** Heredan tokens (incluyendo el nuevo oliva/marfil del botón `default`), pero falta revisar contraste real y los verdes del `badge-msi`.
-- 2026-08-20 — 🟡 **Texturas aún no aplicadas en PDP ni en `CasaRealSection`.** Pendiente para la Fase 3.
+- 2026-08-20 — 🟠 **`ProductStorySections.tsx` sigue en `dunaru-champagne`** (tira de garantías, checks de bullets, tabla comparativa). Debe alinearse a terracota/periwinkle como el carrusel → Fase 3 punto 8.
+- 2026-08-20 — 🟠 **La PDP sigue con hovers y colores hardcodeados** (selector de variantes `ProductPageUI.tsx` ~línea 675: `bg-foreground`/`border-foreground`).
+- 2026-08-20 — 🟠 **La paleta nueva no se ha auditado en carrito ni checkout.**
+- 2026-08-20 — 🟡 **Texturas aún no aplicadas en PDP ni en `CasaRealSection`.**
 - 2026-08-20 — 🟡 Los hex de `TONOS` en la landing (`#F2EBDD`, `#E2CCA3`, `#1F1D1B`) son colores REALES de la cera: **no se cambian**.
-- 2026-08-20 — 🟡 Barrido de radius pendiente en la PDP (`rounded-full`, `rounded-[Npx]`, `rounded-xl/2xl`).
-- 2026-08-20 — 🟠 Riesgo del rediseño: quitar cajas y bajar densidad puede reducir el ATC móvil (hoy 4.1%). **Home desplegada sin baseline capturado.**
-- 2026-08-20 — 🟡 Eyebrows viejos aún vivos en `ProductStepsCarousel`, `Reviews` y la PDP.
+- 2026-08-20 — 🟡 Barrido de radius pendiente en la PDP.
+- 2026-08-20 — 🟠 Riesgo del rediseño: bajar densidad puede reducir el ATC móvil (hoy 4.1%). **Sin baseline capturado.**
 - 2026-08-07 — 🔴 `perlas-originales-500-g` se llama "Recarga" y recibe el grueso del tráfico frío de Meta.
-- 2026-08-07 — 🟠 Sin cross-sell en `perlas-originales-500-g` → se resuelve en 3.7 punto 4.
+- 2026-08-07 — 🟠 Sin cross-sell en `perlas-originales-500-g`.
 - 2026-08-07 — 🟠 Escalera de precio por gramo rota: Dúo 1 kg ($1.10/g) más caro que Reserva 1 kg ($0.80/g).
 - 2026-08-07 — 🟡 `getReviewStats()` es global (4.9/15), no por SKU.
 - 2026-08-07 — 🟡 Las fotos de `TONOS` son packshots, no escenas de ambiente.
@@ -228,16 +222,16 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-07 — 🟡 `PDP_BENEFITS` solo cubre 6 slugs.
 - 2026-07-31 — 🟠 Footer de `EcommerceTemplate.tsx`: 3 nombres de producto hardcodeados.
 - 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price`. Workaround: Dashboard manual.
-- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos o vacíos incluso para strings triviales (reconfirmado 2026-08-20). **Verificar SIEMPRE con `lov-view`.**
+- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos o vacíos incluso para strings triviales (reconfirmado 2026-08-20, 3 veces seguidas). **Verificar SIEMPRE con `lov-view`.**
 - 2026-07-31 — 🟡 Autocapture de clics parece desactivado en PostHog.
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas y **migrar variantes/CTAs a los patrones de hover**.
-- [ALTA] **Auditar la paleta nueva en carrito y checkout** (contraste + `badge-msi` + verificar si el CTA principal ahí también quedó oliva/marfil y si se ve bien).
+- [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas, migrar variantes/CTAs y **`ProductStorySections` a terracota/periwinkle**.
+- [ALTA] **Auditar la paleta nueva en carrito y checkout**.
 - [ALTA] **Ejecutar FASE 4 (fotos atmosféricas nocturnas)**, sin rostros. 4 slots esperando imagen.
 - [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página).
-- [ALTA] P0 de la PDP de perlas (renombrar sin "Recarga", foto #1 = resultado, bloque "¿te sirve tu recipiente?", tiers como "elige tus tonos"). Combinable con la Fase 3.
+- [ALTA] P0 de la PDP de perlas (renombrar sin "Recarga", foto #1 = resultado, bloque "¿te sirve tu recipiente?", tiers como "elige tus tonos").
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
 - [ALTA] User: redirigir anuncios Meta al Kit Vela Rellenable · Vaso de Vidrio.

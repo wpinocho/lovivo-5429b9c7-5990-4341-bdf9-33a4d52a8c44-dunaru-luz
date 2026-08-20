@@ -268,7 +268,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
         background="bg-background"
         footer={
           <Link to="/productos/kit-vaso-de-vidrio">
-            <Button variant="outline" className="font-body font-medium rounded-sm border-foreground/30 hover:border-foreground text-foreground transition-colors">
+            <Button variant="outline" className="font-body font-medium uppercase tracking-[0.12em] text-xs px-8 h-11 rounded-none border-dunaru-terracota/45 bg-transparent text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil hover:border-dunaru-terracota transition-editorial">
               Ver el kit completo
             </Button>
           </Link>
