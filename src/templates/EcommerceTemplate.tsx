@@ -59,15 +59,15 @@ export const EcommerceTemplate = ({
 
   // Top bar fijo: envío gratis (objeción #1) + prueba social
   const topBar = (
-    <div className="surface-olivo font-body py-2 px-3 relative texture-grano">
+    <div className="bg-dunaru-carbon text-dunaru-marfil font-body py-2 px-3">
       <div className="flex items-center justify-center gap-2.5 sm:gap-5 text-[11px] sm:text-xs font-medium">
         <span className="flex items-center gap-1.5 whitespace-nowrap">
-          <Truck className="h-3.5 w-3.5 text-dunaru-terracota-suave shrink-0" strokeWidth={1.75} />
+          <Truck className="h-3.5 w-3.5 text-dunaru-champagne shrink-0" strokeWidth={1.75} />
           Envío gratis a todo México
         </span>
         <span className="h-3 w-px bg-dunaru-marfil/25 shrink-0" />
         <span className="flex items-center gap-1.5 whitespace-nowrap">
-          <Heart className="h-3 w-3 text-dunaru-terracota-suave fill-dunaru-terracota-suave shrink-0" />
+          <Heart className="h-3 w-3 text-dunaru-ambar fill-dunaru-ambar shrink-0" />
           <span>
             <span className="font-semibold">+200 clientes</span> felices
           </span>
@@ -83,9 +83,9 @@ export const EcommerceTemplate = ({
         className={`transition-all duration-300 ${scrolled ? 'py-3' : 'py-4'} ${
           headerOverlay
             ? scrolled || mobileMenuOpen
-              ? 'bg-background/95 backdrop-blur border-b border-dunaru-travertino/70'
+              ? 'bg-background/95 backdrop-blur border-b border-border'
               : 'bg-background/55 backdrop-blur-md'
-            : 'border-b border-dunaru-travertino/50'
+            : ''
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -105,7 +105,7 @@ export const EcommerceTemplate = ({
                   <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
                 </button>
                 <div className="absolute left-0 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 focus-within:opacity-100 focus-within:visible transition-all duration-200 z-50">
-                  <div className="min-w-[200px] rounded-xl border border-dunaru-travertino surface-nacar elev-media p-2">
+                  <div className="min-w-[200px] rounded-xl border border-border bg-background shadow-lg p-2">
                     {PRODUCT_CATEGORIES.map(({ to, label }) => (
                       <Link
                         key={to}
@@ -163,7 +163,7 @@ export const EcommerceTemplate = ({
                 >
                   <ShoppingCart className="h-5 w-5" />
                   {totalItems > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-dunaru-terracota text-dunaru-marfil text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center font-body">
+                    <span className="absolute -top-1 -right-1 bg-dunaru-champagne text-dunaru-carbon text-[10px] font-bold rounded-full h-4 w-4 flex items-center justify-center font-body">
                       {totalItems > 9 ? '9+' : totalItems}
                     </span>
                   )}
@@ -240,10 +240,9 @@ export const EcommerceTemplate = ({
   )
 
   const footer = (
-    <div className={`surface-olivo relative texture-grano ${footerClassName ?? ''}`}>
-      <div className="h-px w-full surface-laton opacity-60" />
+    <div className={`bg-dunaru-carbon text-dunaru-marfil ${footerClassName ?? ''}`}>
       {/* MSI bar */}
-      <div className="border-b border-dunaru-marfil/15 py-4 px-4">
+      <div className="border-b border-white/10 py-4 px-4">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-center gap-4 text-sm font-body opacity-80">
           <span>Pagos 100% seguros</span>
           <span className="opacity-40">·</span>
@@ -258,7 +257,6 @@ export const EcommerceTemplate = ({
           {/* Brand */}
           <div className="md:col-span-1">
             <span className="font-display text-2xl tracking-wide">dunaru</span>
-            <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-dunaru-terracota-suave">Candle sand &amp; wax pearls</p>
             <p className="mt-3 text-sm text-dunaru-marfil/60 leading-relaxed font-body">
               Luz de diseño que cambia contigo. Velas perladas rellenables, hechas para el hogar mexicano contemporáneo.
             </p>
@@ -269,7 +267,7 @@ export const EcommerceTemplate = ({
 
           {/* Comprar */}
           <div>
-            <h4 className="font-body font-semibold text-xs uppercase tracking-[0.22em] text-dunaru-terracota-suave mb-4">Comprar</h4>
+            <h4 className="font-body font-semibold text-xs uppercase tracking-widest text-dunaru-marfil/50 mb-4">Comprar</h4>
             <div className="space-y-2 text-sm font-body">
               {[
                 { to: '/productos/perlas-originales-500-g', label: 'Perlas Originales' },
@@ -286,7 +284,7 @@ export const EcommerceTemplate = ({
 
           {/* Ayuda */}
           <div>
-            <h4 className="font-body font-semibold text-xs uppercase tracking-[0.22em] text-dunaru-terracota-suave mb-4">Ayuda</h4>
+            <h4 className="font-body font-semibold text-xs uppercase tracking-widest text-dunaru-marfil/50 mb-4">Ayuda</h4>
             <div className="space-y-2 text-sm font-body">
               {[
                 { to: '/orders/track', label: 'Rastrear pedido' },
@@ -305,17 +303,17 @@ export const EcommerceTemplate = ({
 
           {/* Contacto */}
           <div>
-            <h4 className="font-body font-semibold text-xs uppercase tracking-[0.22em] text-dunaru-terracota-suave mb-4">Contacto</h4>
+            <h4 className="font-body font-semibold text-xs uppercase tracking-widest text-dunaru-marfil/50 mb-4">Contacto</h4>
             <a
               href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 text-sm font-body text-dunaru-marfil/80 hover:text-dunaru-marfil transition-colors"
             >
-              <MessageCircle className="h-4 w-4 text-dunaru-terracota-suave" strokeWidth={1.75} />
+              <MessageCircle className="h-4 w-4 text-dunaru-champagne" strokeWidth={1.75} />
               <span>
                 ¿Tienes dudas?{" "}
-                <span className="font-medium text-dunaru-marfil underline underline-offset-4 decoration-dunaru-terracota-suave">
+                <span className="font-medium text-dunaru-marfil underline underline-offset-4 decoration-dunaru-champagne">
                   Escríbenos por WhatsApp
                 </span>
               </span>
@@ -324,7 +322,7 @@ export const EcommerceTemplate = ({
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-dunaru-marfil/15 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-body text-dunaru-marfil/45">
+        <div className="mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs font-body text-dunaru-marfil/40">
           <p>© 2025 dunaru. Todos los derechos reservados.</p>
           <p>Marca mexicana · Ciudad de México</p>
         </div>

@@ -33,10 +33,10 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
   return (
     <HeadlessProductCard product={product}>
       {(logic) => (
-        <Card className="surface-nacar border border-dunaru-travertino elev-suave transition-all hover:border-dunaru-terracota/60 hover:shadow-lg">
+        <Card className="bg-white border border-gray-200">
           <CardContent className="p-4">
             <Link to={`/productos/${logic.product.slug}`} className="block">
-              <div className="aspect-square bg-dunaru-arena rounded-lg mb-3 overflow-hidden relative group" style={{ aspectRatio: '1/1' }}>
+              <div className="aspect-square bg-gray-100 rounded-md mb-3 overflow-hidden relative group" style={{ aspectRatio: '1/1' }}>
                 {(logic.matchingVariant?.image || (logic.product.images && logic.product.images.length > 0)) ? (
                   <>
                     {/* Primary image - only fade on hover if there's a second image */}
@@ -63,7 +63,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                     )}
                   </>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-foreground/35 font-body text-sm">
+                  <div className="w-full h-full flex items-center justify-center text-gray-400">
                     Sin imagen
                   </div>
                 )}
@@ -73,14 +73,14 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                   const badges: React.ReactNode[] = []
                   if (logic.discountPercentage) {
                     badges.push(
-                      <span key="discount" className="bg-dunaru-terracota text-dunaru-marfil text-[10px] px-2 py-0.5 rounded-full font-semibold tracking-wide">
+                      <span key="discount" className="bg-destructive text-destructive-foreground text-[10px] px-1.5 py-0.5 rounded-sm font-medium">
                         -{logic.discountPercentage}%
                       </span>
                     )
                   }
                   if (!logic.inStock) {
                     badges.push(
-                      <span key="oos" className="bg-dunaru-travertino text-foreground/70 text-[10px] px-2 py-0.5 rounded-full font-semibold tracking-wide">
+                      <span key="oos" className="bg-muted text-muted-foreground text-[10px] px-1.5 py-0.5 rounded-sm font-medium">
                         Agotado
                       </span>
                     )
@@ -100,7 +100,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                 })()}
               </div>
 
-              <h3 className="font-body text-foreground font-medium text-sm mb-1 line-clamp-2">
+              <h3 className="text-black font-medium text-sm mb-1 line-clamp-2">
                 {logic.product.title}
               </h3>
               {(() => {
@@ -112,17 +112,17 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star
                           key={i}
-                          className={`h-3 w-3 ${i < Math.round(stats.average) ? "fill-dunaru-ocre text-dunaru-ocre" : "text-dunaru-ocre/25"}`}
+                          className={`h-3 w-3 ${i < Math.round(stats.average) ? "fill-dunaru-champagne text-dunaru-champagne" : "text-dunaru-champagne/30"}`}
                           strokeWidth={1.5}
                         />
                       ))}
                     </span>
-                    <span className="font-body text-xs text-foreground/55">({stats.count})</span>
+                    <span className="text-xs text-gray-500">({stats.count})</span>
                   </div>
                 )
               })()}
               {logic.product.description && (
-                <p className="font-body text-foreground/60 text-xs mb-3 line-clamp-2">
+                <p className="text-gray-600 text-xs mb-3 line-clamp-2">
                   {logic.product.description.replace(/<[^>]*>/g, '')}
                 </p>
               )}
@@ -132,7 +132,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
               <div className="mb-3 space-y-2">
                 {logic.options.map((opt) => (
                   <div key={opt.id}>
-                    <div className="font-body text-xs font-medium text-foreground mb-1">{opt.name}</div>
+                    <div className="text-xs font-medium text-black mb-1">{opt.name}</div>
                     <div className="flex flex-wrap gap-2">
                       {opt.values.filter(val => logic.isOptionValueAvailable(opt.name, val)).map((val) => {
                         const isSelected = logic.selected[opt.name] === val
@@ -148,9 +148,9 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                               className={`h-6 w-6 rounded-full border ${
                                 logic.selected[opt.name] && !isSelected ? 'opacity-40' : ''
                               }`}
-                              style={{
-                                backgroundColor: swatch,
-                                borderColor: 'hsl(var(--dunaru-travertino))'
+                              style={{ 
+                                backgroundColor: swatch, 
+                                borderColor: '#e5e7eb'
                               }}
                               aria-label={`${opt.name}: ${val}`}
                             />
@@ -162,12 +162,12 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                             key={val}
                             type="button"
                             onClick={() => logic.handleOptionChange(opt.name, val)}
-                            className={`font-body border rounded-md px-2 py-1 text-xs font-medium transition-colors ${
-                              isSelected
-                                ? 'border-dunaru-olivo bg-dunaru-olivo text-dunaru-marfil'
+                            className={`border rounded px-2 py-1 text-xs font-medium ${
+                              isSelected 
+                                ? 'border-black bg-black text-white' 
                                 : logic.selected[opt.name] && !isSelected
-                                  ? 'border-dunaru-travertino bg-background text-foreground/70 opacity-40'
-                                  : 'border-dunaru-travertino bg-background text-foreground/75 hover:border-dunaru-terracota'
+                                  ? 'border-gray-300 bg-white text-gray-700 opacity-40'
+                                  : 'border-gray-300 bg-white text-gray-700'
                             }`}
                             aria-pressed={isSelected}
                             aria-label={`${opt.name}: ${val}`}
@@ -185,11 +185,11 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
 
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="font-body text-foreground font-bold">
+                <span className="text-black font-semibold">
                   {logic.formatMoney(logic.currentPrice)}
                 </span>
                 {logic.currentCompareAt && logic.currentCompareAt > logic.currentPrice && (
-                  <span className="font-body text-foreground/40 text-xs line-through">
+                  <span className="text-gray-400 text-xs line-through">
                     {logic.formatMoney(logic.currentCompareAt)}
                   </span>
                 )}
@@ -202,7 +202,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                   logic.handleAddToCart()
                 }}
                 disabled={!logic.canAddToCart}
-                className="font-body font-medium border-dunaru-olivo/45 text-foreground hover:bg-dunaru-olivo hover:text-dunaru-marfil hover:border-dunaru-olivo disabled:opacity-50"
+                className="text-black border-black hover:bg-black hover:text-white disabled:opacity-50"
               >
                 {logic.inStock ? 'Agregar' : 'Agotado'}
               </Button>

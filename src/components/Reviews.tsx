@@ -31,7 +31,7 @@ function Stars({ rating, className = "" }: { rating: number; className?: string 
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`h-4 w-4 ${i < rating ? "fill-dunaru-ocre text-dunaru-ocre" : "text-dunaru-ocre/25"}`}
+          className={`h-4 w-4 ${i < rating ? "fill-dunaru-champagne text-dunaru-champagne" : "text-dunaru-champagne/30"}`}
           strokeWidth={1.5}
         />
       ))}
@@ -41,7 +41,7 @@ function Stars({ rating, className = "" }: { rating: number; className?: string 
 
 function FeaturedCard({ r }: { r: Review }) {
   return (
-    <figure className="h-full surface-nacar rounded-lg overflow-hidden border border-dunaru-travertino elev-suave flex flex-col">
+    <figure className="h-full bg-background rounded-lg overflow-hidden border border-border/50 flex flex-col">
       {r.image && (
         <div className="aspect-[4/5] overflow-hidden bg-dunaru-arena">
           <img
@@ -67,7 +67,7 @@ function FeaturedCard({ r }: { r: Review }) {
 
 function TextCard({ r }: { r: Review }) {
   return (
-    <div className="surface-nacar rounded-lg border border-dunaru-travertino elev-suave p-4 sm:p-5 flex flex-col gap-2">
+    <div className="bg-background rounded-lg border border-border/50 p-4 sm:p-5 flex flex-col gap-2">
       <Stars rating={r.rating} />
       <p className="font-body text-sm text-foreground/75 leading-relaxed flex-1">"{r.text}"</p>
       <p className="font-body text-xs font-semibold text-foreground/80 mt-1">
@@ -107,8 +107,8 @@ export const Reviews = ({ slug, title }: ReviewsProps) => {
   if (count === 0) return null
 
   return (
-    <section id="resenas" className="py-12 sm:py-16 surface-arena-rastrillada scroll-mt-24 relative">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <section id="resenas" className="py-12 sm:py-16 bg-dunaru-arena scroll-mt-24">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header compacto */}
         <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-foreground text-center mb-6">
           {title ?? "Lo que dicen quienes ya la encendieron"}
@@ -128,9 +128,9 @@ export const Reviews = ({ slug, title }: ReviewsProps) => {
               return (
                 <div key={stars} className="flex items-center gap-2">
                   <span className="font-body text-xs text-foreground/60 w-6 shrink-0">{stars}★</span>
-                  <div className="flex-1 h-1.5 rounded-full bg-dunaru-travertino/70 overflow-hidden">
+                  <div className="flex-1 h-1.5 rounded-full bg-background overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-dunaru-ocre transition-all"
+                      className="h-full rounded-full bg-dunaru-champagne transition-all"
                       style={{ width: `${pct}%` }}
                     />
                   </div>
@@ -151,7 +151,7 @@ export const Reviews = ({ slug, title }: ReviewsProps) => {
                   onClick={() => emblaApi?.scrollPrev()}
                   disabled={!canPrev}
                   aria-label="Anterior"
-                  className="h-9 w-9 rounded-full border border-dunaru-travertino surface-nacar flex items-center justify-center text-foreground/70 hover:border-dunaru-terracota disabled:opacity-30 transition"
+                  className="h-9 w-9 rounded-full border border-border/60 flex items-center justify-center text-foreground/70 hover:bg-background disabled:opacity-30 transition"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </button>
@@ -160,7 +160,7 @@ export const Reviews = ({ slug, title }: ReviewsProps) => {
                   onClick={() => emblaApi?.scrollNext()}
                   disabled={!canNext}
                   aria-label="Siguiente"
-                  className="h-9 w-9 rounded-full border border-dunaru-travertino surface-nacar flex items-center justify-center text-foreground/70 hover:border-dunaru-terracota disabled:opacity-30 transition"
+                  className="h-9 w-9 rounded-full border border-border/60 flex items-center justify-center text-foreground/70 hover:bg-background disabled:opacity-30 transition"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </button>
@@ -194,7 +194,7 @@ export const Reviews = ({ slug, title }: ReviewsProps) => {
                 <button
                   type="button"
                   onClick={() => setExpanded((v) => !v)}
-                  className="inline-flex items-center justify-center rounded-full border border-dunaru-terracota/45 surface-nacar px-6 py-3 font-body text-sm font-medium text-foreground hover:border-dunaru-terracota transition-colors"
+                  className="inline-flex items-center justify-center rounded-full border border-foreground/20 px-6 py-3 font-body text-sm font-medium text-foreground hover:bg-background transition-colors"
                 >
                   {expanded ? "Ver menos" : `Ver las ${count} opiniones`}
                 </button>

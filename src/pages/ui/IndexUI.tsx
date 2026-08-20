@@ -147,10 +147,10 @@ const FAQ_ITEMS = [
 const FaqItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-dunaru-champagne/25 last:border-0">
+    <div className="border-b border-border last:border-0">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-start justify-between gap-4 py-5 text-left font-body font-medium text-foreground hover:text-dunaru-terracota transition-colors"
+        className="w-full flex items-start justify-between gap-4 py-5 text-left font-body font-medium text-foreground hover:text-dunaru-champagne transition-colors"
       >
         <span>{q}</span>
         <ChevronDown className={`h-4 w-4 shrink-0 mt-0.5 transition-transform duration-200 ${open ? 'rotate-180' : ''}`} />
@@ -172,7 +172,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
     <EcommerceTemplate showCart={true} layout="full-width" headerOverlay>
 
       {/* ── HERO ──────────────────────────────────────────────────────────── */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-dunaru-olivo">
+      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-dunaru-carbon">
         {/* Background image */}
         <div className="absolute inset-0">
           {/* Mobile: dedicated vertical composition (product visible, text space on top) */}
@@ -190,18 +190,15 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             fetchPriority="high"
           />
           {/* Gradient overlay — desktop: dark on the left for text */}
-          <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-dunaru-olivo/80 via-dunaru-olivo/40 to-transparent" />
+          <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-dunaru-carbon/75 via-dunaru-carbon/40 to-transparent" />
           {/* Gradient overlay — mobile: dark on top for text */}
-          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-olivo/90 via-dunaru-olivo/45 to-dunaru-olivo/5" />
-          {/* Halo cálido de luz de vela */}
-          <div className="absolute inset-0 glow-vela pointer-events-none" />
+          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-carbon/90 via-dunaru-carbon/40 to-dunaru-carbon/5" />
         </div>
 
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 md:pt-28 md:pb-20">
           <div className="max-w-xl">
-            <p className="font-body text-xs font-semibold tracking-[0.22em] uppercase text-dunaru-terracota-suave mb-6 sm:mb-7 animate-fade-up flex items-center gap-3">
-              <span className="h-px w-8 surface-laton inline-block" />
+            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-6 sm:mb-7 animate-fade-up">
               Velas perladas rellenables
             </p>
             <h1 className="font-display text-4xl sm:text-5xl md:text-6xl leading-[1.1] text-dunaru-marfil mb-7 sm:mb-8 animate-fade-up delay-100">
@@ -214,13 +211,13 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-up delay-300">
               <Link to="/productos/perlas-originales-500-g">
-                <Button size="lg" variant="terracota" className="w-full sm:w-auto font-body font-semibold px-8 py-4 text-base rounded-sm border-0 transition-all">
+                <Button size="lg" className="w-full sm:w-auto bg-dunaru-marfil text-dunaru-onix hover:bg-dunaru-arena font-body font-semibold px-8 py-4 text-base rounded-sm shadow-none border-0 transition-colors">
                   Comprar ahora
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
               <a href="#como-funciona">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto border-dunaru-marfil/45 text-dunaru-marfil hover:bg-dunaru-marfil/10 hover:border-dunaru-marfil hover:text-dunaru-marfil font-body font-medium px-8 py-4 text-base rounded-sm bg-transparent transition-colors">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto border-dunaru-marfil/40 text-dunaru-marfil hover:bg-dunaru-marfil/10 font-body font-medium px-8 py-4 text-base rounded-sm bg-transparent transition-colors">
                   Ver cómo funciona
                 </Button>
               </a>
@@ -229,7 +226,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             {/* Social proof mini */}
             <div className="mt-10 sm:mt-12 flex items-center gap-3 animate-fade-up delay-400">
               <span className="badge-msi">Hasta 6 MSI</span>
-              <span className="font-body text-xs text-dunaru-marfil/60">· Envío gratis a todo México</span>
+              <span className="font-body text-xs text-dunaru-marfil/50">· Envío gratis a todo México</span>
             </div>
           </div>
         </div>
@@ -241,9 +238,9 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── BENEFICIOS ────────────────────────────────────────────────────── */}
-      <section className="surface-travertino border-y border-dunaru-travertino relative texture-grano">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-4 divide-x divide-dunaru-champagne/25">
+      <section className="bg-dunaru-arena border-b border-border">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-4 divide-x divide-border">
             {[
               { icon: <Clock className="h-4 w-4" />, text: '120 h de luz' },
               { icon: <Flame className="h-4 w-4" />, text: '30 mechas' },
@@ -251,7 +248,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               { icon: <RotateCcw className="h-4 w-4" />, text: 'Rellenable' },
             ].map(({ icon, text }, i) => (
               <div key={i} className="flex flex-col md:flex-row items-center justify-center gap-1.5 py-4 px-1.5 sm:px-4 text-center md:text-left">
-                <span className="text-dunaru-terracota shrink-0">{icon}</span>
+                <span className="text-dunaru-champagne shrink-0">{icon}</span>
                 <span className="font-body text-[11px] leading-tight sm:text-sm font-medium text-foreground/80">{text}</span>
               </div>
             ))}
@@ -277,13 +274,11 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       />
 
       {/* ── INTENCIÓN DE COMPRA ───────────────────────────────────────────── */}
-      <section id="comprar" className="section-pad-sm surface-arena-rastrillada relative">
+      <section id="comprar" className="section-pad-sm bg-dunaru-arena">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <p className="eyebrow mb-3 inline-flex items-center gap-3">
-              <span className="h-px w-6 surface-laton inline-block" />
+            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
               Empieza por aquí
-              <span className="h-px w-6 surface-laton inline-block" />
             </p>
             <h2 className="font-display text-3xl sm:text-4xl text-foreground">Elige tu vela</h2>
             <p className="font-body text-sm text-foreground/60 max-w-sm mx-auto mt-3">
@@ -299,7 +294,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                 <Link
                   key={slug}
                   to={`/productos/${slug}`}
-                  className="group flex flex-col overflow-hidden rounded-lg border border-dunaru-travertino surface-nacar elev-suave transition-all hover:border-dunaru-terracota/60 hover:shadow-lg"
+                  className="group flex flex-col overflow-hidden rounded-sm border border-border bg-background transition-all hover:border-dunaru-champagne/60 hover:shadow-md"
                 >
                   <div className="relative aspect-[4/5] overflow-hidden bg-dunaru-arena">
                     <img
@@ -311,7 +306,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                     {badge && <span className={`absolute top-2.5 left-2.5 ${badgeClass}`}>{badge}</span>}
                   </div>
                   <div className="flex flex-1 flex-col p-3 sm:p-4">
-                    <span className="font-body text-[10px] font-semibold uppercase tracking-[0.18em] text-dunaru-terracota mb-1">
+                    <span className="font-body text-[10px] font-semibold uppercase tracking-widest text-dunaru-champagne mb-1">
                       {tag}
                     </span>
                     <h3 className="font-body text-sm font-medium leading-snug text-foreground mb-2">{p.title}</h3>
@@ -333,7 +328,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               href="https://wa.me/525531215386?text=Hola%2C%20no%20s%C3%A9%20cu%C3%A1l%20vela%20elegir"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dunaru-terracota font-medium hover:underline"
+              className="text-dunaru-champagne font-medium hover:underline"
             >
               Te ayudamos por WhatsApp
             </a>
@@ -345,36 +340,34 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       <Reviews />
 
       {/* Elige tu tono (carrusel) */}
-      <div className="band-arena" aria-hidden="true" />
-
       <section id="tonos" className="section-pad-sm bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <p className="eyebrow mb-3">Tres tonos, tres ambientes</p>
+            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">Tres tonos, tres ambientes</p>
             <h2 className="font-display text-3xl sm:text-4xl text-foreground">Elige tu tono</h2>
           </div>
 
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0 md:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {TONOS.map((tono) => (
               <Link key={tono.name} to={`/productos/${tono.slug}`} className="group block shrink-0 w-[70%] sm:w-[45%] md:w-auto snap-start">
-                <div className="relative overflow-hidden rounded-lg elev-suave">
+                <div className="relative overflow-hidden rounded-sm">
                   <div className="aspect-[3/4] overflow-hidden">
                     <img
                       src={tono.img}
                       alt={`Dunaru tono ${tono.name}`}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-dunaru-onix/70 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-5">
                     <div className="flex items-center gap-2 mb-1">
                       <span
-                        className="w-4 h-4 rounded-full border border-dunaru-marfil/40 shrink-0"
+                        className="w-4 h-4 rounded-full border border-white/30 shrink-0"
                         style={{ backgroundColor: tono.hex }}
                       />
-                      <span className="font-display text-xl text-dunaru-marfil">{tono.name}</span>
+                      <span className="font-display text-xl text-white">{tono.name}</span>
                     </div>
-                    <p className="font-body text-xs text-dunaru-marfil/75">{tono.mood}</p>
+                    <p className="font-body text-xs text-white/70">{tono.mood}</p>
                   </div>
                 </div>
               </Link>
@@ -401,13 +394,12 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       {/* (movido arriba: ahora va justo antes de "Elige tu tono") */}
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
-      <section id="faq" className="section-pad surface-travertino relative texture-grano">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <section id="faq" className="section-pad bg-background">
+        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="font-display text-3xl sm:text-4xl text-foreground">Preguntas frecuentes</h2>
-            <div className="divider-warm w-24 mx-auto mt-4" />
           </div>
-          <div className="divide-y divide-dunaru-champagne/30 border-t border-dunaru-champagne/30">
+          <div className="divide-y divide-border border-t border-border">
             {FAQ_ITEMS.map((item, i) => (
               <FaqItem key={i} q={item.q} a={item.a} />
             ))}
@@ -416,15 +408,15 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── CIERRE — NEWSLETTER + WHATSAPP ───────────────────────────────── */}
-      <section className="section-pad-sm surface-olivo relative texture-grano">
-        <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <section className="section-pad-sm bg-dunaru-carbon">
+        <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-display text-3xl text-dunaru-marfil mb-3">Algo nuevo viene.</h2>
-          <p className="font-body text-sm text-dunaru-marfil/70 mb-8 leading-relaxed">
+          <p className="font-body text-sm text-dunaru-marfil/60 mb-8 leading-relaxed">
             Nuevos tonos, ediciones especiales y consejos para sacarle más a tu vela. Sé la primera en saber.
           </p>
           <DunaruNewsletterForm />
 
-          <div className="divider-warm opacity-40 my-6" />
+          <div className="divider-warm opacity-20 my-6" />
 
           <a
             href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"

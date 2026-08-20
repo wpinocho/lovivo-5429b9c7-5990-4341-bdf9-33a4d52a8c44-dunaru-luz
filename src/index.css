@@ -7,117 +7,97 @@ html {
 }
 
 /* ══════════════════════════════════════════════════════════════
-   DUNARU DESIGN SYSTEM · "Sculpted light. Naturally refined."
-   Paleta mood board: Warm Ivory · Travertino · Terracota ·
-   Ocre · Olivo profundo · Charcoal · Periwinkle · Latón
-   Materiales: travertino, arena rastrillada, nácar, cerámica
+   DUNARU DESIGN SYSTEM
+   Luz de diseño que cambia contigo.
+   Paleta: Marfil · Arena · Champagne · Carbón · Ónix · Ámbar
    Tipografía: Instrument Serif (títulos) + Manrope (UI/cuerpo)
 ══════════════════════════════════════════════════════════════ */
 
 @layer base {
   :root {
-    /* ── Superficies ── */
-    --background: 40 38% 92%;          /* #F3EDDF — Warm Ivory */
-    --background-alt: 36 34% 87%;      /* #E7DBC7 — Travertino claro */
-    --foreground: 132 6% 17%;          /* #2A2F2B — Charcoal verdoso */
+    /* Core brand colors — all HSL */
+    --background: 40 43% 96%;          /* #FAF6EF — Marfil principal */
+    --background-alt: 36 38% 90%;      /* #F1E9DC — Arena pálida */
+    --foreground: 46 4% 16%;           /* #2B2A27 — Carbón suave */
 
-    --card: 40 42% 95%;
-    --card-foreground: 132 6% 17%;
+    --card: 40 43% 96%;
+    --card-foreground: 46 4% 16%;
 
-    --popover: 40 42% 96%;
-    --popover-foreground: 132 6% 17%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 46 4% 16%;
 
-    /* Primary = Olivo profundo (CTA principal) */
-    --primary: 92 25% 23%;             /* #3A4A2C */
-    --primary-foreground: 40 38% 94%;
+    /* Primary = Ónix (botones CTA principales) */
+    --primary: 30 4% 11%;              /* #1E1C1A — Ónix */
+    --primary-foreground: 40 43% 96%; /* Marfil sobre ónix */
 
-    /* Secondary = Terracota (color firma de la marca) */
-    --secondary: 16 52% 49%;           /* #C0603C */
-    --secondary-foreground: 40 42% 96%;
+    /* Secondary = Champagne dorado */
+    --secondary: 38 40% 61%;          /* #C2A878 — Champagne */
+    --secondary-foreground: 30 4% 11%;
 
-    /* Muted = Travertino */
-    --muted: 36 34% 87%;
-    --muted-foreground: 40 8% 38%;
+    /* Muted = Arena */
+    --muted: 36 38% 90%;              /* #F1E9DC */
+    --muted-foreground: 46 8% 42%;
 
-    /* Accent = Ocre */
-    --accent: 43 65% 47%;              /* #C89A2A */
-    --accent-foreground: 132 8% 14%;
+    /* Accent = Ámbar miel (uso mínimo, llama) */
+    --accent: 32 62% 59%;             /* #D89A57 */
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 8 62% 44%;
-    --destructive-foreground: 40 42% 96%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 36 24% 78%;
-    --input: 36 24% 78%;
-    --ring: 16 52% 49%;
+    --border: 36 25% 83%;
+    --input: 36 25% 83%;
+    --ring: 38 40% 61%;
 
-    --radius: 0.5rem;
+    --radius: 0.375rem;
 
-    /* Sidebar (heredado) */
-    --sidebar-background: 40 38% 92%;
-    --sidebar-foreground: 132 6% 17%;
-    --sidebar-primary: 92 25% 23%;
-    --sidebar-primary-foreground: 40 38% 94%;
-    --sidebar-accent: 36 34% 87%;
-    --sidebar-accent-foreground: 132 6% 17%;
-    --sidebar-border: 36 24% 78%;
-    --sidebar-ring: 16 52% 49%;
+    /* Sidebar (heredado, mantener) */
+    --sidebar-background: 40 43% 96%;
+    --sidebar-foreground: 46 4% 16%;
+    --sidebar-primary: 30 4% 11%;
+    --sidebar-primary-foreground: 40 43% 96%;
+    --sidebar-accent: 36 38% 90%;
+    --sidebar-accent-foreground: 46 4% 16%;
+    --sidebar-border: 36 25% 83%;
+    --sidebar-ring: 38 40% 61%;
 
-    /* ── Tokens de marca ── */
-    --dunaru-marfil:     40 38% 92%;   /* #F3EDDF Warm Ivory */
-    --dunaru-arena:      36 34% 87%;   /* #E7DBC7 Travertino claro */
-    --dunaru-travertino: 34 30% 79%;   /* #DCCDB6 Travertino */
-    --dunaru-nacar:      38 34% 93%;   /* #F1E9DC Nácar */
-    --dunaru-terracota:  16 52% 49%;   /* #C0603C */
-    --dunaru-terracota-suave: 18 46% 66%; /* #D69A7C */
-    --dunaru-ocre:       43 65% 47%;   /* #C89A2A */
-    --dunaru-olivo:      92 25% 23%;   /* #3A4A2C */
-    --dunaru-periwinkle: 225 54% 74%;  /* #97A9E0 */
-    --dunaru-champagne:  33 35% 52%;   /* #B08A55 Latón */
-    --dunaru-carbon:     132 6% 17%;   /* #2A2F2B Charcoal */
-    --dunaru-onix:       132 6% 12%;   /* #1E211E */
-    --dunaru-ambar:      32 62% 59%;   /* #D89A57 Llama */
-
-    /* ── Gradientes de material ── */
-    --gradient-arena: linear-gradient(160deg, hsl(var(--dunaru-nacar)) 0%, hsl(var(--dunaru-arena)) 55%, hsl(var(--dunaru-travertino)) 100%);
-    --gradient-terracota: linear-gradient(135deg, hsl(16 52% 54%) 0%, hsl(14 48% 44%) 100%);
-    --gradient-olivo: linear-gradient(135deg, hsl(92 22% 27%) 0%, hsl(132 12% 15%) 100%);
-    --gradient-laton: linear-gradient(100deg, hsl(38 42% 74%) 0%, hsl(33 35% 52%) 45%, hsl(40 50% 82%) 60%, hsl(33 35% 52%) 100%);
-    --gradient-luz: radial-gradient(60% 55% at 50% 42%, hsl(32 62% 59% / 0.22) 0%, transparent 70%);
-
-    /* ── Sombras cálidas (nunca negro puro) ── */
-    --shadow-suave: 0 1px 2px hsl(24 20% 30% / 0.06), 0 6px 18px -8px hsl(24 24% 26% / 0.16);
-    --shadow-media: 0 2px 6px hsl(24 20% 30% / 0.07), 0 16px 40px -18px hsl(24 24% 26% / 0.28);
-    --shadow-relieve: inset 0 1px 0 hsl(40 60% 98% / 0.7), 0 10px 30px -16px hsl(24 24% 26% / 0.35);
+    /* Brand extra tokens */
+    --dunaru-marfil: 40 43% 96%;
+    --dunaru-arena: 36 38% 90%;
+    --dunaru-champagne: 38 40% 61%;
+    --dunaru-carbon: 46 4% 16%;
+    --dunaru-onix: 30 4% 11%;
+    --dunaru-ambar: 32 62% 59%;
   }
 
   .dark {
-    --background: 132 6% 12%;
-    --foreground: 40 38% 92%;
-    --card: 132 7% 15%;
-    --card-foreground: 40 38% 92%;
-    --popover: 132 7% 15%;
-    --popover-foreground: 40 38% 92%;
-    --primary: 40 38% 92%;
-    --primary-foreground: 132 6% 12%;
-    --secondary: 16 42% 40%;
-    --secondary-foreground: 40 38% 92%;
-    --muted: 132 6% 19%;
-    --muted-foreground: 36 14% 62%;
-    --accent: 43 55% 45%;
-    --accent-foreground: 132 8% 12%;
-    --destructive: 8 62% 44%;
-    --destructive-foreground: 40 42% 96%;
-    --border: 132 6% 24%;
-    --input: 132 6% 24%;
-    --ring: 16 52% 49%;
-    --sidebar-background: 132 6% 12%;
-    --sidebar-foreground: 40 38% 92%;
-    --sidebar-primary: 40 38% 92%;
-    --sidebar-primary-foreground: 132 6% 12%;
-    --sidebar-accent: 132 6% 19%;
-    --sidebar-accent-foreground: 40 38% 92%;
-    --sidebar-border: 132 6% 24%;
-    --sidebar-ring: 16 52% 49%;
+    --background: 30 4% 11%;
+    --foreground: 40 43% 96%;
+    --card: 30 6% 14%;
+    --card-foreground: 40 43% 96%;
+    --popover: 30 6% 14%;
+    --popover-foreground: 40 43% 96%;
+    --primary: 40 43% 96%;
+    --primary-foreground: 30 4% 11%;
+    --secondary: 38 30% 25%;
+    --secondary-foreground: 40 43% 96%;
+    --muted: 30 6% 18%;
+    --muted-foreground: 36 15% 60%;
+    --accent: 32 62% 59%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 30 6% 22%;
+    --input: 30 6% 22%;
+    --ring: 38 40% 61%;
+    --sidebar-background: 30 4% 11%;
+    --sidebar-foreground: 40 43% 96%;
+    --sidebar-primary: 40 43% 96%;
+    --sidebar-primary-foreground: 30 4% 11%;
+    --sidebar-accent: 30 6% 18%;
+    --sidebar-accent-foreground: 40 43% 96%;
+    --sidebar-border: 30 6% 22%;
+    --sidebar-ring: 38 40% 61%;
   }
 }
 
@@ -131,19 +111,10 @@ html {
     font-family: 'Manrope', sans-serif;
     font-feature-settings: "kern" 1, "liga" 1;
     -webkit-font-smoothing: antialiased;
-    /* Grano de papel cálido sobre todo el sitio */
-    background-image:
-      radial-gradient(120% 80% at 50% -10%, hsl(38 44% 96% / 0.9) 0%, transparent 60%),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.22'/%3E%3C/svg%3E");
-    background-attachment: fixed, fixed;
   }
 
   h1, h2, h3 {
     font-family: 'Instrument Serif', serif;
-  }
-
-  ::selection {
-    background: hsl(var(--dunaru-terracota) / 0.22);
   }
 }
 
@@ -184,139 +155,28 @@ html {
 .delay-300 { animation-delay: 0.3s; }
 .delay-400 { animation-delay: 0.4s; }
 
-/* ══════════════════════════════════════════════════════════════
-   MATERIALES Y TEXTURAS
-══════════════════════════════════════════════════════════════ */
-
-/* Travertino: piedra porosa cálida (foto real, muy sutil) */
-.surface-travertino {
-  background-color: hsl(var(--dunaru-arena));
-  background-image:
-    linear-gradient(hsl(38 40% 93% / 0.82), hsl(36 34% 88% / 0.82)),
-    url('/textura-travertino.webp');
-  background-size: auto, 620px auto;
-  background-repeat: no-repeat, repeat;
-}
-
-/* Travertino intenso: para bloques editoriales de contraste */
-.surface-travertino-fuerte {
-  background-color: hsl(var(--dunaru-travertino));
-  background-image:
-    linear-gradient(hsl(34 34% 86% / 0.6), hsl(32 28% 78% / 0.68)),
-    url('/textura-travertino.webp');
-  background-size: auto, 720px auto;
-  background-repeat: no-repeat, repeat;
-}
-
-/* Arena rastrillada: ondas suaves tipo jardín zen (foto real) */
-.surface-arena-rastrillada {
-  background-color: hsl(var(--dunaru-arena));
-  background-image:
-    linear-gradient(hsl(40 38% 93% / 0.78), hsl(36 32% 87% / 0.8)),
-    url('/textura-arena.webp');
-  background-size: auto, cover;
-  background-position: center, center;
-  background-repeat: no-repeat, no-repeat;
-}
-
-/* Banda decorativa de arena rastrillada (separador entre secciones) */
-.band-arena {
-  height: 88px;
-  background-image: url('/textura-arena.webp');
-  background-size: cover;
-  background-position: center;
-  opacity: 0.55;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, hsl(0 0% 0%) 35%, hsl(0 0% 0%) 65%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, hsl(0 0% 0%) 35%, hsl(0 0% 0%) 65%, transparent);
-}
-
-/* Cerámica acanalada (terracota estriada del mood board) */
-.surface-acanalado {
-  background-color: hsl(var(--dunaru-terracota));
-  background-image:
-    repeating-linear-gradient(90deg,
-      hsl(40 60% 96% / 0.14) 0 2px,
-      transparent 2px 5px,
-      hsl(14 40% 20% / 0.14) 5px 7px,
-      transparent 7px 12px);
-}
-
-/* Nácar: madreperla iridiscente sutil */
-.surface-nacar {
-  background-color: hsl(var(--dunaru-nacar));
-  background-image:
-    linear-gradient(118deg,
-      hsl(38 40% 96%) 0%,
-      hsl(225 30% 93%) 22%,
-      hsl(38 44% 95%) 44%,
-      hsl(18 34% 92%) 66%,
-      hsl(43 40% 94%) 100%);
-}
-
-/* Latón cepillado (para líneas y detalles finos) */
-.surface-laton {
-  background-image: var(--gradient-laton);
-  background-size: 200% 100%;
-}
-
-/* Superficies de color plenas */
-.surface-terracota {
-  background-image: var(--gradient-terracota);
-  color: hsl(40 42% 96%);
-}
-.surface-olivo {
-  background-image: var(--gradient-olivo);
-  color: hsl(40 38% 92%);
-}
-.surface-periwinkle {
-  background-color: hsl(var(--dunaru-periwinkle));
-  color: hsl(228 40% 22%);
-}
-
-/* Grano fino reutilizable (overlay) */
-.texture-grano::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.28;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)' opacity='0.3'/%3E%3C/svg%3E");
-}
-
-/* Halo de luz de vela */
-.glow-vela { background-image: var(--gradient-luz); }
-
-/* Arco (forma del mood board) */
-.shape-arco { border-radius: 999px 999px 12px 12px; }
-
-/* ══ Elevaciones cálidas ══ */
-.elev-suave   { box-shadow: var(--shadow-suave); }
-.elev-media   { box-shadow: var(--shadow-media); }
-.elev-relieve { box-shadow: var(--shadow-relieve); }
-
 /* ══ Color swatch tokens ══ */
-.swatch-marfil    { background-color: #F3EDDF; }
-.swatch-champagne { background-color: #DCCDB6; }
-.swatch-onix      { background-color: #2A2F2B; }
+.swatch-marfil    { background-color: #F2EBDD; }
+.swatch-champagne { background-color: #E2CCA3; }
+.swatch-onix      { background-color: #1F1D1B; }
 
 /* ══ Badge variants ══ */
 .badge-mas-elegido {
-  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide;
-  background: hsl(var(--dunaru-terracota) / 0.12);
-  color: hsl(14 55% 34%);
-  border: 1px solid hsl(var(--dunaru-terracota) / 0.35);
+  @apply inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold;
+  background: hsl(var(--dunaru-champagne) / 0.15);
+  color: hsl(var(--dunaru-carbon));
+  border: 1px solid hsl(var(--dunaru-champagne) / 0.4);
 }
 .badge-mejor-valor {
-  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide;
-  background: hsl(var(--dunaru-olivo));
+  @apply inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold;
+  background: hsl(var(--dunaru-onix));
   color: hsl(var(--dunaru-marfil));
 }
 .badge-msi {
-  @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium;
-  background: hsl(92 25% 23% / 0.08);
-  color: hsl(92 30% 22%);
-  border: 1px solid hsl(92 25% 23% / 0.28);
+  @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-medium;
+  background: hsl(150 60% 94%);
+  color: hsl(150 50% 25%);
+  border: 1px solid hsl(150 40% 75%);
 }
 
 /* ══ Section spacing ══ */
@@ -326,23 +186,16 @@ html {
 /* ══ Divider ══ */
 .divider-warm {
   height: 1px;
-  background: linear-gradient(to right, transparent, hsl(var(--dunaru-champagne) / 0.55), transparent);
-}
-
-/* ══ Eyebrow editorial ══ */
-.eyebrow {
-  @apply text-[11px] font-semibold uppercase;
-  letter-spacing: 0.22em;
-  color: hsl(var(--dunaru-terracota));
+  background: linear-gradient(to right, transparent, hsl(var(--border)), transparent);
 }
 
 /* ══ Scrollbar ══ */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: hsl(var(--background)); }
-::-webkit-scrollbar-thumb { background: hsl(var(--dunaru-travertino)); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 3px; }
 
 /* ══ Thumbnails horizontal scroll (PDP gallery) ══ */
-.thumbnails-scroll { scrollbar-width: thin; scrollbar-color: hsl(var(--dunaru-travertino)) transparent; }
+.thumbnails-scroll { scrollbar-width: thin; scrollbar-color: hsl(var(--border)) transparent; }
 .thumbnails-scroll::-webkit-scrollbar { height: 4px; }
 .thumbnails-scroll::-webkit-scrollbar-track { background: transparent; }
-.thumbnails-scroll::-webkit-scrollbar-thumb { background: hsl(var(--dunaru-travertino)); border-radius: 999px; }
+.thumbnails-scroll::-webkit-scrollbar-thumb { background: hsl(var(--border)); border-radius: 999px; }

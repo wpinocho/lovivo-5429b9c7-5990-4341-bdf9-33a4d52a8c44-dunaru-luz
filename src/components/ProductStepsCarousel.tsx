@@ -43,7 +43,7 @@ export const ProductStepsCarousel = ({
   eyebrow,
   id,
   bleed = true,
-  background = "surface-travertino",
+  background = "bg-dunaru-arena",
   footer,
 }: ProductStepsCarouselProps) => {
   const [api, setApi] = useState<CarouselApi>()
@@ -81,10 +81,8 @@ export const ProductStepsCarousel = ({
         )}
       >
         {eyebrow && (
-          <p className="eyebrow mb-3 flex items-center justify-center gap-3">
-            <span className="h-px w-6 surface-laton inline-block" />
+          <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3 text-center">
             {eyebrow}
-            <span className="h-px w-6 surface-laton inline-block" />
           </p>
         )}
         <h2 className="font-display text-3xl md:text-4xl lg:text-5xl text-center mb-8">
@@ -103,14 +101,14 @@ export const ProductStepsCarousel = ({
                 className="pl-4 basis-[80%] sm:basis-1/2 lg:basis-1/4"
               >
                 <div className="space-y-4">
-                  <div className="relative aspect-square rounded-xl overflow-hidden bg-dunaru-arena elev-suave">
+                  <div className="relative aspect-square rounded-lg overflow-hidden bg-background/60">
                     <img
                       src={step.image}
                       alt={`Paso ${i + 1}: ${step.title} · vela perlada dunaru`}
                       loading="lazy"
                       className="w-full h-full object-cover"
                     />
-                    <span className="absolute top-3 left-3 h-8 w-8 rounded-full surface-terracota flex items-center justify-center font-display text-lg elev-suave">
+                    <span className="absolute top-3 left-3 h-8 w-8 rounded-full bg-foreground text-background flex items-center justify-center font-display text-lg">
                       {i + 1}
                     </span>
                   </div>
@@ -140,8 +138,8 @@ export const ProductStepsCarousel = ({
                 className={cn(
                   "h-1.5 rounded-full transition-all",
                   i === selected
-                    ? "w-6 bg-dunaru-terracota"
-                    : "w-1.5 bg-foreground/20"
+                    ? "w-6 bg-foreground"
+                    : "w-1.5 bg-foreground/25"
                 )}
               />
             ))}
