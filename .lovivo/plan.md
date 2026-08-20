@@ -60,28 +60,29 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 Pill "Hasta 6 MSI" (usado en el hero de `IndexUI.tsx` y donde se reutilice la clase `.badge-msi`). Antes usaba un verde hardcodeado ajeno a la paleta. Se migró a periwinkle, pero sobre el hero oscuro (`texture-ambar`) el fondo `periwinkle/0.16` + texto `periwinkle-deep` casi no se distinguía. Ajuste final: fondo "frosted glass" `hsl(var(--dunaru-marfil)/0.14)` + `backdrop-blur-sm`, texto en `dunaru-periwinkle` (claro, no `-deep`), borde `periwinkle/0.5`. Al ser una sola clase CSS, cualquier uso futuro de `className="badge-msi"` hereda el cambio automáticamente.
 ⚠️ El aviso de MSI del **checkout** (`CheckoutUI.tsx`, "Págalo a meses sin intereses") y el bloque de trust-icons de la **PDP** ("6 meses · Sin intereses" con ícono en círculo, `ProductPageUI.tsx` ~línea 835-843) son componentes DISTINTOS, en `dunaru-champagne`/`dunaru-ambar`, no en `.badge-msi`. No se tocaron.
 
-### 🖱️ ESTADOS HOVER (regla de marca, desde 2026-08-20, ajustada 2026-08-20 x3)
+### 🖱️ ESTADOS HOVER (regla de marca, desde 2026-08-20, ajustada 2026-08-20 x4)
 - **Botón `default` (CTA principal "Comprar ahora", en TODAS las PDP vía `Button`)**: reposo `bg-[hsl(var(--dunaru-oliva-cta))]` + `text-dunaru-marfil` (verde oliva vivo, texto BEIGE/marfil); hover pasa a Burnt Terracotta (`bg-secondary` + `text-secondary-foreground`). Vive en `src/components/ui/button.tsx`.
 - **Botón "Agregar al carrito" de la PDP** (`ProductPageUI.tsx`, variant `outline`, h-11): hover propio = **periwinkle**. Excepción puntual del owner.
 - **AccordionTrigger compartido** (`ui/accordion.tsx`, desde 2026-08-20): `hover:text-[hsl(var(--dunaru-periwinkle-deep))]` + `hover:underline`. Al ser un componente compartido, aplica automáticamente a: acordeones "Descripción"/"Envío y devoluciones" de la PDP (`ProductPageUI.tsx`) y a todos los FAQ de `ProductStorySections.tsx`.
 - **Links de texto secundarios → hover periwinkle-deep** (desde 2026-08-20): "Escríbenos por WhatsApp" (`ProductPageUI.tsx`, incluye el ícono de subrayado), "¿Ya tienes tu dunaru? Comparte tu experiencia" (`Reviews.tsx`). Patrón: `hover:text-[hsl(var(--dunaru-periwinkle-deep))] transition-colors`.
 - **Botón sólido "Elegir mi vela"** (cierre de PDP, `ProductStorySections.tsx`, `bg-primary`/`text-primary-foreground`): hover cambió de `opacity-90` a `hover:text-dunaru-periwinkle` (texto pasa a periwinkle claro, fondo oliva se mantiene).
+- **Pills de variante NO seleccionadas** (`ProductPageUI.tsx` ~línea 668-679, ej. Marfil/Champagne/Ónix): hover cambió de `border-foreground/60` a **periwinkle**: `hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]` (2026-08-20). ⚠️ El estado SELECCIONADO sigue en `bg-foreground`/`border-foreground` (Fase 3 pendiente para migrar a `bg-dunaru-onix`).
 - Otras variantes de `ui/button.tsx`: `outline` borde+texto terracota + fill 10% al hover · `secondary` terracota/85 · `ghost` fill terracota 10% + texto terracota · `link` texto terracota.
-  ⚠️ Cualquier CTA con `bg-*`/`hover:*` hardcodeado en className NO hereda esto automáticamente — hay que revisarlos uno por uno (ya cubiertos: accordions, WhatsApp links, "Elegir mi vela").
+  ⚠️ Cualquier CTA con `bg-*`/`hover:*` hardcodeado en className NO hereda esto automáticamente — hay que revisarlos uno por uno.
 - **PATRÓN OFICIAL "INVERSIÓN MARFIL ↔ TERRACOTA"** (botones claros sobre fondo oscuro O CTA secundario en tarjeta):
   reposo `bg-dunaru-marfil` + `text-dunaru-terracota`; hover `bg-dunaru-terracota` + `text-dunaru-marfil`. **Sin borde.**
   Usado en: CTA del hero (`IndexUI`), botón "Agregar" de `ProductCardUI`.
 - **PATRÓN "OUTLINE TERRACOTA"** (CTA secundario sobre fondo claro):
   `rounded-none border-dunaru-terracota/45 bg-transparent text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil hover:border-dunaru-terracota` + uppercase `tracking-[0.12em] text-xs`.
   Usado en: footer del carrusel de pasos ("Ver el kit completo"), flechas del carrusel.
-- **SELECTOR DE VARIANTE (pill) — patrón oficial, sin borde**:
+- **SELECTOR DE VARIANTE (pill) — patrón oficial**:
   activo `bg-dunaru-onix` + `text-dunaru-marfil`; reposo `bg-dunaru-arena/70` + `text-dunaru-carbon`;
   hover `bg-dunaru-periwinkle/25` + `text-[hsl(var(--dunaru-periwinkle-deep))]`.
   Swatch de color: seleccionado = `ring-2 ring-offset-2 ring-dunaru-terracota`.
-  ⚠️ **`ProductPageUI.tsx` (~línea 675) TODAVÍA usa `bg-foreground`/`border-foreground`.** Pendiente Fase 3.
+  ⚠️ **`ProductPageUI.tsx` (~línea 675) el hover YA está en periwinkle (2026-08-20); el estado activo/reposo TODAVÍA usa `bg-foreground`/`border-foreground` en vez del patrón oficial completo.** Pendiente Fase 3.
 - **NAVEGACIÓN → MUTED PERIWINKLE.** Clases en `index.css` (`@layer components`): `.nav-link`, `.nav-link-mobile`, `.nav-link-dark`, `.nav-item`.
 - ⚠️ `.nav-link` usa `position: relative` → vive en `@layer components`. No sacarla de ahí.
-- 🎯 Reparto de roles: **oliva/periwinkle = selección, navegación y CTA principal** · **terracota/marfil = hover de CTA y acción secundaria** · **terracota + periwinkle juntos = acentos editoriales de sección** (numerales, reglas, dots) · EXCEPCIÓN: hover de "Agregar al carrito", accordions, links de texto y "Elegir mi vela" en periwinkle.
+- 🎯 Reparto de roles: **oliva/periwinkle = selección, navegación y CTA principal** · **terracota/marfil = hover de CTA y acción secundaria** · **terracota + periwinkle juntos = acentos editoriales de sección** (numerales, reglas, dots) · EXCEPCIÓN: hover de "Agregar al carrito", accordions, links de texto, pills de variante y "Elegir mi vela" en periwinkle.
 
 ### 🪨 MATERIALES / TEXTURAS (index.css, `@layer components`)
 Todas pintan un `::before` con `z-index:-1` dentro de un stacking context aislado.
@@ -138,7 +139,7 @@ Componente COMPARTIDO: home (`IndexUI`, `bg-background`, con eyebrow y footer CT
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ Fase 2.5 · ✅ Fase 2.6 · ✅ Fase 2.7 · ✅ Fase 2.8 · ✅ Fase 2.9 (carrusel de pasos) · ✅ Fase 2.10 (badge MSI a periwinkle) · ✅ Fase 2.11 (hovers periwinkle en accordions/links). ⏭️ Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ Fase 2.5 · ✅ Fase 2.6 · ✅ Fase 2.7 · ✅ Fase 2.8 · ✅ Fase 2.9 (carrusel de pasos) · ✅ Fase 2.10 (badge MSI a periwinkle) · ✅ Fase 2.11 (hovers periwinkle en accordions/links/pills de variante). ⏭️ Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
@@ -149,8 +150,8 @@ Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 ### 3.1–3.6c ✅ Completadas (2026-08-20)
 Fase 1 sistema base · Fase 2 home · Fase 2.5 paleta + texturas · Fase 2.6 hovers + `ProductCardUI` · Fase 2.7 CTA oliva/marfil · Fase 2.8 hover periwinkle en "Agregar al carrito" · Fase 2.9 carrusel de pasos · Fase 2.10 badge MSI.
 
-### 3.6d ✅ FASE 2.11 — Hovers periwinkle en accordions y links de texto (2026-08-20)
-A petición del owner sobre elementos específicos señalados en el editor visual: `ui/accordion.tsx` (componente compartido, afecta PDP + FAQ de `ProductStorySections`), link "Escríbenos por WhatsApp" (`ProductPageUI.tsx`), link "Comparte tu experiencia" (`Reviews.tsx`), botón "Elegir mi vela" (`ProductStorySections.tsx`, texto pasa a periwinkle en hover en vez de solo opacity).
+### 3.6d ✅ FASE 2.11 — Hovers periwinkle en accordions, links y pills (2026-08-20)
+A petición del owner sobre elementos específicos señalados en el editor visual: `ui/accordion.tsx` (componente compartido, afecta PDP + FAQ de `ProductStorySections`), link "Escríbenos por WhatsApp" (`ProductPageUI.tsx`), link "Comparte tu experiencia" (`Reviews.tsx`), botón "Elegir mi vela" (`ProductStorySections.tsx`, texto a periwinkle en vez de opacity), pills de variante no seleccionadas Marfil/Champagne/Ónix (`ProductPageUI.tsx` ~línea 675-679, hover a periwinkle).
 
 ### 3.7 FASE 3 — PDP — SIGUIENTE
 🔒 El orden del buy box NO cambia. Solo tratamiento visual + dos añadidos.
@@ -160,7 +161,7 @@ A petición del owner sobre elementos específicos señalados en el editor visua
 4. **NUEVO "Combina bien con"**: `ProductAddOns` debajo del buy box → resuelve la falta de cross-sell en `perlas-originales-500-g`.
 5. `<RitualSection />` al cierre de la PDP.
 6. Barrer eyebrows viejos → `.eyebrow`; aplicar texturas a las secciones de historia.
-7. **Migrar el selector de variantes de `ProductPageUI.tsx` (~línea 675) al patrón oficial de pills**.
+7. **Migrar el estado activo/reposo del selector de variantes de `ProductPageUI.tsx` (~línea 675) al patrón oficial de pills** (el hover ya quedó en periwinkle; falta `bg-dunaru-onix`/`bg-dunaru-arena/70` en vez de `bg-foreground`).
 8. Migrar `ProductStorySections.tsx` (garantías, bloques, tabla comparativa) de `dunaru-champagne` a terracota/periwinkle, igual que el carrusel.
 9. **NUEVO**: unificar el bloque de trust-icons "6 meses sin intereses" (~línea 835 `ProductPageUI.tsx`, hoy en champagne/ambar) con el resto de la paleta terracota/periwinkle si se decide mantenerlo como ícono (no como pill).
 
@@ -179,6 +180,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-20 — 🖱️ **Pills de variante (Marfil/Champagne/Ónix) con hover periwinkle** (`ProductPageUI.tsx` ~línea 675-679), a petición del owner en el editor visual. Estado activo/reposo aún en `bg-foreground` (pendiente Fase 3.7).
 - 2026-08-20 — 🖱️ **FASE 2.11: hovers periwinkle en accordions y links de texto** señalados por el owner en el editor visual: `ui/accordion.tsx` (compartido → PDP + FAQ), "Escríbenos por WhatsApp" (`ProductPageUI.tsx`), "Comparte tu experiencia" (`Reviews.tsx`), botón "Elegir mi vela" (`ProductStorySections.tsx`, texto a periwinkle en vez de opacity).
 - 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" — fondo frosted glass** (`.badge-msi` en `index.css`): fondo semi-transparente `dunaru-marfil/0.14` + `backdrop-blur-sm`, texto `dunaru-periwinkle` claro, borde `periwinkle/0.5`.
 - 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" a Periwinkle** (`.badge-msi` en `index.css`): antes verde hardcodeado, ahora periwinkle/periwinkle-deep.
@@ -193,8 +195,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-20 — ⚠️ **Aprendizaje**: las clases con `position: relative` deben ir en `@layer components`.
 - 2026-08-20 — ✅ **FASE 2 (home)** completa.
 - 2026-08-20 — 🐞 `.hairline` es `height:1px`, NO un borde.
-- 2026-08-20 — ✅ **FASE 1**: `--radius: 0rem`, tokens oscuros, utilidades editoriales.
-- 2026-08-20 — ⛔ **DECISIÓN: dunaru NO será founder-led.**
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 9 productos, 75 imágenes en `product-images/products/`.
@@ -213,7 +213,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 
 ## 6. Known Issues
 - 2026-08-20 — 🟠 **`ProductStorySections.tsx` sigue en `dunaru-champagne`** (tira de garantías, checks de bullets, tabla comparativa). Debe alinearse a terracota/periwinkle como el carrusel → Fase 3 punto 8.
-- 2026-08-20 — 🟠 **La PDP sigue con hovers y colores hardcodeados** (selector de variantes `ProductPageUI.tsx` ~línea 675: `bg-foreground`/`border-foreground`).
+- 2026-08-20 — 🟠 **El selector de variantes `ProductPageUI.tsx` ~línea 675 tiene el hover en periwinkle, pero el estado activo/reposo sigue en `bg-foreground`/`border-foreground`** (falta migrar a `bg-dunaru-onix`/`bg-dunaru-arena` → Fase 3.7).
 - 2026-08-20 — 🟠 **El bloque de trust-icons "6 meses sin intereses" de la PDP (~línea 835) sigue en champagne/ambar**, distinto del `.badge-msi` ya migrado a periwinkle.
 - 2026-08-20 — 🟠 **La paleta nueva no se ha auditado en carrito ni checkout.**
 - 2026-08-20 — 🟡 **Texturas aún no aplicadas en PDP ni en `CasaRealSection`.**
@@ -237,7 +237,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas, migrar variantes/CTAs, `ProductStorySections` y el bloque "6 meses sin intereses" a terracota/periwinkle.
+- [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas, migrar estado activo/reposo de variantes, `ProductStorySections` y el bloque "6 meses sin intereses" a terracota/periwinkle.
 - [ALTA] **Auditar la paleta nueva en carrito y checkout**.
 - [ALTA] **Ejecutar FASE 4 (fotos atmosféricas nocturnas)**, sin rostros. 4 slots esperando imagen.
 - [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página).
