@@ -325,9 +325,9 @@ html {
 }
 .badge-msi {
   @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-medium;
-  background: hsl(88 34% 90%);
-  color: hsl(90 32% 24%);
-  border: 1px solid hsl(88 26% 72%);
+  background: hsl(var(--dunaru-periwinkle) / 0.16);
+  color: hsl(var(--dunaru-periwinkle-deep));
+  border: 1px solid hsl(var(--dunaru-periwinkle) / 0.4);
 }
 
 /* ══ Section spacing ══ */

@@ -56,6 +56,10 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 - Display: Instrument Serif (`font-display`) · Body/UI: Manrope (`font-body`).
 - **`--radius: 0rem`**. Excepción: `rounded-field` (0.25rem) en `ui/input.tsx` y `ui/textarea.tsx`. Los `rounded-full` se conservan.
 
+### 🏷️ BADGE MSI (`.badge-msi`, `index.css`, desde 2026-08-20)
+Pill "Hasta 6 MSI" (usado en el hero de `IndexUI.tsx` y donde se reutilice la clase `.badge-msi`). Antes usaba un verde hardcodeado ajeno a la paleta. Ahora: `background: hsl(var(--dunaru-periwinkle)/0.16)`, `color: hsl(var(--dunaru-periwinkle-deep))`, `border: hsl(var(--dunaru-periwinkle)/0.4)`. Al ser una sola clase CSS, cualquier uso futuro de `className="badge-msi"` hereda el cambio automáticamente.
+⚠️ El aviso de MSI del **checkout** (`CheckoutUI.tsx`, "Págalo a meses sin intereses") y el bloque de trust-icons de la **PDP** ("6 meses · Sin intereses" con ícono en círculo, `ProductPageUI.tsx` ~línea 835-843) son componentes DISTINTOS, en `dunaru-champagne`/`dunaru-ambar`, no en `.badge-msi`. No se tocaron: el checkout está bloqueado para el rediseño y el bloque de la PDP usa un patrón visual distinto (ícono + texto, no pill).
+
 ### 🖱️ ESTADOS HOVER (regla de marca, desde 2026-08-20, ajustada 2026-08-20 x2)
 - **Botón `default` (CTA principal "Comprar ahora", en TODAS las PDP vía `Button`)**: reposo `bg-[hsl(var(--dunaru-oliva-cta))]` + `text-dunaru-marfil` (verde oliva vivo, texto BEIGE/marfil — ⚠️ NO periwinkle, se probó y se revirtió 2026-08-20); hover pasa a Burnt Terracotta (`bg-secondary` + `text-secondary-foreground`). Vive en `src/components/ui/button.tsx`.
 - **Botón "Agregar al carrito" de la PDP** (`ProductPageUI.tsx`, variant `outline`, h-11, debajo del CTA principal): className custom que SOBRESCRIBE el hover terracota genérico. Hover propio = **periwinkle**. Excepción puntual del owner.
@@ -131,7 +135,7 @@ Componente COMPARTIDO: home (`IndexUI`, `bg-background`, con eyebrow y footer CT
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ Fase 2.5 · ✅ Fase 2.6 · ✅ Fase 2.7 · ✅ Fase 2.8 · ✅ Fase 2.9 (carrusel de pasos terracota+periwinkle). ⏭️ Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ Fase 2.5 · ✅ Fase 2.6 · ✅ Fase 2.7 · ✅ Fase 2.8 · ✅ Fase 2.9 (carrusel de pasos) · ✅ Fase 2.10 (badge MSI a periwinkle). ⏭️ Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
@@ -145,6 +149,9 @@ Fase 1 sistema base · Fase 2 home · Fase 2.5 paleta + texturas · Fase 2.6 hov
 ### 3.6b ✅ FASE 2.9 — Carrusel de pasos (2026-08-20)
 `ProductStepsCarousel.tsx` migrado a acentos terracota + periwinkle (ver sección 2). Footer CTA de la home ("Ver el kit completo") al patrón "outline terracota". Al ser componente compartido, el cambio se replica en home y en TODAS las PDP.
 
+### 3.6c ✅ FASE 2.10 — Badge MSI (2026-08-20)
+`.badge-msi` (index.css) pasó de verde hardcodeado a periwinkle/periwinkle-deep. Cambio a nivel de clase CSS → se replica automáticamente en cualquier sección que use `className="badge-msi"` (hoy: hero de `IndexUI`).
+
 ### 3.7 FASE 3 — PDP — SIGUIENTE
 🔒 El orden del buy box NO cambia. Solo tratamiento visual + dos añadidos.
 1. Galería a sangre en móvil, sin borde ni radius.
@@ -155,6 +162,7 @@ Fase 1 sistema base · Fase 2 home · Fase 2.5 paleta + texturas · Fase 2.6 hov
 6. Barrer eyebrows viejos → `.eyebrow`; aplicar texturas a las secciones de historia.
 7. **Migrar el selector de variantes de `ProductPageUI.tsx` (~línea 675) al patrón oficial de pills**.
 8. Migrar `ProductStorySections.tsx` (garantías, bloques, tabla comparativa) de `dunaru-champagne` a terracota/periwinkle, igual que el carrusel.
+9. **NUEVO**: unificar el bloque de trust-icons "6 meses sin intereses" (~línea 835 `ProductPageUI.tsx`, hoy en champagne/ambar) con el resto de la paleta terracota/periwinkle si se decide mantenerlo como ícono (no como pill).
 
 ### 3.8 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
 Set de **imágenes atmosféricas nocturnas**: penumbra, luz dorada, interiores saturados, sombras largas. ⛔ **SIN ROSTROS.**
@@ -171,6 +179,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" a Periwinkle** (`.badge-msi` en `index.css`): antes verde hardcodeado ajeno a la paleta, ahora `dunaru-periwinkle`/`dunaru-periwinkle-deep`. Al ser una sola clase CSS, se replica en cualquier sección que la use (hoy: hero de `IndexUI`). El aviso MSI del checkout y el bloque de íconos de la PDP son componentes distintos y NO se tocaron (ver sección 2, nota "BADGE MSI").
 - 2026-08-20 — 🔢 **Carrusel "Crea tu vela en 4 pasos" a terracota + periwinkle** (`ProductStepsCarousel.tsx`, compartido home + todas las PDP): eyebrow terracota, ornamento terracota/rombo periwinkle bajo el título, numeral cuadrado terracota→periwinkle al hover, imagen sin radius con zoom lento, regla periwinkle antes del título del paso, dots terracota/periwinkle, flechas outline terracota. En `IndexUI.tsx` el CTA "Ver el kit completo" pasó al patrón outline terracota.
 - 2026-08-20 — 🟢 **"Agregar al carrito" (PDP) con hover periwinkle** (excepción puntual del owner).
 - 2026-08-20 — 🟢 **CTA "Comprar ahora" — texto BEIGE/marfil** sobre verde oliva (`--dunaru-oliva-cta`), hover terracota.
@@ -185,7 +194,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-20 — ✅ **FASE 1**: `--radius: 0rem`, tokens oscuros, utilidades editoriales.
 - 2026-08-20 — ⛔ **DECISIÓN: dunaru NO será founder-led.**
 - 2026-08-07 — 🔍 Auditoría PDP `perlas-originales-500-g` (ver `.lovivo/cro-log.md`).
-- 2026-08-07 — ✅ Auditoría de landing móvil: 13 secciones → 9.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 9 productos, 75 imágenes en `product-images/products/`.
@@ -205,6 +213,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ## 6. Known Issues
 - 2026-08-20 — 🟠 **`ProductStorySections.tsx` sigue en `dunaru-champagne`** (tira de garantías, checks de bullets, tabla comparativa). Debe alinearse a terracota/periwinkle como el carrusel → Fase 3 punto 8.
 - 2026-08-20 — 🟠 **La PDP sigue con hovers y colores hardcodeados** (selector de variantes `ProductPageUI.tsx` ~línea 675: `bg-foreground`/`border-foreground`).
+- 2026-08-20 — 🟠 **El bloque de trust-icons "6 meses sin intereses" de la PDP (~línea 835) sigue en champagne/ambar**, distinto del `.badge-msi` ya migrado a periwinkle.
 - 2026-08-20 — 🟠 **La paleta nueva no se ha auditado en carrito ni checkout.**
 - 2026-08-20 — 🟡 **Texturas aún no aplicadas en PDP ni en `CasaRealSection`.**
 - 2026-08-20 — 🟡 Los hex de `TONOS` en la landing (`#F2EBDD`, `#E2CCA3`, `#1F1D1B`) son colores REALES de la cera: **no se cambian**.
@@ -222,12 +231,12 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-07 — 🟡 `PDP_BENEFITS` solo cubre 6 slugs.
 - 2026-07-31 — 🟠 Footer de `EcommerceTemplate.tsx`: 3 nombres de producto hardcodeados.
 - 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price`. Workaround: Dashboard manual.
-- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos o vacíos incluso para strings triviales (reconfirmado 2026-08-20, 3 veces seguidas). **Verificar SIEMPRE con `lov-view`.**
+- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos o vacíos incluso para strings triviales (reconfirmado 2026-08-20, 4 veces seguidas). **Verificar SIEMPRE con `lov-view`.**
 - 2026-07-31 — 🟡 Autocapture de clics parece desactivado en PostHog.
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas, migrar variantes/CTAs y **`ProductStorySections` a terracota/periwinkle**.
+- [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas, migrar variantes/CTAs, `ProductStorySections` y el bloque "6 meses sin intereses" a terracota/periwinkle.
 - [ALTA] **Auditar la paleta nueva en carrito y checkout**.
 - [ALTA] **Ejecutar FASE 4 (fotos atmosféricas nocturnas)**, sin rostros. 4 slots esperando imagen.
 - [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página).
