@@ -9,9 +9,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        /* CTA principal: Deep Olive en reposo → Burnt Terracotta al hover */
+        /* CTA principal "Comprar ahora": verde oliva vivo + texto periwinkle en reposo → Burnt Terracotta al hover */
         default:
-          "bg-primary text-primary-foreground hover:bg-secondary hover:text-secondary-foreground",
+          "bg-[hsl(var(--dunaru-oliva-cta))] text-dunaru-periwinkle hover:bg-secondary hover:text-secondary-foreground",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline:
