@@ -90,12 +90,17 @@ export default {
 					carbon:    '#2B2A27',
 					onix:      '#1E1C1A',
 					ambar:     '#D89A57',
+					// Tokens oscuros atmosféricos (secciones editoriales)
+					tabaco:    'hsl(var(--dunaru-tabaco))',
+					cacao:     'hsl(var(--dunaru-cacao))',
 				}
 			},
 			borderRadius: {
 				lg:  'var(--radius)',
-				md:  'calc(var(--radius) - 2px)',
-				sm:  'calc(var(--radius) - 4px)'
+				md:  'var(--radius)',
+				sm:  'var(--radius)',
+				// Campos de formulario: conservan un radio mínimo por legibilidad
+				field: 'var(--radius-field)'
 			},
 			keyframes: {
 				'accordion-down': {
