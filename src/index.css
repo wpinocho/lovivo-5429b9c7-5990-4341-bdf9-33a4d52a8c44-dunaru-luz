@@ -324,10 +324,10 @@ html {
   color: hsl(var(--dunaru-marfil));
 }
 .badge-msi {
-  @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-medium;
-  background: hsl(var(--dunaru-periwinkle) / 0.16);
-  color: hsl(var(--dunaru-periwinkle-deep));
-  border: 1px solid hsl(var(--dunaru-periwinkle) / 0.4);
+  @apply inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-medium backdrop-blur-sm;
+  background: hsl(var(--dunaru-marfil) / 0.14);
+  color: hsl(var(--dunaru-periwinkle));
+  border: 1px solid hsl(var(--dunaru-periwinkle) / 0.5);
 }
 
 /* ══ Section spacing ══ */

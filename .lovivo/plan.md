@@ -57,7 +57,7 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 - **`--radius: 0rem`**. Excepción: `rounded-field` (0.25rem) en `ui/input.tsx` y `ui/textarea.tsx`. Los `rounded-full` se conservan.
 
 ### 🏷️ BADGE MSI (`.badge-msi`, `index.css`, desde 2026-08-20)
-Pill "Hasta 6 MSI" (usado en el hero de `IndexUI.tsx` y donde se reutilice la clase `.badge-msi`). Antes usaba un verde hardcodeado ajeno a la paleta. Ahora: `background: hsl(var(--dunaru-periwinkle)/0.16)`, `color: hsl(var(--dunaru-periwinkle-deep))`, `border: hsl(var(--dunaru-periwinkle)/0.4)`. Al ser una sola clase CSS, cualquier uso futuro de `className="badge-msi"` hereda el cambio automáticamente.
+Pill "Hasta 6 MSI" (usado en el hero de `IndexUI.tsx` y donde se reutilice la clase `.badge-msi`). Antes usaba un verde hardcodeado ajeno a la paleta. Se migró a periwinkle, pero sobre el hero oscuro (`texture-ambar`) el fondo `periwinkle/0.16` + texto `periwinkle-deep` casi no se distinguía. Ajuste final: fondo "frosted glass" `hsl(var(--dunaru-marfil)/0.14)` + `backdrop-blur-sm`, texto en `dunaru-periwinkle` (claro, no `-deep`), borde `periwinkle/0.5`. Al ser una sola clase CSS, cualquier uso futuro de `className="badge-msi"` hereda el cambio automáticamente.
 ⚠️ El aviso de MSI del **checkout** (`CheckoutUI.tsx`, "Págalo a meses sin intereses") y el bloque de trust-icons de la **PDP** ("6 meses · Sin intereses" con ícono en círculo, `ProductPageUI.tsx` ~línea 835-843) son componentes DISTINTOS, en `dunaru-champagne`/`dunaru-ambar`, no en `.badge-msi`. No se tocaron: el checkout está bloqueado para el rediseño y el bloque de la PDP usa un patrón visual distinto (ícono + texto, no pill).
 
 ### 🖱️ ESTADOS HOVER (regla de marca, desde 2026-08-20, ajustada 2026-08-20 x2)
@@ -179,6 +179,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" — fondo frosted glass** (`.badge-msi` en `index.css`): el primer ajuste a periwinkle casi no se veía sobre el hero oscuro. Fix: fondo semi-transparente `dunaru-marfil/0.14` + `backdrop-blur-sm`, texto `dunaru-periwinkle` claro, borde `periwinkle/0.5`. Mejor contraste sobre `texture-ambar`.
 - 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" a Periwinkle** (`.badge-msi` en `index.css`): antes verde hardcodeado ajeno a la paleta, ahora `dunaru-periwinkle`/`dunaru-periwinkle-deep`. Al ser una sola clase CSS, se replica en cualquier sección que la use (hoy: hero de `IndexUI`). El aviso MSI del checkout y el bloque de íconos de la PDP son componentes distintos y NO se tocaron (ver sección 2, nota "BADGE MSI").
 - 2026-08-20 — 🔢 **Carrusel "Crea tu vela en 4 pasos" a terracota + periwinkle** (`ProductStepsCarousel.tsx`, compartido home + todas las PDP): eyebrow terracota, ornamento terracota/rombo periwinkle bajo el título, numeral cuadrado terracota→periwinkle al hover, imagen sin radius con zoom lento, regla periwinkle antes del título del paso, dots terracota/periwinkle, flechas outline terracota. En `IndexUI.tsx` el CTA "Ver el kit completo" pasó al patrón outline terracota.
 - 2026-08-20 — 🟢 **"Agregar al carrito" (PDP) con hover periwinkle** (excepción puntual del owner).
