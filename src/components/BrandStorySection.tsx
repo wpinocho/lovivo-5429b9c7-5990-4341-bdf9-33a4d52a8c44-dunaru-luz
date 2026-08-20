@@ -28,12 +28,12 @@ const PILLARS = [
 
 export const BrandStorySection = () => {
   return (
-    <section className="section-pad bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="section-pad surface-nacar relative texture-grano">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Imagen */}
           <div className="relative order-1 lg:order-none">
-            <div className="aspect-[4/5] overflow-hidden rounded-sm">
+            <div className="aspect-[4/5] overflow-hidden rounded-t-[999px] rounded-b-lg elev-media">
               <img
                 src="/paso-vierte.webp"
                 alt="Perlas de cera dunaru hechas en México, vertidas a mano en un recipiente de vidrio"
@@ -41,15 +41,16 @@ export const BrandStorySection = () => {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="absolute -bottom-4 -right-4 hidden sm:block bg-dunaru-onix text-dunaru-marfil px-5 py-4 rounded-sm shadow-lg">
+            <div className="absolute -bottom-4 -right-4 hidden sm:block surface-acanalado text-dunaru-marfil px-5 py-4 rounded-lg elev-media">
               <p className="font-display text-2xl leading-none">Hecho</p>
-              <p className="font-body text-xs tracking-widest uppercase text-dunaru-champagne mt-1">en México</p>
+              <p className="font-body text-xs tracking-[0.22em] uppercase text-dunaru-marfil/85 mt-1">en México</p>
             </div>
           </div>
 
           {/* Texto */}
           <div>
-            <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
+            <p className="eyebrow mb-3 flex items-center gap-3">
+              <span className="h-px w-8 surface-laton inline-block" />
               Quiénes somos
             </p>
             <h2 className="font-display text-3xl sm:text-4xl text-foreground leading-tight mb-5">
@@ -71,8 +72,8 @@ export const BrandStorySection = () => {
             {/* Pilares de confianza */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
               {PILLARS.map(({ icon, title, desc }, i) => (
-                <div key={i} className="border-l-2 border-dunaru-champagne/40 pl-3">
-                  <span className="text-dunaru-champagne">{icon}</span>
+                <div key={i} className="border-l-2 border-dunaru-terracota/45 pl-3">
+                  <span className="text-dunaru-terracota">{icon}</span>
                   <h3 className="font-body font-semibold text-sm text-foreground mt-2">{title}</h3>
                   <p className="font-body text-xs text-foreground/55 leading-snug mt-0.5">{desc}</p>
                 </div>
@@ -81,7 +82,7 @@ export const BrandStorySection = () => {
 
             <Link
               to="/devoluciones"
-              className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-dunaru-champagne hover:underline mt-7"
+              className="inline-flex items-center gap-1.5 font-body text-sm font-medium text-dunaru-terracota hover:underline mt-7"
             >
               Conoce nuestra garantía y cambios
               <ArrowRight className="h-3.5 w-3.5" />

@@ -46,8 +46,10 @@ export const CasaRealSection = () => {
     <section className="section-pad bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <p className="font-body text-xs font-semibold tracking-[0.2em] uppercase text-dunaru-champagne mb-3">
+          <p className="eyebrow mb-3 inline-flex items-center gap-3">
+            <span className="h-px w-6 surface-laton inline-block" />
             En espacios reales
+            <span className="h-px w-6 surface-laton inline-block" />
           </p>
           <h2 className="font-display text-3xl sm:text-4xl text-foreground">
             Así se ve en una casa real
@@ -65,7 +67,7 @@ export const CasaRealSection = () => {
               to={`/productos/${scene.slug}`}
               className="group block shrink-0 w-[72%] sm:w-[48%] md:w-auto snap-start"
             >
-              <div className="relative overflow-hidden rounded-sm">
+              <div className="relative overflow-hidden rounded-lg elev-suave">
                 <div className="aspect-[3/4] overflow-hidden">
                   <img
                     src={scene.img}
@@ -73,16 +75,16 @@ export const CasaRealSection = () => {
                     loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-dunaru-onix/65 via-transparent to-transparent" />
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-5">
-                  <span className="font-body text-[11px] font-semibold tracking-widest uppercase text-dunaru-champagne">
+                  <span className="font-body text-[11px] font-semibold tracking-[0.22em] uppercase text-dunaru-terracota-suave">
                     {scene.tono}
                   </span>
-                  <p className="font-display text-lg text-white leading-snug mt-0.5">
+                  <p className="font-display text-lg text-dunaru-marfil leading-snug mt-0.5">
                     {scene.space}
                   </p>
-                  <span className="font-body text-xs text-white/70 flex items-center gap-1 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <span className="font-body text-xs text-dunaru-marfil/75 flex items-center gap-1 mt-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                     Ver producto <ArrowRight className="h-3 w-3" />
                   </span>
                 </div>
@@ -92,11 +94,11 @@ export const CasaRealSection = () => {
         </div>
 
         {/* Franja de confianza honesta (sin reseñas inventadas) */}
-        <div className="mt-12 border-t border-border pt-8">
+        <div className="mt-12 border-t border-dunaru-travertino pt-8">
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-2">
             {TRUST.map(({ icon, text }, i) => (
               <div key={i} className="flex items-center justify-center gap-2.5 text-center">
-                <span className="text-dunaru-champagne shrink-0">{icon}</span>
+                <span className="text-dunaru-terracota shrink-0">{icon}</span>
                 <span className="font-body text-sm font-medium text-foreground/75">{text}</span>
               </div>
             ))}
@@ -107,7 +109,7 @@ export const CasaRealSection = () => {
               href="https://wa.me/525531215386?text=Hola%2C%20quiero%20compartir%20una%20foto%20de%20mi%20vela%20dunaru"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-dunaru-champagne font-medium hover:underline"
+              className="text-dunaru-terracota font-medium hover:underline"
             >
               Comparte tu foto por WhatsApp
             </a>{' '}

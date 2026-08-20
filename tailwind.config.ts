@@ -82,14 +82,21 @@ export default {
 					border:             'hsl(var(--sidebar-border))',
 					ring:               'hsl(var(--sidebar-ring))'
 				},
-				// Dunaru brand tokens
+				// Dunaru brand tokens — mood board "Sculpted light"
 				dunaru: {
-					marfil:    '#FAF6EF',
-					arena:     '#F1E9DC',
-					champagne: '#C2A878',
-					carbon:    '#2B2A27',
-					onix:      '#1E1C1A',
-					ambar:     '#D89A57',
+					marfil:     'hsl(var(--dunaru-marfil))',
+					arena:      'hsl(var(--dunaru-arena))',
+					travertino: 'hsl(var(--dunaru-travertino))',
+					nacar:      'hsl(var(--dunaru-nacar))',
+					terracota:  'hsl(var(--dunaru-terracota))',
+					'terracota-suave': 'hsl(var(--dunaru-terracota-suave))',
+					ocre:       'hsl(var(--dunaru-ocre))',
+					olivo:      'hsl(var(--dunaru-olivo))',
+					periwinkle: 'hsl(var(--dunaru-periwinkle))',
+					champagne:  'hsl(var(--dunaru-champagne))',
+					carbon:     'hsl(var(--dunaru-carbon))',
+					onix:       'hsl(var(--dunaru-onix))',
+					ambar:      'hsl(var(--dunaru-ambar))',
 				}
 			},
 			borderRadius: {
