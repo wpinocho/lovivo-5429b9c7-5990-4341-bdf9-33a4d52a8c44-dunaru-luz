@@ -217,7 +217,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-3 animate-fade-up delay-300">
               <Link to="/productos/kit-vaso-de-vidrio">
-                <Button size="lg" className="w-full sm:w-auto bg-dunaru-marfil text-dunaru-onix hover:bg-dunaru-arena font-body font-semibold uppercase tracking-[0.12em] text-xs px-9 py-4 h-auto shadow-none border-0 transition-editorial">
+                <Button size="lg" className="w-full sm:w-auto bg-dunaru-marfil text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil font-body font-semibold uppercase tracking-[0.12em] text-xs px-9 py-4 h-auto shadow-none border-0 transition-editorial">
                   Comprar ahora
                   <ArrowRight className="ml-2 h-3.5 w-3.5" />
                 </Button>

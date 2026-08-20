@@ -62,6 +62,7 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 - **CTA / botones → BURNT TERRACOTTA.** Vive en `src/components/ui/button.tsx`:
   `default` olivo → terracota · `outline` borde+texto terracota + fill 10% · `secondary` terracota/85 · `ghost` fill terracota 10% + texto terracota · `link` texto terracota.
   ⚠️ Cualquier CTA con `bg-*` hardcodeado en className NO hereda esto. Migrar a variantes.
+- **CTA SOBRE FONDO OSCURO (hero) = INVERSIÓN**: reposo `bg-dunaru-marfil` + `text-dunaru-terracota`; hover `bg-dunaru-terracota` + `text-dunaru-marfil`. Patrón oficial para botones claros sobre imagen/oscuro (el hover marfil→arena era casi invisible).
 - **NAVEGACIÓN → MUTED PERIWINKLE.** Clases en `index.css` (`@layer components`):
   | Clase | Uso |
   |---|---|
@@ -134,7 +135,7 @@ Hero `min-h-screen` con lockup y CTA a `kit-vaso-de-vidrio`; beneficios sin icon
 Ver sección 2. Paleta terracota/olivo/saffron + 6 clases de textura + grano global. PDP y checkout heredan la paleta automáticamente; **todavía NO tienen texturas aplicadas**.
 
 ### 3.4 ✅ FASE 2.6 — Estados hover (2026-08-20)
-Terracota en todos los hovers de botón (`ui/button.tsx`), periwinkle en toda la navegación (`.nav-link*`, `.nav-item`). Ver sección 2 → 🖱️ ESTADOS HOVER.
+Terracota en todos los hovers de botón (`ui/button.tsx`), periwinkle en toda la navegación (`.nav-link*`, `.nav-item`). CTA claro del hero con inversión marfil ↔ terracota. Ver sección 2 → 🖱️ ESTADOS HOVER.
 
 ### 3.5 FASE 3 — PDP — SIGUIENTE
 🔒 El orden del buy box NO cambia. Solo tratamiento visual + dos añadidos.
@@ -144,7 +145,7 @@ Terracota en todos los hovers de botón (`ui/button.tsx`), periwinkle en toda la
 4. **NUEVO "Combina bien con"**: `ProductAddOns` como fila editorial debajo del buy box → resuelve la falta de cross-sell en `perlas-originales-500-g`.
 5. `<RitualSection />` al cierre de la PDP.
 6. Barrer eyebrows viejos → `.eyebrow`; aplicar `texture-arena` / `texture-travertino` a las secciones de historia.
-7. Auditar CTAs con `bg-*` hardcodeado → migrar a variantes de `Button` para que hereden el hover terracota.
+7. Auditar CTAs con `bg-*` hardcodeado → migrar a variantes de `Button` o al patrón de inversión marfil ↔ terracota.
 
 ### 3.6 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
 Set de **imágenes atmosféricas nocturnas**: penumbra, luz dorada, interiores saturados (madera, lino, cerámica, travertino, vidrio ámbar, metal cepillado), sombras largas. ⛔ **SIN ROSTROS.**
@@ -161,6 +162,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-20 — 🖱️ **CTA del hero con inversión de color**. `IndexUI.tsx` "Comprar ahora": reposo `bg-dunaru-marfil` + `text-dunaru-terracota`, hover `bg-dunaru-terracota` + `text-dunaru-marfil`. El hover anterior (marfil → arena) era casi imperceptible. Nuevo patrón oficial para botones claros sobre fondo oscuro.
 - 2026-08-20 — 🖱️ **ESTADOS HOVER DE MARCA**. `ui/button.tsx`: las 5 variantes ahora van a Burnt Terracotta al hover (default olivo→terracota, outline borde+texto, ghost fill 10%, link texto). `index.css`: nuevas `.nav-link`, `.nav-link-mobile`, `.nav-link-dark`, `.nav-item` con Muted Periwinkle + subrayado animado; nuevo token `--dunaru-periwinkle-deep` (230 27% 45%) porque el periwinkle base no contrasta sobre marfil. Aplicadas en header desktop, dropdown, menú móvil y footer de `EcommerceTemplate.tsx`. También quité `rounded-xl`/`rounded-lg` del dropdown (radius 0).
 - 2026-08-20 — 🎨 **PALETA 2026 + SISTEMA DE MATERIALES**. Warm Ivory / Travertino / Burnt Terracotta / Deep Olive / Saffron Gold / Muted Periwinkle. Tokens `dunaru-*` migrados a variables CSS con `<alpha-value>`; nuevos `terracota`, `periwinkle`, `travertino`, `laton`. 6 clases `texture-*` + `.hairline-metal` + grano global en `<body>`. Aplicadas en home, `Reviews`, `RitualSection`, `BrandStorySection`. Estrellas de reseñas a Saffron Gold.
 - 2026-08-20 — ⚠️ **Aprendizaje**: `dunaru-champagne` pasó a latón oscuro, ilegible sobre fondos oscuros → hero, `RitualSection` y `.eyebrow-light` migrados a `dunaru-ambar`.
@@ -175,7 +177,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-07 — ✅ Auditoría de checkout: `ShippingPromise`, resumen móvil cerrado, `CouponSection`, MSI bajo el Total.
 - 2026-08-07 — ✅ Buy box rediseñado: `PDP_BENEFITS`, cantidad compacta, CTA `h-12` con precio.
 - 2026-08-07 — ✅ `ProductStepsCarousel.tsx` + PDP reordenada (prueba social a la posición 3).
-- 2026-08-07 — ✅ Landing con precios y nombres desde la DB (`buildCatalog`).
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 9 productos, 75 imágenes en `product-images/products/`.
@@ -193,7 +194,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-20 — 🟠 **CTAs con color hardcodeado no heredan el hover terracota.** Cualquier `<Button className="bg-...">` o `<a>` estilizado a mano se queda con el hover viejo. Auditar en Fase 3 (PDP, carrito, newsletter, hero).
+- 2026-08-20 — 🟠 **CTAs con color hardcodeado no heredan el hover terracota.** Cualquier `<Button className="bg-...">` o `<a>` estilizado a mano se queda con el hover viejo. El hero ya está corregido; falta auditar PDP, carrito y newsletter en Fase 3.
 - 2026-08-20 — 🟠 **La paleta nueva no se ha auditado en PDP, carrito ni checkout.** Heredan tokens, pero hay que revisar contraste real, sobre todo cualquier `text-dunaru-champagne` sobre fondo oscuro y los verdes del `badge-msi`.
 - 2026-08-20 — 🟡 **Texturas aún no aplicadas en PDP ni en `CasaRealSection`.** Pendiente para la Fase 3.
 - 2026-08-20 — 🟡 Los hex de `TONOS` en la landing (`#F2EBDD`, `#E2CCA3`, `#1F1D1B`) son colores REALES de la cera, no de la marca: **no se cambian** con la paleta.
@@ -218,7 +219,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 
 ## 7. Pending / Future Sessions
 - [ALTA] **Auditar la paleta nueva en PDP, carrito y checkout** (contraste + `badge-msi`).
-- [ALTA] **Auditar CTAs hardcodeados** para que hereden el hover terracota.
+- [ALTA] **Auditar CTAs hardcodeados** para que hereden el hover terracota o el patrón de inversión.
 - [ALTA] **Ejecutar FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas.
 - [ALTA] **Ejecutar FASE 4 (fotos atmosféricas nocturnas)**, sin rostros. 4 slots esperando imagen.
 - [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página).
