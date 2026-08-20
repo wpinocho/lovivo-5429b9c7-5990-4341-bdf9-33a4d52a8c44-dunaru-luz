@@ -99,18 +99,18 @@ export const EcommerceTemplate = ({
               <div className="relative group">
                 <button
                   type="button"
-                  className="flex items-center gap-1 text-foreground/60 hover:text-foreground transition-colors"
+                  className="nav-link flex items-center gap-1 text-foreground/60"
                 >
                   Productos
                   <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
                 </button>
                 <div className="absolute left-0 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 focus-within:opacity-100 focus-within:visible transition-all duration-200 z-50">
-                  <div className="min-w-[200px] rounded-xl border border-border bg-background shadow-lg p-2">
+                  <div className="min-w-[200px] border border-border bg-background shadow-lg p-2">
                     {PRODUCT_CATEGORIES.map(({ to, label }) => (
                       <Link
                         key={to}
                         to={to}
-                        className="block rounded-lg px-3 py-2 text-sm text-foreground/70 hover:text-foreground hover:bg-muted transition-colors"
+                        className="nav-item block px-3 py-2 text-sm text-foreground/70"
                       >
                         {label}
                       </Link>
@@ -120,31 +120,31 @@ export const EcommerceTemplate = ({
               </div>
               <ScrollLink
                 to="/#como-funciona"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="nav-link text-foreground/60"
               >
                 Cómo funciona
               </ScrollLink>
               <ScrollLink
                 to="/#tonos"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="nav-link text-foreground/60"
               >
                 Tonos
               </ScrollLink>
               <ScrollLink
                 to="/#faq"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="nav-link text-foreground/60"
               >
                 Preguntas
               </ScrollLink>
               <ScrollLink
                 to="/#comprar"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="nav-link text-foreground/60"
               >
                 Comprar
               </ScrollLink>
               <Link
                 to="/orders/track"
-                className="text-foreground/60 hover:text-foreground transition-colors"
+                className="nav-link text-foreground/60"
               >
                 Rastrear pedido
               </Link>
@@ -196,7 +196,7 @@ export const EcommerceTemplate = ({
                     <Link
                       key={to}
                       to={to}
-                      className="text-foreground/70 hover:text-foreground transition-colors"
+                      className="nav-link-mobile text-foreground/70"
                       onClick={() => setMobileMenuOpen(false)}
                     >
                       {label}
@@ -213,7 +213,7 @@ export const EcommerceTemplate = ({
                 <ScrollLink
                   key={to}
                   to={to}
-                  className="text-foreground/70 hover:text-foreground py-1 transition-colors"
+                  className="nav-link-mobile text-foreground/70 py-1"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {label}
@@ -221,7 +221,7 @@ export const EcommerceTemplate = ({
               ))}
               <Link
                 to="/orders/track"
-                className="text-foreground/70 hover:text-foreground py-1 transition-colors"
+                className="nav-link-mobile text-foreground/70 py-1"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Rastrear pedido
@@ -275,7 +275,7 @@ export const EcommerceTemplate = ({
                 { to: '/productos/kit-vaso-de-concreto', label: 'Kit Bowl de Cerámica' },
                 { to: '/productos/reserva-1-kg', label: 'Reserva 1 kg' },
               ].map(({ to, label }) => (
-                <Link key={to} to={to} className="block text-dunaru-marfil/70 hover:text-dunaru-marfil transition-colors py-0.5">
+                <Link key={to} to={to} className="nav-link-dark block text-dunaru-marfil/70 py-0.5">
                   {label}
                 </Link>
               ))}
@@ -294,7 +294,7 @@ export const EcommerceTemplate = ({
                 { to: '/terminos-y-condiciones', label: 'Términos y condiciones' },
                 { to: '/aviso-de-privacidad', label: 'Aviso de privacidad' },
               ].map(({ to, label }) => (
-                <Link key={to} to={to} className="block text-dunaru-marfil/70 hover:text-dunaru-marfil transition-colors py-0.5">
+                <Link key={to} to={to} className="nav-link-dark block text-dunaru-marfil/70 py-0.5">
                   {label}
                 </Link>
               ))}

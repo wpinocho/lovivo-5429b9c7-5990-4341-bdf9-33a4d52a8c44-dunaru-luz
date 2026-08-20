@@ -79,6 +79,7 @@ html {
     /* ── Nuevos tokens de paleta ── */
     --dunaru-terracota: 14 55% 50%;   /* #C55B3A Burnt Terracotta */
     --dunaru-periwinkle: 230 25% 64%; /* #8B93B9 Muted Periwinkle */
+    --dunaru-periwinkle-deep: 230 27% 45%; /* misma familia, legible sobre marfil */
     --dunaru-travertino: 36 30% 82%;  /* piedra porosa, superficies */
     --dunaru-laton: 36 46% 50%;       /* metal cepillado cálido */
 
@@ -181,6 +182,70 @@ html {
   font-style: italic;
   text-transform: lowercase;
   letter-spacing: 0.01em;
+}
+
+/* ══ Navegación · hover en Muted Periwinkle ══
+   .nav-link       → enlaces sobre fondo claro (header)
+   .nav-link-dark  → enlaces sobre fondo oscuro (footer)
+   .nav-item       → filas de menú desplegable
+   OJO: position:relative vive en @layer components para no pisar
+   las utilidades absolute/fixed de Tailwind. */
+@layer components {
+  .nav-link {
+    position: relative;
+    transition: color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    height: 1px;
+    width: 100%;
+    background: hsl(var(--dunaru-periwinkle));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link:hover,
+  .nav-link:focus-visible {
+    color: hsl(var(--dunaru-periwinkle-deep));
+  }
+  .nav-link:hover::after,
+  .nav-link:focus-visible::after,
+  .group:hover > .nav-link::after {
+    transform: scaleX(1);
+  }
+  .group:hover > .nav-link {
+    color: hsl(var(--dunaru-periwinkle-deep));
+  }
+
+  /* Men\u00fa m\u00f3vil: mismo periwinkle, sin subrayado (lista apilada) */
+  .nav-link-mobile {
+    transition: color 200ms ease;
+  }
+  .nav-link-mobile:hover,
+  .nav-link-mobile:focus-visible,
+  .nav-link-mobile:active {
+    color: hsl(var(--dunaru-periwinkle-deep));
+  }
+
+  .nav-link-dark {
+    transition: color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link-dark:hover,
+  .nav-link-dark:focus-visible {
+    color: hsl(var(--dunaru-periwinkle));
+  }
+
+  .nav-item {
+    transition: color 200ms ease, background-color 200ms ease;
+  }
+  .nav-item:hover,
+  .nav-item:focus-visible {
+    color: hsl(var(--dunaru-periwinkle-deep));
+    background-color: hsl(var(--dunaru-periwinkle) / 0.14);
+  }
 }
 
 /* Eyebrow fino (reemplaza los text-xs font-semibold tracking-[0.2em]) */
