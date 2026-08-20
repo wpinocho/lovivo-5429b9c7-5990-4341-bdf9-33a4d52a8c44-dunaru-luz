@@ -9,45 +9,48 @@ html {
 /* ══════════════════════════════════════════════════════════════
    DUNARU DESIGN SYSTEM
    Luz de diseño que cambia contigo.
-   Paleta: Marfil · Arena · Champagne · Carbón · Ónix · Ámbar
+   Paleta 2026: Warm Ivory · Travertino · Burnt Terracotta ·
+                Deep Olive · Saffron Gold · Muted Periwinkle
+   Materiales: cera en arena, travertino, vidrio ámbar,
+               metal cepillado, terracota mineral
    Tipografía: Instrument Serif (títulos) + Manrope (UI/cuerpo)
 ══════════════════════════════════════════════════════════════ */
 
 @layer base {
   :root {
     /* Core brand colors — all HSL */
-    --background: 40 43% 96%;          /* #FAF6EF — Marfil principal */
-    --background-alt: 36 38% 90%;      /* #F1E9DC — Arena pálida */
-    --foreground: 46 4% 16%;           /* #2B2A27 — Carbón suave */
+    --background: 36 37% 92%;          /* #F2ECE3 — Warm Ivory / Bone */
+    --background-alt: 36 34% 86%;      /* #E7DDCE — Travertino */
+    --foreground: 73 10% 17%;          /* #2F3128 — Deep Olive / Charcoal */
 
-    --card: 40 43% 96%;
-    --card-foreground: 46 4% 16%;
+    --card: 36 37% 92%;
+    --card-foreground: 73 10% 17%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 46 4% 16%;
+    --popover: 36 40% 96%;
+    --popover-foreground: 73 10% 17%;
 
-    /* Primary = Ónix (botones CTA principales) */
-    --primary: 30 4% 11%;              /* #1E1C1A — Ónix */
-    --primary-foreground: 40 43% 96%; /* Marfil sobre ónix */
+    /* Primary = Deep Olive (CTA principal, top bar, footer) */
+    --primary: 75 13% 15%;
+    --primary-foreground: 36 37% 92%;
 
-    /* Secondary = Champagne dorado */
-    --secondary: 38 40% 61%;          /* #C2A878 — Champagne */
-    --secondary-foreground: 30 4% 11%;
+    /* Secondary = Burnt Terracotta (color firma de la marca) */
+    --secondary: 14 55% 50%;          /* #C55B3A */
+    --secondary-foreground: 36 37% 92%;
 
-    /* Muted = Arena */
-    --muted: 36 38% 90%;              /* #F1E9DC */
-    --muted-foreground: 46 8% 42%;
+    /* Muted = Travertino */
+    --muted: 36 34% 86%;
+    --muted-foreground: 73 8% 38%;
 
-    /* Accent = Ámbar miel (uso mínimo, llama) */
-    --accent: 32 62% 59%;             /* #D89A57 */
-    --accent-foreground: 0 0% 100%;
+    /* Accent = Saffron Gold (llama, estrellas, luz) */
+    --accent: 38 62% 56%;             /* #D4A24A */
+    --accent-foreground: 75 13% 15%;
 
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 8 65% 44%;
+    --destructive-foreground: 36 37% 92%;
 
-    --border: 36 25% 83%;
-    --input: 36 25% 83%;
-    --ring: 38 40% 61%;
+    --border: 36 22% 79%;
+    --input: 36 22% 79%;
+    --ring: 14 55% 50%;
 
     /* Editorial high-end: esquinas rectas en toda la marca.
        Los formularios conservan su radio propio (--radius-field). */
@@ -55,56 +58,66 @@ html {
     --radius-field: 0.25rem;
 
     /* Sidebar (heredado, mantener) */
-    --sidebar-background: 40 43% 96%;
-    --sidebar-foreground: 46 4% 16%;
-    --sidebar-primary: 30 4% 11%;
-    --sidebar-primary-foreground: 40 43% 96%;
-    --sidebar-accent: 36 38% 90%;
-    --sidebar-accent-foreground: 46 4% 16%;
-    --sidebar-border: 36 25% 83%;
-    --sidebar-ring: 38 40% 61%;
+    --sidebar-background: 36 37% 92%;
+    --sidebar-foreground: 73 10% 17%;
+    --sidebar-primary: 75 13% 15%;
+    --sidebar-primary-foreground: 36 37% 92%;
+    --sidebar-accent: 36 34% 86%;
+    --sidebar-accent-foreground: 73 10% 17%;
+    --sidebar-border: 36 22% 79%;
+    --sidebar-ring: 14 55% 50%;
 
-    /* Brand extra tokens */
-    --dunaru-marfil: 40 43% 96%;
-    --dunaru-arena: 36 38% 90%;
-    --dunaru-champagne: 38 40% 61%;
-    --dunaru-carbon: 46 4% 16%;
-    --dunaru-onix: 30 4% 11%;
-    --dunaru-ambar: 32 62% 59%;
+    /* ── Brand tokens (nombres estables, valores 2026) ──
+       Los nombres NO cambian: hay decenas de componentes usándolos. */
+    --dunaru-marfil: 36 37% 92%;      /* #F2ECE3 Warm Ivory */
+    --dunaru-arena: 36 34% 86%;       /* #E7DDCE Travertino claro */
+    --dunaru-champagne: 36 46% 45%;   /* Latón / brass, legible sobre marfil */
+    --dunaru-carbon: 73 10% 17%;      /* #2F3128 Deep Olive Charcoal */
+    --dunaru-onix: 75 13% 15%;        /* Deep Olive, CTA */
+    --dunaru-ambar: 38 62% 56%;       /* #D4A24A Saffron Gold */
+
+    /* ── Nuevos tokens de paleta ── */
+    --dunaru-terracota: 14 55% 50%;   /* #C55B3A Burnt Terracotta */
+    --dunaru-periwinkle: 230 25% 64%; /* #8B93B9 Muted Periwinkle */
+    --dunaru-travertino: 36 30% 82%;  /* piedra porosa, superficies */
+    --dunaru-laton: 36 46% 50%;       /* metal cepillado cálido */
 
     /* Tokens oscuros atmosféricos (secciones editoriales full-bleed) */
-    --dunaru-tabaco: 24 22% 14%;   /* marrón cálido profundo */
-    --dunaru-cacao:  22 26% 22%;   /* medio, para gradientes */
+    --dunaru-tabaco: 75 13% 13%;   /* olivo profundo, casi negro */
+    --dunaru-cacao:  75 11% 21%;   /* medio, para gradientes */
+
+    /* Grano de papel base, reutilizado por todas las texturas */
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.42'/%3E%3C/svg%3E");
   }
 
   .dark {
-    --background: 30 4% 11%;
-    --foreground: 40 43% 96%;
-    --card: 30 6% 14%;
-    --card-foreground: 40 43% 96%;
-    --popover: 30 6% 14%;
-    --popover-foreground: 40 43% 96%;
-    --primary: 40 43% 96%;
-    --primary-foreground: 30 4% 11%;
-    --secondary: 38 30% 25%;
-    --secondary-foreground: 40 43% 96%;
-    --muted: 30 6% 18%;
-    --muted-foreground: 36 15% 60%;
-    --accent: 32 62% 59%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 30 6% 22%;
-    --input: 30 6% 22%;
-    --ring: 38 40% 61%;
-    --sidebar-background: 30 4% 11%;
-    --sidebar-foreground: 40 43% 96%;
-    --sidebar-primary: 40 43% 96%;
-    --sidebar-primary-foreground: 30 4% 11%;
-    --sidebar-accent: 30 6% 18%;
-    --sidebar-accent-foreground: 40 43% 96%;
-    --sidebar-border: 30 6% 22%;
-    --sidebar-ring: 38 40% 61%;
+    --background: 75 13% 13%;
+    --foreground: 36 37% 92%;
+    --card: 75 11% 17%;
+    --card-foreground: 36 37% 92%;
+    --popover: 75 11% 17%;
+    --popover-foreground: 36 37% 92%;
+    --primary: 36 37% 92%;
+    --primary-foreground: 75 13% 13%;
+    --secondary: 14 45% 38%;
+    --secondary-foreground: 36 37% 92%;
+    --muted: 75 10% 21%;
+    --muted-foreground: 36 18% 66%;
+    --accent: 38 62% 56%;
+    --accent-foreground: 75 13% 13%;
+    --destructive: 8 65% 48%;
+    --destructive-foreground: 36 37% 92%;
+    --border: 75 9% 25%;
+    --input: 75 9% 25%;
+    --ring: 38 62% 56%;
+    --sidebar-background: 75 13% 13%;
+    --sidebar-foreground: 36 37% 92%;
+    --sidebar-primary: 36 37% 92%;
+    --sidebar-primary-foreground: 75 13% 13%;
+    --sidebar-accent: 75 10% 21%;
+    --sidebar-accent-foreground: 36 37% 92%;
+    --sidebar-border: 75 9% 25%;
+    --sidebar-ring: 38 62% 56%;
   }
 }
 
@@ -118,6 +131,10 @@ html {
     font-family: 'Manrope', sans-serif;
     font-feature-settings: "kern" 1, "liga" 1;
     -webkit-font-smoothing: antialiased;
+    /* Grano de papel base en toda la tienda */
+    background-image: var(--grain);
+    background-size: 200px 200px;
+    background-attachment: fixed;
   }
 
   h1, h2, h3 {
@@ -176,7 +193,8 @@ html {
   letter-spacing: 0.28em;
   color: hsl(var(--dunaru-champagne));
 }
-.eyebrow-light { color: hsl(var(--dunaru-champagne) / 0.9); }
+/* Sobre fondos oscuros el latón no contrasta: usamos Saffron Gold. */
+.eyebrow-light { color: hsl(var(--dunaru-ambar) / 0.95); }
 
 /* Escala display de secciones de marca (no usar en bloques de commerce) */
 .h-editorial {
@@ -223,16 +241,16 @@ html {
 .delay-400 { animation-delay: 0.4s; }
 
 /* ══ Color swatch tokens ══ */
-.swatch-marfil    { background-color: #F2EBDD; }
-.swatch-champagne { background-color: #E2CCA3; }
-.swatch-onix      { background-color: #1F1D1B; }
+.swatch-marfil    { background-color: #F2ECE3; }
+.swatch-champagne { background-color: #D4A24A; }
+.swatch-onix      { background-color: #2F3128; }
 
 /* ══ Badge variants ══ */
 .badge-mas-elegido {
   @apply inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold;
-  background: hsl(var(--dunaru-champagne) / 0.15);
-  color: hsl(var(--dunaru-carbon));
-  border: 1px solid hsl(var(--dunaru-champagne) / 0.4);
+  background: hsl(var(--dunaru-terracota) / 0.10);
+  color: hsl(var(--dunaru-terracota));
+  border: 1px solid hsl(var(--dunaru-terracota) / 0.35);
 }
 .badge-mejor-valor {
   @apply inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold;
@@ -241,9 +259,9 @@ html {
 }
 .badge-msi {
   @apply inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-medium;
-  background: hsl(150 60% 94%);
-  color: hsl(150 50% 25%);
-  border: 1px solid hsl(150 40% 75%);
+  background: hsl(88 34% 90%);
+  color: hsl(90 32% 24%);
+  border: 1px solid hsl(88 26% 72%);
 }
 
 /* ══ Section spacing ══ */
@@ -271,6 +289,121 @@ html {
 .divider-warm {
   height: 1px;
   background: linear-gradient(to right, transparent, hsl(var(--border)), transparent);
+}
+
+/* Ribete de metal cepillado: divisor con reflejo satinado */
+.hairline-metal {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    hsl(var(--dunaru-laton) / 0.15) 18%,
+    hsl(var(--dunaru-laton) / 0.55) 50%,
+    hsl(var(--dunaru-laton) / 0.15) 82%,
+    transparent
+  );
+}
+
+/* ══════════════════════════════════════════════════════════════
+   MATERIALES · TEXTURAS
+   Se pintan en un ::before con z-index -1 dentro de un
+   stacking context aislado, así nunca tapan el contenido.
+   Uso: <section className="bg-dunaru-arena texture-travertino">
+══════════════════════════════════════════════════════════════ */
+@layer components {
+  /* En @layer components para que las utilidades de Tailwind
+     (absolute, fixed, sticky…) sigan ganando sobre position: relative. */
+  .texture-grain,
+  .texture-arena,
+  .texture-travertino,
+  .texture-ambar,
+  .texture-terracota,
+  .texture-metal {
+    position: relative;
+    isolation: isolate;
+  }
+}
+
+.texture-grain::before,
+.texture-arena::before,
+.texture-travertino::before,
+.texture-ambar::before,
+.texture-terracota::before,
+.texture-metal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Grano de papel sutil · base neutra para cualquier sección clara */
+.texture-grain::before {
+  background-image: var(--grain);
+  background-size: 180px 180px;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+}
+
+/* Cera en arena · granular fina, mate, casi mineral.
+   Textura protagonista de la marca. */
+.texture-arena::before {
+  background-image:
+    var(--grain),
+    radial-gradient(circle at 50% 50%, hsl(36 28% 55% / 0.16) 0.5px, transparent 0.7px),
+    radial-gradient(140% 80% at 50% 0%, hsl(36 30% 70% / 0.22), transparent 70%);
+  background-size: 170px 170px, 4px 4px, auto;
+  opacity: 0.75;
+  mix-blend-mode: multiply;
+}
+
+/* Travertino · poroso, irregular, crema cálido. Superficies y pedestales. */
+.texture-travertino::before {
+  background-image:
+    var(--grain),
+    repeating-linear-gradient(93deg,
+      hsl(30 22% 52% / 0.045) 0 1px,
+      transparent 1px 7px),
+    radial-gradient(120% 55% at 18% 0%, hsl(36 26% 62% / 0.20), transparent 62%),
+    radial-gradient(110% 65% at 88% 100%, hsl(28 24% 58% / 0.16), transparent 66%);
+  background-size: 190px 190px, auto, auto, auto;
+  opacity: 0.72;
+  mix-blend-mode: multiply;
+}
+
+/* Terracota / cerámica mineral · mate, terrosa, imperfecta. */
+.texture-terracota::before {
+  background-image:
+    var(--grain),
+    radial-gradient(95% 70% at 28% 8%, hsl(14 48% 38% / 0.22), transparent 66%),
+    radial-gradient(80% 60% at 82% 96%, hsl(14 40% 30% / 0.16), transparent 70%);
+  background-size: 165px 165px, auto, auto;
+  opacity: 0.6;
+  mix-blend-mode: multiply;
+}
+
+/* Vidrio ámbar · translúcido, cálido, reflejante.
+   Solo sobre fondos oscuros (tabaco / cacao). */
+.texture-ambar::before {
+  background-image:
+    radial-gradient(70% 50% at 50% 106%, hsl(38 68% 54% / 0.34), transparent 72%),
+    radial-gradient(46% 34% at 14% 8%, hsl(14 55% 48% / 0.20), transparent 72%),
+    radial-gradient(38% 30% at 90% 22%, hsl(38 60% 58% / 0.12), transparent 74%);
+  mix-blend-mode: screen;
+}
+
+/* Metal cepillado · satinado, ligeramente frío.
+   Para ribetes, insignias y detalles pequeños. */
+.texture-metal::before {
+  background-image:
+    repeating-linear-gradient(90deg,
+      hsl(0 0% 100% / 0.09) 0 1px,
+      hsl(0 0% 0% / 0.045) 1px 2px),
+    linear-gradient(102deg,
+      transparent 16%,
+      hsl(var(--dunaru-laton) / 0.42) 48%,
+      transparent 78%);
+  opacity: 0.85;
 }
 
 /* ══ Scrollbar ══ */

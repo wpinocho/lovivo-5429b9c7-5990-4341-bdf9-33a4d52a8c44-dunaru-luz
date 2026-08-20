@@ -32,7 +32,7 @@ const BLOCKS = [
 
 export const BrandStorySection = () => {
   return (
-    <section className="bg-dunaru-arena">
+    <section className="bg-dunaru-arena texture-travertino">
       <div className="grid grid-cols-1 lg:grid-cols-12 lg:items-stretch">
         {/* Imagen grande a sangre */}
         <div className="lg:col-span-7 relative overflow-hidden bg-dunaru-tabaco">
@@ -44,8 +44,9 @@ export const BrandStorySection = () => {
               className="w-full h-full object-cover"
             />
           </div>
+          {/* Insignia de cerámica mineral: mate, terrosa, imperfecta */}
           <div className="absolute bottom-0 left-0 p-6 sm:p-8">
-            <p className="lockup text-xl sm:text-2xl text-dunaru-marfil drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">
+            <p className="texture-terracota inline-block bg-dunaru-terracota/90 px-5 py-2.5 lockup text-lg sm:text-xl text-dunaru-marfil">
               HECHO <em>en</em> MÉXICO
             </p>
           </div>

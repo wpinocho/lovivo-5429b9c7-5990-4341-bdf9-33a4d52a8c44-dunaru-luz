@@ -82,17 +82,22 @@ export default {
 					border:             'hsl(var(--sidebar-border))',
 					ring:               'hsl(var(--sidebar-ring))'
 				},
-				// Dunaru brand tokens
+				// Dunaru brand tokens — fuente de verdad en src/index.css
 				dunaru: {
-					marfil:    '#FAF6EF',
-					arena:     '#F1E9DC',
-					champagne: '#C2A878',
-					carbon:    '#2B2A27',
-					onix:      '#1E1C1A',
-					ambar:     '#D89A57',
+					marfil:     'hsl(var(--dunaru-marfil) / <alpha-value>)',
+					arena:      'hsl(var(--dunaru-arena) / <alpha-value>)',
+					champagne:  'hsl(var(--dunaru-champagne) / <alpha-value>)',
+					carbon:     'hsl(var(--dunaru-carbon) / <alpha-value>)',
+					onix:       'hsl(var(--dunaru-onix) / <alpha-value>)',
+					ambar:      'hsl(var(--dunaru-ambar) / <alpha-value>)',
+					// Paleta 2026
+					terracota:  'hsl(var(--dunaru-terracota) / <alpha-value>)',
+					periwinkle: 'hsl(var(--dunaru-periwinkle) / <alpha-value>)',
+					travertino: 'hsl(var(--dunaru-travertino) / <alpha-value>)',
+					laton:      'hsl(var(--dunaru-laton) / <alpha-value>)',
 					// Tokens oscuros atmosféricos (secciones editoriales)
-					tabaco:    'hsl(var(--dunaru-tabaco))',
-					cacao:     'hsl(var(--dunaru-cacao))',
+					tabaco:     'hsl(var(--dunaru-tabaco) / <alpha-value>)',
+					cacao:      'hsl(var(--dunaru-cacao) / <alpha-value>)',
 				}
 			},
 			borderRadius: {

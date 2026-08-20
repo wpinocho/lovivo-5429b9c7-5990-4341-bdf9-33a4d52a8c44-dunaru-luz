@@ -31,7 +31,7 @@ function Stars({ rating, className = "" }: { rating: number; className?: string 
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className={`h-4 w-4 ${i < rating ? "fill-dunaru-champagne text-dunaru-champagne" : "text-dunaru-champagne/30"}`}
+          className={`h-4 w-4 ${i < rating ? "fill-dunaru-ambar text-dunaru-ambar" : "text-dunaru-ambar/25"}`}
           strokeWidth={1.5}
         />
       ))}
@@ -107,7 +107,7 @@ export const Reviews = ({ slug, title }: ReviewsProps) => {
   if (count === 0) return null
 
   return (
-    <section id="resenas" className="py-12 sm:py-16 bg-dunaru-arena scroll-mt-24">
+    <section id="resenas" className="py-12 sm:py-16 bg-dunaru-arena texture-arena scroll-mt-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header compacto */}
         <h2 className="font-display text-2xl sm:text-3xl md:text-4xl text-foreground text-center mb-6">

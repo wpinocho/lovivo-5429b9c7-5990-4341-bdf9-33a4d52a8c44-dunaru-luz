@@ -35,6 +35,8 @@ export const RitualSection = ({
         className="absolute inset-0 h-full w-full object-cover opacity-40"
       />
       <div className="absolute inset-0 bg-gradient-to-b from-dunaru-tabaco/95 via-dunaru-tabaco/70 to-dunaru-tabaco/95" />
+      {/* Material: vidrio ámbar · luz cálida que sube desde abajo */}
+      <div className="absolute inset-0 texture-ambar" />
 
       <div className="relative z-10 mx-auto max-w-3xl px-6 py-24 text-center sm:py-32 md:py-40">
         <Reveal>
@@ -44,7 +46,7 @@ export const RitualSection = ({
         <Reveal delay={140}>
           <h2 className="lockup h-editorial text-dunaru-marfil">
             EN UN MUNDO QUE VA MUY RÁPIDO,{' '}
-            <em className="text-dunaru-champagne">te invitamos a</em> ENCENDER DESPACIO.
+            <em className="text-dunaru-ambar">te invitamos a</em> ENCENDER DESPACIO.
           </h2>
         </Reveal>
 
@@ -58,7 +60,7 @@ export const RitualSection = ({
         <Reveal delay={400}>
           <Link
             to={linkTo}
-            className="mt-10 inline-block border-b border-dunaru-champagne/50 pb-1 font-body text-xs uppercase tracking-[0.18em] text-dunaru-marfil transition-editorial hover:border-dunaru-champagne"
+            className="mt-10 inline-block border-b border-dunaru-ambar/50 pb-1 font-body text-xs uppercase tracking-[0.18em] text-dunaru-marfil transition-editorial hover:border-dunaru-ambar"
           >
             {linkLabel}
           </Link>

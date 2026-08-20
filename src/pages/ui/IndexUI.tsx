@@ -197,6 +197,8 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-dunaru-tabaco/90 via-dunaru-tabaco/55 to-dunaru-tabaco/10" />
           {/* Gradient overlay — mobile: dark on top for text */}
           <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-tabaco/95 via-dunaru-tabaco/50 to-dunaru-tabaco/20" />
+          {/* Material: vidrio ámbar · calidez y profundidad de fuego */}
+          <div className="absolute inset-0 texture-ambar" />
         </div>
 
         {/* Content */}
@@ -206,7 +208,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               Velas perladas rellenables
             </p>
             <h1 className="lockup text-4xl sm:text-5xl md:text-6xl leading-[1.12] text-dunaru-marfil mb-7 sm:mb-8 animate-fade-up delay-100">
-              CREA LUZ <em className="text-dunaru-champagne">en el</em> RECIPIENTE QUE YA AMAS
+              CREA LUZ <em className="text-dunaru-ambar">en el</em> RECIPIENTE QUE YA AMAS
             </h1>
             <p className="font-body text-base sm:text-lg text-dunaru-marfil/70 mb-10 sm:mb-12 leading-relaxed animate-fade-up delay-200 max-w-md">
               Sin derretir, sin riesgo, sin comprar una vela nueva. Solo vierte las perlas, inserta una mecha y enciende.
@@ -242,7 +244,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── BENEFICIOS ────────────────────────────────────────────────────── */}
-      <section className="bg-dunaru-arena border-b border-foreground/10">
+      <section className="bg-dunaru-arena texture-travertino border-b border-foreground/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-4 divide-x divide-foreground/10">
             {BENEFITS.map((text, i) => (
@@ -274,7 +276,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       />
 
       {/* ── INTENCIÓN DE COMPRA ───────────────────────────────────────────── */}
-      <section id="comprar" className="section-pad-sm bg-dunaru-arena">
+      <section id="comprar" className="section-pad-sm bg-dunaru-arena texture-arena">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-10 sm:mb-14">
             <p className="eyebrow mb-4">Empieza por aquí</p>
@@ -342,7 +344,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       <Reviews />
 
       {/* Elige tu tono (carrusel) */}
-      <section id="tonos" className="section-pad-sm bg-background">
+      <section id="tonos" className="section-pad-sm bg-background texture-grain">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-10 sm:mb-14">
             <p className="eyebrow mb-4">Tres tonos, tres ambientes</p>
@@ -399,7 +401,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       {/* (movido arriba: ahora va justo antes de "Elige tu tono") */}
 
       {/* ── FAQ ───────────────────────────────────────────────────────────── */}
-      <section id="faq" className="section-pad bg-background">
+      <section id="faq" className="section-pad bg-background texture-grain">
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
           <Reveal className="text-center mb-12">
             <h2 className="lockup text-2xl sm:text-3xl text-foreground">
@@ -415,7 +417,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── CIERRE — NEWSLETTER + WHATSAPP ───────────────────────────────── */}
-      <section className="section-pad-sm bg-dunaru-tabaco">
+      <section className="section-pad-sm bg-dunaru-tabaco texture-ambar">
         <div className="max-w-xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="eyebrow eyebrow-light mb-4">Boletín dunaru</p>
           <h2 className="lockup text-2xl sm:text-3xl text-dunaru-marfil mb-4">
@@ -426,7 +428,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </p>
           <DunaruNewsletterForm />
 
-          <div className="divider-warm opacity-20 my-6" />
+          <div className="hairline-metal my-6" />
 
           <a
             href="https://wa.me/525531215386?text=Hola%2C%20tengo%20una%20pregunta%20sobre%20dunaru"
