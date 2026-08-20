@@ -33,10 +33,10 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
   return (
     <HeadlessProductCard product={product}>
       {(logic) => (
-        <Card className="bg-white border border-gray-200">
+        <Card className="bg-card border-0 shadow-none">
           <CardContent className="p-4">
             <Link to={`/productos/${logic.product.slug}`} className="block">
-              <div className="aspect-square bg-gray-100 rounded-md mb-3 overflow-hidden relative group" style={{ aspectRatio: '1/1' }}>
+              <div className="aspect-square bg-dunaru-arena/40 mb-3 overflow-hidden relative group" style={{ aspectRatio: '1/1' }}>
                 {(logic.matchingVariant?.image || (logic.product.images && logic.product.images.length > 0)) ? (
                   <>
                     {/* Primary image - only fade on hover if there's a second image */}
@@ -100,7 +100,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                 })()}
               </div>
 
-              <h3 className="text-black font-medium text-sm mb-1 line-clamp-2">
+              <h3 className="font-display text-dunaru-carbon text-base mb-1 line-clamp-2">
                 {logic.product.title}
               </h3>
               {(() => {
@@ -112,17 +112,17 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                       {Array.from({ length: 5 }).map((_, i) => (
                         <Star
                           key={i}
-                          className={`h-3 w-3 ${i < Math.round(stats.average) ? "fill-dunaru-champagne text-dunaru-champagne" : "text-dunaru-champagne/30"}`}
+                          className={`h-3 w-3 ${i < Math.round(stats.average) ? "fill-dunaru-ambar text-dunaru-ambar" : "text-dunaru-ambar/30"}`}
                           strokeWidth={1.5}
                         />
                       ))}
                     </span>
-                    <span className="text-xs text-gray-500">({stats.count})</span>
+                    <span className="text-xs text-muted-foreground">({stats.count})</span>
                   </div>
                 )
               })()}
               {logic.product.description && (
-                <p className="text-gray-600 text-xs mb-3 line-clamp-2">
+                <p className="text-muted-foreground text-xs mb-3 line-clamp-2 leading-relaxed">
                   {logic.product.description.replace(/<[^>]*>/g, '')}
                 </p>
               )}
@@ -132,7 +132,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
               <div className="mb-3 space-y-2">
                 {logic.options.map((opt) => (
                   <div key={opt.id}>
-                    <div className="text-xs font-medium text-black mb-1">{opt.name}</div>
+                    <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1.5">{opt.name}</div>
                     <div className="flex flex-wrap gap-2">
                       {opt.values.filter(val => logic.isOptionValueAvailable(opt.name, val)).map((val) => {
                         const isSelected = logic.selected[opt.name] === val
@@ -145,13 +145,14 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                               type="button"
                               onClick={() => logic.handleOptionChange(opt.name, val)}
                               title={`${opt.name}: ${val}`}
-                              className={`h-6 w-6 rounded-full border ${
-                                logic.selected[opt.name] && !isSelected ? 'opacity-40' : ''
+                              className={`h-6 w-6 rounded-full border-0 transition-colors duration-200 ${
+                                isSelected
+                                  ? 'ring-2 ring-offset-2 ring-dunaru-terracota'
+                                  : logic.selected[opt.name]
+                                    ? 'opacity-40 hover:opacity-100'
+                                    : ''
                               }`}
-                              style={{ 
-                                backgroundColor: swatch, 
-                                borderColor: '#e5e7eb'
-                              }}
+                              style={{ backgroundColor: swatch }}
                               aria-label={`${opt.name}: ${val}`}
                             />
                           )
@@ -162,12 +163,10 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                             key={val}
                             type="button"
                             onClick={() => logic.handleOptionChange(opt.name, val)}
-                            className={`border rounded px-2 py-1 text-xs font-medium ${
-                              isSelected 
-                                ? 'border-black bg-black text-white' 
-                                : logic.selected[opt.name] && !isSelected
-                                  ? 'border-gray-300 bg-white text-gray-700 opacity-40'
-                                  : 'border-gray-300 bg-white text-gray-700'
+                            className={`border-0 px-3 py-1.5 text-xs transition-colors duration-200 ${
+                              isSelected
+                                ? 'bg-dunaru-onix text-dunaru-marfil'
+                                : 'bg-dunaru-arena/70 text-dunaru-carbon hover:bg-dunaru-periwinkle/25 hover:text-[hsl(var(--dunaru-periwinkle-deep))]'
                             }`}
                             aria-pressed={isSelected}
                             aria-label={`${opt.name}: ${val}`}
@@ -185,24 +184,24 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
 
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
-                <span className="text-black font-semibold">
+                <span className="text-dunaru-carbon font-semibold">
                   {logic.formatMoney(logic.currentPrice)}
                 </span>
                 {logic.currentCompareAt && logic.currentCompareAt > logic.currentPrice && (
-                  <span className="text-gray-400 text-xs line-through">
+                  <span className="text-muted-foreground/70 text-xs line-through">
                     {logic.formatMoney(logic.currentCompareAt)}
                   </span>
                 )}
               </div>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="sm"
                 onClick={() => {
                   logic.onAddToCartSuccess() // Hook para features adicionales
                   logic.handleAddToCart()
                 }}
                 disabled={!logic.canAddToCart}
-                className="text-black border-black hover:bg-black hover:text-white disabled:opacity-50"
+                className="border-0 px-5 bg-dunaru-marfil text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil transition-colors duration-300 disabled:opacity-50"
               >
                 {logic.inStock ? 'Agregar' : 'Agotado'}
               </Button>
