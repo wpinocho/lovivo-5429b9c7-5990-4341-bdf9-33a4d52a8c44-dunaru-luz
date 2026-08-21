@@ -85,7 +85,7 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ### Reglas de layout existentes
 - **TOP BAR** fija en `EcommerceTemplate.tsx` (2 items), no en checkout. **HEADER OVERLAY** solo en `IndexUI`.
-- **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes de color · **3.5 `<ProductScentSelector />` (aroma opcional)** · 4 cantidad (o `ProductQuantityTiers`) · 5 `<DeliveryEstimate />` · 6 CTA `h-12` con precio · 7 CTA outline `h-11` "Agregar al carrito" · 8 micro-línea `Lock` · 9 badges · 10 `<PdpSocialProof />` · 11 WhatsApp · 12 acordeones cerrados.
+- **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes de color · **3.5 `<ProductScentSelector />` (aroma opcional)** · 4 cantidad (o `ProductQuantityTiers`) · 5 `<DeliveryEstimate />` · 6 pago express + CTA `h-12` con precio · 7 CTA outline `h-11` "Agregar al carrito" · 8 micro-línea `Lock` · 9 badges · 10 `<PdpSocialProof />` · 11 WhatsApp · 12 acordeones cerrados.
 - ⚠️ `TIER_SELECTOR_SLUGS` (solo `perlas-originales-500-g`) reemplaza el stepper.
 - `optionLabel(name, slug)` renombra "Color" → "Color de la cera", excepto en `CONTAINER_ONLY_SLUGS`.
 - **📦 REGLA DE CONTENIDO EN KITS**: el primer bullet de `PDP_BENEFITS` de los kits declara qué trae la caja. NO quitar.
@@ -98,10 +98,12 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 - ⚠️ `SCENTS[].name` debe coincidir EXACTO con el valor de la variante en la DB (match por `variant.options.Aroma` con fallback a `variant.title`).
 - ⚠️ **"Inspirado en X" es descriptor secundario**: nunca entra al nombre de la variante ni al line item.
 - **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`. Panel expandido con soporte de imagen 16:9 (si `imageUrl` es null no renderiza nada).
-- **"Agregar al carrito"**: la esencia entra como **línea separada** (`addItem`), **1 frasco por acción**.
-- 🆕 **"Comprar ahora" CON aroma (2026-08-21, corregido)**: NO pasa por el carrito. `handleBuyNowWithScent` en `ProductPageUI` replica el flujo de `HeadlessProduct.handleBuyNow` construyendo `buyNowItems` con DOS líneas (producto principal ×qty + esencia ×1), llama `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` (`checkout_cart` / `checkout_order` / `checkout_order_id`) → `navigate('/pagar')`. Sin aroma delega en `logic.handleBuyNow()`.
-  - El precio del CTA suma `scentSelection.price`. Ambos CTAs (buy box y sticky móvil) muestran "Procesando..." y se deshabilitan con `isBuyingNowWithScent || logic.isBuyingNow`.
-  - ⚠️ `ProductPageUI` ahora llama `useSettings()` dos veces (alias `checkoutCurrency` arriba; `storeName/currencyCode` más abajo). No renombrar sin revisar.
+- **LOS TRES CAMINOS DE COMPRA YA INCLUYEN EL AROMA** (1 frasco por acción):
+  1. **"Agregar al carrito"** → `handleAddToCartWithAddOns`: producto + `addItem(esencia)` como línea separada.
+  2. **"Comprar ahora"** → `handleBuyNowWithScent`: NO pasa por el carrito. Construye `buyNowItems` con DOS líneas, `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` (`checkout_cart` / `checkout_order` / `checkout_order_id`) → `navigate('/pagar')`. Sin aroma delega en `logic.handleBuyNow()`.
+  3. 🆕 **Pago express Apple Pay / Google Pay (2026-08-21)** → `ProductExpressCheckout` acepta prop **`extraItems?: CartItem[]`**. `ProductPageUI` le pasa `scentExtraItems` (useMemo sobre `scentSelection`). Dentro del componente, `extras` (useMemo con clave estable `extrasKey`) alimenta: total del wallet, `buildDisplayItems(shipCents)` (desglose principal + cada extra + envío), items de `shipping-rates`, `buyNowItems` de `createCheckoutFromCart`, `validation_data.items` y el `trackPurchase`.
+- El precio de los CTAs suma `scentSelection.price`. Ambos CTAs (buy box y sticky móvil) muestran "Procesando..." con `isBuyingNowWithScent || logic.isBuyingNow`.
+- ⚠️ `ProductPageUI` llama `useSettings()` dos veces (alias `checkoutCurrency` arriba; `storeName/currencyCode` más abajo). No renombrar sin revisar.
 - **PostHog**: eventos `scent_selected` y `scent_details_toggled`.
 - **Ocultar del catálogo**: `HIDDEN_FROM_CATALOG_SLUGS` + `filterCatalogVisible()` en `src/lib/catalog-order.ts`, aplicado en `Collection.tsx`.
 
@@ -114,7 +116,7 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ **Sistema de aromas (2026-08-21)** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ **Sistema de aromas completo, con los 3 caminos de compra (2026-08-21)** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
@@ -141,8 +143,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — ⚡ **"Comprar ahora" con aroma va DIRECTO al checkout** (antes desviaba al carrito). `handleBuyNowWithScent` construye la orden con producto + esencia y navega a `/pagar`. CTA con estado "Procesando..." y precio total que incluye la esencia.
-- 2026-08-21 — 🌿 **SISTEMA DE AROMAS COMPLETO.** Producto `esencia-para-vela-10-ml` en DB ($99, 6 variantes), `src/lib/scents.ts`, `ProductScentSelector.tsx`, integración en `ProductPageUI` (línea separada en carrito), ocultamiento del catálogo vía `catalog-order.ts`.
+- 2026-08-21 — 🍎 **El pago express (Apple/Google Pay) ya incluye la esencia.** Nueva prop `extraItems` en `ProductExpressCheckout`: suma al total del wallet, al desglose, al cálculo de envío, a la orden y al tracking. Cierra el hueco donde el aroma se perdía.
+- 2026-08-21 — ⚡ **"Comprar ahora" con aroma va DIRECTO al checkout** (antes desviaba al carrito). `handleBuyNowWithScent` construye la orden con producto + esencia y navega a `/pagar`.
+- 2026-08-21 — 🌿 **SISTEMA DE AROMAS COMPLETO.** Producto `esencia-para-vela-10-ml` en DB ($99, 6 variantes), `src/lib/scents.ts`, `ProductScentSelector.tsx`, integración en `ProductPageUI`, ocultamiento del catálogo vía `catalog-order.ts`.
 - 2026-08-21 — 🧵 **Add-on de mechas retirado de la PDP**: `ADDON_MAP` vaciado. El producto sigue en el catálogo.
 - 2026-08-21 — 🟢 Pills de variante seleccionada en `ProductCardUI.tsx` a `dunaru-oliva-claro`.
 - 2026-08-21 — 🗂️ Orden curado del catálogo (`src/lib/catalog-order.ts` + `Collection.tsx` agrupado).
@@ -167,9 +170,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🟠 **`ProductExpressCheckout` (Apple/Google Pay en la PDP) NO incluye la esencia**: es un pago directo del producto principal. Evaluar ocultarlo cuando haya aroma seleccionado.
+- 2026-08-21 — 🟡 **En el pago express, la esencia se ve en el sheet del wallet como línea propia** (`Producto · Variante`). Si el wallet trunca el label, el usuario igual ve el total correcto. Sin probar en device real todavía.
 - 2026-08-21 — 🟡 **La esencia no tiene imágenes**: su PDP directa se ve pobre. Oculta de grids pero indexable.
-- 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP).
+- 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP), en los tres caminos de compra.
 - 2026-08-21 — 🟡 `ProductPageUI` llama `useSettings()` dos veces y la segunda está después de early returns (patrón heredado). No romper el alias `checkoutCurrency`.
 - 2026-08-21 — 🟠 4 de 9 productos sin colección → falta la categoría "Recargas" en el menú.
 - 2026-08-21 — 🟡 `catalog-order.ts` y `scents.ts` son listas manuales: un SKU nuevo del Dashboard cae en "Más de dunaru" y sin aroma hasta añadir su slug.
@@ -193,7 +196,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Probar el flujo real**: PDP con aroma → "Comprar ahora" → verificar que `/pagar` muestre las dos líneas y el total correcto.
+- [ALTA] **Probar en device real**: PDP con aroma → Apple Pay / Google Pay → verificar total y que la orden tenga las dos líneas.
 - [ALTA] **Imágenes de aromas**: 6 flat-lays 16:9 + packshots del frasco. Solo hay que llenar `SCENTS[].imageUrl`.
 - [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden).
 - [ALTA] **Crear la colección `recargas`** y añadirla al menú del header (requiere OK del owner).
@@ -205,7 +208,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
 - [MED] Descripción y SEO propios de la PDP de la esencia.
-- [MED] Evaluar ocultar `ProductExpressCheckout` cuando hay aroma seleccionado.
 - [MED] Aplicar `texture-*` en `CasaRealSection` y en las secciones de historia de la PDP.
 - [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.
 - [MED] Encuesta PostHog de salida en `/pagar` y en la PDP de perlas.

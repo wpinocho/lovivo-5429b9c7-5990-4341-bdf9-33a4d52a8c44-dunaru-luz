@@ -42,6 +42,12 @@ interface ProductExpressCheckoutProps {
   unitPrice: number
   disabled?: boolean
   /**
+   * Líneas adicionales que deben viajar en la MISMA orden que el producto
+   * principal (hoy: la esencia elegida en el selector de aroma).
+   * Se suman al total del wallet, al cálculo de envío y a la orden creada.
+   */
+  extraItems?: CartItem[]
+  /**
    * Called when Stripe finishes detecting whether a wallet is available.
    * `available` is true only if the browser has an authenticated wallet ready
    * (Apple Pay/GPay with saved card, or Link logged in). Use this in the parent
@@ -57,6 +63,7 @@ function PaymentRequestInner({
   quantity,
   unitPrice,
   disabled,
+  extraItems,
   onAvailabilityChange,
 }: ProductExpressCheckoutProps) {
   const stripe = useStripe()
@@ -103,9 +110,53 @@ function PaymentRequestInner({
     return [{ id: 'calculating', label: 'Calculando envío…', detail: '', amount: 0 }]
   }, [])
 
-  const subtotalCents = Math.max(50, Math.round(unitPrice * quantity * 100))
+  // Líneas extra (esencia). Clave estable para no re-crear el PaymentRequest
+  // en cada render del padre.
+  const extrasKey = (extraItems || [])
+    .map((i) => `${i.product?.id}:${i.variant?.id || ''}:${i.quantity || 1}`)
+    .join('|')
+
+  const extras = useMemo(() => {
+    return (extraItems || []).map((item) => {
+      const unit = Number(item.variant?.price ?? item.product?.price ?? 0)
+      const qty = item.quantity || 1
+      const variantTitle = item.variant?.title
+      return {
+        item,
+        productId: item.product.id,
+        variantId: item.variant?.id,
+        label: variantTitle
+          ? `${item.product.title} · ${variantTitle}`
+          : item.product.title,
+        unitPrice: unit,
+        quantity: qty,
+        lineTotal: unit * qty,
+      }
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [extrasKey])
+
+  const mainSubtotalCents = Math.round(unitPrice * quantity * 100)
+  const extrasSubtotalCents = extras.reduce(
+    (sum, e) => sum + Math.round(e.lineTotal * 100),
+    0,
+  )
+  const subtotalCents = Math.max(50, mainSubtotalCents + extrasSubtotalCents)
   const defaultShipCents = 0
   const totalCents = subtotalCents + defaultShipCents
+
+  // El wallet desglosa producto principal + cada extra + envío.
+  const buildDisplayItems = useCallback(
+    (shipCents: number) => [
+      { label: product.title, amount: mainSubtotalCents },
+      ...extras.map((e) => ({
+        label: e.label,
+        amount: Math.round(e.lineTotal * 100),
+      })),
+      { label: 'Envío', amount: shipCents },
+    ],
+    [product.title, mainSubtotalCents, extras],
+  )
 
   // Initialize PaymentRequest and check wallet availability
   useEffect(() => {
@@ -118,10 +169,7 @@ function PaymentRequestInner({
         label: product.title,
         amount: totalCents,
       },
-      displayItems: [
-        { label: product.title, amount: subtotalCents },
-        { label: 'Envío', amount: defaultShipCents },
-      ],
+      displayItems: buildDisplayItems(defaultShipCents),
       requestPayerName: true,
       requestPayerEmail: true,
       requestPayerPhone: true,
@@ -160,7 +208,7 @@ function PaymentRequestInner({
     return () => {
       cancelled = true
     }
-  }, [stripe, disabled, currencyCode, product.title, totalCents, subtotalCents, defaultShipCents, walletShippingOptions, onAvailabilityChange])
+  }, [stripe, disabled, currencyCode, product.title, totalCents, buildDisplayItems, defaultShipCents, walletShippingOptions, onAvailabilityChange])
 
   // Keep the total in sync if quantity / price changes after init
   useEffect(() => {
@@ -170,13 +218,10 @@ function PaymentRequestInner({
         label: product.title,
         amount: totalCents,
       },
-      displayItems: [
-        { label: product.title, amount: subtotalCents },
-        { label: 'Envío', amount: defaultShipCents },
-      ],
+      displayItems: buildDisplayItems(defaultShipCents),
       shippingOptions: walletShippingOptions,
     })
-  }, [paymentRequest, product.title, totalCents, subtotalCents, defaultShipCents, walletShippingOptions])
+  }, [paymentRequest, product.title, totalCents, buildDisplayItems, defaultShipCents, walletShippingOptions])
 
   // Validate shipping address country and recompute totals when wallet user picks a shipping option
   useEffect(() => {
@@ -197,11 +242,18 @@ function PaymentRequestInner({
             state_code: ev?.shippingAddress?.region || '',
             postal_code: ev?.shippingAddress?.postalCode || '',
           },
-          items: [{
-            product_id: product.id,
-            quantity,
-            ...(variant?.id ? { variant_id: variant.id } : {}),
-          }],
+          items: [
+            {
+              product_id: product.id,
+              quantity,
+              ...(variant?.id ? { variant_id: variant.id } : {}),
+            },
+            ...extras.map((e) => ({
+              product_id: e.productId,
+              quantity: e.quantity,
+              ...(e.variantId ? { variant_id: e.variantId } : {}),
+            })),
+          ],
           currency_code: (currencyCode || 'mxn').toUpperCase(),
         })
 
@@ -222,10 +274,7 @@ function PaymentRequestInner({
           status: 'success',
           shippingOptions,
           total: { label: product.title, amount: subtotalCents + firstShip },
-          displayItems: [
-            { label: product.title, amount: subtotalCents },
-            { label: 'Envío', amount: firstShip },
-          ],
+          displayItems: buildDisplayItems(firstShip),
         })
       } catch (err) {
         console.error('[PDP ExpressCheckout] shipping-rates error:', err)
@@ -238,10 +287,7 @@ function PaymentRequestInner({
       ev.updateWith({
         status: 'success',
         total: { label: product.title, amount: subtotalCents + ship },
-        displayItems: [
-          { label: product.title, amount: subtotalCents },
-          { label: 'Envío', amount: ship },
-        ],
+        displayItems: buildDisplayItems(ship),
       })
     }
 
@@ -251,7 +297,7 @@ function PaymentRequestInner({
       paymentRequest.off('shippingaddresschange', onShippingAddressChange)
       paymentRequest.off('shippingoptionchange', onShippingOptionChange)
     }
-  }, [paymentRequest, allowedCountryCodes, subtotalCents, product.title, product.id, variant?.id, quantity, currencyCode])
+  }, [paymentRequest, allowedCountryCodes, subtotalCents, buildDisplayItems, extras, product.title, product.id, variant?.id, quantity, currencyCode])
 
   // Handle wallet confirmation
   useEffect(() => {
@@ -261,15 +307,26 @@ function PaymentRequestInner({
       try {
         setProcessing(true)
 
-        // 1. Build a one-item cart from current PDP selection
-        const buyNowItems: CartItem[] = [{
-          key: `${product.id}:${variant?.id || ''}:${sellingPlan?.id || ''}`,
-          type: 'product' as const,
-          product,
-          variant,
-          sellingPlan: sellingPlan || undefined,
-          quantity,
-        }]
+        // 1. Build the cart from current PDP selection.
+        //    Si el usuario eligió aroma, la esencia viaja como línea aparte
+        //    dentro de la MISMA orden.
+        const buyNowItems: CartItem[] = [
+          {
+            key: `${product.id}:${variant?.id || ''}:${sellingPlan?.id || ''}`,
+            type: 'product' as const,
+            product,
+            variant,
+            sellingPlan: sellingPlan || undefined,
+            quantity,
+          },
+          ...extras.map((e) => ({
+            key: `${e.productId}:${e.variantId || ''}:`,
+            type: 'product' as const,
+            product: e.item.product,
+            variant: e.item.variant,
+            quantity: e.quantity,
+          })),
+        ]
 
         // 2. Extract customer + shipping info from the wallet event
         const payerEmail = ev.payerEmail as string | undefined
@@ -330,7 +387,7 @@ function PaymentRequestInner({
 
         const orderId = order.order_id
         const checkoutToken = order.checkout_token
-        const totalAmount = (order.order?.total_amount ?? unitPrice * quantity)
+        const totalAmount = (order.order?.total_amount ?? (unitPrice * quantity + extras.reduce((s, e) => s + e.lineTotal, 0)))
         const orderTotalCents = Math.max(50, Math.round(totalAmount * 100))
 
         // 4. Create PaymentIntent
@@ -372,12 +429,20 @@ function PaymentRequestInner({
               country: shippingAddress.country,
               name: `${shippingAddress.first_name} ${shippingAddress.last_name}`.trim(),
             } : null,
-            items: [{
-              product_id: product.id,
-              quantity,
-              ...(variant?.id ? { variant_id: variant.id } : {}),
-              price: Math.round(unitPrice * 100),
-            }],
+            items: [
+              {
+                product_id: product.id,
+                quantity,
+                ...(variant?.id ? { variant_id: variant.id } : {}),
+                price: Math.round(unitPrice * 100),
+              },
+              ...extras.map((e) => ({
+                product_id: e.productId,
+                quantity: e.quantity,
+                ...(e.variantId ? { variant_id: e.variantId } : {}),
+                price: Math.round(e.unitPrice * 100),
+              })),
+            ],
           },
         }
 
@@ -430,13 +495,22 @@ function PaymentRequestInner({
           if (!alreadyTracked) {
             try { sessionStorage.setItem(ptKey, '1') } catch {}
             trackPurchase({
-              products: [tracking.createTrackingProduct({
-                id: product.id,
-                title: product.title,
-                price: unitPrice,
-                category: 'product',
-                variant,
-              })],
+              products: [
+                tracking.createTrackingProduct({
+                  id: product.id,
+                  title: product.title,
+                  price: unitPrice,
+                  category: 'product',
+                  variant,
+                }),
+                ...extras.map((e) => tracking.createTrackingProduct({
+                  id: e.productId,
+                  title: e.item.product.title,
+                  price: e.unitPrice,
+                  category: 'product',
+                  variant: e.item.variant,
+                })),
+              ],
               value: totalAmount,
               currency: tracking.getCurrencyFromSettings(currencyCode),
               order_id: orderId,
@@ -498,7 +572,7 @@ function PaymentRequestInner({
     return () => {
       paymentRequest.off('paymentmethod', handlePaymentMethod)
     }
-  }, [paymentRequest, stripe, product, variant, sellingPlan, quantity, unitPrice, currencyCode, clearCart, navigate, toast, requestMissingPhone])
+  }, [paymentRequest, stripe, product, variant, sellingPlan, quantity, unitPrice, extras, currencyCode, clearCart, navigate, toast, requestMissingPhone])
 
   if (disabled || !paymentRequest) return null
 

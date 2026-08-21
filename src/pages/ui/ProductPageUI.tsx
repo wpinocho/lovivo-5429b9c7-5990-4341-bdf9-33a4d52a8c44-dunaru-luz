@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -317,6 +317,24 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
       setIsBuyingNowWithScent(false)
     }
   }
+
+  /**
+   * La esencia elegida, en formato de línea de carrito. Se la pasamos al pago
+   * express (Apple Pay / Google Pay) para que la orden del wallet incluya
+   * producto principal + aroma, igual que "Comprar ahora".
+   */
+  const scentExtraItems = useMemo<CartItem[]>(() => {
+    if (!scentSelection) return []
+    return [
+      {
+        key: `${scentSelection.product.id}:${scentSelection.variant?.id || ""}:`,
+        type: "product",
+        product: scentSelection.product,
+        variant: scentSelection.variant,
+        quantity: 1,
+      },
+    ]
+  }, [scentSelection])
 
   const displayImage =
     selectedImage ||
@@ -906,6 +924,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                       sellingPlan={logic.selectedPlan}
                       quantity={logic.quantity}
                       unitPrice={logic.currentPrice}
+                      extraItems={scentExtraItems}
                       onAvailabilityChange={setExpressAvailable}
                     />
                     {expressAvailable && (
