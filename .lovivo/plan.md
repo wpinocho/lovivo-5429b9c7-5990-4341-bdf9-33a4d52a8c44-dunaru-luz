@@ -101,9 +101,10 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 - ⚠️ **`profile` YA NO SE PINTA en el panel** (desde 2026-08-21). El campo sigue en `scents.ts` para la PDP directa de la esencia.
 - **📐 RATIO DE LOS FLAT-LAYS DE AROMA = 4:3 (1456×1092), webp.** El panel usa `aspect-[4/3]` + `object-cover`.
 - ⚠️ **LOS FLAT-LAYS TIENEN INGREDIENTES HASTA EL BORDE INFERIOR.** **No poner overlays, degradados ni chips encima de la imagen.** Decisión firme, no reabrir.
-- **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`.
-  - **📐 ANATOMÍA DEL CHIP (3 líneas, desde 2026-08-21 v2)**: 1) nombre `font-display text-[15px]` · 2) `inspiredBy` en `text-[11px]` muted · 3) **PRECIO en línea propia**: `text-[11px] font-medium tracking-wide mt-1.5`, **terracota** si no está seleccionado / **marfil** si sí. Formato `+ $99`. El chip "Sin aroma" dice **"Incluido"**. ⚠️ **El precio NUNCA vuelve a la línea de `inspiredBy`**: se leía como parte de la descripción del perfume.
-  - **PANEL EXPANDIDO (compacto)**: contenedor `p-3.5`; wrapper `space-y-2.5 sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start`. Texto: `h4 text-lg` + inspiredBy terracota + description + "Elígelo si buscas" + **notas en UNA línea inline** (micro-label `NOTAS` terracota, `tracking-normal`, separador **thin-space `\u2009·\u2009`** para que quepan en un renglón). Sin `profile`, sin `.hairline`, sin chips en caja.
+- **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas" / "Ocultar detalles". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`.
+  - ⚠️ **EL PANEL ABRE EXPANDIDO POR DEFAULT (desde 2026-08-21).** `useState(true)` y el reset por `productSlug` también vuelve a `true`. La clienta cierra con "Ocultar detalles". Decisión del owner: la foto y las notas no deben depender de descubrir un toggle.
+  - **📐 ANATOMÍA DEL CHIP (3 líneas)**: 1) nombre `font-display text-[15px]` · 2) `inspiredBy` en `text-[11px]` muted · 3) **PRECIO + FORMATO en línea propia**: `text-[11px] font-medium tracking-wide mt-1.5`, **terracota** si no está seleccionado / **marfil** si sí. Formato `+ $99 · 10 ml`, donde `· 10 ml` va en `font-normal` + muted para que el precio siga dominando. El chip "Sin aroma" dice **"Incluido"**. ⚠️ **El precio NUNCA vuelve a la línea de `inspiredBy`**: se leía como parte de la descripción del perfume.
+  - **PANEL EXPANDIDO (compacto)**: contenedor `p-3.5`; wrapper `space-y-2.5 sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start`. Texto: `h4 text-lg` + inspiredBy terracota + description + "Elígelo si buscas" + **notas en UNA línea inline** (micro-label `NOTAS` terracota, `tracking-normal`, separador **thin-space `\u2009·\u2009`**). Sin `profile`, sin `.hairline`, sin chips en caja. Con "Sin aroma" seleccionado muestra "Selecciona un aroma para conocer sus notas."
 - **LOS TRES CAMINOS DE COMPRA YA INCLUYEN EL AROMA** (1 frasco por acción):
   1. **"Agregar al carrito"** → `handleAddToCartWithAddOns`: producto + `addItem(esencia)` como línea separada.
   2. **"Comprar ahora"** → `handleBuyNowWithScent`: NO pasa por el carrito. `buyNowItems` con DOS líneas → `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` → `navigate('/pagar')`.
@@ -122,18 +123,17 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ Sistema de aromas completo con los 3 caminos de compra y sus 6 imágenes editoriales · ✅ **3.13 Panel de aroma compactado** · ✅ **3.14 Jerarquía del chip de aroma (precio en línea propia) + notas en un renglón (2026-08-21)** · 🔜 **SIGUIENTE: verificar en móvil + medir attach rate** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ Sistema de aromas completo con los 3 caminos de compra y sus 6 imágenes editoriales · ✅ 3.13 Panel compactado · ✅ 3.14 Jerarquía del chip · ✅ **3.15 Panel abierto por default + "10 ml" en el chip (2026-08-21)** · 🔜 **SIGUIENTE: verificar en móvil + medir attach rate** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 - 🔒 No tocar: buy box (orden), checkout, `DeliveryEstimate`, `PdpSocialProof`, avisos MSI, envío gratis, WhatsApp.
 
-### 3.14 ✅ JERARQUÍA DEL CHIP DE AROMA (2026-08-21)
-Problema detectado por el owner: `Inspirado en Santal 33 · +$99` se leía como si el "+$99" fuera parte de la descripción del perfume.
-1. ✅ Precio extraído a su **tercera línea** dentro del chip, en terracota (marfil si está seleccionado), `font-medium`, formato `+ $99`.
-2. ✅ "Sin aroma" pasa de `· $0` a **"Incluido"** con el mismo tratamiento.
-3. ✅ Notas del panel: fuera `tracking-[0.08em]`, separador con thin-space → caben en **un solo renglón** sin bajar de 11px.
-- 🔜 Verificar en móvil que el chip de 3 líneas no rompa el nombre en dos renglones en pantallas de 360 px.
+### 3.15 ✅ PANEL DE AROMA ABIERTO POR DEFAULT (2026-08-21)
+1. ✅ `expanded` inicia en `true` y el reset por cambio de producto también.
+2. ✅ El chip declara el formato: `+ $99 · 10 ml`.
+- ⚠️ **Trade-off asumido**: el CTA "Comprar ahora" baja ~380 px en móvil cuando hay un aroma seleccionado. Decisión del owner. **Si el ATC móvil cae por debajo de 3.5%, esto es lo primero que se revierte.**
+- 🔜 Medir `scent_details_toggled` con `expanded: false` (cuántas cierran el panel) para validar.
 
 ### 3.8 FASE 3 — PDP — RESTANTE
 1. Galería a sangre en móvil, sin borde ni radius.
@@ -156,8 +156,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — 💲 **Precio del aroma con jerarquía propia (3.14).** `+ $99` sale de la línea de "Inspirado en" y pasa a su propia línea en terracota; "Sin aroma" dice "Incluido". Notas del panel compactadas a un solo renglón.
-- 2026-08-21 — 📏 **Panel de aroma compactado (3.13).** Fuera la línea `profile`, notas de 6 chips a una línea inline, ritmo vertical apretado y 2 columnas en desktop.
+- 2026-08-21 — 👁️ **Detalles del aroma ABIERTOS por default (3.15)** + el chip ahora dice `+ $99 · 10 ml`.
+- 2026-08-21 — 💲 **Precio del aroma con jerarquía propia (3.14).** `+ $99` sale de la línea de "Inspirado en"; "Sin aroma" dice "Incluido". Notas del panel a un solo renglón.
+- 2026-08-21 — 📏 **Panel de aroma compactado (3.13).** Fuera la línea `profile`, notas inline, 2 columnas en desktop.
 - 2026-08-21 — 🖼️ **Los 6 flat-lays de aroma ya viven en el selector de la PDP.**
 - 2026-08-21 — 🍎 **El pago express (Apple/Google Pay) ya incluye la esencia.** Nueva prop `extraItems`.
 - 2026-08-21 — ⚡ **"Comprar ahora" con aroma va DIRECTO al checkout** vía `handleBuyNowWithScent`.
@@ -170,7 +171,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-21 — 🫒 Token `--dunaru-oliva-claro` para el selector de variante.
 - 2026-08-20 — 🖱️ Hovers periwinkle en accordions, links y pills (Fase 2.11).
 - 2026-08-20 — 🏷️ Badge "Hasta 6 MSI" frosted glass + periwinkle.
-- 2026-08-20 — 🔢 Carrusel "Crea tu vela en 4 pasos" a terracota + periwinkle.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 10 productos (la esencia aún SIN imágenes en la DB).
@@ -192,9 +192,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🟡 **Chip de aroma ahora tiene 3 líneas**: sin verificar en pantallas de 360 px que el nombre no se parta en dos renglones.
-- 2026-08-21 — 🟡 **Altura del panel de aroma sin verificar en móvil real** tras la compactación.
-- 2026-08-21 — 🟡 **La imagen del aroma solo se ve si el usuario abre "Conoce los aromas"**. Auto-expandir al seleccionar es viable: medir `scent_details_toggled` antes de decidir.
+- 2026-08-21 — 🟠 **El panel de aroma abierto por default empuja el CTA hacia abajo en móvil.** Riesgo de ATC. Sin medir. Es lo primero a revertir si cae la conversión móvil.
+- 2026-08-21 — 🟡 **Chip de aroma con 3 líneas y precio + "10 ml"**: sin verificar en pantallas de 360 px que no se parta el nombre.
 - 2026-08-21 — 🟡 **En el pago express, la esencia se ve en el sheet del wallet como línea propia**. Sin probar en device real.
 - 2026-08-21 — 🟡 **La esencia no tiene imágenes en la DB**: su PDP directa se ve pobre.
 - 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP).
@@ -221,9 +220,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar en móvil (360 px)** el chip de aroma de 3 líneas y la altura del panel abierto.
-- [ALTA] **Probar en device real**: PDP con aroma → Apple Pay / Google Pay → verificar total y las dos líneas en la orden.
-- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden) y el uso de `scent_details_toggled`.
+- [ALTA] **Medir el impacto del panel abierto por default**: ATC móvil y `scent_details_toggled` con `expanded:false`.
+- [ALTA] **Verificar en móvil (360 px)** el chip de 3 líneas con `+ $99 · 10 ml`.
+- [ALTA] **Probar en device real**: PDP con aroma → Apple Pay / Google Pay → total y las dos líneas en la orden.
+- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden).
 - [ALTA] **Packshots del frasco de esencia (4:5)** para la PDP del producto en la DB.
 - [ALTA] **Crear la colección `recargas`** y añadirla al menú del header (requiere OK del owner).
 - [ALTA] **Resto de FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection`, texturas, migración de champagne.

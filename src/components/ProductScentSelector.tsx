@@ -51,7 +51,9 @@ export const ProductScentSelector = ({
   const posthog = usePostHog()
   const [scentProduct, setScentProduct] = useState<Product | null>(null)
   const [selectedId, setSelectedId] = useState<string>(NONE)
-  const [expanded, setExpanded] = useState(false)
+  // Los detalles vienen ABIERTOS por defecto: la clienta ve la foto y las notas
+  // sin tener que descubrir el toggle. Puede cerrarlos con "Ocultar detalles".
+  const [expanded, setExpanded] = useState(true)
 
   // Carga el producto de esencias (una sola vez por PDP)
   useEffect(() => {
@@ -75,7 +77,7 @@ export const ProductScentSelector = ({
   // Al cambiar de producto, resetear a "Sin aroma"
   useEffect(() => {
     setSelectedId(NONE)
-    setExpanded(false)
+    setExpanded(true)
   }, [productSlug])
 
   const variants = (scentProduct as any)?.variants as ProductVariant[] | undefined
@@ -246,6 +248,14 @@ export const ProductScentSelector = ({
                   )}
                 >
                   {`+ ${formatMoney(priceFor(scent))}`}
+                  <span
+                    className={cn(
+                      "font-normal",
+                      isSelected ? "text-dunaru-marfil/70" : "text-muted-foreground"
+                    )}
+                  >
+                    {" · 10 ml"}
+                  </span>
                 </span>
               )}
             </button>
