@@ -2,7 +2,7 @@
 - Brand: **dunaru** (dunaru.mx). Velas perladas **rellenables**: gránulos finos de cera tipo arena + mechas de algodón.
 - ⚠️ VOCABULARIO: **"rellenable"** (NO "recargable"). ⚠️ **PROHIBIDO el guion largo (—) en copy visible.**
 - Tesis: no vendemos cera. Vendemos una forma simple de crear luz en el recipiente que ya tienes.
-- **AROMA**: las velas nacen SIN perfume. "El aroma lo eliges tú". 🆕 Desde 2026-08-21 el aroma SÍ se vende: **Esencia para Vela · 10 ml** como add-on opcional en la PDP.
+- **AROMA**: las velas nacen SIN perfume. "El aroma lo eliges tú". Desde 2026-08-21 el aroma SÍ se vende: **Esencia para Vela · 10 ml** como add-on opcional en la PDP.
 - Target: mujer 25–45, urbana, CDMX/GDL/MTY/Puebla/QRO. Decoración, hogar, regalo. Market: México, MXN, es-MX.
 - Tono: claro, cálido, directo. Registro **"high end" / editorial atmosférico**. Referencia: **sensatehomes.com**.
 - ⛔ **NO es founder-led. La owner NO aparece.** Storytelling = producto, materia, manos anónimas, taller y casa.
@@ -30,12 +30,12 @@ Snapshot 2026-08-21 (fuente de verdad = la DB):
 | bowl-negro | Bowl de Cerámica Negro | $399 | $499 | — |
 | vaso-extra-transparente | Vaso de Vidrio Transparente | $249 | — | — |
 | pack-30-mechas | Pack de 30 Mechas | $99 | — | — |
-| 🆕 esencia-para-vela-10-ml | Esencia para Vela · 10 ml | $99 | — | add-on OCULTO del catálogo |
-- **🆕 ESENCIA (creada 2026-08-21)**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, 1 opción **`Aroma`** con 6 variantes: Madera Nocturna · Ámbar Cristal · Costa Mineral · Higo Matcha · Tabaco Vainilla · Musgo Mineral. **NO existe variante "Sin aroma"** (es estado virtual del componente). Sin imágenes todavía. No pertenece a ninguna colección.
+| esencia-para-vela-10-ml | Esencia para Vela · 10 ml | $99 | — | add-on OCULTO del catálogo |
+- **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, 1 opción **`Aroma`** con 6 variantes: Madera Nocturna · Ámbar Cristal · Costa Mineral · Higo Matcha · Tabaco Vainilla · Musgo Mineral. **NO existe variante "Sin aroma"** (es estado virtual del componente). Sin imágenes todavía. No pertenece a ninguna colección.
 - Price rule activa: `perlas-originales-500-g` → 2 uds 10% OFF, 3 uds 15% OFF.
 - **CONTENIDO DE LOS KITS**: ambos = recipiente + **500 g de cera + 30 mechas**.
 - **COLECCIONES ACTUALES**: `kits` (2), `recipientes` (2), `accesorios` (1). ⚠️ 4 productos sin colección: `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`. Falta colección **`recargas`**.
-- 🆕 **ORDEN DE MERCHANDISING** = `src/lib/catalog-order.ts`. **Añadir ahí el slug de cada producto nuevo.**
+- **ORDEN DE MERCHANDISING** = `src/lib/catalog-order.ts`. **Añadir ahí el slug de cada producto nuevo.**
 
 ---
 
@@ -68,7 +68,7 @@ Pill "Hasta 6 MSI" frosted glass + periwinkle. El aviso del checkout y el trust-
 - **"Agregar al carrito" (PDP, outline)**: hover periwinkle.
 - **AccordionTrigger**: hover periwinkle-deep + underline.
 - **Links de texto secundarios** → hover periwinkle-deep.
-- **Pills de variante (PDP y `ProductCardUI`) y 🆕 chips de aroma**: seleccionado `bg-dunaru-oliva-claro text-dunaru-marfil`; no seleccionado hover `bg-dunaru-periwinkle/10` + `text-[hsl(var(--dunaru-periwinkle-deep))]`.
+- **Pills de variante (PDP y `ProductCardUI`) y chips de aroma**: seleccionado `bg-dunaru-oliva-claro text-dunaru-marfil`; no seleccionado hover `bg-dunaru-periwinkle/10` + `text-[hsl(var(--dunaru-periwinkle-deep))]`.
 - **PATRÓN "INVERSIÓN MARFIL ↔ TERRACOTA"**: hero CTA, botón "Agregar" de `ProductCardUI`.
 - **PATRÓN "OUTLINE TERRACOTA"**: footer y flechas del carrusel de pasos.
 - **NAVEGACIÓN → PERIWINKLE** (`.nav-link*` en `index.css`).
@@ -85,23 +85,25 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ### Reglas de layout existentes
 - **TOP BAR** fija en `EcommerceTemplate.tsx` (2 items), no en checkout. **HEADER OVERLAY** solo en `IndexUI`.
-- **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes de color · **3.5 🆕 `<ProductScentSelector />` (aroma opcional)** · 4 cantidad (o `ProductQuantityTiers`) · 5 `<DeliveryEstimate />` · 6 CTA `h-12` con precio · 7 CTA outline `h-11` "Agregar al carrito" · 8 micro-línea `Lock` · 9 badges · 10 `<PdpSocialProof />` · 11 WhatsApp · 12 acordeones cerrados.
+- **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes de color · **3.5 `<ProductScentSelector />` (aroma opcional)** · 4 cantidad (o `ProductQuantityTiers`) · 5 `<DeliveryEstimate />` · 6 CTA `h-12` con precio · 7 CTA outline `h-11` "Agregar al carrito" · 8 micro-línea `Lock` · 9 badges · 10 `<PdpSocialProof />` · 11 WhatsApp · 12 acordeones cerrados.
 - ⚠️ `TIER_SELECTOR_SLUGS` (solo `perlas-originales-500-g`) reemplaza el stepper.
 - `optionLabel(name, slug)` renombra "Color" → "Color de la cera", excepto en `CONTAINER_ONLY_SLUGS`.
 - **📦 REGLA DE CONTENIDO EN KITS**: el primer bullet de `PDP_BENEFITS` de los kits declara qué trae la caja. NO quitar.
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → carrusel → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre.
 
-### 🌿 SISTEMA DE AROMAS (nuevo 2026-08-21)
+### 🌿 SISTEMA DE AROMAS (2026-08-21)
 - **`src/lib/scents.ts`** = fuente única de verdad. Exporta `SCENTS` (name, inspiredBy, profile, description, recommendedFor, notes[], imageUrl), `SCENT_PRODUCT_SLUG`, `SCENT_OPTION_NAME` (`"Aroma"`), `SCENT_ENABLED_SLUGS` y `supportsScentAddon(slug)`.
 - **Para activar el aroma en un producto nuevo: añade su slug a `SCENT_ENABLED_SLUGS`. Nada más.** Hoy: los 6 SKUs con cera perlada. Excluidos: `bowl-negro`, `vaso-extra-transparente`, `pack-30-mechas`.
-- ⚠️ `SCENTS[].name` debe coincidir EXACTO con el valor de la variante en la DB (el componente hace match por `variant.options.Aroma` con fallback a `variant.title`).
+- ⚠️ `SCENTS[].name` debe coincidir EXACTO con el valor de la variante en la DB (match por `variant.options.Aroma` con fallback a `variant.title`).
 - ⚠️ **"Inspirado en X" es descriptor secundario**: nunca entra al nombre de la variante ni al line item.
-- **`src/components/ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas ⌄" / "Ocultar detalles ⌃" (`aria-expanded`, expansión inline, NO modal). Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"` + `role="radio"` + `aria-checked`. Panel expandido con soporte de imagen 16:9 (si `imageUrl` es null NO se renderiza nada, sin placeholder gris).
-- **Carrito**: la esencia entra como **línea separada** (`addItem(product, variant)`), **1 frasco por acción**, sin multiplicar por la cantidad de cera. "Sin aroma" no agrega nada.
-- **`handleBuyNowWithScent`**: si hay aroma seleccionado, "Comprar ahora" se desvía al flujo de carrito (porque `handleBuyNow` de `HeadlessProduct` es FORBIDDEN, hace `clearCart()` y arma su propia orden solo con el producto principal).
-- **PostHog**: eventos `scent_selected` y `scent_details_toggled` (props: `product_slug`, `scent`, `price`, `expanded`).
-- **Ocultar del catálogo**: `HIDDEN_FROM_CATALOG_SLUGS` + `filterCatalogVisible()` en `src/lib/catalog-order.ts`, aplicado en `Collection.tsx`. El home usa `SHOP_CARDS` hardcodeado → no la muestra.
+- **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`. Panel expandido con soporte de imagen 16:9 (si `imageUrl` es null no renderiza nada).
+- **"Agregar al carrito"**: la esencia entra como **línea separada** (`addItem`), **1 frasco por acción**.
+- 🆕 **"Comprar ahora" CON aroma (2026-08-21, corregido)**: NO pasa por el carrito. `handleBuyNowWithScent` en `ProductPageUI` replica el flujo de `HeadlessProduct.handleBuyNow` construyendo `buyNowItems` con DOS líneas (producto principal ×qty + esencia ×1), llama `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` (`checkout_cart` / `checkout_order` / `checkout_order_id`) → `navigate('/pagar')`. Sin aroma delega en `logic.handleBuyNow()`.
+  - El precio del CTA suma `scentSelection.price`. Ambos CTAs (buy box y sticky móvil) muestran "Procesando..." y se deshabilitan con `isBuyingNowWithScent || logic.isBuyingNow`.
+  - ⚠️ `ProductPageUI` ahora llama `useSettings()` dos veces (alias `checkoutCurrency` arriba; `storeName/currencyCode` más abajo). No renombrar sin revisar.
+- **PostHog**: eventos `scent_selected` y `scent_details_toggled`.
+- **Ocultar del catálogo**: `HIDDEN_FROM_CATALOG_SLUGS` + `filterCatalogVisible()` en `src/lib/catalog-order.ts`, aplicado en `Collection.tsx`.
 
 ### 🗂️ CATÁLOGO `/categorias/:handle`
 `catalog-order.ts` ordena en ambos caminos; `todos` renderiza 4 grupos con `.hairline` + `<h2 class="eyebrow">`. Orden: Empieza aquí → Cera perlada → Colecciones de tonos → Recipientes y accesorios.
@@ -131,7 +133,7 @@ Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 
 ### 3.9 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
 Imágenes atmosféricas nocturnas, ⛔ SIN ROSTROS. Slots: hero desktop/móvil, fondo de `RitualSection`, 3 ambientes de "Elige tu tono", imagen de `BrandStorySection`.
-🆕 **+ 6 flat-lays editoriales 16:9 de ingredientes por aroma** → van a `SCENTS[].imageUrl`.
+**+ 6 flat-lays editoriales 16:9 de ingredientes por aroma** → van a `SCENTS[].imageUrl`.
 
 ### 3.11 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`. Si el ATC móvil cae por debajo de 3.5%, revertir densidad primero.
@@ -139,9 +141,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — 🌿 **SISTEMA DE AROMAS COMPLETO.** (a) Producto `esencia-para-vela-10-ml` creado en DB ($99, 6 variantes de `Aroma`, sin imágenes). (b) Nuevo `src/lib/scents.ts` con el copy sensorial de los 6 aromas + `SCENT_ENABLED_SLUGS`. (c) Nuevo `src/components/ProductScentSelector.tsx` (chips + panel expandible inline, accesible). (d) Integrado en `ProductPageUI` entre color y cantidad; la esencia se agrega como línea separada (1 por acción). (e) `handleBuyNowWithScent` para no perder el aroma en "Comprar ahora" (incluida la sticky bar). (f) `HIDDEN_FROM_CATALOG_SLUGS`/`filterCatalogVisible()` en `catalog-order.ts` + aplicado en `Collection.tsx`.
-- 2026-08-21 — 🧵 **Add-on de mechas retirado de la PDP**: `ADDON_MAP` de `ProductAddOns.tsx` vaciado (el bloque "COMPLÉTALO" ya no renderiza). El producto "Pack de 30 Mechas" SIGUE en el catálogo.
-- 2026-08-21 — 🟢 Pills de variante seleccionada en `ProductCardUI.tsx` de `dunaru-onix` a `dunaru-oliva-claro`.
+- 2026-08-21 — ⚡ **"Comprar ahora" con aroma va DIRECTO al checkout** (antes desviaba al carrito). `handleBuyNowWithScent` construye la orden con producto + esencia y navega a `/pagar`. CTA con estado "Procesando..." y precio total que incluye la esencia.
+- 2026-08-21 — 🌿 **SISTEMA DE AROMAS COMPLETO.** Producto `esencia-para-vela-10-ml` en DB ($99, 6 variantes), `src/lib/scents.ts`, `ProductScentSelector.tsx`, integración en `ProductPageUI` (línea separada en carrito), ocultamiento del catálogo vía `catalog-order.ts`.
+- 2026-08-21 — 🧵 **Add-on de mechas retirado de la PDP**: `ADDON_MAP` vaciado. El producto sigue en el catálogo.
+- 2026-08-21 — 🟢 Pills de variante seleccionada en `ProductCardUI.tsx` a `dunaru-oliva-claro`.
 - 2026-08-21 — 🗂️ Orden curado del catálogo (`src/lib/catalog-order.ts` + `Collection.tsx` agrupado).
 - 2026-08-21 — 🧱 Descripciones de los KITS corregidas en la DB con formato "Incluye: A + B + C".
 - 2026-08-21 — 📦 Contenido explícito de los kits en `PDP_BENEFITS`.
@@ -159,14 +162,15 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - **UGC de clientas** (5 fotos): constante `UGC` en `src/data/reviews.ts`.
 - **Hero**: `/hero-dunaru.webp` · `/hero-dunaru-mobile.webp`. **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`.
 - **4 PASOS** — base `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`: Vierte `/paso-vierte.webp` · Inserta `1785521743155-htw95tvbi4b.webp` · Enciende `1785521743156-3qeskqe43gv.webp` · Renueva `/paso-renueva.webp`.
-- 🔴 **FALTAN: (a) 6 flat-lays 16:9 de ingredientes por aroma → `SCENTS[].imageUrl`; (b) 2-3 packshots del frasco de esencia para su PDP; (c) imágenes atmosféricas nocturnas de la Fase 4; (d) video demo del mecanismo (lo graba el user).**
+- 🔴 **FALTAN: (a) 6 flat-lays 16:9 de ingredientes por aroma → `SCENTS[].imageUrl`; (b) 2-3 packshots del frasco de esencia; (c) imágenes atmosféricas nocturnas de la Fase 4; (d) video demo del mecanismo.**
 - 🟡 Los `steps` de `kit-vaso-de-concreto` siguen con `PLACEHOLDER`. 🟡 `/pdp-vaso-decor.webp` huérfana.
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🟠 **`ProductExpressCheckout` (Apple/Google Pay en la PDP) NO incluye la esencia**: es un pago directo del producto principal. Si el wallet está disponible y el usuario eligió aroma, se pierde. Evaluar ocultarlo cuando haya aroma seleccionado.
-- 2026-08-21 — 🟡 **La esencia no tiene imágenes**: su PDP directa (`/productos/esencia-para-vela-10-ml`) se ve pobre. Está oculta de grids pero es indexable.
-- 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP). Si el usuario quiere 2, debe subir la cantidad en el carrito.
+- 2026-08-21 — 🟠 **`ProductExpressCheckout` (Apple/Google Pay en la PDP) NO incluye la esencia**: es un pago directo del producto principal. Evaluar ocultarlo cuando haya aroma seleccionado.
+- 2026-08-21 — 🟡 **La esencia no tiene imágenes**: su PDP directa se ve pobre. Oculta de grids pero indexable.
+- 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP).
+- 2026-08-21 — 🟡 `ProductPageUI` llama `useSettings()` dos veces y la segunda está después de early returns (patrón heredado). No romper el alias `checkoutCurrency`.
 - 2026-08-21 — 🟠 4 de 9 productos sin colección → falta la categoría "Recargas" en el menú.
 - 2026-08-21 — 🟡 `catalog-order.ts` y `scents.ts` son listas manuales: un SKU nuevo del Dashboard cae en "Más de dunaru" y sin aroma hasta añadir su slug.
 - 2026-08-20 — 🟠 `ProductStorySections.tsx` sigue en `dunaru-champagne` (Fase 3 punto 8).
@@ -184,22 +188,23 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-07 — 🟡 `PDP_BENEFITS` solo cubre 6 slugs.
 - 2026-07-31 — 🟠 Footer de `EcommerceTemplate.tsx`: 3 nombres de producto hardcodeados.
 - 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price`. Workaround: Dashboard manual.
-- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos, vacíos o con line numbers erróneos. **Verificar SIEMPRE con `lov-view`.**
+- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos o vacíos. **Verificar SIEMPRE con `lov-view`.**
 - 2026-07-31 — 🟡 Autocapture de clics desactivado en PostHog.
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Imágenes de aromas**: 6 flat-lays 16:9 de ingredientes + packshots del frasco. Solo hay que llenar `SCENTS[].imageUrl`.
-- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden) y decidir si sube el AOV.
+- [ALTA] **Probar el flujo real**: PDP con aroma → "Comprar ahora" → verificar que `/pagar` muestre las dos líneas y el total correcto.
+- [ALTA] **Imágenes de aromas**: 6 flat-lays 16:9 + packshots del frasco. Solo hay que llenar `SCENTS[].imageUrl`.
+- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden).
 - [ALTA] **Crear la colección `recargas`** y añadirla al menú del header (requiere OK del owner).
 - [ALTA] **Resto de FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection`, texturas, migración de champagne.
-- [ALTA] **Auditar la paleta nueva en carrito y checkout** (ahora con la línea de esencia visible ahí).
+- [ALTA] **Auditar la paleta nueva en carrito y checkout**.
 - [ALTA] **FASE 4 (fotos atmosféricas nocturnas)**, sin rostros.
 - [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, CTR de tarjeta).
 - [ALTA] P0 de la PDP de perlas (renombrar sin "Recarga", foto #1 = resultado, tiers como "elige tus tonos").
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
-- [MED] Descripción y SEO propios de la PDP de la esencia (hoy es funcional pero mínima).
+- [MED] Descripción y SEO propios de la PDP de la esencia.
 - [MED] Evaluar ocultar `ProductExpressCheckout` cuando hay aroma seleccionado.
 - [MED] Aplicar `texture-*` en `CasaRealSection` y en las secciones de historia de la PDP.
 - [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.

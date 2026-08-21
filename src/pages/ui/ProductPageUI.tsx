@@ -20,8 +20,14 @@ import {
   CreditCard,
   Lock,
 } from "lucide-react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
+import { createCheckoutFromCart } from "@/lib/checkout"
+import { useCheckoutState } from "@/hooks/useCheckoutState"
+import { STORE_ID } from "@/lib/config"
+import { useToast } from "@/hooks/use-toast"
+import { trackAddToCart, tracking } from "@/lib/tracking-utils"
+import type { CartItem } from "@/contexts/CartContext"
 import {
   Carousel,
   CarouselContent,
@@ -169,7 +175,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const [scentSelection, setScentSelection] = useState<ScentSelection | null>(
     null
   )
-  const { addItem } = useCart()
+  const [isBuyingNowWithScent, setIsBuyingNowWithScent] = useState(false)
+  const { addItem, clearCart } = useCart()
+  const navigate = useNavigate()
+  const { toast } = useToast()
+  const { saveCheckoutState } = useCheckoutState()
+  const { currencyCode: checkoutCurrency } = useSettings()
   const { ref: ctaRef, inView: ctaInView, entry } = useInView({ threshold: 0 })
   // Solo mostramos la barra sticky cuando el usuario YA pasó (scrolleó por encima) del CTA,
   // no cuando el CTA todavía está debajo del fold al cargar la página.
@@ -188,16 +199,123 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   }
 
   /**
-   * "Comprar ahora" crea la orden directa solo con el producto principal.
-   * Si el usuario eligió aroma, lo mandamos por el carrito para no perder la
-   * línea de la esencia (el carrito se abre solo).
+   * "Comprar ahora" con aroma.
+   *
+   * Sin aroma: usamos el flujo nativo de HeadlessProduct.
+   * Con aroma: replicamos ese mismo flujo (orden directa + /pagar) pero
+   * construyendo la orden con DOS líneas — el producto principal y una unidad
+   * de la esencia. Nunca pasa por el carrito.
    */
-  const handleBuyNowWithScent = () => {
-    if (scentSelection) {
-      handleAddToCartWithAddOns()
+  const handleBuyNowWithScent = async () => {
+    if (!scentSelection) {
+      logic.handleBuyNow()
       return
     }
-    logic.handleBuyNow()
+
+    const product = logic.product
+    if (!product || isBuyingNowWithScent) return
+
+    const variants = product.variants
+    const hasVariants = Array.isArray(variants) && variants.length > 0
+    const variantToAdd = hasVariants ? logic.matchingVariant : undefined
+
+    if (hasVariants && !variantToAdd) {
+      toast({
+        title: "Selecciona opciones",
+        description: "Elige una variante disponible.",
+      })
+      return
+    }
+
+    const quantity = logic.quantity || 1
+    const sellingPlan = logic.selectedPlan || undefined
+
+    setIsBuyingNowWithScent(true)
+    try {
+      const buyNowItems: CartItem[] = [
+        {
+          key: `${product.id}:${variantToAdd?.id || ""}:${sellingPlan?.id || ""}`,
+          type: "product",
+          product,
+          variant: variantToAdd,
+          sellingPlan,
+          quantity,
+        },
+        {
+          key: `${scentSelection.product.id}:${scentSelection.variant?.id || ""}:`,
+          type: "product",
+          product: scentSelection.product,
+          variant: scentSelection.variant,
+          quantity: 1,
+        },
+      ]
+
+      const order = await createCheckoutFromCart(
+        buyNowItems,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        undefined,
+        checkoutCurrency
+      )
+
+      saveCheckoutState({
+        order_id: order.order_id,
+        checkout_token: order.checkout_token,
+        store_id: STORE_ID,
+        order: order.order,
+      })
+
+      clearCart()
+
+      const totalValue =
+        logic.currentPrice * quantity + scentSelection.price
+
+      try {
+        sessionStorage.setItem(
+          "checkout_cart",
+          JSON.stringify({ items: buyNowItems, total: totalValue })
+        )
+        sessionStorage.setItem("checkout_order", JSON.stringify(order))
+        sessionStorage.setItem("checkout_order_id", String(order.order_id))
+      } catch (e) {
+        console.error("Error saving to sessionStorage:", e)
+      }
+
+      trackAddToCart({
+        products: [
+          tracking.createTrackingProduct({
+            id: product.id,
+            title: product.title,
+            price: logic.currentPrice,
+            category: "product",
+            variant: variantToAdd,
+          }),
+          tracking.createTrackingProduct({
+            id: scentSelection.product.id,
+            title: scentSelection.product.title,
+            price: scentSelection.price,
+            category: "product",
+            variant: scentSelection.variant,
+          }),
+        ],
+        value: totalValue,
+        currency: tracking.getCurrencyFromSettings(checkoutCurrency),
+        num_items: quantity + 1,
+      })
+
+      navigate("/pagar")
+    } catch (error) {
+      console.error("Error en Comprar ahora con aroma:", error)
+      toast({
+        title: "Error al procesar",
+        description: "No se pudo crear la orden. Intenta de nuevo.",
+        variant: "destructive",
+      })
+    } finally {
+      setIsBuyingNowWithScent(false)
+    }
   }
 
   const displayImage =
@@ -805,18 +923,24 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               {logic.inStock && (
                 <Button
                   onClick={handleBuyNowWithScent}
+                  disabled={isBuyingNowWithScent || logic.isBuyingNow}
                   className="w-full h-12 text-[15px] font-semibold rounded-lg shadow-sm"
                   size="lg"
                 >
-                  Comprar ahora
-                  {!useTierSelector && (
-                    <span className="font-normal opacity-80">
-                      {" · "}
-                      {logic.formatMoney(
-                        logic.currentPrice * (logic.quantity || 1)
-                      )}
-                    </span>
-                  )}
+                  {isBuyingNowWithScent || logic.isBuyingNow
+                    ? "Procesando..."
+                    : "Comprar ahora"}
+                  {!useTierSelector &&
+                    !isBuyingNowWithScent &&
+                    !logic.isBuyingNow && (
+                      <span className="font-normal opacity-80">
+                        {" · "}
+                        {logic.formatMoney(
+                          logic.currentPrice * (logic.quantity || 1) +
+                            (scentSelection?.price || 0)
+                        )}
+                      </span>
+                    )}
                 </Button>
               )}
 
@@ -1021,10 +1145,13 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               <div className="flex gap-2">
                 <Button
                   onClick={handleBuyNowWithScent}
+                  disabled={isBuyingNowWithScent || logic.isBuyingNow}
                   size="sm"
                   className="flex-1"
                 >
-                  Comprar ahora
+                  {isBuyingNowWithScent || logic.isBuyingNow
+                    ? "Procesando..."
+                    : "Comprar ahora"}
                 </Button>
                 <Button
                   onClick={handleAddToCartWithAddOns}
