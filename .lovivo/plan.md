@@ -31,6 +31,7 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 | vaso-extra-transparente | Vaso de Vidrio Transparente | $249 | — | — |
 | pack-30-mechas | Pack de 30 Mechas | $99 | — | — |
 - Price rule activa: `perlas-originales-500-g` → 2 uds 10% OFF, 3 uds 15% OFF.
+- **CONTENIDO DE LOS KITS (confirmado en DB 2026-08-21)**: ambos kits = recipiente + **500 g de cera + 30 mechas**. Vidrio → vaso de vidrio transparente. Cerámica → bowl de cerámica negra mate.
 
 ---
 
@@ -120,6 +121,7 @@ Componente COMPARTIDO: home (`IndexUI`, `bg-background`, con eyebrow y footer CT
 - **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes · 4 cantidad · 5 add-ons/`ProductQuantityTiers` · 6 `<DeliveryEstimate />` · 7 CTA `h-12` con precio · 8 CTA outline `h-11` "Agregar al carrito" · 9 micro-línea `Lock` · 10 badges · 11 `<PdpSocialProof />` · 12 WhatsApp · 13 acordeones cerrados.
 - ⚠️ `TIER_SELECTOR_SLUGS` (solo `perlas-originales-500-g`) reemplaza `ProductAddOns` → esa PDP no tiene cross-sell.
 - `optionLabel(name, slug)` renombra "Color" → "Color de la cera", excepto en `CONTAINER_ONLY_SLUGS` (Bowl Negro, Vaso Transparente, Pack de Mechas mantienen "Color").
+- **📦 REGLA DE CONTENIDO EN KITS (2026-08-21)**: el **primer bullet de `PDP_BENEFITS`** de los dos kits debe declarar explícitamente qué trae la caja ("Incluye: recipiente + 500 g de cera perlada + 30 mechas de algodón"). Petición directa del owner. Si se reescribe el copy, NO quitar esa línea.
 - `PdpTrust.tsx` exporta `getDeliveryRange()`, `DeliveryEstimate`, `PdpSocialProof({ slug?, linkable? })`.
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → `ProductStepsCarousel` → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre.
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
@@ -176,11 +178,12 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — 🫒 **Selector de variante "Color de la cera" — estado seleccionado a verde oliva claro** (`ProductPageUI.tsx` ~línea 675-679): nuevo token `--dunaru-oliva-claro` (75 22% 37%) en `index.css` + mapeado en `tailwind.config.ts`. Antes `bg-foreground` (carbón oscuro). A petición explícita del owner ("un poco más claro" que el oliva del CTA). Da por resuelto el punto 7 pendiente de Fase 3.
-- 2026-08-20 — 🖱️ **Pills de variante (Marfil/Champagne/Ónix) con hover periwinkle** (`ProductPageUI.tsx` ~línea 675-679), a petición del owner en el editor visual.
-- 2026-08-20 — 🖱️ **FASE 2.11: hovers periwinkle en accordions y links de texto** señalados por el owner en el editor visual: `ui/accordion.tsx` (compartido → PDP + FAQ), "Escríbenos por WhatsApp" (`ProductPageUI.tsx`), "Comparte tu experiencia" (`Reviews.tsx`), botón "Elegir mi vela" (`ProductStorySections.tsx`, texto a periwinkle en vez de opacity).
-- 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" — fondo frosted glass** (`.badge-msi` en `index.css`): fondo semi-transparente `dunaru-marfil/0.14` + `backdrop-blur-sm`, texto `dunaru-periwinkle` claro, borde `periwinkle/0.5`.
-- 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" a Periwinkle** (`.badge-msi` en `index.css`): antes verde hardcodeado, ahora periwinkle/periwinkle-deep.
+- 2026-08-21 — 📦 **Contenido explícito de los kits en la PDP** (`ProductPageUI.tsx`, `PDP_BENEFITS`): primer bullet de `kit-vaso-de-vidrio` → "Incluye: vaso de vidrio + 500 g de cera perlada + 30 mechas de algodón"; de `kit-vaso-de-concreto` → "Incluye: bowl de cerámica + 500 g de cera perlada + 30 mechas de algodón". Antes eran genéricos ("Llega completo…"). Las descripciones de la DB ya lo decían, pero no era visible arriba del fold.
+- 2026-08-21 — 🫒 **Selector de variante "Color de la cera" — estado seleccionado a verde oliva claro** (`ProductPageUI.tsx` ~línea 675-679): nuevo token `--dunaru-oliva-claro` (75 22% 37%) en `index.css` + mapeado en `tailwind.config.ts`. Da por resuelto el punto 7 pendiente de Fase 3.
+- 2026-08-20 — 🖱️ **Pills de variante (Marfil/Champagne/Ónix) con hover periwinkle** (`ProductPageUI.tsx` ~línea 675-679).
+- 2026-08-20 — 🖱️ **FASE 2.11: hovers periwinkle en accordions y links de texto**: `ui/accordion.tsx` (compartido → PDP + FAQ), "Escríbenos por WhatsApp" (`ProductPageUI.tsx`), "Comparte tu experiencia" (`Reviews.tsx`), botón "Elegir mi vela" (`ProductStorySections.tsx`).
+- 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" — fondo frosted glass** (`.badge-msi` en `index.css`).
+- 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" a Periwinkle** (`.badge-msi` en `index.css`).
 - 2026-08-20 — 🔢 **Carrusel "Crea tu vela en 4 pasos" a terracota + periwinkle** (`ProductStepsCarousel.tsx`, compartido home + todas las PDP).
 - 2026-08-20 — 🟢 **"Agregar al carrito" (PDP) con hover periwinkle** (excepción puntual del owner).
 - 2026-08-20 — 🟢 **CTA "Comprar ahora" — texto BEIGE/marfil** sobre verde oliva (`--dunaru-oliva-cta`), hover terracota.
@@ -189,7 +192,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-20 — 🖱️ **ESTADOS HOVER DE MARCA** en `ui/button.tsx` + navegación periwinkle en `index.css`.
 - 2026-08-20 — 🎨 **PALETA 2026 + SISTEMA DE MATERIALES** (6 clases `texture-*` + grano global).
 - 2026-08-20 — ⚠️ **Aprendizaje**: `dunaru-champagne` pasó a latón oscuro, ilegible sobre fondos oscuros → usar `dunaru-ambar`.
-- 2026-08-20 — ⚠️ **Aprendizaje**: las clases con `position: relative` deben ir en `@layer components`.
 - 2026-08-20 — ✅ **FASE 2 (home)** completa.
 
 ## 5. Image Inventory
@@ -208,8 +210,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-20 — 🟠 **`ProductStorySections.tsx` sigue en `dunaru-champagne`** (tira de garantías, checks de bullets, tabla comparativa). Debe alinearse a terracota/periwinkle como el carrusel → Fase 3 punto 8.
-- 2026-08-20 — 🟠 **El bloque de trust-icons "6 meses sin intereses" de la PDP (~línea 835) sigue en champagne/ambar**, distinto del `.badge-msi` ya migrado a periwinkle.
+- 2026-08-21 — 🟡 La descripción HTML del `kit-vaso-de-concreto` en la DB todavía dice **"Bowl artesanal de concreto gris mate"**, cuando el producto real es **cerámica negra mate**. Inconsistente con el copy de la PDP. Corregir desde el Dashboard o con `update-product`.
+- 2026-08-20 — 🟠 **`ProductStorySections.tsx` sigue en `dunaru-champagne`** (tira de garantías, checks de bullets, tabla comparativa) → Fase 3 punto 8.
+- 2026-08-20 — 🟠 **El bloque de trust-icons "6 meses sin intereses" de la PDP (~línea 835) sigue en champagne/ambar**.
 - 2026-08-20 — 🟠 **La paleta nueva no se ha auditado en carrito ni checkout.**
 - 2026-08-20 — 🟡 **Texturas aún no aplicadas en PDP ni en `CasaRealSection`.**
 - 2026-08-20 — 🟡 Los hex de `TONOS` en la landing (`#F2EBDD`, `#E2CCA3`, `#1F1D1B`) son colores REALES de la cera: **no se cambian**.
@@ -227,11 +230,12 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-07 — 🟡 `PDP_BENEFITS` solo cubre 6 slugs.
 - 2026-07-31 — 🟠 Footer de `EcommerceTemplate.tsx`: 3 nombres de producto hardcodeados.
 - 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price`. Workaround: Dashboard manual.
-- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos o vacíos incluso para strings triviales (reconfirmado 2026-08-21, 6+ veces). **Verificar SIEMPRE con `lov-view`.**
+- 2026-07-31 — 🟡 `lov-search-files` devuelve resultados falsos o vacíos incluso para strings triviales (reconfirmado 2026-08-21, 8+ veces). **Verificar SIEMPRE con `lov-view`.**
 - 2026-07-31 — 🟡 Autocapture de clics parece desactivado en PostHog.
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
+- [ALTA] **Corregir la descripción en DB del `kit-vaso-de-concreto`**: dice "concreto gris mate", debe decir cerámica negra mate.
 - [ALTA] **Ejecutar resto de FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas, `ProductStorySections` y el bloque "6 meses sin intereses" a terracota/periwinkle.
 - [ALTA] **Auditar la paleta nueva en carrito y checkout**.
 - [ALTA] **Ejecutar FASE 4 (fotos atmosféricas nocturnas)**, sin rostros. 4 slots esperando imagen.

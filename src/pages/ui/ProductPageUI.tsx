@@ -93,13 +93,13 @@ const PDP_HEADLINE: Record<string, string> = {
  */
 const PDP_BENEFITS: Record<string, string[]> = {
   "kit-vaso-de-vidrio": [
-    "Llega completo: vaso, cera y mechas. Enciendes tu vela el mismo día",
+    "Incluye: vaso de vidrio + 500 g de cera perlada + 30 mechas de algodón",
     "Cuando se acaba la rellenas, no la tiras: el mismo vaso te dura años",
     "Hasta 120 horas de luz cálida con los 500 g que vienen incluidos",
   ],
   "kit-vaso-de-concreto": [
+    "Incluye: bowl de cerámica + 500 g de cera perlada + 30 mechas de algodón",
     "Bowl de cerámica negra mate hecho a mano: se ve bien encendido y apagado",
-    "Llega listo para regalar, con 500 g de cera y 30 mechas dentro",
     "Se rellena infinitas veces: compras una vez y sigue dando luz",
   ],
   "perlas-originales-500-g": [
