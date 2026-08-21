@@ -199,7 +199,17 @@ export const ProductScentSelector = ({
               selectedId === NONE ? "text-dunaru-marfil/75" : "text-muted-foreground"
             )}
           >
-            Solo cera perlada, sin perfume · $0
+            Solo cera perlada, sin perfume
+          </span>
+          <span
+            className={cn(
+              "text-[11px] font-medium leading-none mt-1.5 tracking-wide",
+              selectedId === NONE
+                ? "text-dunaru-marfil"
+                : "text-dunaru-terracota"
+            )}
+          >
+            Incluido
           </span>
         </button>
 
@@ -226,10 +236,18 @@ export const ProductScentSelector = ({
                   isSelected ? "text-dunaru-marfil/75" : "text-muted-foreground"
                 )}
               >
-                {isAvailable
-                  ? `${scent.inspiredBy} · +${formatMoney(priceFor(scent))}`
-                  : "Agotado por ahora"}
+                {isAvailable ? scent.inspiredBy : "Agotado por ahora"}
               </span>
+              {isAvailable && (
+                <span
+                  className={cn(
+                    "text-[11px] font-medium leading-none mt-1.5 tracking-wide",
+                    isSelected ? "text-dunaru-marfil" : "text-dunaru-terracota"
+                  )}
+                >
+                  {`+ ${formatMoney(priceFor(scent))}`}
+                </span>
+              )}
             </button>
           )
         })}
@@ -280,12 +298,12 @@ export const ProductScentSelector = ({
                   {selectedScent.recommendedFor}
                 </p>
 
-                <p className="text-[11px] leading-relaxed text-foreground/60">
+                <p className="text-[11px] leading-snug text-foreground/60">
                   <span className="uppercase tracking-[0.16em] text-dunaru-terracota">
                     Notas
                   </span>{" "}
-                  <span className="tracking-[0.08em]">
-                    {selectedScent.notes.join(" · ")}
+                  <span className="tracking-normal">
+                    {selectedScent.notes.join("\u2009·\u2009")}
                   </span>
                 </p>
               </div>
