@@ -15,14 +15,13 @@ import { cn } from "@/lib/utils"
  *   los agregue al carrito como líneas extra.
  */
 
-const ADDON_MAP: Record<string, string[]> = {
-  "kit-vaso-de-vidrio": ["recarga-500-g-30-mechas", "pack-30-mechas"],
-  "kit-vaso-de-concreto": ["recarga-500-g-30-mechas", "pack-30-mechas"],
-  // perlas-originales-500-g: sin add-ons — usa el selector "Lleva más y ahorra"
-  "reserva-1-kg": ["pack-60-mechas"],
-  "d-o-de-tonos": ["pack-60-mechas"],
-  "tr-o-de-tonos": ["pack-60-mechas"],
-}
+/**
+ * ⚠️ 2026-08-21: los add-ons de mechas se retiraron de la PDP. Los productos
+ * principales YA incluyen mechas, así que ofrecerlas como complemento confundía.
+ * El componente se conserva para el futuro bloque "Combina bien con".
+ * El producto "Pack de 30 Mechas" sigue existiendo en el catálogo.
+ */
+const ADDON_MAP: Record<string, string[]> = {}
 
 const ADDON_PITCH: Record<string, string> = {
   "recarga-500-g-30-mechas":

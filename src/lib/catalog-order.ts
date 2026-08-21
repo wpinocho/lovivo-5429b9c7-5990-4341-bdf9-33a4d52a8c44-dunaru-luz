@@ -39,6 +39,23 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   },
 ]
 
+/**
+ * Productos que SÍ se pueden comprar (y aparecen en carrito y checkout) pero
+ * NO deben listarse en grids, colecciones ni recomendaciones automáticas.
+ * Caso de uso: complementos que solo se agregan desde la PDP, como la esencia.
+ */
+export const HIDDEN_FROM_CATALOG_SLUGS: string[] = ["esencia-para-vela-10-ml"]
+
+export const isHiddenFromCatalog = (slug?: string | null): boolean =>
+  !!slug && HIDDEN_FROM_CATALOG_SLUGS.includes(slug)
+
+/** Quita del listado los productos marcados como ocultos del catálogo. */
+export function filterCatalogVisible<T extends { slug?: string | null }>(
+  items: T[]
+): T[] {
+  return items.filter((i) => !isHiddenFromCatalog(i.slug))
+}
+
 /** Etiqueta para productos nuevos que aún no están en ningún grupo. */
 export const CATALOG_FALLBACK_LABEL = "Más de dunaru"
 

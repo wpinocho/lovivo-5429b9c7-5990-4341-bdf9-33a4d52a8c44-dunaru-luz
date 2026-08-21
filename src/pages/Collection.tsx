@@ -8,7 +8,11 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { SEO } from "@/components/SEO"
 import { useSettings } from "@/contexts/SettingsContext"
-import { sortByCatalogOrder, groupByCatalog } from "@/lib/catalog-order"
+import {
+  sortByCatalogOrder,
+  groupByCatalog,
+  filterCatalogVisible,
+} from "@/lib/catalog-order"
 
 /**
  * Collection — Landing de categoría.
@@ -118,7 +122,9 @@ const Collection = () => {
     }
   }, [handle, isAll])
 
-  const visibleProducts = sortByCatalogOrder(products.filter(isInStock) as any) as Product[]
+  const visibleProducts = sortByCatalogOrder(
+    filterCatalogVisible(products.filter(isInStock) as any)
+  ) as Product[]
   const groupedProducts = isAll ? groupByCatalog(visibleProducts as any) : []
 
   const title = isAll ? "Todos los productos" : collection?.name || "Categoría"

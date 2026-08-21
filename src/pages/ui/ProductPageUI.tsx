@@ -38,8 +38,12 @@ import type { SellingPlan } from "@/lib/supabase"
 import { BOGOLabel } from "@/components/ui/BOGOLabel"
 import { intervalLabel } from "@/lib/subscription-utils"
 import ProductExpressCheckout from "@/components/ProductExpressCheckout"
-import { ProductAddOns } from "@/components/ProductAddOns"
 import { ProductQuantityTiers } from "@/components/ProductQuantityTiers"
+import {
+  ProductScentSelector,
+  type ScentSelection,
+} from "@/components/ProductScentSelector"
+import { supportsScentAddon } from "@/lib/scents"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
 import { DeliveryEstimate, PdpSocialProof } from "@/components/PdpTrust"
@@ -162,17 +166,38 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null)
   const [expressAvailable, setExpressAvailable] = useState(false)
   const [isZoomed, setIsZoomed] = useState(false)
-  const [selectedAddOns, setSelectedAddOns] = useState<Product[]>([])
+  const [scentSelection, setScentSelection] = useState<ScentSelection | null>(
+    null
+  )
   const { addItem } = useCart()
   const { ref: ctaRef, inView: ctaInView, entry } = useInView({ threshold: 0 })
   // Solo mostramos la barra sticky cuando el usuario YA pasó (scrolleó por encima) del CTA,
   // no cuando el CTA todavía está debajo del fold al cargar la página.
   const scrolledPastCta = !ctaInView && (entry?.boundingClientRect.top ?? 0) < 0
 
-  // Agrega los complementos seleccionados como líneas extra y luego el producto principal
+  /**
+   * Agrega el producto principal y, si el usuario eligió aroma, una unidad de
+   * la esencia como LÍNEA SEPARADA del carrito.
+   * MVP: 1 frasco por acción, sin multiplicar por la cantidad de cera.
+   */
   const handleAddToCartWithAddOns = () => {
-    selectedAddOns.forEach((addon) => addItem(addon))
     logic.handleAddToCart()
+    if (logic.canAddToCart && scentSelection) {
+      addItem(scentSelection.product, scentSelection.variant)
+    }
+  }
+
+  /**
+   * "Comprar ahora" crea la orden directa solo con el producto principal.
+   * Si el usuario eligió aroma, lo mandamos por el carrito para no perder la
+   * línea de la esencia (el carrito se abre solo).
+   */
+  const handleBuyNowWithScent = () => {
+    if (scentSelection) {
+      handleAddToCartWithAddOns()
+      return
+    }
+    logic.handleBuyNow()
   }
 
   const displayImage =
@@ -691,6 +716,15 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </div>
             )}
 
+            {/* Aroma opcional — solo en productos con cera perlada */}
+            {logic.inStock && supportsScentAddon(logic.product?.slug) && (
+              <ProductScentSelector
+                productSlug={logic.product.slug}
+                formatMoney={logic.formatMoney}
+                onSelectionChange={setScentSelection}
+              />
+            )}
+
             {useTierSelector ? (
               /* Selector "Lleva más y ahorra" — reemplaza stepper + add-ons */
               <ProductQuantityTiers
@@ -736,15 +770,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     </button>
                   </div>
                 </div>
-
-                {/* Add-ons / complementos */}
-                {logic.inStock && logic.product?.slug && (
-                  <ProductAddOns
-                    productSlug={logic.product.slug}
-                    formatMoney={logic.formatMoney}
-                    onSelectionChange={setSelectedAddOns}
-                  />
-                )}
               </>
             )}
 
@@ -779,7 +804,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
               {logic.inStock && (
                 <Button
-                  onClick={logic.handleBuyNow}
+                  onClick={handleBuyNowWithScent}
                   className="w-full h-12 text-[15px] font-semibold rounded-lg shadow-sm"
                   size="lg"
                 >
@@ -958,7 +983,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <Button onClick={logic.handleBuyNow} size="default">
+                <Button onClick={handleBuyNowWithScent} size="default">
                   Comprar ahora
                 </Button>
                 <Button
@@ -995,7 +1020,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </div>
               <div className="flex gap-2">
                 <Button
-                  onClick={logic.handleBuyNow}
+                  onClick={handleBuyNowWithScent}
                   size="sm"
                   className="flex-1"
                 >
