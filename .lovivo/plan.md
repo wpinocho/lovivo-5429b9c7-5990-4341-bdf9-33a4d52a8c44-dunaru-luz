@@ -88,6 +88,7 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 - **TOP BAR** fija en `EcommerceTemplate.tsx` (2 items), no en checkout. **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes de color · **3.5 `<ProductScentSelector />` (aroma opcional)** · 4 cantidad (o `ProductQuantityTiers`) · 5 `<DeliveryEstimate />` · 6 pago express + CTA `h-12` con precio · 7 CTA outline `h-11` "Agregar al carrito" · 8 micro-línea `Lock` · 9 badges · 10 `<PdpSocialProof />` · 11 WhatsApp · 12 acordeones cerrados.
 - ⚠️ `TIER_SELECTOR_SLUGS` (solo `perlas-originales-500-g`) reemplaza el stepper.
+- **💰 PRECIO EN EL CTA "COMPRAR AHORA" (2026-08-21)**: `ctaTotal` en `ProductPageUI.tsx` = `ctaUnitPrice * ctaQuantity + scentSelection.price`, donde `ctaUnitPrice` sale de `calcVolumeDiscount(currentPrice, qty, getVolumeRulesForProduct(product.id))` con fallback a `currentPrice`. **Se muestra en TODOS los productos**, incluidos los de `TIER_SELECTOR_SLUGS` (antes se ocultaba ahí y por eso las recargas no mostraban total). ⚠️ La barra sticky sigue mostrando solo el precio UNITARIO del producto, sin aroma.
 - `optionLabel(name, slug)` renombra "Color" → "Color de la cera", excepto en `CONTAINER_ONLY_SLUGS`.
 - **📦 REGLA DE CONTENIDO EN KITS**: el primer bullet de `PDP_BENEFITS` de los kits declara qué trae la caja. NO quitar.
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
@@ -102,14 +103,14 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 - **📐 RATIO DE LOS FLAT-LAYS DE AROMA = 4:3 (1456×1092), webp.** El panel usa `aspect-[4/3]` + `object-cover`.
 - ⚠️ **LOS FLAT-LAYS TIENEN INGREDIENTES HASTA EL BORDE INFERIOR.** **No poner overlays, degradados ni chips encima de la imagen.** Decisión firme, no reabrir.
 - **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas" / "Ocultar detalles". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`.
-  - ⚠️ **EL PANEL ABRE EXPANDIDO POR DEFAULT (desde 2026-08-21).** `useState(true)` y el reset por `productSlug` también vuelve a `true`. La clienta cierra con "Ocultar detalles". Decisión del owner: la foto y las notas no deben depender de descubrir un toggle.
-  - **📐 ANATOMÍA DEL CHIP (3 líneas)**: 1) nombre `font-display text-[15px]` · 2) `inspiredBy` en `text-[11px]` muted · 3) **PRECIO + FORMATO en línea propia**: `text-[11px] font-medium tracking-wide mt-1.5`, **terracota** si no está seleccionado / **marfil** si sí. Formato `+ $99 · 10 ml`, donde `· 10 ml` va en `font-normal` + muted para que el precio siga dominando. El chip "Sin aroma" dice **"Incluido"**. ⚠️ **El precio NUNCA vuelve a la línea de `inspiredBy`**: se leía como parte de la descripción del perfume.
-  - **PANEL EXPANDIDO (compacto)**: contenedor `p-3.5`; wrapper `space-y-2.5 sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start`. Texto: `h4 text-lg` + inspiredBy terracota + description + "Elígelo si buscas" + **notas en UNA línea inline** (micro-label `NOTAS` terracota, `tracking-normal`, separador **thin-space `\u2009·\u2009`**). Sin `profile`, sin `.hairline`, sin chips en caja. Con "Sin aroma" seleccionado muestra "Selecciona un aroma para conocer sus notas."
+  - ⚠️ **EL PANEL ABRE EXPANDIDO POR DEFAULT (desde 2026-08-21).** `useState(true)` y el reset por `productSlug` también vuelve a `true`.
+  - **📐 ANATOMÍA DEL CHIP (3 líneas)**: 1) nombre `font-display text-[15px]` · 2) `inspiredBy` en `text-[11px]` muted · 3) **PRECIO + FORMATO en línea propia**: `text-[11px] font-medium tracking-wide mt-1.5`, **terracota** si no está seleccionado / **marfil** si sí. Formato `+ $99 · 10 ml`. El chip "Sin aroma" dice **"Incluido"**.
+  - **PANEL EXPANDIDO (compacto)**: contenedor `p-3.5`; wrapper `space-y-2.5 sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start`. Notas en UNA línea inline con separador thin-space `\u2009·\u2009`. Sin `profile`.
 - **LOS TRES CAMINOS DE COMPRA YA INCLUYEN EL AROMA** (1 frasco por acción):
   1. **"Agregar al carrito"** → `handleAddToCartWithAddOns`: producto + `addItem(esencia)` como línea separada.
   2. **"Comprar ahora"** → `handleBuyNowWithScent`: NO pasa por el carrito. `buyNowItems` con DOS líneas → `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` → `navigate('/pagar')`.
   3. **Pago express Apple Pay / Google Pay** → `ProductExpressCheckout` acepta prop **`extraItems?: CartItem[]`**.
-- El precio de los CTAs suma `scentSelection.price`.
+- El precio de los CTAs suma `scentSelection.price` vía `ctaTotal`.
 - ⚠️ `ProductPageUI` llama `useSettings()` dos veces (alias `checkoutCurrency` arriba; `storeName/currencyCode` abajo). No renombrar sin revisar.
 - **PostHog**: eventos `scent_selected` y `scent_details_toggled`.
 - **Ocultar del catálogo**: `HIDDEN_FROM_CATALOG_SLUGS` + `filterCatalogVisible()` en `src/lib/catalog-order.ts`, aplicado en `Collection.tsx`.
@@ -123,17 +124,16 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ Sistema de aromas completo con los 3 caminos de compra y sus 6 imágenes editoriales · ✅ 3.13 Panel compactado · ✅ 3.14 Jerarquía del chip · ✅ **3.15 Panel abierto por default + "10 ml" en el chip (2026-08-21)** · 🔜 **SIGUIENTE: verificar en móvil + medir attach rate** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ Sistema de aromas completo con los 3 caminos de compra y sus 6 imágenes editoriales · ✅ 3.13 Panel compactado · ✅ 3.14 Jerarquía del chip · ✅ 3.15 Panel abierto por default + "10 ml" en el chip · ✅ **3.16 Total con aroma en el CTA de TODOS los productos (2026-08-21)** · 🔜 **SIGUIENTE: verificar en móvil + medir attach rate** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 - 🔒 No tocar: buy box (orden), checkout, `DeliveryEstimate`, `PdpSocialProof`, avisos MSI, envío gratis, WhatsApp.
 
-### 3.15 ✅ PANEL DE AROMA ABIERTO POR DEFAULT (2026-08-21)
-1. ✅ `expanded` inicia en `true` y el reset por cambio de producto también.
-2. ✅ El chip declara el formato: `+ $99 · 10 ml`.
-- ⚠️ **Trade-off asumido**: el CTA "Comprar ahora" baja ~380 px en móvil cuando hay un aroma seleccionado. Decisión del owner. **Si el ATC móvil cae por debajo de 3.5%, esto es lo primero que se revierte.**
-- 🔜 Medir `scent_details_toggled` con `expanded: false` (cuántas cierran el panel) para validar.
+### 3.16 ✅ TOTAL EN EL CTA, TAMBIÉN EN LAS RECARGAS (2026-08-21)
+- Antes el precio del CTA se ocultaba cuando `useTierSelector` era true, así que en `perlas-originales-500-g` (recarga rellenable) nunca aparecía el total ni al elegir aroma.
+- Ahora `ctaTotal` respeta el descuento por volumen real de la price rule, así que el número del botón coincide con lo que cobra el checkout.
+- 🔜 Pendiente opcional: reflejar también el aroma en el precio de la barra sticky.
 
 ### 3.8 FASE 3 — PDP — RESTANTE
 1. Galería a sangre en móvil, sin borde ni radius.
@@ -156,8 +156,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-21 — 💰 **El CTA "Comprar ahora" ya muestra el total en TODOS los productos** (3.16), incluidas las recargas con selector de tiers, con descuento por volumen + aroma.
 - 2026-08-21 — 👁️ **Detalles del aroma ABIERTOS por default (3.15)** + el chip ahora dice `+ $99 · 10 ml`.
-- 2026-08-21 — 💲 **Precio del aroma con jerarquía propia (3.14).** `+ $99` sale de la línea de "Inspirado en"; "Sin aroma" dice "Incluido". Notas del panel a un solo renglón.
+- 2026-08-21 — 💲 **Precio del aroma con jerarquía propia (3.14).** `+ $99` sale de la línea de "Inspirado en"; "Sin aroma" dice "Incluido".
 - 2026-08-21 — 📏 **Panel de aroma compactado (3.13).** Fuera la línea `profile`, notas inline, 2 columnas en desktop.
 - 2026-08-21 — 🖼️ **Los 6 flat-lays de aroma ya viven en el selector de la PDP.**
 - 2026-08-21 — 🍎 **El pago express (Apple/Google Pay) ya incluye la esencia.** Nueva prop `extraItems`.
@@ -170,7 +171,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-21 — 📦 Contenido explícito de los kits en `PDP_BENEFITS`.
 - 2026-08-21 — 🫒 Token `--dunaru-oliva-claro` para el selector de variante.
 - 2026-08-20 — 🖱️ Hovers periwinkle en accordions, links y pills (Fase 2.11).
-- 2026-08-20 — 🏷️ Badge "Hasta 6 MSI" frosted glass + periwinkle.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 10 productos (la esencia aún SIN imágenes en la DB).
@@ -192,8 +192,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🟠 **El panel de aroma abierto por default empuja el CTA hacia abajo en móvil.** Riesgo de ATC. Sin medir. Es lo primero a revertir si cae la conversión móvil.
-- 2026-08-21 — 🟡 **Chip de aroma con 3 líneas y precio + "10 ml"**: sin verificar en pantallas de 360 px que no se parta el nombre.
+- 2026-08-21 — 🟡 **La barra sticky de la PDP muestra el precio unitario sin aroma**, mientras el CTA principal ya muestra el total. Inconsistencia menor, sin resolver.
+- 2026-08-21 — 🟠 **El panel de aroma abierto por default empuja el CTA hacia abajo en móvil.** Riesgo de ATC. Sin medir.
+- 2026-08-21 — 🟡 **Chip de aroma con 3 líneas y precio + "10 ml"**: sin verificar en pantallas de 360 px.
 - 2026-08-21 — 🟡 **En el pago express, la esencia se ve en el sheet del wallet como línea propia**. Sin probar en device real.
 - 2026-08-21 — 🟡 **La esencia no tiene imágenes en la DB**: su PDP directa se ve pobre.
 - 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP).
@@ -205,7 +206,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-20 — 🟠 Paleta nueva sin auditar en carrito ni checkout.
 - 2026-08-20 — 🟡 Texturas aún no aplicadas en PDP ni en `CasaRealSection`.
 - 2026-08-20 — 🟡 Los hex de `TONOS` en la landing son colores REALES de la cera: no se cambian.
-- 2026-08-20 — 🟠 Riesgo: bajar densidad puede reducir el ATC móvil (hoy 4.1%). Sin baseline capturado.
 - 2026-08-07 — 🔴 `perlas-originales-500-g` se llama "Recarga" y recibe el grueso del tráfico frío de Meta.
 - 2026-08-07 — 🟠 Escalera de precio por gramo rota: Dúo 1 kg ($1.10/g) vs Reserva 1 kg ($0.80/g).
 - 2026-08-07 — 🟡 `getReviewStats()` es global (4.9/15), no por SKU.
@@ -220,6 +220,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
+- [ALTA] **Verificar el total del CTA en `perlas-originales-500-g`** con 2 y 3 bolsas + aroma: el número debe coincidir con el checkout.
 - [ALTA] **Medir el impacto del panel abierto por default**: ATC móvil y `scent_details_toggled` con `expanded:false`.
 - [ALTA] **Verificar en móvil (360 px)** el chip de 3 líneas con `+ $99 · 10 ml`.
 - [ALTA] **Probar en device real**: PDP con aroma → Apple Pay / Google Pay → total y las dos líneas en la orden.
@@ -231,11 +232,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - [ALTA] **FASE 4 (fotos atmosféricas nocturnas)**, sin rostros.
 - [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, CTR de tarjeta).
 - [ALTA] P0 de la PDP de perlas (renombrar sin "Recarga", foto #1 = resultado, tiers como "elige tus tonos").
-- [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
-- [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
+- [MED] Reflejar el aroma en el precio de la barra sticky de la PDP.
 - [MED] Descripción y SEO propios de la PDP de la esencia.
-- [MED] Aplicar `texture-*` en `CasaRealSection` y en las secciones de historia de la PDP.
 - [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.
-- [MED] Encuesta PostHog de salida en `/pagar` y en la PDP de perlas.
-- [MED] Barrer guiones largos (—) en copy, incluidos títulos de producto en la DB.
 - [BAJA] Banners de colección y borrar imágenes huérfanas.

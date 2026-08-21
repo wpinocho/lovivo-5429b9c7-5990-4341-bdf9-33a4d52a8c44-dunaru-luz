@@ -50,6 +50,8 @@ import {
   type ScentSelection,
 } from "@/components/ProductScentSelector"
 import { supportsScentAddon } from "@/lib/scents"
+import { usePriceRules } from "@/hooks/usePriceRules"
+import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
 import { DeliveryEstimate, PdpSocialProof } from "@/components/PdpTrust"
@@ -181,6 +183,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const { toast } = useToast()
   const { saveCheckoutState } = useCheckoutState()
   const { currencyCode: checkoutCurrency } = useSettings()
+  const { getVolumeRulesForProduct } = usePriceRules()
   const { ref: ctaRef, inView: ctaInView, entry } = useInView({ threshold: 0 })
   // Solo mostramos la barra sticky cuando el usuario YA pasó (scrolleó por encima) del CTA,
   // no cuando el CTA todavía está debajo del fold al cargar la página.
@@ -410,6 +413,21 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   ) : null
   const useTierSelector =
     logic.product?.slug && TIER_SELECTOR_SLUGS.includes(logic.product.slug)
+
+  /**
+   * Total real que verá la clienta al pagar: precio unitario (ya con el
+   * descuento por volumen de la price rule, si existe) x cantidad, más la
+   * esencia si eligió aroma. Se pinta en el CTA de "Comprar ahora" en TODOS
+   * los productos, incluidos los que usan el selector de tiers.
+   */
+  const ctaQuantity = logic.quantity || 1
+  const ctaUnitPrice =
+    calcVolumeDiscount(
+      logic.currentPrice || 0,
+      ctaQuantity,
+      getVolumeRulesForProduct(logic.product.id)
+    )?.discountedPrice ?? (logic.currentPrice || 0)
+  const ctaTotal = ctaUnitPrice * ctaQuantity + (scentSelection?.price || 0)
 
   const headline = logic.product?.slug
     ? PDP_HEADLINE[logic.product.slug]
@@ -949,17 +967,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   {isBuyingNowWithScent || logic.isBuyingNow
                     ? "Procesando..."
                     : "Comprar ahora"}
-                  {!useTierSelector &&
-                    !isBuyingNowWithScent &&
-                    !logic.isBuyingNow && (
-                      <span className="font-normal opacity-80">
-                        {" · "}
-                        {logic.formatMoney(
-                          logic.currentPrice * (logic.quantity || 1) +
-                            (scentSelection?.price || 0)
-                        )}
-                      </span>
-                    )}
+                  {!isBuyingNowWithScent && !logic.isBuyingNow && (
+                    <span className="font-normal opacity-80">
+                      {" · "}
+                      {logic.formatMoney(ctaTotal)}
+                    </span>
+                  )}
                 </Button>
               )}
 
