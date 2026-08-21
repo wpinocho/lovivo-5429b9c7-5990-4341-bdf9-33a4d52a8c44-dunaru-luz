@@ -61,6 +61,22 @@ export const SCENT_ENABLED_SLUGS: string[] = [
 export const supportsScentAddon = (slug?: string | null): boolean =>
   !!slug && SCENT_ENABLED_SLUGS.includes(slug)
 
+/**
+ * Devuelve la foto editorial de un aroma a partir del NOMBRE de la variante.
+ *
+ * Se usa en el resumen del checkout y en la confirmación de compra, donde el
+ * line item solo trae el nombre de la variante ("Higo Matcha") y las fotos del
+ * producto de esencias vienen todas juntas: sin esto se pintaría siempre la
+ * primera foto para cualquier aroma.
+ */
+export const getScentImageByVariantName = (
+  variantName?: string | null
+): string | undefined => {
+  if (!variantName) return undefined
+  const clean = variantName.trim().toLowerCase()
+  return SCENTS.find((s) => s.name.toLowerCase() === clean)?.imageUrl || undefined
+}
+
 export const SCENTS: Scent[] = [
   {
     id: "madera-nocturna",

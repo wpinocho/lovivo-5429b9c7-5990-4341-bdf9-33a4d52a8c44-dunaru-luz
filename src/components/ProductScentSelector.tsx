@@ -112,10 +112,21 @@ export const ProductScentSelector = ({
       onSelectionChange(null)
       return
     }
+    const rawVariant = variantFor(selectedScent) as any
+    const image = selectedScent.imageUrl || undefined
+    // El carrito y el checkout leen la imagen del line item desde
+    // variant.image_urls / variant.image / product.images[0]. Como el producto
+    // de esencias tiene 6 fotos (una por aroma), aquí dejamos SIEMPRE la del
+    // aroma elegido al frente para que la clienta vea su aroma, no otro.
     onSelectionChange({
       scent: selectedScent,
-      product: scentProduct,
-      variant: variantFor(selectedScent),
+      product: image
+        ? ({ ...(scentProduct as any), images: [image] } as Product)
+        : scentProduct,
+      variant:
+        rawVariant && image
+          ? ({ ...rawVariant, image, image_urls: [image] } as ProductVariant)
+          : rawVariant,
       price: priceFor(selectedScent),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps

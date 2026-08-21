@@ -6,6 +6,7 @@ import { callEdge } from '@/lib/edge'
 import { STORE_ID } from '@/lib/config'
 import { useToast } from '@/hooks/use-toast'
 import { logger } from '@/lib/logger'
+import { getScentImageByVariantName } from '@/lib/scents'
 
 export interface OrderItem {
   key: string
@@ -181,6 +182,12 @@ export const useOrderItems = () => {
         // variant_image es la imagen específica de la variante (campo directo del backend)
         const fallbackImages = item.product_images || item.products?.images || fallback?.product.images || []
         productImages = [item.variant_image, ...fallbackImages.filter((img: string) => img !== item.variant_image)]
+      } else if (getScentImageByVariantName(variantName)) {
+        // Esencias dunaru: el line item solo trae el nombre del aroma, así que
+        // resolvemos su foto para no mostrar siempre la del primer aroma.
+        const scentImg = getScentImageByVariantName(variantName)!
+        const fallbackImages = item.product_images || item.products?.images || fallback?.product.images || []
+        productImages = [scentImg, ...fallbackImages.filter((img: string) => img !== scentImg)]
       } else if (variant_id && item.products?.variants) {
         // checkout-create format: buscar image_urls en la variante dentro de products.variants
         const variantData = item.products.variants.find((v: any) => v.id === variant_id)

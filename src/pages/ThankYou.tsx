@@ -11,6 +11,7 @@ import { SEO } from '@/components/SEO'
 import { STORE_ID } from '@/lib/config'
 import { callEdge } from '@/lib/edge'
 import { useCart } from '@/contexts/CartContext'
+import { getScentImageByVariantName } from '@/lib/scents'
 
 interface OrderDetails {
   id: string
@@ -216,10 +217,10 @@ const ThankYou = () => {
                 {order.order_items.filter(item => item.quantity > 0).map((item, index) => (
                   <div key={index} className="flex gap-4 items-start">
                     {/* Product Image */}
-                    {item.product_images && item.product_images.length > 0 && (
+                    {(getScentImageByVariantName(item.variant_name) || (item.product_images && item.product_images.length > 0)) && (
                       <div className="w-16 h-16 bg-muted rounded-lg flex-shrink-0 overflow-hidden">
                         <img 
-                          src={item.product_images[0]} 
+                          src={getScentImageByVariantName(item.variant_name) || item.product_images![0]} 
                           alt={item.product_name || 'Producto'}
                           className="w-full h-full object-cover"
                           onError={(e) => {
