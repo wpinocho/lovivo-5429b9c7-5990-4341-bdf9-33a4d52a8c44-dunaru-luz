@@ -48,7 +48,7 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 | Contraste oscuro | Deep Olive / Charcoal | #2F3128 | 73 10% 17% | `--foreground`, `dunaru-carbon` |
 | Top bar / footer | Deep Olive oscuro | — | 75 13% 15% | `--primary`, `dunaru-onix` |
 | **CTA "Comprar ahora"** | **Verde oliva vivo** | — | **75 24% 25%** | **`--dunaru-oliva-cta`** (solo `Button` variant `default`) |
-| **Selector variante (default/seleccionado)** | **Verde oliva claro** | — | **75 22% 37%** | **`--dunaru-oliva-claro`** (pills de "Color de la cera" en `ProductPageUI.tsx`) |
+| **Selector variante (default/seleccionado)** | **Verde oliva claro** | — | **75 22% 37%** | **`--dunaru-oliva-claro`** (pills de "Color de la cera" en PDP Y en `ProductCardUI.tsx`) |
 | Acento cálido | Saffron Gold | #D4A24A | 38 62% 56% | `--accent`, `dunaru-ambar` |
 | Acento distintivo | Muted Periwinkle | #8B93B9 | 230 25% 64% | `dunaru-periwinkle` |
 | Periwinkle legible | — | — | 230 27% 45% | `--dunaru-periwinkle-deep` (solo CSS, usar `text-[hsl(var(--dunaru-periwinkle-deep))]`, NO está en tailwind.config) |
@@ -70,10 +70,11 @@ Pill "Hasta 6 MSI" (usado en el hero de `IndexUI.tsx` y donde se reutilice la cl
 - **AccordionTrigger compartido** (`ui/accordion.tsx`): `hover:text-[hsl(var(--dunaru-periwinkle-deep))]` + `hover:underline`. Aplica a acordeones de la PDP y a todos los FAQ de `ProductStorySections.tsx`.
 - **Links de texto secundarios → hover periwinkle-deep**: "Escríbenos por WhatsApp" (`ProductPageUI.tsx`), "Comparte tu experiencia" (`Reviews.tsx`). Patrón: `hover:text-[hsl(var(--dunaru-periwinkle-deep))] transition-colors`.
 - **Botón sólido "Elegir mi vela"** (cierre de PDP, `ProductStorySections.tsx`): `hover:text-dunaru-periwinkle`, fondo oliva se mantiene.
-- **Pills de variante "Color de la cera"** (`ProductPageUI.tsx` ~línea 668-679):
-  - Seleccionado/default: `border-dunaru-oliva-claro bg-dunaru-oliva-claro text-dunaru-marfil`.
-  - No seleccionado, hover: `hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]`.
+- **Pills de variante "Color de la cera"** (`ProductPageUI.tsx` ~línea 668-679) Y **pills de variante en `ProductCardUI.tsx`** (grid de catálogo, ~línea 162-177):
+  - Seleccionado/default: `bg-dunaru-oliva-claro text-dunaru-marfil` (PDP añade `border-dunaru-oliva-claro`).
+  - No seleccionado, hover: `hover:bg-dunaru-periwinkle/10-25 hover:text-[hsl(var(--dunaru-periwinkle-deep))]`.
   - ⚠️ Esto ya CUMPLE la Fase 3.7. Punto 7 de la Fase 3 = resuelto.
+  - 🆕 2026-08-21: `ProductCardUI.tsx` usaba `bg-dunaru-onix` (negro carbón) para la pill seleccionada — corregido a `dunaru-oliva-claro` para consistencia con la PDP.
 - Otras variantes de `ui/button.tsx`: `outline` borde+texto terracota + fill 10% al hover · `secondary` terracota/85 · `ghost` fill terracota 10% + texto terracota · `link` texto terracota.
   ⚠️ Cualquier CTA con `bg-*`/`hover:*` hardcodeado en className NO hereda esto automáticamente.
 - **PATRÓN OFICIAL "INVERSIÓN MARFIL ↔ TERRACOTA"**: reposo `bg-dunaru-marfil` + `text-dunaru-terracota`; hover `bg-dunaru-terracota` + `text-dunaru-marfil`. **Sin borde.** Usado en: CTA del hero (`IndexUI`), botón "Agregar" de `ProductCardUI`.
@@ -149,7 +150,7 @@ Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 - Si un cambio estético reduce claridad de precio, disponibilidad o envío → **no se hace**.
 
 ### 3.1–3.7 ✅ Completadas
-Fase 1 sistema base · Fase 2 home · 2.5 paleta + texturas · 2.6 hovers + `ProductCardUI` · 2.7 CTA oliva/marfil · 2.8 hover periwinkle en "Agregar al carrito" · 2.9 carrusel de pasos · 2.10 badge MSI · 2.11 hovers periwinkle en accordions/links/pills · 3.7 selector de variante a `dunaru-oliva-claro`.
+Fase 1 sistema base · Fase 2 home · 2.5 paleta + texturas · 2.6 hovers + `ProductCardUI` · 2.7 CTA oliva/marfil · 2.8 hover periwinkle en "Agregar al carrito" · 2.9 carrusel de pasos · 2.10 badge MSI · 2.11 hovers periwinkle en accordions/links/pills · 3.7 selector de variante a `dunaru-oliva-claro` (PDP y ProductCardUI).
 
 ### 3.8 FASE 3 — PDP — RESTANTE
 🔒 El orden del buy box NO cambia. Solo tratamiento visual + dos añadidos.
@@ -159,7 +160,7 @@ Fase 1 sistema base · Fase 2 home · 2.5 paleta + texturas · 2.6 hovers + `Pro
 4. **NUEVO "Combina bien con"**: `ProductAddOns` debajo del buy box → resuelve la falta de cross-sell en `perlas-originales-500-g`.
 5. `<RitualSection />` al cierre de la PDP.
 6. Barrer eyebrows viejos → `.eyebrow`; aplicar texturas a las secciones de historia.
-7. ~~Selector de variantes~~ ✅ HECHO 2026-08-21.
+7. ~~Selector de variantes~~ ✅ HECHO 2026-08-21 (PDP y catálogo).
 8. Migrar `ProductStorySections.tsx` (garantías, bloques, tabla comparativa) de `dunaru-champagne` a terracota/periwinkle.
 9. Unificar el bloque de trust-icons "6 meses sin intereses" (~línea 835 `ProductPageUI.tsx`) con la paleta terracota/periwinkle.
 
@@ -186,6 +187,7 @@ Ver la sección "🗂️ CATÁLOGO" del Design System para las reglas vigentes.
 ---
 
 ## 4. Recent Changes
+- 2026-08-21 — 🟢 **Pills de variante seleccionada en `ProductCardUI.tsx` (grid de catálogo) de `bg-dunaru-onix` (negro carbón) a `bg-dunaru-oliva-claro`** (verde oliva claro), a petición del owner ("botones verde oliva más claros") y para consistencia con el selector de la PDP.
 - 2026-08-21 — 🗂️ **ORDEN CURADO DEL CATÁLOGO IMPLEMENTADO.** Nuevo `src/lib/catalog-order.ts` (solo slugs) con `CATALOG_GROUPS`, `sortByCatalogOrder()` y `groupByCatalog()`. `Collection.tsx` ahora ordena en AMBOS caminos y, en `todos`, renderiza 4 grupos con divisor `.hairline` + `<h2 class="eyebrow">`. Copy de la descripción de `todos` reescrito a la nueva narrativa. Antes: accesorios baratos primero y best seller último.
 - 2026-08-21 — 🧭 Diagnóstico previo del orden de `/categorias/todos` (ordenaba por `created_at desc`; las colecciones por handle sin `.order()`).
 - 2026-08-21 — 🧱 **Descripciones de los KITS corregidas en la DB** (`ecommerce--update-product`). `kit-vaso-de-concreto`: decía "Bowl artesanal de concreto gris mate" → ahora "Incluye: bowl artesanal de cerámica negra mate + 500 g de cera perlada + 30 mechas de algodón". `kit-vaso-de-vidrio`: normalizado al mismo formato. El tag interno `concreto` se dejó intacto.
@@ -199,8 +201,6 @@ Ver la sección "🗂️ CATÁLOGO" del Design System para las reglas vigentes.
 - 2026-08-20 — 🟢 **CTA "Comprar ahora" — texto marfil sobre oliva, hover terracota**.
 - 2026-08-20 — 🎴 **`ProductCardUI` a la paleta 2026**.
 - 2026-08-20 — 🖱️ **CTA del hero con inversión marfil ↔ terracota**.
-- 2026-08-20 — 🖱️ **ESTADOS HOVER DE MARCA** en `ui/button.tsx` + navegación periwinkle.
-- 2026-08-20 — 🎨 **PALETA 2026 + SISTEMA DE MATERIALES**.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 9 productos, 75 imágenes en `product-images/products/`.

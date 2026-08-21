@@ -165,7 +165,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                             onClick={() => logic.handleOptionChange(opt.name, val)}
                             className={`border-0 px-3 py-1.5 text-xs transition-colors duration-200 ${
                               isSelected
-                                ? 'bg-dunaru-onix text-dunaru-marfil'
+                                ? 'bg-dunaru-oliva-claro text-dunaru-marfil'
                                 : 'bg-dunaru-arena/70 text-dunaru-carbon hover:bg-dunaru-periwinkle/25 hover:text-[hsl(var(--dunaru-periwinkle-deep))]'
                             }`}
                             aria-pressed={isSelected}
