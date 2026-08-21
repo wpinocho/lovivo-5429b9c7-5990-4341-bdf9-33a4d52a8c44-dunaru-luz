@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Button } from "@/components/ui/button"
 import { SEO } from "@/components/SEO"
 import { useSettings } from "@/contexts/SettingsContext"
+import { sortByCatalogOrder, groupByCatalog } from "@/lib/catalog-order"
 
 /**
  * Collection — Landing de categoría.
@@ -117,11 +118,12 @@ const Collection = () => {
     }
   }, [handle, isAll])
 
-  const visibleProducts = products.filter(isInStock)
+  const visibleProducts = sortByCatalogOrder(products.filter(isInStock) as any) as Product[]
+  const groupedProducts = isAll ? groupByCatalog(visibleProducts as any) : []
 
   const title = isAll ? "Todos los productos" : collection?.name || "Categoría"
   const description = isAll
-    ? "Explora todo el catálogo dunaru: perlas, kits, recipientes y accesorios para crear tu vela de diseño."
+    ? "Empieza con un kit completo, repón la cera cuando se acabe y suma tonos o recipientes cuando quieras."
     : collection?.description || `Descubre los productos de ${title} en dunaru.`
 
   return (
@@ -179,6 +181,25 @@ const Collection = () => {
             <Button asChild>
               <Link to="/categorias/todos">Ver todos los productos</Link>
             </Button>
+          </div>
+        ) : isAll ? (
+          <div className="space-y-14 lg:space-y-20">
+            {groupedProducts.map((group) => (
+              <section key={group.id} aria-labelledby={`grupo-${group.id}`}>
+                <div className="hairline mb-6" />
+                <h2
+                  id={`grupo-${group.id}`}
+                  className="eyebrow text-xs uppercase tracking-[0.2em] mb-6"
+                >
+                  {group.label}
+                </h2>
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                  {(group.items as Product[]).map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
+                </div>
+              </section>
+            ))}
           </div>
         ) : (
           <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">

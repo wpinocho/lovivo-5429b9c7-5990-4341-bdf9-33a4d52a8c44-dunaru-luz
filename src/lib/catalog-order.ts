@@ -1,0 +1,87 @@
+/**
+ * catalog-order — Orden de merchandising del catálogo dunaru.
+ *
+ * Fuente única de verdad del ORDEN en que se muestran los productos.
+ * ⚠️ Aquí SOLO viven slugs. Títulos, precios e imágenes siempre vienen de la DB,
+ * porque el owner los edita desde el Dashboard.
+ *
+ * Lógica narrativa: primero "quiero empezar" (kits completos), luego
+ * "quiero repetir" (recargas), luego "quiero más" (colecciones de tonos)
+ * y al final refacciones y recipientes sueltos.
+ */
+
+export type CatalogGroup = {
+  id: string
+  label: string
+  slugs: string[]
+}
+
+export const CATALOG_GROUPS: CatalogGroup[] = [
+  {
+    id: "kits",
+    label: "Empieza aquí",
+    slugs: ["kit-vaso-de-vidrio", "kit-vaso-de-concreto"],
+  },
+  {
+    id: "recargas",
+    label: "Cera perlada",
+    slugs: ["perlas-originales-500-g", "reserva-1-kg"],
+  },
+  {
+    id: "tonos",
+    label: "Colecciones de tonos",
+    slugs: ["d-o-de-tonos", "tr-o-de-tonos"],
+  },
+  {
+    id: "accesorios",
+    label: "Recipientes y accesorios",
+    slugs: ["vaso-extra-transparente", "bowl-negro", "pack-30-mechas"],
+  },
+]
+
+/** Etiqueta para productos nuevos que aún no están en ningún grupo. */
+export const CATALOG_FALLBACK_LABEL = "Más de dunaru"
+
+/** Orden plano derivado de los grupos. */
+export const CATALOG_ORDER: string[] = CATALOG_GROUPS.flatMap((g) => g.slugs)
+
+const orderIndex = new Map(CATALOG_ORDER.map((slug, i) => [slug, i]))
+
+type Sortable = { slug?: string | null; created_at?: string | null }
+
+/**
+ * Ordena por CATALOG_ORDER. Los slugs desconocidos (productos nuevos creados
+ * desde el Dashboard) no desaparecen: se van al final, del más nuevo al más viejo.
+ */
+export function sortByCatalogOrder<T extends Sortable>(items: T[]): T[] {
+  return [...items].sort((a, b) => {
+    const ia = orderIndex.has(a.slug || "") ? (orderIndex.get(a.slug || "") as number) : Number.MAX_SAFE_INTEGER
+    const ib = orderIndex.has(b.slug || "") ? (orderIndex.get(b.slug || "") as number) : Number.MAX_SAFE_INTEGER
+    if (ia !== ib) return ia - ib
+    // Ambos fuera de la lista curada: más recientes primero.
+    const da = a.created_at ? Date.parse(a.created_at) : 0
+    const db = b.created_at ? Date.parse(b.created_at) : 0
+    return db - da
+  })
+}
+
+/**
+ * Agrupa productos ya ordenados en las secciones del catálogo.
+ * Los grupos vacíos se omiten (no se renderiza su encabezado).
+ */
+export function groupByCatalog<T extends Sortable>(
+  items: T[]
+): { id: string; label: string; items: T[] }[] {
+  const groups = CATALOG_GROUPS.map((g) => ({
+    id: g.id,
+    label: g.label,
+    items: items.filter((p) => g.slugs.includes(p.slug || "")),
+  })).filter((g) => g.items.length > 0)
+
+  const rest = items.filter((p) => !CATALOG_ORDER.includes(p.slug || ""))
+  if (rest.length > 0) {
+    groups.push({ id: "otros", label: CATALOG_FALLBACK_LABEL, items: rest })
+  }
+
+  return groups
+}

@@ -33,6 +33,7 @@ Snapshot 2026-08-07 (fuente de verdad = la DB):
 - Price rule activa: `perlas-originales-500-g` → 2 uds 10% OFF, 3 uds 15% OFF.
 - **CONTENIDO DE LOS KITS (confirmado en DB 2026-08-21)**: ambos kits = recipiente + **500 g de cera + 30 mechas**. Vidrio → vaso de vidrio transparente. Cerámica → bowl de cerámica negra mate. Descripciones de DB ya declaran el contenido con formato "Incluye: A + B + C".
 - **COLECCIONES ACTUALES (DB 2026-08-21)**: `kits` (2 productos), `recipientes` (2), `accesorios` (1). ⚠️ **4 productos no pertenecen a ninguna colección**: `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`. Falta una colección **`recargas`** (o "Cera perlada").
+- 🆕 **ORDEN DE MERCHANDISING** = `src/lib/catalog-order.ts` (solo slugs). Cualquier SKU nuevo cae al final por `created_at desc`. **Añadir ahí el slug de cada producto nuevo.**
 
 ---
 
@@ -123,9 +124,12 @@ Componente COMPARTIDO: home (`IndexUI`, `bg-background`, con eyebrow y footer CT
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
 - **`ProductCardUI.tsx`**: sin borde de card, imagen sobre `bg-dunaru-arena/40`, título `font-display`, estrellas en `dunaru-ambar`.
 
-### 🏠 LANDING (`src/pages/ui/IndexUI.tsx`) — orden oficial
-1. Hero (`min-h-screen`, tabaco + `texture-ambar`) · 2. Beneficios (`texture-travertino`) · 3. Cómo funciona (`ProductStepsCarousel`) · 4. **Elige tu vela** (`SHOP_CARDS`, `texture-arena`) · 5. `<RitualSection />` · 6. `<Reviews />` · 7. Elige tu tono · 8. `<CasaRealSection />` · 9. `<BrandStorySection />` · 10. FAQ · 11. Newsletter tabaco + WhatsApp.
-- ⚠️ Prohibido duplicar SKUs en varias secciones. Precios y títulos SIEMPRE dinámicos vía `buildCatalog(logic.products)`.
+### 🗂️ CATÁLOGO `/categorias/:handle` (desde 2026-08-21)
+- `src/lib/catalog-order.ts` = **fuente única de verdad del orden**. Exporta `CATALOG_GROUPS`, `CATALOG_ORDER`, `sortByCatalogOrder()`, `groupByCatalog()`.
+- ⚠️ **Solo slugs.** Nada de precios ni títulos: vienen de la DB.
+- `Collection.tsx` aplica `sortByCatalogOrder()` a `visibleProducts` en AMBOS caminos (`todos` y colección por handle) → esto también arregla el orden indefinido de las páginas de colección.
+- Cuando `isAll === true` se renderiza un **grid agrupado**: por cada grupo un divisor `.hairline` + `<h2 class="eyebrow">` + grid `grid-cols-2 lg:grid-cols-3`. Grupos vacíos (por stock) NO se renderizan. Productos fuera de la lista curada caen en "Más de dunaru".
+- Orden curado: Empieza aquí (kits) → Cera perlada (recargas) → Colecciones de tonos → Recipientes y accesorios. `pack-30-mechas` va ÚLTIMO a propósito pese a ser el más barato (es refacción, no puerta de entrada).
 
 ### 🧾 CHECKOUT (`src/pages/ui/CheckoutUI.tsx`) — reglas fijas
 - Header minimal, solo logo. Sin nav, sin top bar promocional.
@@ -136,7 +140,7 @@ Componente COMPARTIDO: home (`IndexUI`, `bg-background`, con eyebrow y footer CT
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ 2.5 · ✅ 2.6 · ✅ 2.7 · ✅ 2.8 · ✅ 2.9 · ✅ 2.10 · ✅ 2.11 · ✅ Fase 3.7. ⏭️ Resto de Fase 3 y Fase 4 pendientes. 🆕 **3.12 (orden del catálogo) LISTO PARA CRAFT MODE.**
+**Estado**: ✅ Fase 1 · ✅ Fase 2 · ✅ 2.5 · ✅ 2.6 · ✅ 2.7 · ✅ 2.8 · ✅ 2.9 · ✅ 2.10 · ✅ 2.11 · ✅ Fase 3.7 · ✅ **3.12 (orden del catálogo) EJECUTADA 2026-08-21**. ⏭️ Resto de Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
@@ -171,104 +175,22 @@ Founder-led · marquee de "6 sentidos" · esconder precios o quitar tachados · 
 ### 3.11 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`. Si el ATC móvil cae por debajo de 3.5%, revertir badges y densidad primero.
 
----
-
-### 3.12 🆕 ORDEN DE MERCHANDISING DEL CATÁLOGO (`/categorias/:handle`) — LISTO PARA CRAFT MODE
-
-#### Diagnóstico (2026-08-21)
-`src/pages/Collection.tsx` línea 56: en el caso `handle === "todos"` la query hace
-`.order("created_at", { ascending: false })`. Como el catálogo se sembró casi todo el mismo segundo (2026-06-23T21:16:50.xxx) y los accesorios se crearon después, el orden resultante hoy es:
-
-1. Bowl de Cerámica Negro ($399) · 2. Pack de 30 Mechas ($99) · 3. Vaso de Vidrio Transparente ($249) · 4. Kit Vaso de Vidrio ($799) · 5. Recarga 1 Kg ($799) · 6. Kit Bowl de Cerámica ($999) · 7. Dúo ($1,099) · 8. Trío ($1,399) · 9. Recarga 500 g ($499)
-
-Problemas de negocio:
-- Los **3 productos de menor ticket y menor intención (accesorios/recipientes sueltos) ocupan las 3 primeras posiciones**, que son las de mayor visibilidad. El producto ancla de pauta (`kit-vaso-de-vidrio`) queda en 4º y el best-seller de tráfico frío (`perlas-originales-500-g`) queda **último**.
-- Un visitante frío que aterriza en "Todos los productos" ve primero un bowl vacío de $399 sin contexto → no entiende la propuesta ("¿qué compro para empezar?").
-- El orden no cuenta ninguna historia: mezcla kits, recargas y refacciones sin jerarquía.
-- Además, en el caso de colección (`kits`, `recipientes`, `accesorios`) la query **ni siquiera tiene `.order()`** → orden indefinido de Postgres, puede cambiar entre cargas.
-- ⚠️ Dato adicional: solo 5 de 9 productos están asignados a alguna colección. Faltan `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos` → **no existe la colección "Recargas"**.
-
-#### Orden curado propuesto (fuente única de verdad, por slug)
-Lógica: **primero lo que resuelve "quiero empezar", luego "quiero repetir", luego "quiero más", al final refacciones.** Dentro de cada grupo, precio ascendente.
-
-```
-GRUPO A · "Empieza aquí" (kits completos)
-  1. kit-vaso-de-vidrio        $799   ← ancla de pauta Meta
-  2. kit-vaso-de-concreto      $999   ← Bowl de Cerámica (premium)
-
-GRUPO B · "Cera perlada" (recargas)
-  3. perlas-originales-500-g   $499   ← best seller tráfico frío
-  4. reserva-1-kg              $799   ← mejor $/g
-
-GRUPO C · "Colecciones de tonos"
-  5. d-o-de-tonos              $1,099
-  6. tr-o-de-tonos             $1,399  ← mejor valor
-
-GRUPO D · "Recipientes y accesorios"
-  7. vaso-extra-transparente   $249
-  8. bowl-negro                $399
-  9. pack-30-mechas            $99     ← refacción pura, siempre al final
-```
-⚠️ Nota de merchandising: `pack-30-mechas` va último **a propósito** aunque sea el más barato: es una refacción, no una puerta de entrada.
-⚠️ El Grupo C se mantiene separado del Grupo B a propósito: si el Dúo (1 kg, $1,099) queda pegado a la Reserva (1 kg, $799) la escalera de precio por gramo se ve rota (Known Issue 2026-08-07).
-
-#### Implementación
-**1. Crear `src/lib/catalog-order.ts`** (nuevo archivo, fuente única de verdad):
-```ts
-export const CATALOG_ORDER: string[] = [
-  "kit-vaso-de-vidrio",
-  "kit-vaso-de-concreto",
-  "perlas-originales-500-g",
-  "reserva-1-kg",
-  "d-o-de-tonos",
-  "tr-o-de-tonos",
-  "vaso-extra-transparente",
-  "bowl-negro",
-  "pack-30-mechas",
-]
-
-export const CATALOG_GROUPS = [
-  { id: "kits",        label: "Empieza aquí",              slugs: ["kit-vaso-de-vidrio", "kit-vaso-de-concreto"] },
-  { id: "recargas",    label: "Cera perlada",              slugs: ["perlas-originales-500-g", "reserva-1-kg"] },
-  { id: "tonos",       label: "Colecciones de tonos",      slugs: ["d-o-de-tonos", "tr-o-de-tonos"] },
-  { id: "accesorios",  label: "Recipientes y accesorios",  slugs: ["vaso-extra-transparente", "bowl-negro", "pack-30-mechas"] },
-] as const
-
-/** Ordena por CATALOG_ORDER. Slugs desconocidos van al final, por created_at desc. */
-export function sortByCatalogOrder<T extends { slug?: string | null; created_at?: string }>(items: T[]): T[] { ... }
-```
-- ⚠️ **NO hardcodear precios ni títulos ahí. Solo slugs.** Títulos y precios siguen viniendo de la DB.
-- ⚠️ Los slugs deben coincidir EXACTO con la DB, incluidos los raros: `d-o-de-tonos`, `tr-o-de-tonos`, `kit-vaso-de-concreto`.
-- Cualquier producto nuevo que el owner cree desde el Dashboard y que no esté en la lista **no desaparece**: cae al final ordenado por fecha.
-
-**2. `src/pages/Collection.tsx`**:
-- Quitar/relajar el `.order("created_at")` y aplicar `sortByCatalogOrder(...)` sobre `visibleProducts` en AMBOS caminos (`todos` y colección por handle). Esto también arregla el orden indefinido de las páginas de colección.
-- **Solo cuando `isAll === true`**: renderizar el grid agrupado con encabezados de sección en lugar de un grid plano de 9. Cada grupo:
-  - Encabezado: `<h2>` con clase `.eyebrow` (latón, fondo claro), `text-xs uppercase tracking-[0.2em]`, alineado a la izquierda, `mb-4`, precedido de un divisor `.hairline` `mb-10`.
-  - Debajo, el mismo `grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6` con sus `<ProductCard />`.
-  - Un grupo sin productos visibles (stock) NO se renderiza (ni su encabezado).
-  - Los productos que no estén en ningún grupo se renderizan al final bajo el encabezado "Más de dunaru".
-- Ajustar el copy del `<header>` de `todos`: la descripción debe reflejar la nueva narrativa ("Empieza con un kit completo, repón cuando se acabe"). ⛔ Sin guion largo.
-- 🔒 No tocar `isInStock`, ni SEO, ni el estado `notFound`, ni el skeleton.
-
-**3. `src/components/ui/ProductCardUI.tsx` (opcional, fase 2 de este bloque)**:
-- Ya soporta máximo 2 badges (descuento, agotado, price rules). Si se quiere añadir un badge editorial "Más vendido" / "Mejor valor", debe hacerse por slug en `catalog-order.ts` y respetar el límite de 2 badges. **No inventar claims**: "Más vendido" solo si el owner lo confirma con datos del Dashboard.
-
-#### Recomendaciones adicionales para el owner (NO ejecutar sin su OK)
-- **Crear la colección `recargas`** ("Cera perlada") con `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`, y añadirla al menú del header. Hoy esos 4 productos no viven en ninguna categoría → el menú desplegable está incompleto.
-- Revisar la escalera de precio del **Dúo 1 kg ($1,099)** vs **Reserva 1 kg ($799)**: al agruparlos por narrativa la comparación se vuelve más visible.
-- Un selector de orden ("Recomendados / Precio: menor a mayor") es opcional; con 9 SKUs el orden curado rinde más que el filtro.
-
-#### Medición
-Comparación secuencial en PostHog: CTR de tarjeta desde `/categorias/todos` → PDP, y ATC atribuido. Bajo volumen → no A/B.
+### 3.12 ✅ ORDEN DE MERCHANDISING DEL CATÁLOGO — EJECUTADO 2026-08-21
+Ver la sección "🗂️ CATÁLOGO" del Design System para las reglas vigentes.
+**Pendientes derivados (requieren OK del owner):**
+- Crear la colección `recargas` ("Cera perlada") con `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`, y añadirla al menú del header. Hoy esos 4 SKUs no viven en ninguna categoría.
+- Revisar la escalera de precio del Dúo 1 kg ($1,099) vs Reserva 1 kg ($799): al agruparlos por narrativa la comparación quedó más visible.
+- Badge editorial "Más vendido" / "Mejor valor" por slug en `catalog-order.ts` (límite de 2 badges en `ProductCardUI`). **Solo si el owner lo confirma con datos del Dashboard.** No inventar claims.
+- Medición: CTR de tarjeta desde `/categorias/todos` → PDP y ATC atribuido, comparación secuencial en PostHog. Bajo volumen → no A/B.
 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — 🧭 **Diagnóstico del orden de `/categorias/todos`**: se detectó que ordena por `created_at desc`, lo que empuja accesorios baratos al frente y manda el best seller al final; las páginas de colección no tienen `.order()` en absoluto. Plan 3.12 escrito con orden curado por slug + grupos con encabezado. **Pendiente de ejecutar en Craft Mode.**
-- 2026-08-21 — 🧱 **Descripciones de los KITS corregidas en la DB** (`ecommerce--update-product`). `kit-vaso-de-concreto`: decía "Bowl artesanal de concreto gris mate" → ahora "Incluye: bowl artesanal de cerámica negra mate + 500 g de cera perlada + 30 mechas de algodón". `kit-vaso-de-vidrio`: normalizado al mismo formato "Incluye: A + B + C". El tag interno `concreto` se dejó intacto.
-- 2026-08-21 — 📦 **Contenido explícito de los kits en la PDP** (`ProductPageUI.tsx`, `PDP_BENEFITS`): primer bullet de cada kit declara qué trae la caja.
-- 2026-08-21 — 🫒 **Selector de variante "Color de la cera" a verde oliva claro** (`ProductPageUI.tsx`): nuevo token `--dunaru-oliva-claro` (75 22% 37%) en `index.css` + tailwind.config.ts.
+- 2026-08-21 — 🗂️ **ORDEN CURADO DEL CATÁLOGO IMPLEMENTADO.** Nuevo `src/lib/catalog-order.ts` (solo slugs) con `CATALOG_GROUPS`, `sortByCatalogOrder()` y `groupByCatalog()`. `Collection.tsx` ahora ordena en AMBOS caminos y, en `todos`, renderiza 4 grupos con divisor `.hairline` + `<h2 class="eyebrow">`. Copy de la descripción de `todos` reescrito a la nueva narrativa. Antes: accesorios baratos primero y best seller último.
+- 2026-08-21 — 🧭 Diagnóstico previo del orden de `/categorias/todos` (ordenaba por `created_at desc`; las colecciones por handle sin `.order()`).
+- 2026-08-21 — 🧱 **Descripciones de los KITS corregidas en la DB** (`ecommerce--update-product`). `kit-vaso-de-concreto`: decía "Bowl artesanal de concreto gris mate" → ahora "Incluye: bowl artesanal de cerámica negra mate + 500 g de cera perlada + 30 mechas de algodón". `kit-vaso-de-vidrio`: normalizado al mismo formato. El tag interno `concreto` se dejó intacto.
+- 2026-08-21 — 📦 **Contenido explícito de los kits en la PDP** (`ProductPageUI.tsx`, `PDP_BENEFITS`).
+- 2026-08-21 — 🫒 **Selector de variante "Color de la cera" a verde oliva claro**: nuevo token `--dunaru-oliva-claro` (75 22% 37%).
 - 2026-08-20 — 🖱️ **Pills de variante con hover periwinkle** (`ProductPageUI.tsx`).
 - 2026-08-20 — 🖱️ **FASE 2.11: hovers periwinkle en accordions y links de texto**.
 - 2026-08-20 — 🏷️ **Badge "Hasta 6 MSI" — frosted glass + periwinkle** (`.badge-msi`).
@@ -279,7 +201,6 @@ Comparación secuencial en PostHog: CTR de tarjeta desde `/categorias/todos` →
 - 2026-08-20 — 🖱️ **CTA del hero con inversión marfil ↔ terracota**.
 - 2026-08-20 — 🖱️ **ESTADOS HOVER DE MARCA** en `ui/button.tsx` + navegación periwinkle.
 - 2026-08-20 — 🎨 **PALETA 2026 + SISTEMA DE MATERIALES**.
-- 2026-08-20 — ⚠️ **Aprendizaje**: `dunaru-champagne` es latón oscuro → usar `dunaru-ambar` sobre fondos oscuros.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 9 productos, 75 imágenes en `product-images/products/`.
@@ -297,8 +218,8 @@ Comparación secuencial en PostHog: CTR de tarjeta desde `/categorias/todos` →
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🟠 **`/categorias/todos` ordena por `created_at desc`** → accesorios primero, best seller último. Las páginas de colección por handle NO tienen `.order()` → orden indefinido. Fix = plan 3.12.
-- 2026-08-21 — 🟠 **4 de 9 productos no pertenecen a ninguna colección** (`perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`) → falta la categoría "Recargas" en el menú del header.
+- 2026-08-21 — 🟠 **4 de 9 productos no pertenecen a ninguna colección** (`perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`) → falta la categoría "Recargas" en el menú del header. El grid agrupado de `/categorias/todos` ya los muestra bien, pero el menú sigue incompleto.
+- 2026-08-21 — 🟡 **`catalog-order.ts` es una lista manual**: si el owner crea un SKU nuevo desde el Dashboard, aparece al final bajo "Más de dunaru" hasta que se añada su slug al grupo correcto.
 - 2026-08-20 — 🟠 **`ProductStorySections.tsx` sigue en `dunaru-champagne`** (tira de garantías, checks, tabla comparativa) → Fase 3 punto 8.
 - 2026-08-20 — 🟠 **El bloque de trust-icons "6 meses sin intereses" de la PDP (~línea 835) sigue en champagne/ambar**.
 - 2026-08-20 — 🟠 **La paleta nueva no se ha auditado en carrito ni checkout.**
@@ -323,12 +244,11 @@ Comparación secuencial en PostHog: CTR de tarjeta desde `/categorias/todos` →
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Ejecutar el plan 3.12: orden curado del catálogo** (`src/lib/catalog-order.ts` + `Collection.tsx` con grupos).
 - [ALTA] **Crear la colección `recargas`** y añadirla al menú del header (requiere OK del owner).
 - [ALTA] **Ejecutar resto de FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection` de cierre, texturas, `ProductStorySections` y el bloque "6 meses sin intereses" a terracota/periwinkle.
 - [ALTA] **Auditar la paleta nueva en carrito y checkout**.
 - [ALTA] **Ejecutar FASE 4 (fotos atmosféricas nocturnas)**, sin rostros. 4 slots esperando imagen.
-- [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página).
+- [ALTA] Capturar baseline de PostHog (ATC móvil, scroll depth, tiempo en página) y CTR de tarjeta desde `/categorias/todos`.
 - [ALTA] P0 de la PDP de perlas (renombrar sin "Recarga", foto #1 = resultado, bloque "¿te sirve tu recipiente?", tiers como "elige tus tonos").
 - [ALTA] `PDP_BENEFITS` para bowl-negro, vaso-extra-transparente y pack-30-mechas.
 - [ALTA] Footer de `EcommerceTemplate.tsx`: nombres de producto → dinámicos.
@@ -337,5 +257,6 @@ Comparación secuencial en PostHog: CTR de tarjeta desde `/categorias/todos` →
 - [MED] Aplicar `texture-*` en `CasaRealSection` y en las secciones de historia de la PDP.
 - [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.
 - [MED] Encuesta PostHog de salida en `/pagar` y en la PDP de perlas.
+- [MED] Badge editorial "Más vendido" / "Mejor valor" por slug (solo con datos reales del Dashboard).
 - [MED] Barrer el resto del sitio buscando guiones largos (—) en copy, incluidos los títulos de producto en la DB.
 - [BAJA] Banners de colección y borrar imágenes huérfanas.
