@@ -94,19 +94,21 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → carrusel → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre.
 
 ### 🌿 SISTEMA DE AROMAS (2026-08-21)
-- **`src/lib/scents.ts`** = fuente única de verdad. Exporta `SCENTS` (name, inspiredBy, profile, description, recommendedFor, notes[], imageUrl), `SCENT_PRODUCT_SLUG`, `SCENT_OPTION_NAME` (`"Aroma"`), `SCENT_ENABLED_SLUGS`, `supportsScentAddon(slug)` y la constante privada `SCENT_IMG` (base de Supabase para los flat-lays).
+- **`src/lib/scents.ts`** = fuente única de verdad. Exporta `SCENTS` (name, inspiredBy, profile, description, recommendedFor, notes[], imageUrl), `SCENT_PRODUCT_SLUG`, `SCENT_OPTION_NAME` (`"Aroma"`), `SCENT_ENABLED_SLUGS`, `supportsScentAddon(slug)` y la constante privada `SCENT_IMG`.
 - **Para activar el aroma en un producto nuevo: añade su slug a `SCENT_ENABLED_SLUGS`. Nada más.** Hoy: los 6 SKUs con cera perlada. Excluidos: `bowl-negro`, `vaso-extra-transparente`, `pack-30-mechas`.
 - ⚠️ `SCENTS[].name` debe coincidir EXACTO con el valor de la variante en la DB (match por `variant.options.Aroma` con fallback a `variant.title`).
-- ⚠️ **"Inspirado en X" es descriptor secundario**: nunca entra al nombre de la variante ni al line item. **Y el prefijo "Inspirado en" NO se quita del chip** (claridad + seguridad legal frente a las marcas originales).
+- ⚠️ **"Inspirado en X" es descriptor secundario**: nunca entra al nombre de la variante ni al line item. **Y el prefijo "Inspirado en" NO se quita del chip** (claridad + seguridad legal).
+- ⚠️ **`profile` YA NO SE PINTA en el panel** (desde 2026-08-21, compactación 3.13). El campo sigue existiendo en `scents.ts` para uso futuro en la PDP directa de la esencia.
 - **📐 RATIO DE LOS FLAT-LAYS DE AROMA = 4:3 (1456×1092), webp.** El panel usa `aspect-[4/3]` + `object-cover`.
-- ⚠️ **LOS FLAT-LAYS TIENEN INGREDIENTES HASTA EL BORDE INFERIOR** (Tabaco Vainilla, Higo Matcha, Musgo Mineral). **No poner overlays, degradados ni chips encima de la imagen**: taparían justo la materia que justifica el +$99.
-- **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`. Panel expandido con imagen 4:3 del aroma seleccionado (si `imageUrl` es null no renderiza nada).
+- ⚠️ **LOS FLAT-LAYS TIENEN INGREDIENTES HASTA EL BORDE INFERIOR** (Tabaco Vainilla, Higo Matcha, Musgo Mineral). **No poner overlays, degradados ni chips encima de la imagen**: taparían justo la materia que justifica el +$99. Decisión firme, no reabrir.
+- **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`.
+  - **PANEL EXPANDIDO (compacto desde 2026-08-21)**: contenedor `p-3.5`; wrapper `space-y-2.5 sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start` → móvil apilado (imagen arriba), desktop 2 columnas. Columna de texto: `h4 text-lg` + inspiredBy terracota + description + "Elígelo si buscas" + **notas en UNA línea inline** (`notes.join(" · ")` con micro-label `NOTAS` en terracota). Sin `profile`, sin `.hairline`, sin chips en caja.
 - **LOS TRES CAMINOS DE COMPRA YA INCLUYEN EL AROMA** (1 frasco por acción):
   1. **"Agregar al carrito"** → `handleAddToCartWithAddOns`: producto + `addItem(esencia)` como línea separada.
-  2. **"Comprar ahora"** → `handleBuyNowWithScent`: NO pasa por el carrito. Construye `buyNowItems` con DOS líneas, `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` (`checkout_cart` / `checkout_order` / `checkout_order_id`) → `navigate('/pagar')`. Sin aroma delega en `logic.handleBuyNow()`.
-  3. **Pago express Apple Pay / Google Pay** → `ProductExpressCheckout` acepta prop **`extraItems?: CartItem[]`**. `ProductPageUI` le pasa `scentExtraItems` (useMemo sobre `scentSelection`). Dentro del componente, `extras` (useMemo con clave estable `extrasKey`) alimenta: total del wallet, `buildDisplayItems(shipCents)`, items de `shipping-rates`, `buyNowItems` de `createCheckoutFromCart`, `validation_data.items` y el `trackPurchase`.
-- El precio de los CTAs suma `scentSelection.price`. Ambos CTAs (buy box y sticky móvil) muestran "Procesando..." con `isBuyingNowWithScent || logic.isBuyingNow`.
-- ⚠️ `ProductPageUI` llama `useSettings()` dos veces (alias `checkoutCurrency` arriba; `storeName/currencyCode` más abajo). No renombrar sin revisar.
+  2. **"Comprar ahora"** → `handleBuyNowWithScent`: NO pasa por el carrito. `buyNowItems` con DOS líneas → `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` → `navigate('/pagar')`. Sin aroma delega en `logic.handleBuyNow()`.
+  3. **Pago express Apple Pay / Google Pay** → `ProductExpressCheckout` acepta prop **`extraItems?: CartItem[]`** (`scentExtraItems`).
+- El precio de los CTAs suma `scentSelection.price`. Ambos CTAs muestran "Procesando..." con `isBuyingNowWithScent || logic.isBuyingNow`.
+- ⚠️ `ProductPageUI` llama `useSettings()` dos veces (alias `checkoutCurrency` arriba; `storeName/currencyCode` abajo). No renombrar sin revisar.
 - **PostHog**: eventos `scent_selected` y `scent_details_toggled`.
 - **Ocultar del catálogo**: `HIDDEN_FROM_CATALOG_SLUGS` + `filterCatalogVisible()` en `src/lib/catalog-order.ts`, aplicado en `Collection.tsx`.
 
@@ -119,42 +121,22 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ Sistema de aromas completo con los 3 caminos de compra y sus 6 imágenes editoriales (2026-08-21) · 🔜 **SIGUIENTE: 3.13 Compactar el panel de aroma** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ Sistema de aromas completo con los 3 caminos de compra y sus 6 imágenes editoriales · ✅ **3.13 Panel de aroma compactado (2026-08-21)** · 🔜 **SIGUIENTE: verificar altura real en móvil + medir attach rate** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 - 🔒 No tocar: buy box (orden), checkout, `DeliveryEstimate`, `PdpSocialProof`, avisos MSI, envío gratis, WhatsApp.
 
-### 3.13 🔜 COMPACTAR EL PANEL DE AROMA (decidido 2026-08-21, PENDIENTE DE IMPLEMENTAR)
-
-**Problema real (diagnóstico):** el panel expandido no es largo por la imagen, es largo por **redundancia semántica**. Hoy dice lo mismo cuatro veces:
-| Capa | Ejemplo (Tabaco Vainilla) | Veredicto |
-|---|---|---|
-| `profile` | "CÁLIDO · DULCE · PROFUNDO" | ❌ redundante con description + notes |
-| `description` | "Tabaco dulce, vainilla oscura y miel sobre un fondo cálido de madera y especias." | ✅ se queda (sensorial, de marca) |
-| `recommendedFor` | "un aroma cálido, intenso y acogedor." | ✅ se queda (es lo que ayuda a DECIDIR) |
-| `notes` (6 chips en caja, 2 filas) | Tabaco · Vainilla · Miel · Jengibre · Tonka · Cedro | ✅ contenido sí, formato ❌ |
-
-Altura estimada actual del panel en móvil: **~600 px**. Objetivo: **~360-400 px**, sin esconder nada útil.
-
-**IDEAS DEL OWNER — VEREDICTO RAZONADO (no implementar tal cual):**
-1. ❌ **Hover con máscara sobre la imagen.** Rechazado: el grueso del tráfico es móvil (Meta) y en touch el hover no existe. Escondería la ayuda de decisión justo en el momento de decidir, y una máscara arruina el flat-lay, que es el activo que justifica el +$99.
-2. ❌ **Chips de notas dentro de la imagen (abajo).** Rechazado: en Tabaco Vainilla, Higo Matcha y Musgo Mineral hay ingredientes pegados al borde inferior. El scrim taparía exactamente la materia que queremos mostrar, y la legibilidad varía foto a foto.
-3. ✅ **"Hay demasiada información en la tarjeta".** CORRECTO. Esa es la palanca: quitar la capa redundante y aligerar el formato de las notas.
-
-**IMPLEMENTACIÓN — `src/components/ProductScentSelector.tsx` (panel expandido, líneas ~239-302):**
-1. **Eliminar la línea `profile`** del render (líneas 273-275). NO borrar el campo de `scents.ts` (puede servir en la PDP directa de la esencia); solo dejar de pintarlo en el panel.
-2. **Notas: de 6 chips en caja a UNA línea inline.** Sustituir el bloque `pt-1` + `.hairline` + `<ul>` de chips por una sola línea de texto:
-   `Tabaco · Vainilla · Miel · Jengibre · Tonka · Cedro`
-   Estilo sugerido: `text-[11px] tracking-[0.08em] text-foreground/60 leading-relaxed`, precedida de un micro-label `NOTAS` (`text-[10px] uppercase tracking-[0.16em] text-dunaru-terracota`) en la misma línea o justo encima. Quitar el `.hairline`. Ahorro: ~80 px y mucho ruido visual.
-3. **Apretar el ritmo vertical**: contenedor `space-y-3` → `space-y-2.5`; `p-4` → `p-3.5`. Título `text-xl` → `text-lg`.
-4. **Layout de 2 columnas en desktop.** Envolver imagen + texto en `sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start`. Móvil sigue apilado (imagen arriba). En desktop la altura del panel baja ~45% y se ve más editorial.
-5. **La imagen NO se toca**: sigue 4:3, `object-cover`, `width/height` fijos, sin overlays. Es el activo que vende.
-6. Mantener intactos los eventos PostHog `scent_details_toggled` y `scent_selected`.
-
-**NO se toca en este cambio:** el grid de chips de selección (los 7 botones), el copy de `scents.ts`, ni el orden del buy box. El chip conserva el prefijo "Inspirado en" (seguridad legal).
-
-**Criterio de éxito:** el CTA "Comprar ahora" debe quedar visible o a menos de un scroll corto cuando el panel está abierto en un iPhone estándar. Verificar con screenshot en móvil después de implementar.
+### 3.13 ✅ COMPACTAR EL PANEL DE AROMA (implementado 2026-08-21)
+Diagnóstico: el panel no era largo por la imagen sino por **redundancia semántica** (4 capas diciendo lo mismo). Aplicado:
+1. ✅ Eliminado el render de `profile` (campo intacto en `scents.ts`).
+2. ✅ Notas: de 6 chips en caja a **una línea inline** con micro-label `NOTAS` en terracota. Fuera el `.hairline`.
+3. ✅ Ritmo vertical: `p-4` → `p-3.5`, `space-y-3` → `space-y-2.5`, título `text-xl` → `text-lg`.
+4. ✅ Desktop en 2 columnas (`sm:grid-cols-[minmax(0,44%)_1fr]`), móvil apilado.
+5. ✅ Imagen intacta: 4:3, `object-cover`, `width/height`, sin overlays.
+6. ✅ Eventos PostHog intactos.
+- ❌ **Rechazadas y NO reabrir**: hover con máscara sobre la imagen (tráfico móvil, hover no existe en touch) y chips dentro de la imagen (taparían los ingredientes del borde inferior).
+- 🔜 **Pendiente de verificación**: screenshot móvil tras el deploy para confirmar que el CTA "Comprar ahora" queda a menos de un scroll corto con el panel abierto.
 
 ### 3.8 FASE 3 — PDP — RESTANTE
 1. Galería a sangre en móvil, sin borde ni radius.
@@ -169,7 +151,7 @@ Altura estimada actual del panel en móvil: **~600 px**. Objetivo: **~360-400 px
 
 ### 3.9 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
 Imágenes atmosféricas nocturnas, ⛔ SIN ROSTROS. Slots: hero desktop/móvil, fondo de `RitualSection`, 3 ambientes de "Elige tu tono", imagen de `BrandStorySection`.
-~~6 flat-lays de aroma~~ ✅ HECHO (entregados por el owner). Falta: **packshots del frasco de esencia** (4:5) para la PDP directa del producto.
+~~6 flat-lays de aroma~~ ✅ HECHO. Falta: **packshots del frasco de esencia** (4:5) para la PDP directa del producto.
 
 ### 3.11 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`. Si el ATC móvil cae por debajo de 3.5%, revertir densidad primero.
@@ -177,7 +159,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — 🖼️ **Los 6 flat-lays de aroma ya viven en el selector de la PDP.** Imágenes del owner (4:3, webp) mapeadas una a una en `SCENTS[].imageUrl` vía la constante `SCENT_IMG`. El panel pasó de `aspect-[16/9]` a `aspect-[4/3]` con `width/height` para evitar CLS y alt descriptivo.
+- 2026-08-21 — 📏 **Panel de aroma compactado (3.13).** Fuera la línea `profile`, notas de 6 chips a una línea inline con label NOTAS, ritmo vertical más apretado y layout de 2 columnas en desktop. Imagen 4:3 intacta, sin overlays.
+- 2026-08-21 — 🖼️ **Los 6 flat-lays de aroma ya viven en el selector de la PDP.** Imágenes del owner (4:3, webp) mapeadas en `SCENTS[].imageUrl` vía `SCENT_IMG`.
 - 2026-08-21 — 🍎 **El pago express (Apple/Google Pay) ya incluye la esencia.** Nueva prop `extraItems` en `ProductExpressCheckout`.
 - 2026-08-21 — ⚡ **"Comprar ahora" con aroma va DIRECTO al checkout** vía `handleBuyNowWithScent`.
 - 2026-08-21 — 🌿 **SISTEMA DE AROMAS COMPLETO.** Producto `esencia-para-vela-10-ml` en DB ($99, 6 variantes), `src/lib/scents.ts`, `ProductScentSelector.tsx`, integración en `ProductPageUI`, ocultamiento del catálogo.
@@ -191,7 +174,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-20 — 🏷️ Badge "Hasta 6 MSI" frosted glass + periwinkle.
 - 2026-08-20 — 🔢 Carrusel "Crea tu vela en 4 pasos" a terracota + periwinkle.
 - 2026-08-20 — 🟢 CTA "Comprar ahora" oliva con hover terracota.
-- 2026-08-20 — 🎴 `ProductCardUI` a la paleta 2026.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 10 productos (la esencia aún SIN imágenes en la DB).
@@ -213,8 +195,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🟠 **El panel de aroma expandido mide ~600 px en móvil y empuja el CTA fuera de pantalla.** Plan de compactación en 3.13. Causa: 4 capas de copy redundantes + 6 chips de notas en caja.
-- 2026-08-21 — 🟡 **La imagen del aroma solo se ve si el usuario abre "Conoce los aromas"**. Si el attach rate es bajo, considerar auto-expandir el panel al seleccionar un aroma (empuja el CTA hacia abajo: medir antes; hacerlo DESPUÉS de compactar el panel, no antes).
+- 2026-08-21 — 🟡 **Altura del panel de aroma sin verificar tras la compactación.** Estimado ~380 px en móvil (antes ~600). Pendiente screenshot móvil post-deploy.
+- 2026-08-21 — 🟡 **La imagen del aroma solo se ve si el usuario abre "Conoce los aromas"**. Ahora que el panel es más corto, auto-expandir al seleccionar un aroma es viable: medir `scent_details_toggled` antes de decidir.
 - 2026-08-21 — 🟡 **En el pago express, la esencia se ve en el sheet del wallet como línea propia**. Sin probar en device real todavía.
 - 2026-08-21 — 🟡 **La esencia no tiene imágenes en la DB**: su PDP directa se ve pobre. Oculta de grids pero indexable.
 - 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP), en los tres caminos de compra.
@@ -241,9 +223,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **3.13 Compactar el panel de aroma** (quitar `profile`, notas inline, 2 columnas en desktop, ritmo vertical). Verificar con screenshot móvil.
+- [ALTA] **Verificar con screenshot móvil** que el CTA queda cerca con el panel de aroma abierto (post-deploy de 3.13).
 - [ALTA] **Probar en device real**: PDP con aroma → Apple Pay / Google Pay → verificar total y que la orden tenga las dos líneas.
-- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden) y el uso de `scent_details_toggled`.
+- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden) y el uso de `scent_details_toggled`. Si el toggle se usa poco, evaluar auto-expandir el panel.
 - [ALTA] **Packshots del frasco de esencia (4:5)** para la PDP del producto en la DB.
 - [ALTA] **Crear la colección `recargas`** y añadirla al menú del header (requiere OK del owner).
 - [ALTA] **Resto de FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection`, texturas, migración de champagne.

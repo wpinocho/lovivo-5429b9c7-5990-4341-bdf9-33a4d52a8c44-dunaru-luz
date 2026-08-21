@@ -239,14 +239,14 @@ export const ProductScentSelector = ({
       {expanded && (
         <div
           id="panel-aromas"
-          className="border border-border/60 bg-dunaru-arena/40 texture-arena p-4 space-y-3"
+          className="border border-border/60 bg-dunaru-arena/40 texture-arena p-3.5"
         >
           {!selectedScent ? (
             <p className="font-display text-[15px] text-foreground/80 leading-snug">
               Selecciona un aroma para conocer sus notas.
             </p>
           ) : (
-            <>
+            <div className="space-y-2.5 sm:space-y-0 sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start">
               {selectedScent.imageUrl && (
                 <div className="w-full aspect-[4/3] overflow-hidden bg-dunaru-arena">
                   <img
@@ -261,42 +261,35 @@ export const ProductScentSelector = ({
                 </div>
               )}
 
-              <div className="space-y-1">
-                <h4 className="font-display text-xl leading-none text-foreground">
-                  {selectedScent.name}
-                </h4>
-                <p className="text-[11px] uppercase tracking-[0.16em] text-dunaru-terracota">
-                  {selectedScent.inspiredBy}
+              <div className="space-y-2.5">
+                <div className="space-y-1">
+                  <h4 className="font-display text-lg leading-none text-foreground">
+                    {selectedScent.name}
+                  </h4>
+                  <p className="text-[11px] uppercase tracking-[0.16em] text-dunaru-terracota">
+                    {selectedScent.inspiredBy}
+                  </p>
+                </div>
+
+                <p className="text-sm text-foreground/85 leading-relaxed">
+                  {selectedScent.description}
+                </p>
+
+                <p className="text-sm text-foreground/85 leading-relaxed">
+                  <span className="font-medium">Elígelo si buscas:</span>{" "}
+                  {selectedScent.recommendedFor}
+                </p>
+
+                <p className="text-[11px] leading-relaxed text-foreground/60">
+                  <span className="uppercase tracking-[0.16em] text-dunaru-terracota">
+                    Notas
+                  </span>{" "}
+                  <span className="tracking-[0.08em]">
+                    {selectedScent.notes.join(" · ")}
+                  </span>
                 </p>
               </div>
-
-              <p className="text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                {selectedScent.profile}
-              </p>
-
-              <p className="text-sm text-foreground/85 leading-relaxed">
-                {selectedScent.description}
-              </p>
-
-              <p className="text-sm text-foreground/85 leading-relaxed">
-                <span className="font-medium">Elígelo si buscas:</span>{" "}
-                {selectedScent.recommendedFor}
-              </p>
-
-              <div className="pt-1">
-                <div className="hairline mb-3" />
-                <ul className="flex flex-wrap gap-1.5">
-                  {selectedScent.notes.map((note) => (
-                    <li
-                      key={note}
-                      className="px-2 py-1 border border-dunaru-terracota/35 text-[11px] text-foreground/80"
-                    >
-                      {note}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </>
+            </div>
           )}
         </div>
       )}
