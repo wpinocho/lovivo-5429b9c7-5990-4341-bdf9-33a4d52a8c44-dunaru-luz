@@ -29,11 +29,15 @@ export type Scent = {
   /** Notas olfativas. */
   notes: string[]
   /**
-   * Imagen editorial horizontal (~16:9). Mientras sea null el área de imagen
-   * simplemente no se renderiza (sin placeholders grises).
+   * Imagen editorial horizontal (flat-lay 4:3). Mientras sea null el área de
+   * imagen simplemente no se renderiza (sin placeholders grises).
    */
   imageUrl: string | null
 }
+
+/** Base de las imágenes editoriales de aromas (flat-lays de ingredientes). */
+const SCENT_IMG =
+  "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/"
 
 /** Slug del producto independiente de esencias en la DB. */
 export const SCENT_PRODUCT_SLUG = "esencia-para-vela-10-ml"
@@ -67,7 +71,7 @@ export const SCENTS: Scent[] = [
       "Sándalo seco, cuero suave y cedro con un toque especiado de cardamomo.",
     recommendedFor: "una casa cálida, amaderada y sofisticada.",
     notes: ["Sándalo", "Cuero", "Iris", "Cardamomo", "Violeta", "Cedro"],
-    imageUrl: null,
+    imageUrl: `${SCENT_IMG}1787337333998-ynkiiz87l1n.webp`,
   },
   {
     id: "ambar-cristal",
@@ -78,7 +82,7 @@ export const SCENTS: Scent[] = [
       "Ámbar cálido y ligeramente dulce, con jazmín, azafrán y maderas suaves.",
     recommendedFor: "un aroma envolvente, sofisticado y con un toque dulce.",
     notes: ["Azafrán", "Jazmín", "Ámbar", "Cedro", "Abeto", "Musgo"],
-    imageUrl: null,
+    imageUrl: `${SCENT_IMG}1787337333997-44wwhmmisy5.webp`,
   },
   {
     id: "costa-mineral",
@@ -89,7 +93,7 @@ export const SCENTS: Scent[] = [
       "Aire de mar, salvia fresca y madera clara. Limpio, mineral y nada dulce.",
     recommendedFor: "algo fresco, limpio y nada dulce.",
     notes: ["Sal marina", "Salvia", "Ambreta", "Madera de ámbar"],
-    imageUrl: null,
+    imageUrl: `${SCENT_IMG}1787337333998-jphdwvy2pbh.webp`,
   },
   {
     id: "higo-matcha",
@@ -100,7 +104,7 @@ export const SCENTS: Scent[] = [
       "Higo verde y matcha con cítricos suaves y un fondo limpio de madera.",
     recommendedFor: "algo verde, relajado y moderno.",
     notes: ["Higo", "Matcha", "Bergamota", "Naranja amarga", "Cedro", "Vetiver"],
-    imageUrl: null,
+    imageUrl: `${SCENT_IMG}1787337333998-enck999sju7.webp`,
   },
   {
     id: "tabaco-vainilla",
@@ -111,7 +115,7 @@ export const SCENTS: Scent[] = [
       "Tabaco dulce, vainilla oscura y miel sobre un fondo cálido de madera y especias.",
     recommendedFor: "un aroma cálido, intenso y acogedor.",
     notes: ["Tabaco", "Vainilla", "Miel", "Jengibre", "Tonka", "Cedro"],
-    imageUrl: null,
+    imageUrl: `${SCENT_IMG}1787337333998-5e5poqkcxh8.webp`,
   },
   {
     id: "musgo-mineral",
@@ -122,6 +126,6 @@ export const SCENTS: Scent[] = [
       "Almizcle limpio y ámbar suave con flores ligeras y un fondo cálido, casi de piel.",
     recommendedFor: "algo limpio, sutil y sofisticado.",
     notes: ["Almizcle", "Jazmín", "Rosa", "Lavanda", "Ámbar gris", "Tonka"],
-    imageUrl: null,
+    imageUrl: `${SCENT_IMG}1787337333998-n7f8zqhfx8m.webp`,
   },
 ]

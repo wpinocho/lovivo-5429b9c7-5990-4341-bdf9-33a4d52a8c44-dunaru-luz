@@ -248,11 +248,14 @@ export const ProductScentSelector = ({
           ) : (
             <>
               {selectedScent.imageUrl && (
-                <div className="w-full aspect-[16/9] overflow-hidden bg-dunaru-arena">
+                <div className="w-full aspect-[4/3] overflow-hidden bg-dunaru-arena">
                   <img
                     src={selectedScent.imageUrl}
-                    alt={`Ingredientes de ${selectedScent.name}`}
+                    alt={`Ingredientes del aroma ${selectedScent.name} de dunaru`}
                     loading="lazy"
+                    decoding="async"
+                    width={1456}
+                    height={1092}
                     className="w-full h-full object-cover"
                   />
                 </div>

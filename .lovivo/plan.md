@@ -31,7 +31,7 @@ Snapshot 2026-08-21 (fuente de verdad = la DB):
 | vaso-extra-transparente | Vaso de Vidrio Transparente | $249 | — | — |
 | pack-30-mechas | Pack de 30 Mechas | $99 | — | — |
 | esencia-para-vela-10-ml | Esencia para Vela · 10 ml | $99 | — | add-on OCULTO del catálogo |
-- **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, 1 opción **`Aroma`** con 6 variantes: Madera Nocturna · Ámbar Cristal · Costa Mineral · Higo Matcha · Tabaco Vainilla · Musgo Mineral. **NO existe variante "Sin aroma"** (es estado virtual del componente). Sin imágenes todavía. No pertenece a ninguna colección.
+- **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, 1 opción **`Aroma`** con 6 variantes: Madera Nocturna · Ámbar Cristal · Costa Mineral · Higo Matcha · Tabaco Vainilla · Musgo Mineral. **NO existe variante "Sin aroma"** (es estado virtual del componente). **El producto en la DB sigue sin imágenes** (los flat-lays viven en `scents.ts`, no en el producto). No pertenece a ninguna colección.
 - Price rule activa: `perlas-originales-500-g` → 2 uds 10% OFF, 3 uds 15% OFF.
 - **CONTENIDO DE LOS KITS**: ambos = recipiente + **500 g de cera + 30 mechas**.
 - **COLECCIONES ACTUALES**: `kits` (2), `recipientes` (2), `accesorios` (1). ⚠️ 4 productos sin colección: `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`. Falta colección **`recargas`**.
@@ -93,15 +93,16 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → carrusel → reseñas → bloques editoriales → tabla comparativa → FAQ → CTA de cierre.
 
 ### 🌿 SISTEMA DE AROMAS (2026-08-21)
-- **`src/lib/scents.ts`** = fuente única de verdad. Exporta `SCENTS` (name, inspiredBy, profile, description, recommendedFor, notes[], imageUrl), `SCENT_PRODUCT_SLUG`, `SCENT_OPTION_NAME` (`"Aroma"`), `SCENT_ENABLED_SLUGS` y `supportsScentAddon(slug)`.
+- **`src/lib/scents.ts`** = fuente única de verdad. Exporta `SCENTS` (name, inspiredBy, profile, description, recommendedFor, notes[], imageUrl), `SCENT_PRODUCT_SLUG`, `SCENT_OPTION_NAME` (`"Aroma"`), `SCENT_ENABLED_SLUGS`, `supportsScentAddon(slug)` y la constante privada `SCENT_IMG` (base de Supabase para los flat-lays).
 - **Para activar el aroma en un producto nuevo: añade su slug a `SCENT_ENABLED_SLUGS`. Nada más.** Hoy: los 6 SKUs con cera perlada. Excluidos: `bowl-negro`, `vaso-extra-transparente`, `pack-30-mechas`.
 - ⚠️ `SCENTS[].name` debe coincidir EXACTO con el valor de la variante en la DB (match por `variant.options.Aroma` con fallback a `variant.title`).
 - ⚠️ **"Inspirado en X" es descriptor secundario**: nunca entra al nombre de la variante ni al line item.
-- **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`. Panel expandido con soporte de imagen 16:9 (si `imageUrl` es null no renderiza nada).
+- **📐 RATIO DE LOS FLAT-LAYS DE AROMA = 4:3 (1456×1092), webp.** El panel usa `aspect-[4/3]` + `object-cover`. Si en el futuro se generan 16:9, hay que ajustar el componente.
+- **`ProductScentSelector.tsx`**: título "AGREGA AROMA · OPCIONAL" + toggle "Conoce los aromas". Grid `grid-cols-2`, chip "Sin aroma" a `col-span-2`. `role="radiogroup"`. Panel expandido con imagen 4:3 del aroma seleccionado (si `imageUrl` es null no renderiza nada).
 - **LOS TRES CAMINOS DE COMPRA YA INCLUYEN EL AROMA** (1 frasco por acción):
   1. **"Agregar al carrito"** → `handleAddToCartWithAddOns`: producto + `addItem(esencia)` como línea separada.
   2. **"Comprar ahora"** → `handleBuyNowWithScent`: NO pasa por el carrito. Construye `buyNowItems` con DOS líneas, `createCheckoutFromCart` → `saveCheckoutState` → `clearCart` → `sessionStorage` (`checkout_cart` / `checkout_order` / `checkout_order_id`) → `navigate('/pagar')`. Sin aroma delega en `logic.handleBuyNow()`.
-  3. 🆕 **Pago express Apple Pay / Google Pay (2026-08-21)** → `ProductExpressCheckout` acepta prop **`extraItems?: CartItem[]`**. `ProductPageUI` le pasa `scentExtraItems` (useMemo sobre `scentSelection`). Dentro del componente, `extras` (useMemo con clave estable `extrasKey`) alimenta: total del wallet, `buildDisplayItems(shipCents)` (desglose principal + cada extra + envío), items de `shipping-rates`, `buyNowItems` de `createCheckoutFromCart`, `validation_data.items` y el `trackPurchase`.
+  3. **Pago express Apple Pay / Google Pay** → `ProductExpressCheckout` acepta prop **`extraItems?: CartItem[]`**. `ProductPageUI` le pasa `scentExtraItems` (useMemo sobre `scentSelection`). Dentro del componente, `extras` (useMemo con clave estable `extrasKey`) alimenta: total del wallet, `buildDisplayItems(shipCents)`, items de `shipping-rates`, `buyNowItems` de `createCheckoutFromCart`, `validation_data.items` y el `trackPurchase`.
 - El precio de los CTAs suma `scentSelection.price`. Ambos CTAs (buy box y sticky móvil) muestran "Procesando..." con `isBuyingNowWithScent || logic.isBuyingNow`.
 - ⚠️ `ProductPageUI` llama `useSettings()` dos veces (alias `checkoutCurrency` arriba; `storeName/currencyCode` más abajo). No renombrar sin revisar.
 - **PostHog**: eventos `scent_selected` y `scent_details_toggled`.
@@ -116,7 +117,7 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
 
-**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ **Sistema de aromas completo, con los 3 caminos de compra (2026-08-21)** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ **Sistema de aromas completo, con los 3 caminos de compra y sus 6 imágenes editoriales (2026-08-21)** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
 
 ### 3.0 REGLA MAESTRA
 Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
@@ -135,7 +136,7 @@ Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
 
 ### 3.9 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
 Imágenes atmosféricas nocturnas, ⛔ SIN ROSTROS. Slots: hero desktop/móvil, fondo de `RitualSection`, 3 ambientes de "Elige tu tono", imagen de `BrandStorySection`.
-**+ 6 flat-lays editoriales 16:9 de ingredientes por aroma** → van a `SCENTS[].imageUrl`.
+~~6 flat-lays de aroma~~ ✅ HECHO (entregados por el owner). Falta: **packshots del frasco de esencia** (4:5) para la PDP directa del producto.
 
 ### 3.11 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`. Si el ATC móvil cae por debajo de 3.5%, revertir densidad primero.
@@ -143,10 +144,11 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — 🍎 **El pago express (Apple/Google Pay) ya incluye la esencia.** Nueva prop `extraItems` en `ProductExpressCheckout`: suma al total del wallet, al desglose, al cálculo de envío, a la orden y al tracking. Cierra el hueco donde el aroma se perdía.
-- 2026-08-21 — ⚡ **"Comprar ahora" con aroma va DIRECTO al checkout** (antes desviaba al carrito). `handleBuyNowWithScent` construye la orden con producto + esencia y navega a `/pagar`.
-- 2026-08-21 — 🌿 **SISTEMA DE AROMAS COMPLETO.** Producto `esencia-para-vela-10-ml` en DB ($99, 6 variantes), `src/lib/scents.ts`, `ProductScentSelector.tsx`, integración en `ProductPageUI`, ocultamiento del catálogo vía `catalog-order.ts`.
-- 2026-08-21 — 🧵 **Add-on de mechas retirado de la PDP**: `ADDON_MAP` vaciado. El producto sigue en el catálogo.
+- 2026-08-21 — 🖼️ **Los 6 flat-lays de aroma ya viven en el selector de la PDP.** Imágenes del owner (4:3, webp) mapeadas una a una en `SCENTS[].imageUrl` vía la constante `SCENT_IMG`. El panel pasó de `aspect-[16/9]` a `aspect-[4/3]` con `width/height` para evitar CLS y alt descriptivo.
+- 2026-08-21 — 🍎 **El pago express (Apple/Google Pay) ya incluye la esencia.** Nueva prop `extraItems` en `ProductExpressCheckout`.
+- 2026-08-21 — ⚡ **"Comprar ahora" con aroma va DIRECTO al checkout** vía `handleBuyNowWithScent`.
+- 2026-08-21 — 🌿 **SISTEMA DE AROMAS COMPLETO.** Producto `esencia-para-vela-10-ml` en DB ($99, 6 variantes), `src/lib/scents.ts`, `ProductScentSelector.tsx`, integración en `ProductPageUI`, ocultamiento del catálogo.
+- 2026-08-21 — 🧵 **Add-on de mechas retirado de la PDP**: `ADDON_MAP` vaciado.
 - 2026-08-21 — 🟢 Pills de variante seleccionada en `ProductCardUI.tsx` a `dunaru-oliva-claro`.
 - 2026-08-21 — 🗂️ Orden curado del catálogo (`src/lib/catalog-order.ts` + `Collection.tsx` agrupado).
 - 2026-08-21 — 🧱 Descripciones de los KITS corregidas en la DB con formato "Incluye: A + B + C".
@@ -159,19 +161,27 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-20 — 🎴 `ProductCardUI` a la paleta 2026.
 
 ## 5. Image Inventory
-- **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 10 productos (la esencia aún SIN imágenes).
+- **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 10 productos (la esencia aún SIN imágenes en la DB).
+- **🌿 FLAT-LAYS DE AROMA (4:3, 1456×1092, webp)** — base `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`:
+  - Madera Nocturna → `1787337333998-ynkiiz87l1n.webp`
+  - Ámbar Cristal → `1787337333997-44wwhmmisy5.webp`
+  - Costa Mineral → `1787337333998-jphdwvy2pbh.webp`
+  - Higo Matcha → `1787337333998-enck999sju7.webp`
+  - Tabaco Vainilla → `1787337333998-5e5poqkcxh8.webp`
+  - Musgo Mineral → `1787337333998-n7f8zqhfx8m.webp`
 - ⚠️ Foto #1 de `perlas-originales-500-g` = `x3azemqdof.webp`. Candidata #1 a reemplazo.
 - Colecciones sin imagen. **FAVICON**: `/favicon.png` (256×256).
 - **UGC de clientas** (5 fotos): constante `UGC` en `src/data/reviews.ts`.
 - **Hero**: `/hero-dunaru.webp` · `/hero-dunaru-mobile.webp`. **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`.
-- **4 PASOS** — base `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`: Vierte `/paso-vierte.webp` · Inserta `1785521743155-htw95tvbi4b.webp` · Enciende `1785521743156-3qeskqe43gv.webp` · Renueva `/paso-renueva.webp`.
-- 🔴 **FALTAN: (a) 6 flat-lays 16:9 de ingredientes por aroma → `SCENTS[].imageUrl`; (b) 2-3 packshots del frasco de esencia; (c) imágenes atmosféricas nocturnas de la Fase 4; (d) video demo del mecanismo.**
+- **4 PASOS** — misma base de Supabase: Vierte `/paso-vierte.webp` · Inserta `1785521743155-htw95tvbi4b.webp` · Enciende `1785521743156-3qeskqe43gv.webp` · Renueva `/paso-renueva.webp`.
+- 🔴 **FALTAN: (a) packshots 4:5 del frasco de esencia para la PDP del producto; (b) imágenes atmosféricas nocturnas de la Fase 4; (c) video demo del mecanismo.**
 - 🟡 Los `steps` de `kit-vaso-de-concreto` siguen con `PLACEHOLDER`. 🟡 `/pdp-vaso-decor.webp` huérfana.
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🟡 **En el pago express, la esencia se ve en el sheet del wallet como línea propia** (`Producto · Variante`). Si el wallet trunca el label, el usuario igual ve el total correcto. Sin probar en device real todavía.
-- 2026-08-21 — 🟡 **La esencia no tiene imágenes**: su PDP directa se ve pobre. Oculta de grids pero indexable.
+- 2026-08-21 — 🟡 **La imagen del aroma solo se ve si el usuario abre "Conoce los aromas"**. Si el attach rate es bajo, considerar auto-expandir el panel al seleccionar un aroma (empuja el CTA hacia abajo: medir antes).
+- 2026-08-21 — 🟡 **En el pago express, la esencia se ve en el sheet del wallet como línea propia**. Sin probar en device real todavía.
+- 2026-08-21 — 🟡 **La esencia no tiene imágenes en la DB**: su PDP directa se ve pobre. Oculta de grids pero indexable.
 - 2026-08-21 — 🟡 **Aroma limitado a 1 frasco por acción** (decisión de MVP), en los tres caminos de compra.
 - 2026-08-21 — 🟡 `ProductPageUI` llama `useSettings()` dos veces y la segunda está después de early returns (patrón heredado). No romper el alias `checkoutCurrency`.
 - 2026-08-21 — 🟠 4 de 9 productos sin colección → falta la categoría "Recargas" en el menú.
@@ -197,8 +207,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 
 ## 7. Pending / Future Sessions
 - [ALTA] **Probar en device real**: PDP con aroma → Apple Pay / Google Pay → verificar total y que la orden tenga las dos líneas.
-- [ALTA] **Imágenes de aromas**: 6 flat-lays 16:9 + packshots del frasco. Solo hay que llenar `SCENTS[].imageUrl`.
-- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden).
+- [ALTA] **Medir el attach rate de aroma** en PostHog (`scent_selected` → orden) y el uso de `scent_details_toggled`.
+- [ALTA] **Packshots del frasco de esencia (4:5)** para la PDP del producto en la DB.
 - [ALTA] **Crear la colección `recargas`** y añadirla al menú del header (requiere OK del owner).
 - [ALTA] **Resto de FASE 3 (PDP)**: galería a sangre, título lockup, acordeones de ritual, "Combina bien con", `RitualSection`, texturas, migración de champagne.
 - [ALTA] **Auditar la paleta nueva en carrito y checkout**.
