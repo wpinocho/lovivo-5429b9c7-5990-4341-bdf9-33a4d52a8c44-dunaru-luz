@@ -75,6 +75,7 @@ html {
     --dunaru-carbon: 73 10% 17%;      /* #2F3128 Deep Olive Charcoal */
     --dunaru-onix: 75 13% 15%;        /* Deep Olive, top bar / footer */
     --dunaru-oliva-cta: 75 24% 25%;   /* Verde oliva más vivo, botón "Comprar ahora" */
+    --dunaru-oliva-claro: 75 22% 37%; /* Verde oliva más claro, default del selector de variantes */
     --dunaru-ambar: 38 62% 56%;       /* #D4A24A Saffron Gold */
 
     /* ── Nuevos tokens de paleta ── */

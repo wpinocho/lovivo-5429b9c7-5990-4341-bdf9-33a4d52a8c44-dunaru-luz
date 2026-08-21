@@ -92,6 +92,7 @@ export default {
 					ambar:      'hsl(var(--dunaru-ambar) / <alpha-value>)',
 					// Paleta 2026
 					terracota:  'hsl(var(--dunaru-terracota) / <alpha-value>)',
+					'oliva-claro': 'hsl(var(--dunaru-oliva-claro) / <alpha-value>)',
 					periwinkle: 'hsl(var(--dunaru-periwinkle) / <alpha-value>)',
 					travertino: 'hsl(var(--dunaru-travertino) / <alpha-value>)',
 					laton:      'hsl(var(--dunaru-laton) / <alpha-value>)',

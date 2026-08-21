@@ -675,7 +675,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                             className={cn(
                               "min-w-[3rem] px-4 h-11 rounded-md border text-sm font-medium transition-all",
                               isSelected
-                                ? "border-foreground bg-foreground text-background"
+                                ? "border-dunaru-oliva-claro bg-dunaru-oliva-claro text-dunaru-marfil"
                                 : "border-border bg-background hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]",
                               !isAvailable &&
                                 "opacity-40 cursor-not-allowed line-through"
