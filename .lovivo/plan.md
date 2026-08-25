@@ -2,13 +2,13 @@
 - Brand: **dunaru** (dunaru.mx). Velas perladas **rellenables**: gránulos finos de cera tipo arena + mechas de algodón.
 - ⚠️ VOCABULARIO: **"rellenable"** (NO "recargable"). ⚠️ **PROHIBIDO el guion largo (—) en copy visible.**
 - Tesis: no vendemos cera. Vendemos una forma simple de crear luz en el recipiente que ya tienes.
-- **AROMA**: las velas nacen SIN perfume. "El aroma lo eliges tú". Desde 2026-08-21 el aroma SÍ se vende: **Esencia para Vela · 10 ml** como add-on opcional en la PDP.
+- **AROMA**: las velas nacen SIN perfume. Desde 2026-08-21 el aroma SÍ se vende: **Esencia para Vela · 10 ml** como add-on opcional en la PDP. ⚠️ **2026-08-25: el copy viejo ("agrega unas gotas de la esencia que ya tienes en casa") CONTRADICE el negocio actual. Ver Fase 5.**
 - Target: mujer 25–45, urbana, CDMX/GDL/MTY/Puebla/QRO. Decoración, hogar, regalo. Market: México, MXN, es-MX.
-- Tono: claro, cálido, directo. Registro **"high end" / editorial atmosférico**. Referencia: **sensatehomes.com**.
+- Tono: claro, cálido, directo. Registro **"high end" / editorial atmosférico**. Referencias: **sensatehomes.com** (diseño) y **soliracandle.com** (mensaje/estructura, benchmark 2026-08-25).
 - ⛔ **NO es founder-led. La owner NO aparece.** Storytelling = producto, materia, manos anónimas, taller y casa.
 - Pagos: **hasta 6 MSI**. ⚠️ NUNCA nombrar "Stripe" ni "Mercado Pago" en la UI.
 - Envío: **GRATIS A TODO MÉXICO, SIN MÍNIMO.** WhatsApp real: `525531215386`.
-- REGLA DE INTEGRIDAD: **nunca reseñas falsas** (15 reales, 4.9 vía `getReviewStats()`), **nunca precios tachados inventados**.
+- REGLA DE INTEGRIDAD: **nunca reseñas falsas** (15 reales, 4.9 vía `getReviewStats()`), **nunca precios tachados inventados**, **nunca logos de prensa que no existen**.
 - ⚠️ "+200 clientes felices": dato del owner, sin verificar contra la DB.
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - RUTAS: producto `/productos/:slug`, paquete `/paquete/:slug`, carrito `/carrito`, checkout `/pagar`, categoría `/categorias/:handle`.
@@ -16,6 +16,7 @@
 - ⚠️ **PRODUCTO ANCLA DE PAUTA = `kit-vaso-de-vidrio`.**
 - ⚠️ El owner renombra y repriza desde el Dashboard. **NUNCA hardcodear precios ni títulos.**
 - ⚠️ **STAGING**: los cambios se commitean al final del turno. Pedir refresh duro antes de re-implementar.
+- 📦 2026-08-25: el owner está **rediseñando el empaque** para subir el registro premium. Falta copy de empaque (bolsa resellable, caja, inserto).
 
 ### CATÁLOGO (slugs SIEMPRE intactos)
 Snapshot 2026-08-21 (fuente de verdad = la DB):
@@ -31,11 +32,11 @@ Snapshot 2026-08-21 (fuente de verdad = la DB):
 | vaso-extra-transparente | Vaso de Vidrio Transparente | $249 | — | — |
 | pack-30-mechas | Pack de 30 Mechas | $99 | — | — |
 | esencia-para-vela-10-ml | Esencia para Vela · 10 ml | $99 | — | add-on OCULTO del catálogo |
-- **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, 1 opción **`Aroma`** con 6 variantes: Madera Nocturna · Ámbar Cristal · Costa Mineral · Higo Matcha · Tabaco Vainilla · Musgo Mineral. **NO existe variante "Sin aroma"** (estado virtual del componente). **Desde 2026-08-21 el producto SÍ tiene las 6 fotos** (los flat-lays, en el mismo orden que `SCENTS`). No pertenece a ninguna colección.
-- ⚠️ **2026-08-21: los IDs de las variantes de la esencia CAMBIARON** al tocar `variants_config`. Carritos viejos en localStorage con los IDs anteriores pueden fallar en checkout.
+- **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, 1 opción **`Aroma`** con 6 variantes: Madera Nocturna · Ámbar Cristal · Costa Mineral · Higo Matcha · Tabaco Vainilla · Musgo Mineral. **NO existe variante "Sin aroma"** (estado virtual del componente). Tiene las 6 fotos (flat-lays, mismo orden que `SCENTS`). No pertenece a ninguna colección.
+- ⚠️ **2026-08-21: los IDs de las variantes de la esencia CAMBIARON** al tocar `variants_config`. Carritos viejos en localStorage pueden fallar en checkout.
 - Price rule activa: `perlas-originales-500-g` → 2 uds 10% OFF, 3 uds 15% OFF.
 - **CONTENIDO DE LOS KITS**: ambos = recipiente + **500 g de cera + 30 mechas**.
-- **COLECCIONES ACTUALES**: `kits` (2), `recipientes` (2), `accesorios` (1). ⚠️ 4 productos sin colección: `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`. Falta colección **`recargas`**.
+- **COLECCIONES ACTUALES**: `kits` (2), `recipientes` (2), `accesorios` (1). ⚠️ 4 productos sin colección. Falta colección **`recargas`**.
 - **ORDEN DE MERCHANDISING** = `src/lib/catalog-order.ts`. **Añadir ahí el slug de cada producto nuevo.**
 
 ---
@@ -89,7 +90,7 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 - **TOP BAR** fija en `EcommerceTemplate.tsx` (2 items), no en checkout. **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN OFICIAL DEL BUY BOX** (`ProductPageUI.tsx`): 1 título+precio+MSI+rating · 2 `PDP_BENEFITS[slug]` · 3 variantes de color · **3.5 `<ProductScentSelector />` (aroma opcional)** · 4 cantidad (o `ProductQuantityTiers`) · 5 `<DeliveryEstimate />` · 6 pago express + CTA `h-12` con precio · 7 CTA outline `h-11` "Agregar al carrito" · 8 micro-línea `Lock` · 9 badges · 10 `<PdpSocialProof />` · 11 WhatsApp · 12 acordeones cerrados.
 - ⚠️ `TIER_SELECTOR_SLUGS` (solo `perlas-originales-500-g`) reemplaza el stepper.
-- **💰 PRECIO EN EL CTA "COMPRAR AHORA"**: `ctaTotal` = `ctaUnitPrice * ctaQuantity + scentSelection.price`. Se muestra en TODOS los productos. La barra sticky sigue mostrando solo el precio UNITARIO sin aroma.
+- **💰 PRECIO EN EL CTA "COMPRAR AHORA"**: `ctaTotal` = `ctaUnitPrice * ctaQuantity + scentSelection.price`. La barra sticky sigue mostrando solo el precio UNITARIO sin aroma.
 - `optionLabel(name, slug)` renombra "Color" → "Color de la cera", excepto en `CONTAINER_ONLY_SLUGS`.
 - **📦 REGLA DE CONTENIDO EN KITS**: el primer bullet de `PDP_BENEFITS` de los kits declara qué trae la caja. NO quitar.
 - **📐 RATIO DE IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
@@ -98,18 +99,12 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 ### 🌿 SISTEMA DE AROMAS (2026-08-21)
 - **`src/lib/scents.ts`** = fuente única de verdad. Exporta `SCENTS`, `SCENT_PRODUCT_SLUG`, `SCENT_OPTION_NAME` (`"Aroma"`), `SCENT_ENABLED_SLUGS`, `supportsScentAddon(slug)` y **`getScentImageByVariantName(name)`**.
 - **Para activar el aroma en un producto nuevo: añade su slug a `SCENT_ENABLED_SLUGS`.** Hoy: los 6 SKUs con cera perlada.
-- ⚠️ `SCENTS[].name` debe coincidir EXACTO con el valor de la variante en la DB (match por `variant.options.Aroma` con fallback a `variant.title`). **`getScentImageByVariantName` depende de esa coincidencia.**
+- ⚠️ `SCENTS[].name` debe coincidir EXACTO con el valor de la variante en la DB.
 - ⚠️ **"Inspirado en X" es descriptor secundario**: nunca entra al nombre de la variante ni al line item.
-- ⚠️ `profile` ya no se pinta en el panel.
-- **📐 RATIO DE LOS FLAT-LAYS DE AROMA = 4:3 (1456×1092), webp.** Panel `aspect-[4/3]` + `object-cover`.
-- ⚠️ **LOS FLAT-LAYS TIENEN INGREDIENTES HASTA EL BORDE INFERIOR. No poner overlays.** Decisión firme.
-- **🖼️ IMAGEN DEL AROMA EN TODO EL FLUJO (2026-08-21)** — tres capas, porque cada superficie resuelve la imagen distinto:
-  1. **Carrito y drawer** (`CartSidebar`, `CartUI` leen `variant.image_urls[0] || variant.image || product.images[0]`): `ProductScentSelector` inyecta la foto del aroma elegido en el objeto que reporta al padre (`product.images = [img]`, `variant.image` + `variant.image_urls`). Los line items del carrito guardan esos objetos.
-  2. **Resumen del checkout** (`useOrderItems.transformOrderItems`): nueva rama que llama `getScentImageByVariantName(variantName)` justo después de `variant_image`. Sin esto pintaba siempre la foto #1 del producto para cualquier aroma.
-  3. **Confirmación** (`ThankYou.tsx`): misma helper sobre `item.variant_name`.
-  - ⚠️ **`ecommerce--update-product` NO soporta imágenes por variante.** Al mandarlas dentro de `variants_config` concatena todos los campos en el `title` y regenera los IDs. Por eso las fotos por aroma se resuelven en el FRONTEND, no en la DB.
-- **LOS TRES CAMINOS DE COMPRA INCLUYEN EL AROMA** (1 frasco por acción): `handleAddToCartWithAddOns` · `handleBuyNowWithScent` (directo a `/pagar`) · `ProductExpressCheckout` con prop `extraItems`.
-- ⚠️ `ProductPageUI` llama `useSettings()` dos veces. No renombrar sin revisar.
+- **📐 RATIO DE LOS FLAT-LAYS DE AROMA = 4:3 (1456×1092), webp.** ⚠️ Ingredientes hasta el borde inferior: **no poner overlays.**
+- **🖼️ IMAGEN DEL AROMA EN TODO EL FLUJO**: 3 capas (carrito/drawer via inyección en `ProductScentSelector`; checkout via `useOrderItems.transformOrderItems`; confirmación via `ThankYou.tsx`).
+- ⚠️ **`ecommerce--update-product` NO soporta imágenes por variante.**
+- **LOS TRES CAMINOS DE COMPRA INCLUYEN EL AROMA**: `handleAddToCartWithAddOns` · `handleBuyNowWithScent` · `ProductExpressCheckout` con `extraItems`.
 - **PostHog**: eventos `scent_selected` y `scent_details_toggled`.
 - **Ocultar del catálogo**: `HIDDEN_FROM_CATALOG_SLUGS` + `filterCatalogVisible()` en `src/lib/catalog-order.ts`.
 
@@ -120,33 +115,126 @@ Compartido home + PDP. Terracota + periwinkle, numeral cuadrado, dots activos te
 
 ---
 
-## 3. Active Plan — REDISEÑO "HIGH END" (Sensate)
+## 3. Active Plan — FASE 5: REFINAMIENTO DE MENSAJE (benchmark Solira)
 
-**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12 · ✅ Sistema de aromas completo (3 caminos de compra + 6 imágenes) · ✅ 3.13–3.16 · ✅ **3.17 Imagen del aroma en carrito, checkout y confirmación (2026-08-21)** · 🔜 **SIGUIENTE: verificar el flujo completo con refresh duro + medir attach rate** · ⏭️ Resto de Fase 3 y Fase 4 pendientes.
+**Estado**: ✅ Fases 1, 2, 2.5–2.11, 3.7, 3.12–3.17 · Sistema de aromas completo · 🔜 **SIGUIENTE: Fase 5.1 (arreglar la contradicción del aroma) y 5.2 (credenciales premium en la landing)**. Resto de Fase 3 y Fase 4 siguen pendientes.
 
-### 3.0 REGLA MAESTRA
-Elevar las **superficies de marca**, no tocar la **maquinaria de conversión**.
-- 🔒 No tocar: buy box (orden), checkout, `DeliveryEstimate`, `PdpSocialProof`, avisos MSI, envío gratis, WhatsApp.
+### 5.0 CONTEXTO DEL BENCHMARK (2026-08-25)
+Competidor UK: **soliracandle.com** (WooCommerce, "candle sand", £30 por 500 g + 20 mechas). El owner quiere ese registro premium. Se auditó su home y su PDP `emberly-candle-sand` con `lov-fetch-website`.
 
-### 3.17 ✅ FOTO DE CADA ESENCIA EN TODO EL FLUJO (2026-08-21)
-- La esencia salía sin foto en el carrito porque el producto no tenía `images` en la DB.
-- Se subieron las 6 fotos al producto (orden = orden de `SCENTS`) y se resuelve la foto del aroma exacto en carrito, checkout y ThankYou.
-- 🔜 Falta: packshots reales del frasco (hoy se usan los flat-lays de ingredientes).
+**LO QUE ELLOS HACEN MEJOR (a nivel de wording):**
+1. **Headline = categoría + credencial**: "Premium Scented Candle Sand, Made in the UK". Nombran la categoría Y la credencial en la misma línea. Nuestro H1 es poético pero no reclama nada.
+2. **Barra de confianza con 6 credenciales**, no features: envío gratis, 100% natural vegano, hecho en UK, garantía 30 días money-back, libre de parabenos, eco. **Nuestra barra son 4 specs de producto** ("120 h de luz", "30 mechas", "Cualquier recipiente", "Rellenable"). Las specs no construyen premium; las credenciales sí.
+3. **El AROMA es el héroe.** Cada SKU es un aroma con nombre propio (Emberly, Grove, Mellor) y una **pirámide olfativa en 3 fases** narrada ("The Tranquil Opening", "The Hearth-Warmed Heart", "The Enveloping Finish"). Es su activo premium número uno.
+4. **Material propietario con nombre**: "EcoSnow wax". Nombrar la materia la vuelve exclusiva. Nosotros decimos "cera perlada" (genérico y copiable).
+5. **Números concretos por todos lados**: "cada 100 g = 20 horas", "hasta 15 h por mecha", "más de 100 h por bolsa", "35 millones de frascos de vela al año en vertederos del Reino Unido".
+6. **Tiers con nombre y % de ahorro explícito** en el buy box: "The Classic Solo" / "The Perfect Pair · Most Popular · save 18%" / "The Ultimate Trio · Best Value · save 25%".
+7. **"What's Included?" con el beneficio de cada componente**, no solo la lista.
+8. **Seguridad como feature de diseño**: "Safer by Design", "Self-Extinguishing Flame".
+9. **Garantía con nombre**: "30-Day Happiness Guarantee".
+10. **B2B / wholesale** (floristas, event planners, hospitality) y **sample de £5 / 30 g** como puerta de entrada barata.
+
+**LO QUE NOSOTROS YA HACEMOS MEJOR (no tocar):**
+- `RitualSection` y `BrandStorySection` son más editoriales que su "Designed for the Modern Home".
+- Nuestra tabla comparativa dunaru vs vela tradicional ya existe (ellos la tienen en home, nosotros solo en PDP).
+- `CasaRealSection`, UGC real, `DeliveryEstimate`, MSI, envío gratis sin mínimo, WhatsApp.
+- Home deduplicada (la suya repite "how to use" y "why choose" 2 veces; su PDP repite el carrusel 3 veces = bug).
+
+**LO QUE NO HAY QUE COPIAR:**
+- ⛔ El muro legal de su PDP (H-statements, "toxic to aquatic life", SDS, disclaimer médico). Mata la conversión y el registro premium.
+- ⛔ "As Featured In" con logos de prensa: **no tenemos prensa. No inventar.**
+- ⛔ Su PDP de scroll infinito con 8 acordeones enormes.
+
+---
+
+### 5.1 🔴 P0 — ARREGLAR LA CONTRADICCIÓN DEL AROMA
+**Problema**: desde que vendemos `esencia-para-vela-10-ml` ($99), el copy viejo sigue diciendo que el aroma es un DIY con "la esencia o aceite que ya tienes en casa". Eso (a) canibaliza el add-on, (b) suena barato, (c) es la palanca premium más grande que tenemos sin usar.
+
+Archivos y cambios exactos:
+
+**`src/components/ProductStorySections.tsx`**
+- Bloque `PERLAS_BENEFIT_BLOCKS` → "El aroma lo eliges tú". Reescribir:
+  - title: `Seis aromas, una sola vela`
+  - body: `Tu vela nace neutra, sin perfume de fábrica. **Tú eliges el aroma**: seis esencias creadas para dunaru, en frascos de 10 ml. Unas gotas antes de encender y la casa cambia. Cuando quieras otro ambiente, cambias de esencia, no de vela.`
+  - bullets: `Seis esencias propias, formuladas para cera perlada` / `Cambias de aroma sin comprar otra vela` / `O déjala neutra: luz limpia, sin humo perfumado`
+  - ⚠️ mantener `photo: true` y la misma imagen.
+- `compareRows`: cambiar la fila `"El aroma lo eliges tú"` → `"Cambias de aroma sin cambiar de vela"` en los 6 slugs donde aparece.
+- FAQs `"¿Las velas tienen aroma?"` (aparece en `perlas-originales-500-g`, `reserva-1-kg`, `d-o-de-tonos`, `tr-o-de-tonos`): nueva respuesta:
+  `La cera nace neutra, sin perfume de fábrica. En esta misma página puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Si prefieres luz sin olor, también funciona perfecto. Cambias de aroma cuando quieras, sin cambiar de vela.`
+- FAQ del mismo tema en `IndexUI.tsx` (`FAQ_ITEMS`): añadir un item nuevo `¿Las velas tienen aroma?` con la misma respuesta (hoy la landing NO habla de aroma en el FAQ).
+
+**`src/lib/scents.ts`** — subir el registro de cada aroma (es la joya premium):
+- Añadir a cada entrada de `SCENTS` dos campos nuevos opcionales: `story` (1 frase editorial, máx 14 palabras) y `pyramid: { salida: string; corazon: string; fondo: string }`.
+- Mantener `name` EXACTO (el match con la DB depende de eso) y `notes` como está.
+- Ejemplo de tono a seguir (adaptar a las notas reales de cada aroma, NO inventar notas que no existan): Madera Nocturna → story `Cedro y humo tibio. La sala cuando ya nadie tiene prisa.`; pyramid `salida: Cedro`, `corazon: Vetiver y clavo`, `fondo: Ámbar seco`.
+- ⚠️ Las notas reales de los 6 aromas ya existen en el archivo: **usarlas, no inventarlas**. Si un aroma no tiene 3 niveles claros, pedir el dato al owner antes de publicar.
+
+**`src/components/ProductScentSelector.tsx`**
+- En el panel de detalles (ya abierto por default), pintar `story` en una línea propia arriba de las notas, y las 3 fases como `Salida · Corazón · Fondo` en una sola línea compacta con separadores.
+- ⚠️ NO agrandar el panel: ya empuja el CTA en móvil (issue abierto). Si crece más de ~1 línea, colapsar la pirámide detrás de "Ver notas".
+- ⚠️ NO poner overlays sobre el flat-lay.
+
+---
+
+### 5.2 🟠 P1 — CREDENCIALES PREMIUM EN LA LANDING (`src/pages/ui/IndexUI.tsx`)
+1. **Eyebrow del hero**: `Velas perladas rellenables` → `Cera perlada vegetal · Hecha en México`.
+2. **Sub-línea del hero**: hoy `Sin derretir, sin riesgo, sin comprar una vela nueva. Solo vierte las perlas, inserta una mecha y enciende.` → `Cera vegetal en gránulos finos. Viertes, insertas una mecha y enciendes. El aroma lo eliges tú.` (más corta, mete la palanca de aroma arriba del fold).
+3. **Barra de beneficios** (`const BENEFITS`): cambiar de specs a credenciales, manteniendo `grid-cols-4`:
+   `['Cera vegetal, sin parafina', 'Rellenable para siempre', 'Hecha en México', 'Envío gratis + 30 días']`
+   Las specs que salen (120 h, 30 mechas, cualquier recipiente) YA viven en `PDP_BENEFITS` y en las tarjetas: no se pierde información.
+4. **Subline de "ELIGE tu VELA"**: añadir la garantía → `Envío gratis a todo México, sin mínimo. Hasta 6 meses sin intereses. 30 días de garantía.`
+5. **Sección nueva de AROMAS en la landing** (hoy NO existe, y es el activo premium): bloque compacto con los 6 flat-lays 4:3 + nombre + `story` de una línea, link a `/productos/kit-vaso-de-vidrio`. Colocarlo **entre `<Reviews />` y "Elige tu tono"**. Reutilizar `SCENTS` de `scents.ts` (nunca duplicar la lista).
+6. **Mover la tabla comparativa a la landing**: extraer la tabla dunaru vs vela tradicional de `ProductStorySections.tsx` a un componente reutilizable y ponerla en la home después de "Crea tu vela en 4 pasos". Solira la tiene en home y es un activo de conversión: hoy solo la ve quien llega a una PDP.
+7. **Revisar redundancia**: "Elige tu tono" (carrusel de 3 tonos) y la rejilla "Elige tu vela" apuntan casi siempre a `perlas-originales-500-g`. Si tras añadir la sección de aromas la home queda muy larga, **el candidato a recortar es "Elige tu tono"**, no la sección de aromas.
+
+---
+
+### 5.3 🟠 P1 — PDP: "QUÉ INCLUYE" Y SEGURIDAD POR DISEÑO (`ProductPageUI.tsx`)
+1. **Acordeón nuevo `Qué incluye`** (primer acordeón, cerrado, antes de "Descripción"), estilo Solira pero breve: cada componente + su beneficio en una línea. Driven por slug, ej. `kit-vaso-de-vidrio`:
+   - `Vaso de vidrio resistente al calor · se rellena por años, no se tira`
+   - `500 g de cera perlada vegetal · hasta 120 horas de luz`
+   - `30 mechas de algodón · cambias mecha, no vela`
+   - `Guía de uso · lista en 3 pasos, sin derretir nada`
+2. **Renombrar acordeones** con lenguaje de ritual: `Descripción` → `La pieza`; `Envío y devoluciones` → `Envío y garantía`. Añadir tercero: `Cuidado y seguridad` con el texto de `SHARED_FAQS` + la línea de seguridad por diseño.
+3. **Seguridad por diseño** en `PERLAS_BENEFIT_BLOCKS`: el bloque "Se cae y no pasa nada" sube de registro:
+   - title: `Seguridad por diseño`
+   - body: `Al ser gránulos y no un bloque de cera, un golpe **no significa cera caliente encima**. La llama pierde contacto y se apaga sola. Recoges las perlas y sigues.`
+   - bullets: `La llama se apaga sola si se vuelca` / `Pensada para casas con niños y mascotas` / `Se recogen y se vuelven a usar`
+4. **Matemática de la luz** (concreto vende): añadir a `PDP_BENEFITS` de las recargas la línea `Cada 100 g dan cerca de 24 horas de luz` (derivado consistente de 500 g = 120 h, no es un dato inventado).
+5. **Trust icons**: si se adopta el nombre de la garantía (ver 5.5), cambiar `30 días / De garantía`.
+
+---
+
+### 5.4 🟡 P2 — AOV: TIERS CON NOMBRE Y % DE AHORRO
+- `ProductQuantityTiers` hoy solo aplica a `perlas-originales-500-g` (`TIER_SELECTOR_SLUGS`). Añadir **nombre editorial + ahorro explícito** a cada tier, estilo Solira:
+  - `Una bolsa` / `Dos bolsas · Ahorra 10% · La más elegida` / `Tres bolsas · Ahorra 15% · Mejor valor`
+- Extenderlo a `kit-vaso-de-vidrio` y `reserva-1-kg` **requiere que el owner cree price rules de volumen en el Dashboard primero**. No inventar descuentos que no existen en la DB.
+
+---
+
+### 5.5 DECISIONES QUE NECESITAN AL OWNER (bloquean parte del copy)
+1. **Nombre propietario de la cera** (el "EcoSnow" de dunaru). Opciones a proponer: `Perla Vegetal`, `Cera Duna`, `Cera Perlada dunaru`. Sin esto, el material sigue sonando genérico.
+2. **Nombre de la garantía**: `Garantía Primera Luz · 30 días` o `Garantía 30 noches`.
+3. **¿Cuántos gramos de cera perfuma un frasco de 10 ml?** Dato clave para justificar los $99. Hoy no lo tenemos y no se puede inventar.
+4. **¿Cuántas horas da una mecha?** Solira dice 15 h. Nosotros solo tenemos el total por bolsa.
+5. **Composición exacta de la cera** (¿soya? ¿coco? ¿% vegetal?) para poder decir algo más fuerte que "vegetal, sin parafina".
+6. **Copy del empaque nuevo** (bolsa resellable, caja, inserto) para reflejarlo en la PDP: Solira vende fuerte "airtight resealable pouch".
+7. **¿Interés en B2B?** (floristas, restaurantes, hoteles, event planners). Solira tiene página de wholesale. Puede ser un canal grande para dunaru.
+8. **¿Crear un sample barato?** (tipo 30 g + 5 mechas). Es su puerta de entrada de £5 y baja muchísimo la barrera del primer pedido.
+
+---
 
 ### 3.8 FASE 3 — PDP — RESTANTE
 1. Galería a sangre en móvil, sin borde ni radius.
 2. Título a lockup; precio en `font-body`, discreto.
-3. Acordeones con lenguaje de ritual.
-4. **"Combina bien con"**: reutilizar `ProductAddOns` (hoy `ADDON_MAP` vacío) para cross-sell real.
-5. `<RitualSection />` al cierre de la PDP.
-6. Barrer eyebrows viejos → `.eyebrow`; texturas en las secciones de historia.
-7. ~~Selector de variantes~~ ✅ HECHO.
-8. Migrar `ProductStorySections.tsx` de `dunaru-champagne` a terracota/periwinkle.
-9. Unificar el bloque de trust-icons "6 meses sin intereses".
+3. **"Combina bien con"**: reutilizar `ProductAddOns` (hoy `ADDON_MAP` vacío) para cross-sell real.
+4. `<RitualSection />` al cierre de la PDP.
+5. Barrer eyebrows viejos → `.eyebrow`; texturas en las secciones de historia.
+6. Migrar `ProductStorySections.tsx` de `dunaru-champagne` a terracota/periwinkle.
+7. Unificar el bloque de trust-icons "6 meses sin intereses".
 
 ### 3.9 FASE 4 — Arte y fotografía (LA PALANCA MÁS GRANDE)
-Imágenes atmosféricas nocturnas, ⛔ SIN ROSTROS. Slots: hero desktop/móvil, fondo de `RitualSection`, 3 ambientes de "Elige tu tono", imagen de `BrandStorySection`.
-~~6 flat-lays de aroma~~ ✅ HECHO. Falta: **packshots del frasco de esencia** (4:5).
+Imágenes atmosféricas nocturnas, ⛔ SIN ROSTROS. Slots: hero desktop/móvil, fondo de `RitualSection`, 3 ambientes de "Elige tu tono", imagen de `BrandStorySection`. Falta: **packshots del frasco de esencia (4:5)**.
 
 ### 3.11 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`. Si el ATC móvil cae por debajo de 3.5%, revertir densidad primero.
@@ -154,8 +242,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-21 — 🖼️ **Cada esencia muestra SU foto en carrito, checkout y confirmación** (3.17). Producto de esencias con 6 imágenes en la DB + `getScentImageByVariantName()`.
-- 2026-08-21 — ⚠️ Al intentar imágenes por variante, `ecommerce--update-product` deformó las variantes de la esencia; se restauraron (IDs nuevos).
+- 2026-08-25 — 🔎 **Auditoría del competidor soliracandle.com** (home + PDP) y plan de Fase 5: refinamiento de mensaje. Hallazgo P0: el copy del aroma contradice el add-on que ya vendemos.
+- 2026-08-21 — 🖼️ Cada esencia muestra SU foto en carrito, checkout y confirmación (3.17).
+- 2026-08-21 — ⚠️ `ecommerce--update-product` deformó las variantes de la esencia; se restauraron (IDs nuevos).
 - 2026-08-21 — 💰 El CTA "Comprar ahora" muestra el total en TODOS los productos (3.16).
 - 2026-08-21 — 👁️ Detalles del aroma ABIERTOS por default (3.15) + chip `+ $99 · 10 ml`.
 - 2026-08-21 — 💲 Precio del aroma con jerarquía propia (3.14).
@@ -168,10 +257,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-21 — 🟢 Pills de variante seleccionada en `ProductCardUI.tsx` a `dunaru-oliva-claro`.
 - 2026-08-21 — 🗂️ Orden curado del catálogo.
 - 2026-08-21 — 🧱 Descripciones de los KITS corregidas en la DB.
-- 2026-08-20 — 🖱️ Hovers periwinkle en accordions, links y pills (Fase 2.11).
 
 ## 5. Image Inventory
-- **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 10 productos; **la esencia ya tiene 6 imágenes** (los flat-lays 4:3, provisionales).
+- **📐 Fotos de producto: 1122×1402 px (4:5), webp.** 10 productos; la esencia tiene 6 imágenes (los flat-lays 4:3, provisionales).
 - **🌿 FLAT-LAYS DE AROMA (4:3, 1456×1092, webp)** — base `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`:
   - Madera Nocturna → `1787337333998-ynkiiz87l1n.webp`
   - Ámbar Cristal → `1787337333997-44wwhmmisy5.webp`
@@ -179,22 +267,28 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
   - Higo Matcha → `1787337333998-enck999sju7.webp`
   - Tabaco Vainilla → `1787337333998-5e5poqkcxh8.webp`
   - Musgo Mineral → `1787337333998-n7f8zqhfx8m.webp`
-  - ⚠️ Ingredientes hasta el borde inferior. **No overlays.** Mismo orden en `SCENTS` y en `product.images` de la esencia: **si se reordena una lista, reordenar la otra.**
+  - ⚠️ Ingredientes hasta el borde inferior. **No overlays.** Mismo orden en `SCENTS` y en `product.images` de la esencia.
+  - 👉 Estos 6 flat-lays son los que se reusan en la sección nueva de aromas de la landing (5.2.5).
 - ⚠️ Foto #1 de `perlas-originales-500-g` = `x3azemqdof.webp`. Candidata #1 a reemplazo.
 - Colecciones sin imagen. **FAVICON**: `/favicon.png` (256×256).
 - **UGC de clientas** (5 fotos): constante `UGC` en `src/data/reviews.ts`.
 - **Hero**: `/hero-dunaru.webp` · `/hero-dunaru-mobile.webp`. **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`.
 - **4 PASOS**: Vierte `/paso-vierte.webp` · Inserta `1785521743155-htw95tvbi4b.webp` · Enciende `1785521743156-3qeskqe43gv.webp` · Renueva `/paso-renueva.webp`.
-- 🔴 **FALTAN: (a) packshots 4:5 del frasco de esencia; (b) imágenes atmosféricas nocturnas de la Fase 4; (c) video demo.**
+- 🔴 **FALTAN: (a) packshots 4:5 del frasco de esencia; (b) imágenes atmosféricas nocturnas de la Fase 4; (c) video demo; (d) foto del EMPAQUE NUEVO.**
 - 🟡 Los `steps` de `kit-vaso-de-concreto` siguen con `PLACEHOLDER`. 🟡 `/pdp-vaso-decor.webp` huérfana.
 - ⛔ Descartadas por el owner: `1786132713652-czg3jwwtcrv.webp` y `1786129807292-5eb2uq5pl0m.webp`.
 
 ## 6. Known Issues
-- 2026-08-21 — 🔴 **`ecommerce--update-product` NO soporta imágenes por variante.** Mandarlas en `variants_config` concatena los campos en el `title` y **regenera los IDs de variante**. No repetir.
-- 2026-08-21 — 🟠 **Los IDs de las variantes de la esencia cambiaron hoy**: un carrito guardado antes de las 20:35 con esencia puede fallar al crear checkout. Se resuelve vaciando el carrito.
-- 2026-08-21 — 🟡 **Las fotos de la esencia son flat-lays de ingredientes 4:3**, no packshots del frasco: en el thumbnail cuadrado del carrito se recortan.
+- 2026-08-25 — 🔴 **CONTRADICCIÓN DE COPY EN EL AROMA**: `ProductStorySections.tsx` (bloque "El aroma lo eliges tú", FAQs y `compareRows`) invita a usar "la esencia que ya tienes en casa" mientras vendemos esencia propia a $99. Canibaliza el add-on y baja el registro. Fix en 5.1.
+- 2026-08-25 — 🟠 **La landing no menciona el aroma en ningún lugar** (ni FAQ ni sección). Es el activo premium más fuerte y está invisible arriba del funnel.
+- 2026-08-25 — 🟡 La barra de beneficios de la home son 4 specs, no credenciales de marca.
+- 2026-08-25 — 🟡 La tabla comparativa dunaru vs vela tradicional solo existe en PDP, no en la home.
+- 2026-08-25 — 🟡 La cera no tiene nombre propietario ni composición pública (soya/coco/%). Bloquea copy premium.
+- 2026-08-21 — 🔴 **`ecommerce--update-product` NO soporta imágenes por variante.** No repetir.
+- 2026-08-21 — 🟠 Los IDs de las variantes de la esencia cambiaron: un carrito guardado antes de las 20:35 del 21/08 puede fallar. Se resuelve vaciando el carrito.
+- 2026-08-21 — 🟡 Las fotos de la esencia son flat-lays 4:3, no packshots del frasco.
 - 2026-08-21 — 🟡 La barra sticky de la PDP muestra el precio unitario sin aroma.
-- 2026-08-21 — 🟠 El panel de aroma abierto por default empuja el CTA en móvil. Sin medir.
+- 2026-08-21 — 🟠 El panel de aroma abierto por default empuja el CTA en móvil. Sin medir. ⚠️ Tenerlo en cuenta al añadir la pirámide olfativa (5.1).
 - 2026-08-21 — 🟡 Chip de aroma de 3 líneas sin verificar en 360 px.
 - 2026-08-21 — 🟡 Pago express con esencia sin probar en device real.
 - 2026-08-21 — 🟡 Aroma limitado a 1 frasco por acción (MVP).
@@ -220,17 +314,18 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Probar el flujo completo con aroma tras refresh duro**: PDP → carrito (foto correcta) → /pagar (foto correcta) → orden.
+- [ALTA] **Fase 5.1**: arreglar la contradicción del aroma (bloque, FAQs, compareRows, FAQ de la home) + pirámide olfativa en `scents.ts`.
+- [ALTA] **Fase 5.2**: credenciales premium en la landing (eyebrow, sub-línea, barra de beneficios, sección de aromas, tabla comparativa en home).
+- [ALTA] **Fase 5.3**: acordeón "Qué incluye" + "Seguridad por diseño" en la PDP.
+- [ALTA] **Confirmar con el owner los 8 puntos de 5.5** (nombre de la cera, nombre de la garantía, gramos por frasco, horas por mecha, composición, empaque, B2B, sample).
 - [ALTA] **Packshots del frasco de esencia (4:5)** y sustituir los flat-lays como imágenes del producto.
-- [ALTA] **Verificar el total del CTA en `perlas-originales-500-g`** con 2 y 3 bolsas + aroma.
-- [ALTA] **Medir el impacto del panel abierto por default** y el **attach rate de aroma** en PostHog.
-- [ALTA] **Verificar en móvil (360 px)** el chip de 3 líneas.
-- [ALTA] **Probar Apple Pay / Google Pay con esencia en device real.**
+- [ALTA] **Probar el flujo completo con aroma tras refresh duro**: PDP → carrito → /pagar → orden.
+- [ALTA] **Medir el attach rate de aroma** y el impacto del panel abierto por default en PostHog.
+- [ALTA] **Verificar en móvil (360 px)** el chip de 3 líneas y el panel con pirámide.
 - [ALTA] **Crear la colección `recargas`** y añadirla al menú (requiere OK del owner).
-- [ALTA] **Resto de FASE 3 (PDP)** y **auditar la paleta en carrito y checkout**.
 - [ALTA] **FASE 4 (fotos atmosféricas nocturnas)**, sin rostros.
-- [ALTA] Capturar baseline de PostHog. P0 de la PDP de perlas.
+- [MED] **Fase 5.4**: tiers con nombre y % de ahorro (requiere price rules nuevas del owner).
 - [MED] Reflejar el aroma en el precio de la barra sticky.
 - [MED] Descripción y SEO propios de la PDP de la esencia.
-- [MED] Fotos reales para los `steps` de kit-vaso-de-concreto.
-- [BAJA] Banners de colección y borrar imágenes huérfanas.
+- [MED] Resto de FASE 3 (PDP) y auditar la paleta en carrito y checkout.
+- [BAJA] Página B2B / wholesale. SKU sample barato. Banners de colección.
