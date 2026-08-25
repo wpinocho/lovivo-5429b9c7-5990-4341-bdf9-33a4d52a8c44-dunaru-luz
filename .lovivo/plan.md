@@ -71,17 +71,18 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### 🪨 TEXTURAS / utilidades
 `.texture-grain` · `.texture-arena` · `.texture-travertino` · `.texture-terracota` · `.texture-ambar` (solo oscuros) · `.texture-metal` · `.hairline-metal` · `.lockup` · `.eyebrow` · `.h-editorial` · `.transition-editorial` · `<Reveal>` · `.full-bleed` · `.section-pad` / `.section-pad-sm`.
 
-### 🧭 NAVEGACIÓN (2026-08-25 — REDISEÑADA)
+### 🧭 NAVEGACIÓN
 - **FUENTE ÚNICA: `src/lib/navigation.ts`** → `SHOP_COLUMNS`, `SHOP_FEATURED`, `SHOP_ALL`, `PRIMARY_LINKS`, `UTILITY_LINKS`.
 - **Componente: `src/components/MainNav.tsx`** → exporta `DesktopNav` y `MobileNav({ onNavigate })`.
 - ⛔ **REGLA DE ORO: el menú NO contiene anclas a la home (`/#...`).**
 - **Desktop**: `Tienda ▾` (mega menú de 4 columnas) + `Aromas` + `Cómo funciona`.
 - ⚙️ El panel del mega menú es `absolute top-full left-0 right-0` y depende de que el wrapper `.max-w-7xl` del header tenga `relative`. **No quitar ese `relative`.**
 
-### 🖼️ IMÁGENES DEL RITUAL — FUENTE ÚNICA (2026-08-25)
-- **`src/lib/steps-media.ts`** exporta `STEP_IMAGES` (`vierte`, `inserta`, `enciende`, `renueva`) y `BRAND_STORY_IMAGE`.
-- La consumen: `IndexUI` (STEPS), `ProductStorySections` (`HOW_IT_WORKS_STEPS` + bloque "Así funciona la renovación" del pack de mechas), `ComoFunciona` y `BrandStorySection`.
-- ⛔ **Nunca volver a hardcodear `/paso-vierte.webp` ni URLs sueltas de pasos.** Se cambia solo en `steps-media.ts`.
+### 🖼️ IMÁGENES EDITORIALES — FUENTE ÚNICA (`src/lib/steps-media.ts`)
+- Exporta: `STEP_IMAGES` (`vierte`, `inserta`, `enciende`, `renueva`), `BRAND_STORY_IMAGE` (= `vierte`), **`RITUAL_IMAGE`** y **`HERO_DESKTOP_IMAGE`**.
+- La consumen: `IndexUI` (STEPS + hero desktop), `ProductStorySections`, `ComoFunciona`, `BrandStorySection`, `RitualSection`.
+- ⛔ **Nunca hardcodear URLs de pasos, hero desktop ni ritual.** Se cambia solo en `steps-media.ts`.
+- 🟡 `public/hero-dunaru.webp` quedó **huérfano** (desktop ahora usa Supabase). El **hero móvil sigue en `/hero-dunaru-mobile.webp`**.
 
 ### 🎨 "ELIGE TU TONO" (home)
 - La constante `TONOS` de `IndexUI` usa la **imagen 1 de cada variante** de `perlas-originales-500-g`.
@@ -109,10 +110,10 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 6: NAVEGACIÓN Y ARQUITECTURA DE SITIO
 
-**Estado**: ✅ Mega menú + `/como-funciona` + fotos nuevas del ritual. 🔜 **Verificar en 360 px y desktop 1280 px.**
+**Estado**: ✅ Mega menú + `/como-funciona` + set completo de fotos nuevas (pasos, hero desktop, ritual, brand story). 🔜 **Verificar en 360 px y desktop 1280 px.**
 
 ### 6.1 🔴 P1 — Verificación visual tras el commit
-Menú (alineación del panel), 4 pasos con las fotos nuevas, "Elige tu tono" → PDP con variante preseleccionada.
+Menú (alineación del panel), 4 pasos en el orden correcto, hero desktop nuevo (encuadre del texto sobre la foto horizontal), `RitualSection`, "Elige tu tono" → PDP con variante preseleccionada.
 
 ### 6.2 🟡 P2 — Página `/aromas` propia
 Hoy "Aromas" apunta a la PDP de la esencia (oculta del catálogo, sin SEO propio). Merece landing editorial reusando `ScentsSection`.
@@ -124,7 +125,7 @@ Hoy "Aromas" apunta a la PDP de la esencia (oculta del catálogo, sin SEO propio
 1. ❓ Nombre de la garantía. 2. ❓ Horas por mecha. 3. ❓ Copy del empaque / inserto. 4. ❓ B2B / SKU sample.
 
 ### 6.5 FASE 4 — Arte y fotografía
-Faltan **packshots 4:5 del frasco de esencia** e imágenes atmosféricas nocturnas (⛔ sin rostros).
+Faltan **packshots 4:5 del frasco de esencia**, **hero MÓVIL nuevo** (vertical, a juego con el desktop nuevo) e imágenes atmosféricas nocturnas (⛔ sin rostros).
 
 ### 6.6 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`.
@@ -132,35 +133,37 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-25 — 🖼️ **Nuevas fotos del ritual (4 pasos)** del owner, centralizadas en `src/lib/steps-media.ts`. Propagadas a home, todas las PDP y `/como-funciona`.
-- 2026-08-25 — 🎨 **"Elige tu tono"** ahora usa la imagen 1 de cada variante de Cera Duna · 500 g y linkea con `?variante=`.
+- 2026-08-25 — 🔁 **Paso 1 corregido** (foto nueva) y **pasos 3 y 4 intercambiados**: Enciende = cerillo, Renueva = disco de cera. Propagado a home, PDP y `/como-funciona`.
+- 2026-08-25 — 🌅 **Hero desktop reemplazado** por la foto horizontal de travertino (`HERO_DESKTOP_IMAGE`). Alt text actualizado. Móvil sin cambios.
+- 2026-08-25 — 🕯️ **`RitualSection` migrada** a la foto del bowl negro (`RITUAL_IMAGE`). Foto vieja `3qeskqe43gv` retirada.
+- 2026-08-25 — 🖼️ Fotos del ritual centralizadas en `src/lib/steps-media.ts` (ahora también hero desktop y ritual).
+- 2026-08-25 — 🎨 **"Elige tu tono"** usa la imagen 1 de cada variante de Cera Duna · 500 g y linkea con `?variante=`.
 - 2026-08-25 — 🔗 **`ProductPageUI` preselecciona variante desde la URL** (`?variante=Marfil`), una sola vez por producto.
-- 2026-08-25 — 🖼️ `BrandStorySection` usa `BRAND_STORY_IMAGE` (foto 1 nueva).
-- 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `src/lib/navigation.ts` + `src/components/MainNav.tsx`. Mega menú "Tienda" de 4 columnas. Cero anclas a la home.
+- 2026-08-25 — 🖼️ `BrandStorySection` usa `BRAND_STORY_IMAGE`.
+- 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `src/lib/navigation.ts` + `src/components/MainNav.tsx`. Mega menú "Tienda" de 4 columnas.
 - 2026-08-25 — 📄 **Nueva página `/como-funciona`** con SEO propio, 4 pasos, `CompareTable` y FAQ de 6.
 - 2026-08-25 — 🧹 `EcommerceTemplate.tsx`: eliminados menús viejos; wrapper del header ahora `relative`.
 - 2026-08-25 — 🏷️ **NOMENCLATURA PREMIUM: renombrados 8 productos en la DB**. Slugs intactos.
 - 2026-08-25 — 🔻 Tabla comparativa bajada en la home (después de `BrandStorySection`).
 - 2026-08-25 — ✂️ Acordeón "Cuidado y seguridad" eliminado de la PDP.
 - 2026-08-25 — 🔢 Mechas corregidas: Trío = 90, Cera Duna 1 kg = 60.
-- 2026-08-25 — ⚖️ `CompareTable.tsx` extraída a componente único.
-- 2026-08-25 — 📦 Acordeón "Qué incluye" (`src/lib/pdp-includes.ts`).
-- 2026-08-25 — 🌱 Claim "Cera 100% vegetal y biodegradable".
-- 2026-08-25 — 🌾 "Cera Duna": la cera ya tiene nombre propietario.
+- 2026-08-25 — 📦 Acordeón "Qué incluye" (`src/lib/pdp-includes.ts`) + claim "Cera 100% vegetal y biodegradable".
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
-- **🔥 4 PASOS (2026-08-25, fotos del owner)** — base `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`:
-  - Vierte `1787699972902-dld268c7c0u.webp` (también BrandStory) · Inserta `1787699972902-6ha0kcq29g.webp` · Enciende `1787699972902-11zjzn59pysq.webp` · Renueva `1787699972902-pr81fsb4jso.webp`
-  - ⛔ Deprecadas: `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b.webp`, `1785521743156-3qeskqe43gv.webp` (esta última sigue viva solo en `RitualSection.tsx`).
+- Base de uploads del owner: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`
+- **🔥 4 PASOS (vigentes)**: Vierte `1787701006060-mdjjspbepql.webp` (también BrandStory) · Inserta `1787699972902-6ha0kcq29g.webp` · Enciende `1787699972902-pr81fsb4jso.webp` · Renueva `1787699972902-11zjzn59pysq.webp`
+- **🌅 HERO desktop**: `1787701006060-xuyehajl1yr.webp`. **Hero móvil**: `/hero-dunaru-mobile.webp` (aún el viejo).
+- **🕯️ RITUAL**: `1787701006060-vpgjgog2juh.webp`.
+- ⛔ Deprecadas: `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b.webp`, `1785521743156-3qeskqe43gv.webp`, `1787699972902-dld268c7c0u.webp`, `public/hero-dunaru.webp`.
 - **🌿 FLAT-LAYS DE AROMA (4:3, 1456×1092)**: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `1787337333997-44wwhmmisy5` · Costa Mineral `1787337333998-jphdwvy2pbh` · Higo Matcha `1787337333998-enck999sju7` · Tabaco Vainilla `1787337333998-5e5poqkcxh8` · Musgo Mineral `1787337333998-n7f8zqhfx8m`.
-- **Hero**: `/hero-dunaru.webp` · `/hero-dunaru-mobile.webp`. **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`.
-- **UGC de clientas** (5 fotos): constante `UGC` en `src/data/reviews.ts`. **FAVICON**: `/favicon.png`.
+- **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **UGC** (5 fotos): constante `UGC` en `src/data/reviews.ts`. **FAVICON**: `/favicon.png`.
 - 🟡 Subidas por el owner sin usar: `1787681082141-dy7wr0dcp15.webp`, `1787681082142-42qlfq25nvs.webp`, `1787684660654-vr5uiznl7cj.webp`.
-- 🔴 **FALTAN: packshots 4:5 del frasco de esencia · video demo · foto del EMPAQUE NUEVO.**
+- 🔴 **FALTAN: packshots 4:5 del frasco de esencia · hero MÓVIL nuevo · video demo · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-25 — 🟡 `RitualSection.tsx` sigue usando la foto vieja `1785521743156-3qeskqe43gv.webp`. Valorar migrarla a las nuevas.
+- 2026-08-25 — 🟠 **Hero móvil desalineado con el desktop nuevo**: el desktop ya es la foto de travertino, el móvil sigue con la foto vieja. Pedir vertical a juego.
+- 2026-08-25 — 🟡 `public/hero-dunaru.webp` quedó huérfano en el repo (no se borró por si acaso).
 - 2026-08-25 — 🟡 **Mega menú sin verificar visualmente** (staging).
 - 2026-08-25 — 🟡 **"Aromas" del menú apunta a la PDP de la esencia**, oculta del catálogo y sin SEO propio.
 - 2026-08-25 — 🟠 **Los nombres nuevos NO están en los anuncios de Meta ni en emails automatizados.**
@@ -177,7 +180,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar tras el commit**: mega menú, 4 pasos nuevos, "Elige tu tono" con `?variante=`.
+- [ALTA] **Verificar tras el commit**: hero desktop nuevo, 4 pasos en orden, `RitualSection`, mega menú, "Elige tu tono" con `?variante=`.
+- [ALTA] **Pedir al owner un HERO MÓVIL vertical** a juego con la foto nueva de travertino.
 - [ALTA] **Añadir `/como-funciona` al sitemap** (`scripts/generate-sitemap.ts`) y al footer.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
 - [ALTA] **Pedir al owner**: horas por mecha, nombre de la garantía, copy del empaque.
@@ -185,7 +189,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - [ALTA] **Medir el attach rate de aroma** en PostHog.
 - [ALTA] **Crear la colección `recargas`**.
 - [MED] **Página `/aromas`** propia (6.2).
-- [MED] Migrar `RitualSection` a las fotos nuevas.
 - [MED] Tiers con nombre y % de ahorro.
 - [MED] Limpiar "perlas dunaru" de `bowl-negro` y `vaso-extra-transparente`.
 - [BAJA] Página B2B / wholesale. SKU sample barato. Banners de colección.

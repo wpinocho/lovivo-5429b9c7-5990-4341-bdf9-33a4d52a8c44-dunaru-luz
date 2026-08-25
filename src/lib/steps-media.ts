@@ -11,11 +11,17 @@ const MEDIA =
   "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/"
 
 export const STEP_IMAGES = {
-  vierte: `${MEDIA}1787699972902-dld268c7c0u.webp`,
+  vierte: `${MEDIA}1787701006060-mdjjspbepql.webp`,
   inserta: `${MEDIA}1787699972902-6ha0kcq29g.webp`,
-  enciende: `${MEDIA}1787699972902-11zjzn59pysq.webp`,
-  renueva: `${MEDIA}1787699972902-pr81fsb4jso.webp`,
+  enciende: `${MEDIA}1787699972902-pr81fsb4jso.webp`,
+  renueva: `${MEDIA}1787699972902-11zjzn59pysq.webp`,
 } as const
 
 /** Retrato editorial usado en "Quiénes somos / La luz que se queda". */
 export const BRAND_STORY_IMAGE = STEP_IMAGES.vierte
+
+/** Fondo atmosférico a sangre del bloque "El ritual". */
+export const RITUAL_IMAGE = `${MEDIA}1787701006060-vpgjgog2juh.webp`
+
+/** Composición horizontal del hero de la home (desktop). */
+export const HERO_DESKTOP_IMAGE = `${MEDIA}1787701006060-xuyehajl1yr.webp`

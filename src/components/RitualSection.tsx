@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Reveal } from '@/components/Reveal';
+import { RITUAL_IMAGE } from '@/lib/steps-media';
 
 interface RitualSectionProps {
   /** Imagen atmosférica de fondo. */
@@ -11,8 +12,7 @@ interface RitualSectionProps {
   className?: string;
 }
 
-const DEFAULT_IMAGE =
-  'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-3qeskqe43gv.webp';
+const DEFAULT_IMAGE = RITUAL_IMAGE;
 
 /**
  * Bloque editorial oscuro a sangre. Rompe el ritmo claro de la página

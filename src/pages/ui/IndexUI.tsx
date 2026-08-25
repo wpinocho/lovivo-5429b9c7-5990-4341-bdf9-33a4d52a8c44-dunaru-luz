@@ -14,7 +14,7 @@ import { ScentsSection } from '@/components/ScentsSection';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { formatMoney } from '@/lib/money';
-import { STEP_IMAGES } from '@/lib/steps-media';
+import { STEP_IMAGES, HERO_DESKTOP_IMAGE } from '@/lib/steps-media';
 import { useMemo, useState } from 'react';
 
 interface IndexUIProps {
@@ -197,8 +197,8 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           />
           {/* Desktop: horizontal composition */}
           <img
-            src="/hero-dunaru.webp"
-            alt="Mesa con vela perlada dunaru encendida en interior mexicano contemporáneo"
+            src={HERO_DESKTOP_IMAGE}
+            alt="Cera Duna vertiéndose en un bowl de cerámica sobre travertino, luz cálida de tarde"
             className="hidden md:block w-full h-full object-cover object-center"
             fetchPriority="high"
           />
