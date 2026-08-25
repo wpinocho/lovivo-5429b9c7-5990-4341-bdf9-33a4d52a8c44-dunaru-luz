@@ -254,7 +254,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     faqs: [
       {
         q: "¿Qué incluye el kit?",
-        a: "Un vaso de vidrio transparente de diseño, 500 g de perlas de cera perlada y 30 mechas de algodón. Todo listo para encender o regalar.",
+        a: "Un vaso de vidrio transparente de diseño, 500 g de Cera Duna y 30 mechas de algodón. Todo listo para encender o regalar.",
       },
       {
         q: "¿Tiene costo el envío?",
@@ -346,7 +346,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     faqs: [
       {
         q: "¿Qué incluye el kit?",
-        a: "Un bowl de cerámica negra mate hecho a mano, 500 g de perlas de cera perlada y 30 mechas de algodón. Listo para regalar o estrenar.",
+        a: "Un bowl de cerámica negra mate hecho a mano, 500 g de Cera Duna y 30 mechas de algodón. Listo para regalar o estrenar.",
       },
       {
         q: "¿Tiene costo el envío?",
@@ -379,12 +379,12 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     ],
     faqs: [
       {
-        q: "¿Qué incluye la Reserva 1 kg?",
-        a: "1 kg de perlas de cera perlada (el doble de la bolsa original) más 30 mechas de algodón. Ideal para recipientes grandes o para tener varias velas encendidas.",
+        q: "¿Qué incluye la Cera Duna de 1 kg?",
+        a: "1 kg de Cera Duna (el doble de la bolsa de 500 g) más 60 mechas de algodón. Ideal para recipientes grandes o para tener varias velas encendidas.",
       },
       {
         q: "¿Necesito un recipiente aparte?",
-        a: "Sí. La Reserva es solo perlas y mechas. Úsala con cualquier recipiente resistente al calor de más de 10 cm de diámetro, o con tu kit dunaru.",
+        a: "Sí. Esta presentación es solo cera y mechas. Úsala con cualquier recipiente resistente al calor de más de 10 cm de diámetro, o con tu vela dunaru.",
       },
       {
         q: "¿Cuánto dura 1 kg?",
@@ -414,7 +414,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     faqs: [
       {
         q: "¿Qué incluye el Dúo de Tonos?",
-        a: "Dos bolsas de 500 g de perlas de cera perlada en los colores que elijas, más 60 mechas de algodón. Envío gratis.",
+        a: "Dos bolsas de 500 g de Cera Duna en los tonos que elijas, más 60 mechas de algodón (30 por bolsa). Envío gratis.",
       },
       {
         q: "¿Puedo elegir los colores?",
@@ -448,7 +448,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     faqs: [
       {
         q: "¿Qué incluye el Trío de Tonos?",
-        a: "Tres bolsas de 500 g de perlas de cera perlada en Marfil, Champagne y Ónix, más 60 mechas de algodón. Es nuestro mejor valor. Envío gratis.",
+        a: "Tres bolsas de 500 g de Cera Duna en Marfil, Champagne y Ónix, más 90 mechas de algodón (30 por bolsa). Es nuestro mejor valor. Envío gratis.",
       },
       {
         q: "¿Es el mejor precio?",

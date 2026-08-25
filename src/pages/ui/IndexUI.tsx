@@ -36,12 +36,12 @@ interface CatalogEntry {
 const IMG = 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/';
 
 const CATALOG_FALLBACK: Record<string, { title: string; price: number; compare?: number; img: string }> = {
-  'perlas-originales-500-g': { title: 'Recarga para vela rellenable — 500 g + 30 mechas', price: 499, compare: 599, img: `${IMG}x3azemqdof.webp` },
-  'reserva-1-kg': { title: 'Recarga para vela rellenable — 1 Kg + 60 mechas', price: 799, compare: 999, img: `${IMG}vjtp9uzft8.webp` },
-  'kit-vaso-de-vidrio': { title: 'Kit Vela Rellenable · Vaso de Vidrio', price: 799, compare: 899, img: `${IMG}21sy3747vik.webp` },
-  'kit-vaso-de-concreto': { title: 'Kit Vela Rellenable · Bowl de Cerámica', price: 999, compare: 1199, img: `${IMG}c47q4wicqvv.webp` },
-  'd-o-de-tonos': { title: 'Dúo de Tonos · 1 kg de Cera Perlada', price: 1099, compare: 1398, img: `${IMG}yuq5htx9eol.webp` },
-  'tr-o-de-tonos': { title: 'Trío de Tonos · 1.5 kg de Cera Perlada', price: 1399, compare: 1499, img: `${IMG}bfh3fau5iyv.webp` },
+  'perlas-originales-500-g': { title: 'Cera Duna · 500 g', price: 499, compare: 599, img: `${IMG}x3azemqdof.webp` },
+  'reserva-1-kg': { title: 'Cera Duna · 1 kg', price: 799, compare: 999, img: `${IMG}vjtp9uzft8.webp` },
+  'kit-vaso-de-vidrio': { title: 'Vela Rellenable · Vaso de Vidrio', price: 799, compare: 899, img: `${IMG}21sy3747vik.webp` },
+  'kit-vaso-de-concreto': { title: 'Vela Rellenable · Bowl de Cerámica', price: 999, compare: 1199, img: `${IMG}c47q4wicqvv.webp` },
+  'd-o-de-tonos': { title: 'Dúo de Tonos · 1 kg', price: 1099, compare: 1398, img: `${IMG}yuq5htx9eol.webp` },
+  'tr-o-de-tonos': { title: 'Trío de Tonos · 1.5 kg', price: 1399, compare: 1499, img: `${IMG}bfh3fau5iyv.webp` },
 };
 
 const buildCatalog = (products: UseIndexLogicReturn['products']): Record<string, CatalogEntry> => {
@@ -145,7 +145,7 @@ const FAQ_ITEMS = [
   { q: '¿Las velas tienen aroma?', a: 'La cera nace neutra, sin perfume de fábrica. Al comprar puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Un frasco perfuma 500 g de cera. Si prefieres luz sin olor, también funciona perfecto: cambias de aroma cuando quieras, sin cambiar de vela.' },
   { q: '¿Qué es la Cera Duna?', a: 'Es nuestra cera 100% vegetal y biodegradable, en gránulos finos y libre de parafina. No se derrite en bloque: rodea la mecha, da luz limpia y después se vuelve a usar. Por eso la vela se rellena en vez de tirarse: menos basura y menos gasto.' },
   { q: '¿Qué recipiente puedo usar?', a: 'Cualquier recipiente resistente al calor de mínimo 10 cm de diámetro y 5 cm de alto. Vasos, bowls, copas o jarras: lo que ya tienes en casa.' },
-  { q: '¿Cuántas mechas incluye?', a: '30 mechas por bolsa de 500 g. Los bundles Dúo y Trío incluyen 60 mechas.' },
+  { q: '¿Cuántas mechas incluye?', a: '30 mechas por bolsa de 500 g. El Dúo incluye 60 y el Trío 90.' },
   { q: '¿Cuánto dura una bolsa?', a: 'Aproximadamente 120 horas de luz por bolsa de 500 g, dependiendo del tamaño de tu recipiente.' },
   { q: '¿Qué pasa al encenderla?', a: 'La mecha se consume lentamente. Las perlas no se "derriten" como una vela tradicional, solo rodean la llama. Al terminar la mecha, agregas una nueva.' },
   { q: '¿Es seguro?', a: 'Sí. La vela se apaga si se vuelca porque la mecha pierde contacto. Úsala siempre sobre una superficie plana y estable, nunca sin supervisión cerca de telas o materiales inflamables.' },
@@ -281,24 +281,6 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
         }
       />
 
-      {/* ── DUNARU VS VELA NORMAL ─────────────────────────────────────────── */}
-      <section className="section-pad-sm bg-dunaru-marfil texture-grain border-t border-foreground/10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <Reveal className="text-center mb-10 sm:mb-12">
-            <p className="eyebrow mb-4">La diferencia</p>
-            <h2 className="lockup text-3xl sm:text-4xl text-foreground">
-              DUNARU <em>vs</em> VELA NORMAL
-            </h2>
-            <p className="font-body text-sm text-foreground/55 max-w-md mx-auto mt-4">
-              Una vela normal se consume y se tira. La nuestra se rellena, cambia de aroma y se queda en tu casa.
-            </p>
-          </Reveal>
-          <Reveal delay={90}>
-            <CompareTable />
-          </Reveal>
-        </div>
-      </section>
-
       {/* ── INTENCIÓN DE COMPRA ───────────────────────────────────────────── */}
       <section id="comprar" className="section-pad-sm bg-dunaru-arena texture-arena">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -423,6 +405,24 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
 
       {/* ── HISTORIA DE MARCA + HECHO EN MÉXICO + GARANTÍA ────────────────── */}
       <BrandStorySection />
+
+      {/* ── DUNARU VS VELA NORMAL ─────────────────────────────────────────── */}
+      <section className="section-pad-sm bg-dunaru-arena texture-arena border-t border-foreground/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal className="text-center mb-10 sm:mb-12">
+            <p className="eyebrow mb-4">La diferencia</p>
+            <h2 className="lockup text-3xl sm:text-4xl text-foreground">
+              DUNARU <em>vs</em> VELA NORMAL
+            </h2>
+            <p className="font-body text-sm text-foreground/55 max-w-md mx-auto mt-4">
+              Una vela normal se consume y se tira. La nuestra se rellena, cambia de aroma y se queda en tu casa.
+            </p>
+          </Reveal>
+          <Reveal delay={90}>
+            <CompareTable />
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── RESEÑAS (HONESTO — MARCA NUEVA) ──────────────────────────────── */}
       {/* (movido arriba: ahora va justo antes de "Elige tu tono") */}

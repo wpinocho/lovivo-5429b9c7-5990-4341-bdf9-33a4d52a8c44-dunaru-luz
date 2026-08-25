@@ -1111,27 +1111,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </AccordionItem>
               )}
 
-              <AccordionItem value="care">
-                <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
-                  Cuidado y seguridad
-                </AccordionTrigger>
-                <AccordionContent className="text-sm text-muted-foreground space-y-2">
-                  <p>
-                    Deja que la mecha queme entre 2 y 3 horas por sesión y
-                    apágala. Nunca dejes una vela encendida sin supervisión.
-                  </p>
-                  <p>
-                    Al ser cera en gránulos, si se mueve el recipiente no hay
-                    derrame de cera caliente como en una vela tradicional: la
-                    llama se apaga sola.
-                  </p>
-                  <p>
-                    Cuando se consuma, deja enfriar, vacía el recipiente,
-                    lávalo con agua tibia y vuelve a llenarlo.
-                  </p>
-                </AccordionContent>
-              </AccordionItem>
-
               <AccordionItem value="shipping">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
                   Envío y garantía
