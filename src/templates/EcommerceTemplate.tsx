@@ -6,18 +6,10 @@ import { FloatingCart } from '@/components/FloatingCart'
 import { ProfileMenu } from '@/components/ProfileMenu'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
-import { ShoppingCart, Package, MessageCircle, ChevronDown, Truck, Heart } from 'lucide-react'
+import { ShoppingCart, MessageCircle, Truck, Heart } from 'lucide-react'
 import { useCartUISafe } from '@/components/CartProvider'
 import { useCart } from '@/contexts/CartContext'
-import { useCollections } from '@/hooks/useCollections'
-import { ScrollLink } from '@/components/ScrollLink'
-
-const PRODUCT_CATEGORIES = [
-  { to: '/categorias/todos', label: 'Todos los productos' },
-  { to: '/categorias/kits', label: 'Kits' },
-  { to: '/categorias/accesorios', label: 'Accesorios' },
-  { to: '/categorias/recipientes', label: 'Recipientes' },
-]
+import { DesktopNav, MobileNav } from '@/components/MainNav'
 
 
 interface EcommerceTemplateProps {
@@ -88,67 +80,13 @@ export const EcommerceTemplate = ({
             : ''
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <BrandLogoLeft />
 
-            {/* Navigation — desktop */}
-            <nav className="hidden md:flex items-center gap-8 font-body text-sm font-medium">
-              {/* Productos — dropdown de categorías */}
-              <div className="relative group">
-                <button
-                  type="button"
-                  className="nav-link flex items-center gap-1 text-foreground/60"
-                >
-                  Productos
-                  <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" />
-                </button>
-                <div className="absolute left-0 top-full pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 focus-within:opacity-100 focus-within:visible transition-all duration-200 z-50">
-                  <div className="min-w-[200px] border border-border bg-background shadow-lg p-2">
-                    {PRODUCT_CATEGORIES.map(({ to, label }) => (
-                      <Link
-                        key={to}
-                        to={to}
-                        className="nav-item block px-3 py-2 text-sm text-foreground/70"
-                      >
-                        {label}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <ScrollLink
-                to="/#como-funciona"
-                className="nav-link text-foreground/60"
-              >
-                Cómo funciona
-              </ScrollLink>
-              <ScrollLink
-                to="/#tonos"
-                className="nav-link text-foreground/60"
-              >
-                Tonos
-              </ScrollLink>
-              <ScrollLink
-                to="/#faq"
-                className="nav-link text-foreground/60"
-              >
-                Preguntas
-              </ScrollLink>
-              <ScrollLink
-                to="/#comprar"
-                className="nav-link text-foreground/60"
-              >
-                Comprar
-              </ScrollLink>
-              <Link
-                to="/orders/track"
-                className="nav-link text-foreground/60"
-              >
-                Rastrear pedido
-              </Link>
-            </nav>
+            {/* Navigation — desktop (mega menú de rutas reales, ver MainNav) */}
+            <DesktopNav />
 
             {/* Actions */}
             <div className="flex items-center gap-1">
@@ -187,47 +125,7 @@ export const EcommerceTemplate = ({
           </div>
 
           {/* Mobile menu */}
-          {mobileMenuOpen && (
-            <nav className="md:hidden pt-4 pb-2 border-t border-border mt-3 flex flex-col gap-3 font-body text-sm font-medium animate-fade-in">
-              <div className="pb-1">
-                <span className="block text-xs uppercase tracking-widest text-foreground/40 mb-2">Productos</span>
-                <div className="flex flex-col gap-2 pl-1">
-                  {PRODUCT_CATEGORIES.map(({ to, label }) => (
-                    <Link
-                      key={to}
-                      to={to}
-                      className="nav-link-mobile text-foreground/70"
-                      onClick={() => setMobileMenuOpen(false)}
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-              {[
-                { to: '/#como-funciona', label: 'Cómo funciona' },
-                { to: '/#tonos', label: 'Elige tu tono' },
-                { to: '/#faq', label: 'Preguntas frecuentes' },
-                { to: '/#comprar', label: 'Comprar ahora' },
-              ].map(({ to, label }) => (
-                <ScrollLink
-                  key={to}
-                  to={to}
-                  className="nav-link-mobile text-foreground/70 py-1"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  {label}
-                </ScrollLink>
-              ))}
-              <Link
-                to="/orders/track"
-                className="nav-link-mobile text-foreground/70 py-1"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Rastrear pedido
-              </Link>
-            </nav>
-          )}
+          {mobileMenuOpen && <MobileNav onNavigate={() => setMobileMenuOpen(false)} />}
 
           {pageTitle && (
             <div className="mt-6">
