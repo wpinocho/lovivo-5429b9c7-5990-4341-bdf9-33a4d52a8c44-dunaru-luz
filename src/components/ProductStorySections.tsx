@@ -100,10 +100,11 @@ const PERLAS_BENEFIT_BLOCKS: StoryBlock[] = [
     flip: true,
   },
   {
-    title: "Se cae y no pasa nada",
-    body: "Al ser perlas de cera, un golpe **no significa cera caliente encima ni manchas imposibles**. Las recoges y sigues. Pensadas para casas con vida, niños y mascotas.",
+    title: "Seguridad por diseño",
+    body: "Al ser gránulos y no un bloque de cera, un golpe **no significa cera caliente encima**. La llama pierde contacto y se apaga sola. Recoges las perlas y sigues.",
     bullets: [
-      "Mucho menos riesgo que una vela común",
+      "La llama se apaga sola si se vuelca",
+      "Pensada para casas con niños y mascotas",
       "Se recogen y se vuelven a usar",
     ],
     image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784141750638-go7315yuax.webp",
@@ -121,12 +122,12 @@ const PERLAS_BENEFIT_BLOCKS: StoryBlock[] = [
     flip: true,
   },
   {
-    title: "El aroma lo eliges tú",
-    body: "Nuestras velas nacen **sin perfume**: luz limpia y sin humo perfumado. ¿La quieres con aroma? Antes de encender, agrega unas gotas de la esencia o aceite que ya tienes en casa. Tú controlas qué tan fuerte y lo cambias cuando quieras.",
+    title: "Seis aromas, una sola vela",
+    body: "Tu vela nace neutra, sin perfume de fábrica. **Tú eliges el aroma**: seis esencias creadas para dunaru, en frascos de 10 ml. Un frasco perfuma 500 g de cera. Cuando quieras otro ambiente, cambias de esencia, no de vela.",
     bullets: [
-      "Sin perfume de fábrica: tú decides el aroma",
-      "Cámbialo cuando quieras, sin comprar otra vela",
-      "Usa esencias aptas para velas y en poca cantidad",
+      "Seis esencias propias, formuladas para Cera Duna",
+      "Un frasco de 10 ml perfuma 500 g de cera",
+      "O déjala neutra: luz limpia, sin humo perfumado",
     ],
     image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-7ucg5c0kwb7.webp",
     photo: true,
@@ -164,7 +165,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Libre de parafina", dunaru: true, traditional: false },
       { label: "Usa el recipiente que tú quieras", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
-      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
       { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
@@ -182,7 +183,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       },
       {
         q: "¿Las velas tienen aroma?",
-        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
+        a: "La cera nace neutra, sin perfume de fábrica. En esta misma página puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Un frasco perfuma 500 g de cera. Si prefieres luz sin olor, también funciona perfecto: cambias de aroma cuando quieras, sin cambiar de vela.",
       },
       {
         q: "¿Cuánto dura?",
@@ -228,7 +229,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
         body: "Sin armar, sin buscar recipiente, sin complicaciones. Tu Kit Vaso de Vidrio llega **completo y listo para usar o regalar**.",
         bullets: [
           "Vaso de vidrio de diseño, resistente al calor",
-          "500 g de perlas de cera perlada",
+          "500 g de Cera Duna vegetal",
           "30 mechas de algodón incluidas",
           "Envío gratis a todo México",
         ],
@@ -253,7 +254,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Vaso reutilizable de diseño", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
-      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
       { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
@@ -344,7 +345,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Llega listo para regalar", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
-      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
       { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
@@ -378,7 +379,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Envío gratis a todo México", dunaru: true, traditional: false },
-      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
       { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
@@ -396,7 +397,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       },
       {
         q: "¿Las velas tienen aroma?",
-        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
+        a: "La cera nace neutra, sin perfume de fábrica. En esta misma página puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Un frasco perfuma 500 g de cera. Si prefieres luz sin olor, también funciona perfecto: cambias de aroma cuando quieras, sin cambiar de vela.",
       },
       {
         q: "¿Tiene costo el envío?",
@@ -412,7 +413,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "Mejor precio que por separado", dunaru: true, traditional: false },
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Envío gratis a todo México", dunaru: true, traditional: false },
-      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
       { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
@@ -426,7 +427,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       },
       {
         q: "¿Las velas tienen aroma?",
-        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
+        a: "La cera nace neutra, sin perfume de fábrica. En esta misma página puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Un frasco perfuma 500 g de cera. Si prefieres luz sin olor, también funciona perfecto: cambias de aroma cuando quieras, sin cambiar de vela.",
       },
       {
         q: "¿Necesito recipiente aparte?",
@@ -446,7 +447,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       { label: "El mejor precio por gramo", dunaru: true, traditional: false },
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Envío gratis a todo México", dunaru: true, traditional: false },
-      { label: "El aroma lo eliges tú", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
       { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
     ],
     faqs: [
@@ -460,7 +461,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
       },
       {
         q: "¿Las velas tienen aroma?",
-        a: "No, y es a propósito. Vienen sin perfume para que tú decidas: agrega unas gotas de tu esencia favorita antes de encender y tendrás el aroma que quieras, con la intensidad que quieras. Si prefieres luz sin olor, también funciona perfecto. Usa siempre esencias aptas para velas y en poca cantidad.",
+        a: "La cera nace neutra, sin perfume de fábrica. En esta misma página puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Un frasco perfuma 500 g de cera. Si prefieres luz sin olor, también funciona perfecto: cambias de aroma cuando quieras, sin cambiar de vela.",
       },
       {
         q: "¿Necesito recipiente aparte?",

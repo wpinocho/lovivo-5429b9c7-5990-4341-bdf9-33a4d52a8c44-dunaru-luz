@@ -24,7 +24,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   },
   {
     id: "recargas",
-    label: "Cera perlada",
+    label: "Cera Duna",
     slugs: ["perlas-originales-500-g", "reserva-1-kg"],
   },
   {

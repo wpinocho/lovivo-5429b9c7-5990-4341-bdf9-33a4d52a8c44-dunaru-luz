@@ -92,7 +92,7 @@ const PDP_HEADLINE: Record<string, string> = {
   "perlas-originales-500-g":
     "Convierte cualquier recipiente que ya tienes en una vela. Hasta 120 horas de luz.",
   "reserva-1-kg":
-    "Un kilo de cera perlada: hasta 240 horas de luz para rellenar todas tus velas.",
+    "Un kilo de Cera Duna: hasta 240 horas de luz para rellenar todas tus velas.",
   "d-o-de-tonos":
     "Dos tonos para combinar. Un kilo de cera para crear las velas que quieras.",
   "tr-o-de-tonos":
@@ -105,22 +105,22 @@ const PDP_HEADLINE: Record<string, string> = {
  */
 const PDP_BENEFITS: Record<string, string[]> = {
   "kit-vaso-de-vidrio": [
-    "Incluye: vaso de vidrio + 500 g de cera perlada + 30 mechas de algodón",
+    "Incluye: vaso de vidrio + 500 g de Cera Duna + 30 mechas de algodón",
     "Cuando se acaba la rellenas, no la tiras: el mismo vaso te dura años",
     "Hasta 120 horas de luz cálida con los 500 g que vienen incluidos",
   ],
   "kit-vaso-de-concreto": [
-    "Incluye: bowl de cerámica + 500 g de cera perlada + 30 mechas de algodón",
+    "Incluye: bowl de cerámica + 500 g de Cera Duna + 30 mechas de algodón",
     "Bowl de cerámica negra mate hecho a mano: se ve bien encendido y apagado",
     "Se rellena infinitas veces: compras una vez y sigue dando luz",
   ],
   "perlas-originales-500-g": [
     "Convierte el vaso o bowl que ya tienes en una vela de diseño",
-    "Hasta 120 horas de luz por bolsa, con 30 mechas incluidas",
+    "Hasta 120 horas de luz por bolsa: cada 100 g dan cerca de 24 horas",
     "Sin cera pegada: se vacía, se limpia y empieza de cero",
   ],
   "reserva-1-kg": [
-    "1 kg de cera: hasta 240 horas de luz, el mejor precio por gramo",
+    "1 kg de Cera Duna: hasta 240 horas de luz, el mejor precio por gramo",
     "Rinde para varias velas encendidas al mismo tiempo",
     "60 mechas incluidas: rellenas cuando quieras, sin comprar nada más",
   ],

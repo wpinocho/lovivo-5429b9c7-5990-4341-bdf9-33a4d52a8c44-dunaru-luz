@@ -186,7 +186,10 @@ export const ProductScentSelector = ({
       </div>
 
       <p className="text-xs text-muted-foreground leading-snug -mt-1">
-        Nuestra cera nace sin perfume. El aroma lo eliges tú.
+        La Cera Duna nace neutra, sin perfume de fábrica.{" "}
+        <span className="text-foreground/70">
+          Un frasco de 10 ml perfuma 500 g de cera.
+        </span>
       </p>
 
       {/* Opciones */}
@@ -212,7 +215,7 @@ export const ProductScentSelector = ({
               selectedId === NONE ? "text-dunaru-marfil/75" : "text-muted-foreground"
             )}
           >
-            Solo cera perlada, sin perfume
+            Luz limpia, sin perfume
           </span>
           <span
             className={cn(
@@ -310,14 +313,30 @@ export const ProductScentSelector = ({
                   </p>
                 </div>
 
-                <p className="text-sm text-foreground/85 leading-relaxed">
-                  {selectedScent.description}
-                </p>
+                {selectedScent.story && (
+                  <p className="font-display text-[15px] leading-snug text-foreground/90">
+                    {selectedScent.story}
+                  </p>
+                )}
 
-                <p className="text-sm text-foreground/85 leading-relaxed">
-                  <span className="font-medium">Elígelo si buscas:</span>{" "}
-                  {selectedScent.recommendedFor}
-                </p>
+                {selectedScent.pyramid && (
+                  <dl className="space-y-1">
+                    {(
+                      [
+                        ["Salida", selectedScent.pyramid.salida],
+                        ["Corazón", selectedScent.pyramid.corazon],
+                        ["Fondo", selectedScent.pyramid.fondo],
+                      ] as const
+                    ).map(([label, value]) => (
+                      <div key={label} className="flex gap-2 text-[11px] leading-snug">
+                        <dt className="w-14 shrink-0 uppercase tracking-[0.14em] text-dunaru-terracota">
+                          {label}
+                        </dt>
+                        <dd className="text-foreground/80">{value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
 
                 <p className="text-[11px] leading-snug text-foreground/60">
                   <span className="uppercase tracking-[0.16em] text-dunaru-terracota">

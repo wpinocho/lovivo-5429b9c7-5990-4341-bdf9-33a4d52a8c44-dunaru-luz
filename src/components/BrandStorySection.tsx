@@ -10,7 +10,7 @@ import { Reveal } from '@/components/Reveal';
  */
 
 const PILLARS = [
-  { title: 'Cera vegetal', desc: 'Gránulos de origen vegetal, sin parafina.' },
+  { title: 'Cera Duna vegetal', desc: 'Gránulos de origen vegetal, sin parafina.' },
   { title: 'Hecho en México', desc: 'Preparamos y empacamos cada pedido en la CDMX.' },
   { title: 'Garantía de 30 días', desc: 'Si llega roto o no te enamora, lo resolvemos.' },
 ];
@@ -18,7 +18,7 @@ const PILLARS = [
 const BLOCKS = [
   {
     kicker: 'La materia',
-    text: 'Nuestra cera no viene en bloque ni en molde. Son gránulos finos, casi como arena, que se acomodan solos a la forma de lo que ya tienes en casa. Sin derretir, sin temperatura, sin instrumentos.',
+    text: 'Le llamamos Cera Duna: gránulos vegetales finos, casi como arena, que se acomodan solos a la forma de lo que ya tienes en casa. Sin bloque, sin molde, sin derretir, sin temperatura.',
   },
   {
     kicker: 'El oficio',
@@ -39,7 +39,7 @@ export const BrandStorySection = () => {
           <div className="aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[38rem]">
             <img
               src="/paso-vierte.webp"
-              alt="Gránulos de cera perlada dunaru vertidos a mano en un recipiente de vidrio"
+              alt="Gránulos de Cera Duna dunaru vertidos a mano en un recipiente de vidrio"
               loading="lazy"
               className="w-full h-full object-cover"
             />

@@ -9,6 +9,7 @@ import { BrandStorySection } from '@/components/BrandStorySection';
 import { RitualSection } from '@/components/RitualSection';
 import { Reveal } from '@/components/Reveal';
 import { Reviews } from '@/components/Reviews';
+import { ScentsSection } from '@/components/ScentsSection';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { formatMoney } from '@/lib/money';
@@ -84,7 +85,9 @@ const SHOP_CARDS: { slug: string; tag: string; badge?: string }[] = [
   { slug: 'reserva-1-kg', tag: 'Rinde el doble' },
 ];
 
-const BENEFITS = ['120 h de luz', '30 mechas', 'Cualquier recipiente', 'Rellenable'];
+// Credenciales de marca, no specs. Las specs (120 h, 30 mechas, cualquier
+// recipiente) ya viven en PDP_BENEFITS y en las tarjetas de producto.
+const BENEFITS = ['Cera vegetal, sin parafina', 'Rellenable para siempre', 'Hecha en México', 'Envío gratis + 30 días'];
 
 const STEPS = [
   {
@@ -137,7 +140,9 @@ const TONOS = [
 ];
 
 const FAQ_ITEMS = [
-  { q: '¿Qué incluye cada bolsa?', a: '500 g de perlas de cera perlada + 30 mechas de algodón. Los kits incluyen además el recipiente (vaso de vidrio o bowl de cerámica).' },
+  { q: '¿Qué incluye cada bolsa?', a: '500 g de Cera Duna vegetal + 30 mechas de algodón. Los kits incluyen además el recipiente (vaso de vidrio o bowl de cerámica).' },
+  { q: '¿Las velas tienen aroma?', a: 'La cera nace neutra, sin perfume de fábrica. Al comprar puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Un frasco perfuma 500 g de cera. Si prefieres luz sin olor, también funciona perfecto: cambias de aroma cuando quieras, sin cambiar de vela.' },
+  { q: '¿Qué es la Cera Duna?', a: 'Es nuestra cera vegetal en gránulos finos, libre de parafina. No se derrite en bloque: rodea la mecha, da luz limpia y después se vuelve a usar. Por eso la vela se rellena en vez de tirarse.' },
   { q: '¿Qué recipiente puedo usar?', a: 'Cualquier recipiente resistente al calor de mínimo 10 cm de diámetro y 5 cm de alto. Vasos, bowls, copas o jarras: lo que ya tienes en casa.' },
   { q: '¿Cuántas mechas incluye?', a: '30 mechas por bolsa de 500 g. Los bundles Dúo y Trío incluyen 60 mechas.' },
   { q: '¿Cuánto dura una bolsa?', a: 'Aproximadamente 120 horas de luz por bolsa de 500 g, dependiendo del tamaño de tu recipiente.' },
@@ -205,13 +210,13 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 md:pt-28 md:pb-20">
           <div className="max-w-xl">
             <p className="eyebrow eyebrow-light mb-6 sm:mb-7 animate-fade-up">
-              Velas perladas rellenables
+              Cera vegetal rellenable · Hecha en México
             </p>
             <h1 className="lockup text-4xl sm:text-5xl md:text-6xl leading-[1.12] text-dunaru-marfil mb-7 sm:mb-8 animate-fade-up delay-100">
               CREA LUZ <em className="text-dunaru-ambar">en el</em> RECIPIENTE QUE YA AMAS
             </h1>
             <p className="font-body text-base sm:text-lg text-dunaru-marfil/70 mb-10 sm:mb-12 leading-relaxed animate-fade-up delay-200 max-w-md">
-              Sin derretir, sin riesgo, sin comprar una vela nueva. Solo vierte las perlas, inserta una mecha y enciende.
+              Cera Duna vegetal en gránulos finos. Viertes, insertas una mecha y enciendes. El aroma lo eliges tú.
             </p>
 
             {/* CTAs */}
@@ -284,7 +289,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               ELIGE <em>tu</em> VELA
             </h2>
             <p className="font-body text-sm text-foreground/55 max-w-sm mx-auto mt-4">
-              Envío gratis a todo México, sin mínimo. Hasta 6 meses sin intereses.
+              Envío gratis a todo México, sin mínimo. Hasta 6 meses sin intereses. 30 días de garantía.
             </p>
           </Reveal>
 
@@ -342,6 +347,9 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       <RitualSection />
 
       <Reviews />
+
+      {/* ── AROMAS ────────────────────────────────────────────── */}
+      <ScentsSection />
 
       {/* Elige tu tono (carrusel) */}
       <section id="tonos" className="section-pad-sm bg-background texture-grain">
