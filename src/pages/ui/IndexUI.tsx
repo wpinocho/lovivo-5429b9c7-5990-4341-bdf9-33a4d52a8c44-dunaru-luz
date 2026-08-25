@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowRight, ChevronDown, MessageCircle } from 'lucide-react';
 import { FloatingCart } from '@/components/FloatingCart';
 import { ProductStepsCarousel } from '@/components/ProductStepsCarousel';
+import { CompareTable } from '@/components/CompareTable';
 import { DunaruNewsletterForm } from '@/components/DunaruNewsletterForm';
 import { CasaRealSection } from '@/components/CasaRealSection';
 import { BrandStorySection } from '@/components/BrandStorySection';
@@ -87,7 +88,7 @@ const SHOP_CARDS: { slug: string; tag: string; badge?: string }[] = [
 
 // Credenciales de marca, no specs. Las specs (120 h, 30 mechas, cualquier
 // recipiente) ya viven en PDP_BENEFITS y en las tarjetas de producto.
-const BENEFITS = ['Cera vegetal, sin parafina', 'Rellenable para siempre', 'Hecha en México', 'Envío gratis + 30 días'];
+const BENEFITS = ['100% vegetal y biodegradable', 'Rellenable para siempre', 'Hecha en México', 'Envío gratis + 30 días'];
 
 const STEPS = [
   {
@@ -140,9 +141,9 @@ const TONOS = [
 ];
 
 const FAQ_ITEMS = [
-  { q: '¿Qué incluye cada bolsa?', a: '500 g de Cera Duna vegetal + 30 mechas de algodón. Los kits incluyen además el recipiente (vaso de vidrio o bowl de cerámica).' },
+  { q: '¿Qué incluye cada bolsa?', a: '500 g de Cera Duna 100% vegetal + 30 mechas de algodón. Los kits incluyen además el recipiente (vaso de vidrio o bowl de cerámica).' },
   { q: '¿Las velas tienen aroma?', a: 'La cera nace neutra, sin perfume de fábrica. Al comprar puedes agregar una de nuestras seis esencias de 10 ml y elegir el aroma de tu casa: unas gotas antes de encender y listo. Un frasco perfuma 500 g de cera. Si prefieres luz sin olor, también funciona perfecto: cambias de aroma cuando quieras, sin cambiar de vela.' },
-  { q: '¿Qué es la Cera Duna?', a: 'Es nuestra cera vegetal en gránulos finos, libre de parafina. No se derrite en bloque: rodea la mecha, da luz limpia y después se vuelve a usar. Por eso la vela se rellena en vez de tirarse.' },
+  { q: '¿Qué es la Cera Duna?', a: 'Es nuestra cera 100% vegetal y biodegradable, en gránulos finos y libre de parafina. No se derrite en bloque: rodea la mecha, da luz limpia y después se vuelve a usar. Por eso la vela se rellena en vez de tirarse: menos basura y menos gasto.' },
   { q: '¿Qué recipiente puedo usar?', a: 'Cualquier recipiente resistente al calor de mínimo 10 cm de diámetro y 5 cm de alto. Vasos, bowls, copas o jarras: lo que ya tienes en casa.' },
   { q: '¿Cuántas mechas incluye?', a: '30 mechas por bolsa de 500 g. Los bundles Dúo y Trío incluyen 60 mechas.' },
   { q: '¿Cuánto dura una bolsa?', a: 'Aproximadamente 120 horas de luz por bolsa de 500 g, dependiendo del tamaño de tu recipiente.' },
@@ -279,6 +280,24 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           </Link>
         }
       />
+
+      {/* ── DUNARU VS VELA NORMAL ─────────────────────────────────────────── */}
+      <section className="section-pad-sm bg-dunaru-marfil texture-grain border-t border-foreground/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Reveal className="text-center mb-10 sm:mb-12">
+            <p className="eyebrow mb-4">La diferencia</p>
+            <h2 className="lockup text-3xl sm:text-4xl text-foreground">
+              DUNARU <em>vs</em> VELA NORMAL
+            </h2>
+            <p className="font-body text-sm text-foreground/55 max-w-md mx-auto mt-4">
+              Una vela normal se consume y se tira. La nuestra se rellena, cambia de aroma y se queda en tu casa.
+            </p>
+          </Reveal>
+          <Reveal delay={90}>
+            <CompareTable />
+          </Reveal>
+        </div>
+      </section>
 
       {/* ── INTENCIÓN DE COMPRA ───────────────────────────────────────────── */}
       <section id="comprar" className="section-pad-sm bg-dunaru-arena texture-arena">

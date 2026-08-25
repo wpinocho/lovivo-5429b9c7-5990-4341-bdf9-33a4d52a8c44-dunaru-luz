@@ -10,7 +10,7 @@ import { Reveal } from '@/components/Reveal';
  */
 
 const PILLARS = [
-  { title: 'Cera Duna vegetal', desc: 'Gránulos de origen vegetal, sin parafina.' },
+  { title: 'Cera Duna vegetal', desc: '100% vegetal y biodegradable, sin parafina.' },
   { title: 'Hecho en México', desc: 'Preparamos y empacamos cada pedido en la CDMX.' },
   { title: 'Garantía de 30 días', desc: 'Si llega roto o no te enamora, lo resolvemos.' },
 ];

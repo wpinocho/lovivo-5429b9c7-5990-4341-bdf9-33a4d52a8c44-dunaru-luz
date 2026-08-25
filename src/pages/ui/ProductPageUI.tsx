@@ -23,6 +23,7 @@ import {
 import { Link, useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { createCheckoutFromCart } from "@/lib/checkout"
+import { getIncludes } from "@/lib/pdp-includes"
 import { useCheckoutState } from "@/hooks/useCheckoutState"
 import { STORE_ID } from "@/lib/config"
 import { useToast } from "@/hooks/use-toast"
@@ -433,6 +434,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     ? PDP_HEADLINE[logic.product.slug]
     : undefined
   const benefits = (logic.product?.slug && PDP_BENEFITS[logic.product.slug]) || []
+  /** "Qué incluye": componente + beneficio, driven por slug. */
+  const productIncludes = getIncludes(logic.product?.slug)
 
   // Rating compacto reutilizable (móvil arriba del fold)
   const InlineRating =
@@ -1064,10 +1067,38 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               collapsible
               className="border-t border-border/60"
             >
+              {productIncludes && (
+                <AccordionItem value="includes">
+                  <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
+                    Qué incluye
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <ul className="space-y-3.5">
+                      {productIncludes.map((inc, i) => (
+                        <li key={i} className="flex items-start gap-3">
+                          <Check
+                            className="mt-0.5 h-4 w-4 shrink-0 text-dunaru-terracota"
+                            strokeWidth={2.5}
+                          />
+                          <div className="min-w-0">
+                            <p className="text-sm font-medium leading-snug text-foreground">
+                              {inc.item}
+                            </p>
+                            <p className="mt-0.5 text-sm leading-snug text-muted-foreground">
+                              {inc.benefit}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </AccordionContent>
+                </AccordionItem>
+              )}
+
               {logic.product.description && (
                 <AccordionItem value="description">
                   <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
-                    Descripción
+                    La pieza
                   </AccordionTrigger>
                   <AccordionContent>
                     <div
@@ -1080,14 +1111,35 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </AccordionItem>
               )}
 
-              <AccordionItem value="shipping">
+              <AccordionItem value="care">
                 <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
-                  Envío y devoluciones
+                  Cuidado y seguridad
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground space-y-2">
                   <p>
-                    Envío a todo el país. Tiempo estimado de entrega: 2 a 5
-                    días hábiles.
+                    Deja que la mecha queme entre 2 y 3 horas por sesión y
+                    apágala. Nunca dejes una vela encendida sin supervisión.
+                  </p>
+                  <p>
+                    Al ser cera en gránulos, si se mueve el recipiente no hay
+                    derrame de cera caliente como en una vela tradicional: la
+                    llama se apaga sola.
+                  </p>
+                  <p>
+                    Cuando se consuma, deja enfriar, vacía el recipiente,
+                    lávalo con agua tibia y vuelve a llenarlo.
+                  </p>
+                </AccordionContent>
+              </AccordionItem>
+
+              <AccordionItem value="shipping">
+                <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
+                  Envío y garantía
+                </AccordionTrigger>
+                <AccordionContent className="text-sm text-muted-foreground space-y-2">
+                  <p>
+                    Envío gratis a todo México, sin mínimo de compra. Tiempo
+                    estimado de entrega: 2 a 5 días hábiles.
                   </p>
                   <p>
                     Cuentas con 30 días para solicitar tu devolución sin

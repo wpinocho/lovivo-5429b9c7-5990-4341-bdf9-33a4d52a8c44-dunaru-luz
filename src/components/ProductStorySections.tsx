@@ -4,7 +4,6 @@ import {
   RefreshCw,
   Sparkles,
   Check,
-  X,
 } from "lucide-react"
 import {
   Accordion,
@@ -15,6 +14,7 @@ import {
 import { cn } from "@/lib/utils"
 import { Reviews } from "@/components/Reviews"
 import { ProductStepsCarousel } from "@/components/ProductStepsCarousel"
+import { CompareTable, type CompareRow } from "@/components/CompareTable"
 
 /**
  * ProductStorySections — Secciones editoriales full-width de la PDP.
@@ -37,13 +37,6 @@ interface StoryBlock {
   flip?: boolean
   /** true = foto lifestyle real (object-cover, sin opacidad); false/undefined = placeholder */
   photo?: boolean
-}
-
-interface CompareRow {
-  label: string
-  /** boolean = palomita/tache · string = valor comparativo (ej. "$" vs "$$$") */
-  dunaru: boolean | string
-  traditional: boolean | string
 }
 
 interface FaqItem {
@@ -162,7 +155,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     compareRows: [
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
       { label: "Sin desperdicio ni cera pegada", dunaru: true, traditional: false },
-      { label: "Libre de parafina", dunaru: true, traditional: false },
+      { label: "Cera 100% vegetal y biodegradable", dunaru: true, traditional: false },
       { label: "Usa el recipiente que tú quieras", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
       { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
@@ -251,6 +244,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     compareRows: [
       { label: "Llega listo para encender", dunaru: true, traditional: false },
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+      { label: "Cera 100% vegetal y biodegradable", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Vaso reutilizable de diseño", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
@@ -342,6 +336,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     compareRows: [
       { label: "Objeto de diseño reutilizable", dunaru: true, traditional: false },
       { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+      { label: "Cera 100% vegetal y biodegradable", dunaru: true, traditional: false },
       { label: "Llega listo para regalar", dunaru: true, traditional: false },
       { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
       { label: "Hasta 120 horas de luz", dunaru: true, traditional: false },
@@ -740,66 +735,12 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
         ))}
       </section>
 
-      {/* 5 — Tabla comparativa */}
+      {/* 5 — Tabla comparativa (componente compartido con la home) */}
       <section className="max-w-3xl mx-auto">
         <h2 className="font-display text-3xl md:text-4xl text-center mb-10">
           Esto hace diferente a dunaru
         </h2>
-        <div className="rounded-xl border border-border/60 overflow-hidden">
-          <div className="grid grid-cols-[1fr_auto_auto] items-center bg-dunaru-arena">
-            <span className="px-4 py-4 text-sm font-medium text-muted-foreground" />
-            <span className="px-4 py-4 text-center font-display text-lg w-24">
-              dunaru
-            </span>
-            <span className="px-4 py-4 text-center text-xs text-muted-foreground leading-tight w-24">
-              Vela
-              <br />
-              tradicional
-            </span>
-          </div>
-          {content.compareRows.map((row, i) => (
-            <div
-              key={i}
-              className={cn(
-                "grid grid-cols-[1fr_auto_auto] items-center border-t border-border/60",
-                i % 2 === 1 && "bg-muted/30"
-              )}
-            >
-              <span className="px-4 py-4 text-sm text-foreground/90">
-                {row.label}
-              </span>
-              <span className="px-4 py-4 flex justify-center w-24">
-                {typeof row.dunaru === "string" ? (
-                  <span className="font-display text-lg leading-none text-dunaru-champagne">
-                    {row.dunaru}
-                  </span>
-                ) : row.dunaru ? (
-                  <Check className="h-5 w-5 text-dunaru-champagne" strokeWidth={2.5} />
-                ) : (
-                  <X className="h-5 w-5 text-muted-foreground/40" />
-                )}
-              </span>
-              <span className="px-4 py-4 flex justify-center w-24">
-                {typeof row.traditional === "string" ? (
-                  <span className="font-display text-lg leading-none text-muted-foreground/70">
-                    {row.traditional}
-                  </span>
-                ) : row.traditional ? (
-                  <Check className="h-5 w-5 text-muted-foreground/60" strokeWidth={2.5} />
-                ) : (
-                  <X className="h-5 w-5 text-muted-foreground/40" />
-                )}
-              </span>
-            </div>
-          ))}
-        </div>
-        {content.compareRows.some((r) => typeof r.dunaru === "string") && (
-          <p className="mt-4 px-2 text-xs text-muted-foreground leading-relaxed text-center">
-            Una bolsa de 500 g rinde hasta 120 horas de luz. Como rellenas el
-            mismo recipiente en vez de comprar una vela nueva cada vez, cada hora
-            de luz te sale mucho más barata.
-          </p>
-        )}
+        <CompareTable rows={content.compareRows} />
       </section>
 
       {/* 6 — FAQ */}
