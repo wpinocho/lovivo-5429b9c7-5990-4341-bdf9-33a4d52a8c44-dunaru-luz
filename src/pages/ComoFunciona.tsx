@@ -11,33 +11,32 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion'
 
-const MEDIA =
-  'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/'
+import { STEP_IMAGES } from '@/lib/steps-media'
 
 const STEPS = [
   {
     n: '01',
     title: 'Vierte',
     body: 'Llena tu recipiente con Cera Duna. Son gránulos vegetales finos, como arena. No se derrite nada, no se calienta nada.',
-    img: '/paso-vierte.webp',
+    img: STEP_IMAGES.vierte,
   },
   {
     n: '02',
     title: 'Inserta',
     body: 'Clava una mecha de algodón en el centro. Puedes poner una, dos o tres: tú decides qué tan viva quieres la llama.',
-    img: `${MEDIA}1785521743155-htw95tvbi4b.webp`,
+    img: STEP_IMAGES.inserta,
   },
   {
     n: '03',
     title: 'Enciende',
     body: 'La cera se consume solo alrededor de la mecha. El resto queda intacto, listo para la próxima vez.',
-    img: `${MEDIA}1785521743156-3qeskqe43gv.webp`,
+    img: STEP_IMAGES.enciende,
   },
   {
     n: '04',
     title: 'Renueva',
     body: 'Cuando se acaba, rellenas y sigues. El mismo recipiente te dura años, cambies de tono o de aroma cuando quieras.',
-    img: '/paso-renueva.webp',
+    img: STEP_IMAGES.renueva,
   },
 ]
 

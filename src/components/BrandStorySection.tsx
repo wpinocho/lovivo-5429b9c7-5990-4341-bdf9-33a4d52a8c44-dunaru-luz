@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Reveal } from '@/components/Reveal';
+import { BRAND_STORY_IMAGE } from '@/lib/steps-media';
 
 /**
  * BrandStorySection — historia de materia y oficio.
@@ -38,7 +39,7 @@ export const BrandStorySection = () => {
         <div className="lg:col-span-7 relative overflow-hidden bg-dunaru-tabaco">
           <div className="aspect-[4/3] lg:aspect-auto lg:h-full lg:min-h-[38rem]">
             <img
-              src="/paso-vierte.webp"
+              src={BRAND_STORY_IMAGE}
               alt="Gránulos de Cera Duna dunaru vertidos a mano en un recipiente de vidrio"
               loading="lazy"
               className="w-full h-full object-cover"

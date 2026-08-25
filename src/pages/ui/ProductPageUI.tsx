@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -20,7 +20,7 @@ import {
   CreditCard,
   Lock,
 } from "lucide-react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { cn } from "@/lib/utils"
 import { createCheckoutFromCart } from "@/lib/checkout"
 import { getIncludes } from "@/lib/pdp-includes"
@@ -349,6 +349,37 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   useEffect(() => {
     setSelectedImage(null)
   }, [logic.matchingVariant])
+
+  /**
+   * Preselección de variante desde la URL: /productos/slug?variante=Marfil
+   * La usa la sección "Elige tu tono" de la home para que el cliente aterrice
+   * en la PDP con el tono que tocó ya elegido, sin un clic extra.
+   */
+  const { search } = useLocation()
+  const appliedVariantRef = useRef<string | null>(null)
+
+  useEffect(() => {
+    const wanted = new URLSearchParams(search).get("variante")
+    if (!wanted) return
+    const options = logic.product?.options
+    if (!Array.isArray(options) || options.length === 0) return
+
+    const key = `${logic.product?.id}:${wanted}`
+    if (appliedVariantRef.current === key) return
+
+    const target = wanted.trim().toLowerCase()
+    for (const opt of options) {
+      const value = (opt.values || []).find(
+        (v: string) => String(v).trim().toLowerCase() === target
+      )
+      if (!value) continue
+      appliedVariantRef.current = key
+      if (logic.selected?.[opt.name] !== value) {
+        logic.handleOptionSelect(opt.name, value)
+      }
+      break
+    }
+  }, [search, logic.product?.id])
 
   useEffect(() => {
     window.scrollTo(0, 0)

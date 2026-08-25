@@ -14,6 +14,7 @@ import { ScentsSection } from '@/components/ScentsSection';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { formatMoney } from '@/lib/money';
+import { STEP_IMAGES } from '@/lib/steps-media';
 import { useMemo, useState } from 'react';
 
 interface IndexUIProps {
@@ -94,25 +95,27 @@ const STEPS = [
   {
     title: 'Vierte',
     text: 'Llena tu recipiente favorito con las perlas. Cualquier vaso, bowl o copa de mínimo 10 cm.',
-    image: '/paso-vierte.webp',
+    image: STEP_IMAGES.vierte,
   },
   {
     title: 'Inserta',
     text: 'Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.',
-    image: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743155-htw95tvbi4b.webp',
+    image: STEP_IMAGES.inserta,
   },
   {
     title: 'Enciende',
     text: 'Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.',
-    image: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-3qeskqe43gv.webp',
+    image: STEP_IMAGES.enciende,
   },
   {
     title: 'Renueva',
     text: 'Cuando la mecha se consume, agrega una nueva. Las perlas se reutilizan. Tu recipiente también.',
-    image: '/paso-renueva.webp',
+    image: STEP_IMAGES.renueva,
   },
 ];
 
+// Cada tono lleva a la PDP de Cera Duna · 500 g con SU variante ya seleccionada
+// (?variante=). Las fotos son la imagen 1 de cada variante en la base de datos.
 const TONOS = [
   {
     name: 'Marfil',
@@ -120,7 +123,7 @@ const TONOS = [
     slug: 'perlas-originales-500-g',
     mood: 'Luz de mañana. Mesa despejada. Inicio de día.',
     scene: 'Mesa de madera clara con vaso de vidrio y perlas blancas encendidas, luz solar matutina, plantas verdes de fondo',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/x3azemqdof.webp',
+    img: `${IMG}m4gndhjxsj.webp`,
   },
   {
     name: 'Champagne',
@@ -128,7 +131,7 @@ const TONOS = [
     slug: 'perlas-originales-500-g',
     mood: 'Cena entre amigos. Mesa de madera y vino.',
     scene: 'Mesa de cena con mantel de lino, vela champagne encendida, copas de vino, luz cálida de tarde',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/ndawzidqt2a.webp',
+    img: `${IMG}siffm8eo71e.webp`,
   },
   {
     name: 'Ónix',
@@ -136,7 +139,7 @@ const TONOS = [
     slug: 'perlas-originales-500-g',
     mood: 'Noche en terraza. Contraste y presencia.',
     scene: 'Bowl de concreto con perlas ónix negras encendidas en terraza nocturna con luces de ciudad de fondo',
-    img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/57db85v1ixx.webp',
+    img: `${IMG}smwszrq34a.webp`,
   },
 ];
 
@@ -364,7 +367,11 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
 
           <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-3 md:gap-6 md:overflow-visible md:mx-0 md:px-0 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {TONOS.map((tono) => (
-              <Link key={tono.name} to={`/productos/${tono.slug}`} className="group block shrink-0 w-[70%] sm:w-[45%] md:w-auto snap-start">
+              <Link
+                key={tono.name}
+                to={`/productos/${tono.slug}?variante=${encodeURIComponent(tono.name)}`}
+                className="group block shrink-0 w-[70%] sm:w-[45%] md:w-auto snap-start"
+              >
                 <div className="relative overflow-hidden">
                   <div className="aspect-[3/4] overflow-hidden bg-dunaru-tabaco">
                     <img

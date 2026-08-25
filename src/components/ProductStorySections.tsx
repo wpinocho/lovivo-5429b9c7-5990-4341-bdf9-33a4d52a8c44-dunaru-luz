@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils"
 import { Reviews } from "@/components/Reviews"
 import { ProductStepsCarousel } from "@/components/ProductStepsCarousel"
 import { CompareTable, type CompareRow } from "@/components/CompareTable"
+import { STEP_IMAGES } from "@/lib/steps-media"
 
 /**
  * ProductStorySections — Secciones editoriales full-width de la PDP.
@@ -536,7 +537,7 @@ const PDP_CONTENT: Record<string, PdpContent> = {
           "Menos desperdicio, más ahorro",
           "Siempre lista para renovar",
         ],
-        image: "/paso-renueva.webp",
+        image: STEP_IMAGES.renueva,
         photo: true,
         flip: true,
       },
@@ -619,22 +620,22 @@ const HOW_IT_WORKS_STEPS: StoryStep[] = [
   {
     title: "Vierte",
     text: "Llena tu recipiente favorito con las perlas. Cualquier vaso, bowl o copa de mínimo 10 cm de diámetro.",
-    image: "/paso-vierte.webp",
+    image: STEP_IMAGES.vierte,
   },
   {
     title: "Inserta",
     text: "Coloca una mecha de algodón en el centro. Sin instrumentos, sin temperatura, sin riesgo.",
-    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743155-htw95tvbi4b.webp",
+    image: STEP_IMAGES.inserta,
   },
   {
     title: "Enciende",
     text: "Prende la mecha. Tu vela ya está lista. Hasta 120 horas de luz con una bolsa de 500 g.",
-    image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1785521743156-3qeskqe43gv.webp",
+    image: STEP_IMAGES.enciende,
   },
   {
     title: "Renueva",
     text: "Cuando la mecha se consume, agrega una nueva. Las perlas se reutilizan. Tu recipiente también.",
-    image: "/paso-renueva.webp",
+    image: STEP_IMAGES.renueva,
   },
 ]
 
