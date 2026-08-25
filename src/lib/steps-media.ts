@@ -23,5 +23,9 @@ export const BRAND_STORY_IMAGE = STEP_IMAGES.vierte
 /** Fondo atmosférico a sangre del bloque "El ritual". */
 export const RITUAL_IMAGE = `${MEDIA}1787701006060-vpgjgog2juh.webp`
 
-/** Composición horizontal del hero de la home (desktop). */
-export const HERO_DESKTOP_IMAGE = `${MEDIA}1787701006060-xuyehajl1yr.webp`
+/**
+ * Composición horizontal del hero de la home.
+ * Se usa en desktop (object-center) y también en móvil recortada a la derecha
+ * (object-right), donde queda el bowl y la mano vertiendo la cera.
+ */
+export const HERO_DESKTOP_IMAGE = `${MEDIA}1787702019949-nscqjcvsz0r.webp`

@@ -188,11 +188,11 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       <section className="relative min-h-screen flex items-center overflow-hidden bg-dunaru-tabaco">
         {/* Background image */}
         <div className="absolute inset-0">
-          {/* Mobile: dedicated vertical composition (product visible, text space on top) */}
+          {/* Mobile: misma foto horizontal, recortada a la derecha para conservar el bowl */}
           <img
-            src="/hero-dunaru-mobile.webp"
-            alt="Vela perlada dunaru encendida junto a la bolsa de perladas en un interior cálido"
-            className="w-full h-full object-cover object-top md:hidden"
+            src={HERO_DESKTOP_IMAGE}
+            alt="Cera Duna vertiéndose en un bowl de cerámica sobre travertino, luz cálida de tarde"
+            className="w-full h-full object-cover object-right md:hidden"
             fetchPriority="high"
           />
           {/* Desktop: horizontal composition */}
