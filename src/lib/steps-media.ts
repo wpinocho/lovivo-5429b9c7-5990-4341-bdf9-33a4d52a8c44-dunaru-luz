@@ -29,3 +29,16 @@ export const RITUAL_IMAGE = `${MEDIA}1787701006060-vpgjgog2juh.webp`
  * (object-right), donde queda el bowl y la mano vertiendo la cera.
  */
 export const HERO_DESKTOP_IMAGE = `${MEDIA}1787702019949-nscqjcvsz0r.webp`
+
+/**
+ * HERO MÓVIL — video vertical 9:16.
+ * MP4 H.264 720×1280, sin pista de audio, ~1.8 MB. Se reproduce solo en móvil.
+ * El póster es el primer frame exacto del video, así el fundido es invisible.
+ * ⛔ No sustituir el póster por la foto horizontal: provocaría un salto visual.
+ */
+const STORE_MEDIA =
+  "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/"
+
+export const HERO_MOBILE_VIDEO = `${STORE_MEDIA}store-videos/5429b9c7-5990-4341-bdf9-33a4d52a8c44/hero-dunaru-mobile.mp4`
+
+export const HERO_MOBILE_POSTER = `${STORE_MEDIA}product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/hero-dunaru-mobile-poster.webp`

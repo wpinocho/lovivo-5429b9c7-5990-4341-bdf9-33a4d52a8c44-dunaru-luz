@@ -79,10 +79,17 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - ⚙️ El panel del mega menú es `absolute top-full left-0 right-0` y depende de que el wrapper `.max-w-7xl` del header tenga `relative`. **No quitar ese `relative`.**
 
 ### 🖼️ IMÁGENES EDITORIALES — FUENTE ÚNICA (`src/lib/steps-media.ts`)
-- Exporta: `STEP_IMAGES` (`vierte`, `inserta`, `enciende`, `renueva`), `BRAND_STORY_IMAGE` (= `vierte`), **`RITUAL_IMAGE`** y **`HERO_DESKTOP_IMAGE`**.
-- La consumen: `IndexUI` (STEPS + hero **desktop Y móvil**), `ProductStorySections`, `ComoFunciona`, `BrandStorySection`, `RitualSection`.
-- ⛔ **Nunca hardcodear URLs de pasos, hero ni ritual.** Se cambia solo en `steps-media.ts`.
-- 🖼️ **HERO ÚNICO (desde 2026-08-25)**: la misma foto horizontal se usa en ambos breakpoints. Desktop `object-center`, **móvil `object-right`** (conserva el bowl y la mano). Los `.webp` `/hero-dunaru.webp` y `/hero-dunaru-mobile.webp` quedaron **huérfanos**.
+- Exporta: `STEP_IMAGES` (`vierte`, `inserta`, `enciende`, `renueva`), `BRAND_STORY_IMAGE` (= `vierte`), **`RITUAL_IMAGE`**, **`HERO_DESKTOP_IMAGE`**, **`HERO_MOBILE_VIDEO`** y **`HERO_MOBILE_POSTER`**.
+- La consumen: `IndexUI` (STEPS + hero desktop), `HeroMobileVideo`, `ProductStorySections`, `ComoFunciona`, `BrandStorySection`, `RitualSection`.
+- ⛔ **Nunca hardcodear URLs de pasos, hero, ritual ni video.** Se cambia solo en `steps-media.ts`.
+
+### 🎬 HERO (desde 2026-08-26)
+- **Desktop**: foto horizontal `HERO_DESKTOP_IMAGE`, `object-center`. Sin video, nunca lo descarga.
+- **Móvil**: **`<HeroMobileVideo />`** (`src/components/HeroMobileVideo.tsx`) → video 9:16 720×1280 MP4 H.264, **sin audio, 1.8 MB**, `autoPlay muted loop playsInline`.
+- **Estrategia LCP (no romper)**: el póster se pinta como `<img fetchPriority="high">` (webp 55 KB, primer frame exacto del video); el `<video>` **no se monta** hasta `requestIdleCallback` (fallback 1200 ms) y solo si `useIsMobile()`; hace fade-in con `onPlaying`. Respeta `prefers-reduced-motion` (se queda la foto).
+- ⛔ **El póster debe ser siempre el primer frame del video**, si no hay salto visual.
+- Overlay móvil reforzado a `from-tabaco/95 via-/65 to-/25` porque el video es de día.
+- Huérfanos en repo: `/hero-dunaru.webp`, `/hero-dunaru-mobile.webp`.
 
 ### 🎨 "ELIGE TU TONO" (home)
 - La constante `TONOS` de `IndexUI` usa la **imagen 1 de cada variante** de `perlas-originales-500-g`.
@@ -110,67 +117,65 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 6: NAVEGACIÓN Y ARQUITECTURA DE SITIO
 
-**Estado**: ✅ Mega menú + `/como-funciona` + set completo de fotos nuevas (pasos, hero único, ritual, brand story). 🔜 **Verificar en 360 px y desktop 1280 px.**
+**Estado**: ✅ Mega menú + `/como-funciona` + fotos nuevas + **video hero móvil implementado**. 🔜 **Verificación visual en 360 px y desktop 1280 px.**
 
 ### 6.1 🔴 P1 — Verificación visual tras el commit
-Menú (alineación del panel), 4 pasos en el orden correcto, **hero móvil con `object-right`** (confirmar que el bowl no se corta y que el H1 no se encima con la mano), `RitualSection`, "Elige tu tono" → PDP con variante preseleccionada.
+- **Video hero móvil**: que arranque solo, sin audio, en loop y sin parpadeo entre póster y video. Medir LCP móvil en PageSpeed (debe seguir siendo la imagen del póster).
+- Menú (alineación del panel), 4 pasos en orden, `RitualSection`, "Elige tu tono" → PDP con variante preseleccionada.
+- Si el póster de día resta contraste al H1 en 360 px, subir el overlay móvil a `via-/75`.
 
-### 6.2 🎬 P1 — VIDEO HERO 9:16 (pendiente del owner)
-El owner tiene un video vertical de 9 s y quiere usarlo como hero **solo en móvil** (desktop se queda con la foto).
-- Herramienta disponible: `videoedit--edit_video` (FFmpeg, gratis) para recomprimir, recortar y quitar audio.
-- **Specs objetivo**: MP4 H.264, 720×1280, sin pista de audio, CRF ~28, target **< 3 MB**.
-- **Implementación acordada**: `<video autoPlay muted loop playsInline preload="metadata" poster={HERO_DESKTOP_IMAGE}>` dentro del `div.absolute inset-0`, visible solo `md:hidden`. El `poster` mantiene el LCP en la imagen y evita salto de layout.
-- ⚠️ Nunca dejar el video como LCP en móvil sin poster.
-
-### 6.3 🟡 P2 — Página `/aromas` propia
+### 6.2 🟡 P2 — Página `/aromas` propia
 Hoy "Aromas" apunta a la PDP de la esencia (oculta del catálogo, sin SEO propio). Merece landing editorial reusando `ScentsSection`.
 
-### 6.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
+### 6.3 🟡 P2 — AOV: tiers con nombre y % de ahorro
 `ProductQuantityTiers` (solo `perlas-originales-500-g`). Extenderlo requiere price rules nuevas.
 
-### 6.5 DECISIONES PENDIENTES DEL OWNER
+### 6.4 DECISIONES PENDIENTES DEL OWNER
 1. ❓ Nombre de la garantía. 2. ❓ Horas por mecha. 3. ❓ Copy del empaque / inserto. 4. ❓ B2B / SKU sample.
 
-### 6.6 FASE 4 — Arte y fotografía
+### 6.5 FASE 4 — Arte y fotografía
 Faltan **packshots 4:5 del frasco de esencia** e imágenes atmosféricas nocturnas (⛔ sin rostros).
 
-### 6.7 Medición
+### 6.6 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`.
 
 ---
 
 ## 4. Recent Changes
-- 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**: nueva foto horizontal `1787702019949-nscqjcvsz0r.webp`. Ahora **una sola imagen para ambos breakpoints**; móvil usa `object-right`. `/hero-dunaru-mobile.webp` deja de usarse.
-- 2026-08-25 — 🔁 **Paso 1 corregido** (foto nueva) y **pasos 3 y 4 intercambiados**: Enciende = cerillo, Renueva = disco de cera. Propagado a home, PDP y `/como-funciona`.
-- 2026-08-25 — 🕯️ **`RitualSection` migrada** a la foto del bowl negro (`RITUAL_IMAGE`). Foto vieja `3qeskqe43gv` retirada.
-- 2026-08-25 — 🖼️ Fotos del ritual centralizadas en `src/lib/steps-media.ts` (ahora también hero y ritual).
+- 2026-08-26 — 🎬 **VIDEO HERO MÓVIL**: el owner subió un 9:16. Comprimido con `videoedit--edit_video` (remove_audio + resize 720×1280) → **1.8 MB**. Nuevo componente `src/components/HeroMobileVideo.tsx` con póster webp (primer frame, 55 KB), montaje diferido por `requestIdleCallback`, solo móvil, respeta `prefers-reduced-motion`. Overlay móvil reforzado.
+- 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**: foto horizontal `1787702019949-nscqjcvsz0r.webp`. Desktop `object-center`.
+- 2026-08-25 — 🔁 **Paso 1 corregido** y **pasos 3 y 4 intercambiados**: Enciende = cerillo, Renueva = disco de cera.
+- 2026-08-25 — 🕯️ **`RitualSection` migrada** a la foto del bowl negro (`RITUAL_IMAGE`).
+- 2026-08-25 — 🖼️ Fotos del ritual centralizadas en `src/lib/steps-media.ts`.
 - 2026-08-25 — 🎨 **"Elige tu tono"** usa la imagen 1 de cada variante de Cera Duna · 500 g y linkea con `?variante=`.
-- 2026-08-25 — 🔗 **`ProductPageUI` preselecciona variante desde la URL** (`?variante=Marfil`), una sola vez por producto.
+- 2026-08-25 — 🔗 **`ProductPageUI` preselecciona variante desde la URL**.
 - 2026-08-25 — 🖼️ `BrandStorySection` usa `BRAND_STORY_IMAGE`.
-- 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `src/lib/navigation.ts` + `src/components/MainNav.tsx`. Mega menú "Tienda" de 4 columnas.
-- 2026-08-25 — 📄 **Nueva página `/como-funciona`** con SEO propio, 4 pasos, `CompareTable` y FAQ de 6.
+- 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `src/lib/navigation.ts` + `src/components/MainNav.tsx`.
+- 2026-08-25 — 📄 **Nueva página `/como-funciona`** con SEO propio.
 - 2026-08-25 — 🧹 `EcommerceTemplate.tsx`: eliminados menús viejos; wrapper del header ahora `relative`.
 - 2026-08-25 — 🏷️ **NOMENCLATURA PREMIUM: renombrados 8 productos en la DB**. Slugs intactos.
-- 2026-08-25 — 🔻 Tabla comparativa bajada en la home (después de `BrandStorySection`).
+- 2026-08-25 — 🔻 Tabla comparativa bajada en la home.
 - 2026-08-25 — ✂️ Acordeón "Cuidado y seguridad" eliminado de la PDP.
 - 2026-08-25 — 🔢 Mechas corregidas: Trío = 90, Cera Duna 1 kg = 60.
-- 2026-08-25 — 📦 Acordeón "Qué incluye" (`src/lib/pdp-includes.ts`) + claim "Cera 100% vegetal y biodegradable".
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
 - Base de uploads del owner: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`
 - **🔥 4 PASOS (vigentes)**: Vierte `1787701006060-mdjjspbepql.webp` (también BrandStory) · Inserta `1787699972902-6ha0kcq29g.webp` · Enciende `1787699972902-pr81fsb4jso.webp` · Renueva `1787699972902-11zjzn59pysq.webp`
-- **🌅 HERO (desktop + móvil)**: `1787702019949-nscqjcvsz0r.webp`.
+- **🌅 HERO DESKTOP**: `1787702019949-nscqjcvsz0r.webp`.
+- **🎬 HERO MÓVIL (video)**: `store-videos/<STORE_ID>/hero-dunaru-mobile.mp4` (720×1280, 1.8 MB, sin audio). Original del owner: `1787757859669-adcv9j2771q.mp4`.
+- **🖼️ PÓSTER DEL VIDEO**: `product-images/<STORE_ID>/hero-dunaru-mobile-poster.webp` (720×1280, 55 KB).
 - **🕯️ RITUAL**: `1787701006060-vpgjgog2juh.webp`.
-- ⛔ Deprecadas: `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b.webp`, `1785521743156-3qeskqe43gv.webp`, `1787699972902-dld268c7c0u.webp`, `1787701006060-xuyehajl1yr.webp` (hero v1 mal subido), `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
+- ⛔ Deprecadas: `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b.webp`, `1785521743156-3qeskqe43gv.webp`, `1787699972902-dld268c7c0u.webp`, `1787701006060-xuyehajl1yr.webp`, `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
 - **🌿 FLAT-LAYS DE AROMA (4:3, 1456×1092)**: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `1787337333997-44wwhmmisy5` · Costa Mineral `1787337333998-jphdwvy2pbh` · Higo Matcha `1787337333998-enck999sju7` · Tabaco Vainilla `1787337333998-5e5poqkcxh8` · Musgo Mineral `1787337333998-n7f8zqhfx8m`.
 - **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **UGC** (5 fotos): constante `UGC` en `src/data/reviews.ts`. **FAVICON**: `/favicon.png`.
 - 🟡 Subidas por el owner sin usar: `1787681082141-dy7wr0dcp15.webp`, `1787681082142-42qlfq25nvs.webp`, `1787684660654-vr5uiznl7cj.webp`.
-- 🔴 **FALTAN: packshots 4:5 del frasco de esencia · VIDEO 9:16 optimizado · foto del EMPAQUE NUEVO.**
+- 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-25 — 🟡 **Hero móvil sin verificar en 360 px**: usa `object-right` sobre la foto horizontal. Si el bowl se corta, la alternativa es `object-[75%_center]`.
-- 2026-08-25 — 🟡 `public/hero-dunaru.webp` y `public/hero-dunaru-mobile.webp` quedaron huérfanos en el repo (no se borraron por si acaso).
+- 2026-08-26 — 🟡 **Video hero móvil sin verificar en dispositivo real**: iOS Low Power Mode bloquea el autoplay; en ese caso se queda el póster (comportamiento aceptado).
+- 2026-08-26 — 🟡 El póster del video es una escena **diurna y clara**; verificar contraste del H1 en 360 px.
+- 2026-08-25 — 🟡 `public/hero-dunaru.webp` y `public/hero-dunaru-mobile.webp` quedaron huérfanos.
 - 2026-08-25 — 🟡 **Mega menú sin verificar visualmente** (staging).
 - 2026-08-25 — 🟡 **"Aromas" del menú apunta a la PDP de la esencia**, oculta del catálogo y sin SEO propio.
 - 2026-08-25 — 🟠 **Los nombres nuevos NO están en los anuncios de Meta ni en emails automatizados.**
@@ -187,15 +192,14 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Recibir el video 9:16 del owner** → comprimir con `videoedit--edit_video` e implementar como hero móvil con poster (ver 6.2).
-- [ALTA] **Verificar tras el commit**: hero nuevo en móvil (360 px) y desktop, 4 pasos en orden, `RitualSection`, mega menú, "Elige tu tono" con `?variante=`.
+- [ALTA] **Verificar tras el commit**: video hero móvil (360 px, iOS real), mega menú, 4 pasos, "Elige tu tono" con `?variante=`.
 - [ALTA] **Añadir `/como-funciona` al sitemap** (`scripts/generate-sitemap.ts`) y al footer.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
 - [ALTA] **Pedir al owner**: horas por mecha, nombre de la garantía, copy del empaque.
 - [ALTA] **Packshots del frasco de esencia (4:5)**.
 - [ALTA] **Medir el attach rate de aroma** en PostHog.
 - [ALTA] **Crear la colección `recargas`**.
-- [MED] **Página `/aromas`** propia (6.3).
+- [MED] **Página `/aromas`** propia (6.2).
 - [MED] Tiers con nombre y % de ahorro.
 - [MED] Limpiar "perlas dunaru" de `bowl-negro` y `vaso-extra-transparente`.
 - [BAJA] Página B2B / wholesale. SKU sample barato. Banners de colección.

@@ -15,6 +15,7 @@ import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { formatMoney } from '@/lib/money';
 import { STEP_IMAGES, HERO_DESKTOP_IMAGE } from '@/lib/steps-media';
+import { HeroMobileVideo } from '@/components/HeroMobileVideo';
 import { useMemo, useState } from 'react';
 
 interface IndexUIProps {
@@ -188,12 +189,10 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       <section className="relative min-h-screen flex items-center overflow-hidden bg-dunaru-tabaco">
         {/* Background image */}
         <div className="absolute inset-0">
-          {/* Mobile: misma foto horizontal, recortada a la derecha para conservar el bowl */}
-          <img
-            src={HERO_DESKTOP_IMAGE}
-            alt="Cera Duna vertiéndose en un bowl de cerámica sobre travertino, luz cálida de tarde"
-            className="w-full h-full object-cover object-right md:hidden"
-            fetchPriority="high"
+          {/* Mobile: video vertical 9:16 con póster de respaldo (ver HeroMobileVideo) */}
+          <HeroMobileVideo
+            className="relative w-full h-full md:hidden"
+            alt="Bowl de cerámica dunaru sobre una mesa de travertino en una sala con luz natural"
           />
           {/* Desktop: horizontal composition */}
           <img
@@ -205,7 +204,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
           {/* Gradient overlay — desktop: dark on the left for text */}
           <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-dunaru-tabaco/90 via-dunaru-tabaco/55 to-dunaru-tabaco/10" />
           {/* Gradient overlay — mobile: dark on top for text */}
-          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-tabaco/95 via-dunaru-tabaco/50 to-dunaru-tabaco/20" />
+          <div className="absolute inset-0 md:hidden bg-gradient-to-b from-dunaru-tabaco/95 via-dunaru-tabaco/65 to-dunaru-tabaco/25" />
           {/* Material: vidrio ámbar · calidez y profundidad de fuego */}
           <div className="absolute inset-0 texture-ambar" />
         </div>
