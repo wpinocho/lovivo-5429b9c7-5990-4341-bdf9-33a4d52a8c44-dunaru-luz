@@ -63,6 +63,7 @@ export const SCENT_YIELD_COPY = "Un frasco perfuma 500 g de cera"
 export const SCENT_ENABLED_SLUGS: string[] = [
   "kit-vaso-de-vidrio",
   "kit-vaso-de-concreto",
+  "vela-bowl-de-acero",
   "perlas-originales-500-g",
   "reserva-1-kg",
   "d-o-de-tonos",

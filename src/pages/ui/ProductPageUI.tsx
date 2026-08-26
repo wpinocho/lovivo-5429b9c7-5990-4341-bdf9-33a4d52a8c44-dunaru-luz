@@ -90,6 +90,10 @@ const PDP_HEADLINE: Record<string, string> = {
     "Enciende tu primera vela hoy. Cuando se acabe, la vuelves a llenar — no la tiras.",
   "kit-vaso-de-concreto":
     "El objeto de diseño que nunca se acaba: se rellena, no se tira.",
+  "vela-bowl-de-acero":
+    "Acero pulido que refleja la llama y la duplica sobre la mesa. Llega lista para encender.",
+  "bowl-espejo-de-acero":
+    "Solo el recipiente: acero pulido tipo espejo para rellenar con tu Cera Duna.",
   "perlas-originales-500-g":
     "Convierte cualquier recipiente que ya tienes en una vela. Hasta 120 horas de luz.",
   "reserva-1-kg":
@@ -114,6 +118,16 @@ const PDP_BENEFITS: Record<string, string[]> = {
     "Incluye: bowl de cerámica + 500 g de Cera Duna + 30 mechas de algodón",
     "Bowl de cerámica negra mate hecho a mano: se ve bien encendido y apagado",
     "Se rellena infinitas veces: compras una vez y sigue dando luz",
+  ],
+  "vela-bowl-de-acero": [
+    "Incluye: bowl de acero espejo + 500 g de Cera Duna + 30 mechas de algodón",
+    "El acero pulido refleja la llama: una luz que se multiplica sobre la mesa",
+    "Se rellena infinitas veces: compras una vez y sigue dando luz",
+  ],
+  "bowl-espejo-de-acero": [
+    "Bowl de acero pulido tipo espejo, resistente al calor",
+    "Solo el recipiente: la cera y las mechas se piden aparte",
+    "Ideal como segunda vela para otro rincón de la casa",
   ],
   "perlas-originales-500-g": [
     "Convierte el vaso o bowl que ya tienes en una vela de diseño",

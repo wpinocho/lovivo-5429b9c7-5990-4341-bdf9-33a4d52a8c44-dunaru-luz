@@ -71,6 +71,16 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
     ENVIO,
   ],
 
+  "vela-bowl-de-acero": [
+    {
+      item: "Bowl de acero pulido tipo espejo",
+      benefit: "Refleja la llama y la duplica sobre la mesa. Se limpia y vuelve a empezar.",
+    },
+    CERA_500,
+    MECHAS_30,
+    ENVIO,
+  ],
+
   "d-o-de-tonos": [
     {
       item: "Dos bolsas de 500 g de Cera Duna, en tonos distintos",
@@ -115,6 +125,18 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
     {
       item: "Solo el recipiente",
       benefit: "Ideal como segunda vela para otro cuarto de la casa.",
+    },
+    ENVIO,
+  ],
+
+  "bowl-espejo-de-acero": [
+    {
+      item: "Bowl de acero pulido tipo espejo",
+      benefit: "Resiste el calor y se rellena las veces que quieras.",
+    },
+    {
+      item: "Solo el recipiente",
+      benefit: "La cera y las mechas se piden aparte, para encenderlo cuando quieras.",
     },
     ENVIO,
   ],

@@ -170,6 +170,7 @@ export const EcommerceTemplate = ({
               {[
                 { to: '/productos/kit-vaso-de-vidrio', label: 'Vela · Vaso de Vidrio' },
                 { to: '/productos/kit-vaso-de-concreto', label: 'Vela · Bowl de Cerámica' },
+                { to: '/productos/vela-bowl-de-acero', label: 'Vela · Bowl de Acero' },
                 { to: '/productos/perlas-originales-500-g', label: 'Cera Duna · 500 g' },
                 { to: '/productos/reserva-1-kg', label: 'Cera Duna · 1 kg' },
               ].map(({ to, label }) => (

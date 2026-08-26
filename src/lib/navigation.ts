@@ -41,6 +41,12 @@ export const SHOP_COLUMNS: NavColumn[] = [
         to: "/productos/kit-vaso-de-concreto",
         desc: "Pieza artesanal mate",
       },
+      {
+        label: "Bowl de Acero",
+        to: "/productos/vela-bowl-de-acero",
+        desc: "Acero espejo que refleja la llama",
+        tag: "Nuevo",
+      },
     ],
   },
   {
@@ -59,6 +65,7 @@ export const SHOP_COLUMNS: NavColumn[] = [
     items: [
       { label: "Vaso de Vidrio", to: "/productos/vaso-extra-transparente", desc: "Recipiente extra" },
       { label: "Bowl Artesanal", to: "/productos/bowl-negro", desc: "Cerámica negra mate" },
+      { label: "Bowl Espejo de Acero", to: "/productos/bowl-espejo-de-acero", desc: "Acero pulido, solo el recipiente", tag: "Nuevo" },
       { label: "30 Mechas de Algodón", to: "/productos/pack-30-mechas", desc: "Repuesto" },
     ],
   },

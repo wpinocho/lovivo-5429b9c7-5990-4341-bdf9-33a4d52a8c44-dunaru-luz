@@ -20,7 +20,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   {
     id: "kits",
     label: "Empieza aquí",
-    slugs: ["kit-vaso-de-vidrio", "kit-vaso-de-concreto"],
+    slugs: ["kit-vaso-de-vidrio", "kit-vaso-de-concreto", "vela-bowl-de-acero"],
   },
   {
     id: "recargas",
@@ -35,7 +35,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   {
     id: "accesorios",
     label: "Recipientes y accesorios",
-    slugs: ["vaso-extra-transparente", "bowl-negro", "pack-30-mechas"],
+    slugs: ["vaso-extra-transparente", "bowl-negro", "bowl-espejo-de-acero", "pack-30-mechas"],
   },
 ]
 

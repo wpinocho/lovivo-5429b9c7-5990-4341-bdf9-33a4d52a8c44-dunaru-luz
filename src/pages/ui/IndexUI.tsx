@@ -42,6 +42,7 @@ const CATALOG_FALLBACK: Record<string, { title: string; price: number; compare?:
   'reserva-1-kg': { title: 'Cera Duna · 1 kg', price: 799, compare: 999, img: `${IMG}vjtp9uzft8.webp` },
   'kit-vaso-de-vidrio': { title: 'Vela Rellenable · Vaso de Vidrio', price: 799, compare: 899, img: `${IMG}21sy3747vik.webp` },
   'kit-vaso-de-concreto': { title: 'Vela Rellenable · Bowl de Cerámica', price: 999, compare: 1199, img: `${IMG}c47q4wicqvv.webp` },
+  'vela-bowl-de-acero': { title: 'Vela Rellenable · Bowl de Acero', price: 1099, compare: 1299, img: 'https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1787759673455-m5x9h5ouxwf.webp' },
   'd-o-de-tonos': { title: 'Dúo de Tonos · 1 kg', price: 1099, compare: 1398, img: `${IMG}yuq5htx9eol.webp` },
   'tr-o-de-tonos': { title: 'Trío de Tonos · 1.5 kg', price: 1399, compare: 1499, img: `${IMG}bfh3fau5iyv.webp` },
 };
@@ -83,6 +84,7 @@ const SHOP_CARDS: { slug: string; tag: string; badge?: string }[] = [
   { slug: 'kit-vaso-de-vidrio', tag: 'Todo incluido', badge: 'Más elegido' },
   { slug: 'perlas-originales-500-g', tag: 'Ya tengo recipiente' },
   { slug: 'kit-vaso-de-concreto', tag: 'Para regalar' },
+  { slug: 'vela-bowl-de-acero', tag: 'Acero espejo', badge: 'Nuevo' },
   { slug: 'd-o-de-tonos', tag: '2 tonos · 1 kg' },
   { slug: 'tr-o-de-tonos', tag: '3 tonos · 1.5 kg' },
   { slug: 'reserva-1-kg', tag: 'Rinde el doble' },
