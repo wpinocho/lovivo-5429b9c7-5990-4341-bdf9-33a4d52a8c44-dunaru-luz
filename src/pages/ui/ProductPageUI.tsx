@@ -55,6 +55,7 @@ import {
   supportsScentAddon,
   getScentImageByVariantName,
   SCENT_OPTION_NAME,
+  SCENTS,
 } from "@/lib/scents"
 import { usePriceRules } from "@/hooks/usePriceRules"
 import { calcVolumeDiscount } from "@/lib/price-rule-utils"
@@ -465,11 +466,104 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
   // Al cambiar de color volvemos a la foto de esa variante (desktop y móvil)
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null)
+  const [carouselIndex, setCarouselIndex] = useState(0)
+
+  /**
+   * Opción "deslizable": la primera opción cuyos valores TODOS tienen foto.
+   * En móvil el carrusel deja de ser una galería pasiva y se convierte en el
+   * selector: deslizas, se elige ese valor y debajo aparece su nombre y su
+   * descripción. Así elegir y ver ocurren en el mismo gesto.
+   */
+  const sliderOption = useMemo(() => {
+    const options: any[] = logic.product?.options || []
+    const opt = options.find(
+      (o) => o?.name && optionValueImages[o.name] && (o.values || []).length > 1
+    )
+    return opt
+      ? { name: String(opt.name), values: (opt.values || []) as string[] }
+      : null
+  }, [logic.product, optionValueImages])
+
+  /**
+   * Slides del carrusel móvil: primero una por valor de la opción (en orden
+   * estable, nunca reordenado al cambiar de variante) y después el resto de
+   * fotos del producto, que no cambian la selección.
+   */
+  const mobileSlides = useMemo(() => {
+    type Slide = {
+      image: string
+      value?: string
+      subtitle?: string
+      description?: string
+    }
+
+    if (!sliderOption) return galleryImages.map((image) => ({ image } as Slide))
+
+    const byValue = optionValueImages[sliderOption.name] || {}
+    const used = new Set(sliderOption.values.map((v) => byValue[v]))
+
+    const slides: Slide[] = sliderOption.values.map((value) => {
+      const scent = SCENTS.find(
+        (s) => s.name.toLowerCase() === value.trim().toLowerCase()
+      )
+      return {
+        image: byValue[value],
+        value,
+        subtitle: scent?.profile,
+        description: scent?.description,
+      }
+    })
+
+    const base: string[] = Array.isArray((logic.product as any)?.images)
+      ? (logic.product as any).images
+      : logic.displayImages || []
+    for (const img of base) if (img && !used.has(img)) slides.push({ image: img })
+
+    return slides
+  }, [sliderOption, optionValueImages, galleryImages, logic.product, logic.displayImages])
+
+  /** Índice del slide que corresponde al valor seleccionado. */
+  const activeSlideIndex = useMemo(() => {
+    if (!sliderOption) return 0
+    const value = logic.selected?.[sliderOption.name]
+    const i = mobileSlides.findIndex((s) => s.value === value)
+    return i >= 0 ? i : 0
+  }, [sliderOption, logic.selected, mobileSlides])
+
+  // Deslizar → seleccionar
+  useEffect(() => {
+    if (!carouselApi) return
+    const onSelect = () => {
+      const idx = carouselApi.selectedScrollSnap()
+      setCarouselIndex(idx)
+      const slide = mobileSlides[idx]
+      if (
+        sliderOption &&
+        slide?.value &&
+        logic.selected?.[sliderOption.name] !== slide.value
+      ) {
+        logic.handleOptionSelect(sliderOption.name, slide.value)
+      }
+    }
+    carouselApi.on("select", onSelect)
+    return () => {
+      carouselApi.off("select", onSelect)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [carouselApi, mobileSlides, sliderOption, logic.selected])
+
+  // Elegir desde otro lado (chips de desktop, ?variante=) → mover el carrusel
+  useEffect(() => {
+    if (!carouselApi || !sliderOption) return
+    if (carouselApi.selectedScrollSnap() !== activeSlideIndex) {
+      carouselApi.scrollTo(activeSlideIndex)
+    }
+  }, [carouselApi, activeSlideIndex, sliderOption])
 
   useEffect(() => {
     setSelectedImage(null)
-    carouselApi?.scrollTo(0)
-  }, [logic.matchingVariant, carouselApi])
+    if (!sliderOption) carouselApi?.scrollTo(0)
+  }, [logic.matchingVariant, carouselApi, sliderOption])
 
   /**
    * Preselección de variante desde la URL: /productos/slug?variante=Marfil
@@ -739,8 +833,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               )}
             </div>
 
-            {/* Mobile: carousel */}
-            {galleryImages.length > 1 ? (
+            {/* Mobile: carousel — en productos con foto por variante ES el selector */}
+            {mobileSlides.length > 1 ? (
               <div className="md:hidden">
                 <Carousel
                   className="w-full"
@@ -748,12 +842,16 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   setApi={setCarouselApi}
                 >
                   <CarouselContent>
-                    {galleryImages.map((img: string, index: number) => (
+                    {mobileSlides.map((slide, index: number) => (
                       <CarouselItem key={index} className="basis-[88%]">
                         <div className="relative aspect-[4/5] max-h-[46vh] rounded-lg overflow-hidden bg-muted/30">
                           <img
-                            src={img}
-                            alt={`${logic.product.title} ${index + 1}`}
+                            src={slide.image}
+                            alt={
+                              slide.value
+                                ? `${logic.product.title} · ${slide.value}`
+                                : `${logic.product.title} ${index + 1}`
+                            }
                             loading={index === 0 ? "eager" : "lazy"}
                             decoding="async"
                             className="w-full h-full object-cover"
@@ -768,6 +866,58 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     ))}
                   </CarouselContent>
                 </Carousel>
+
+                {/* Puntos de posición */}
+                <div className="flex items-center gap-1.5 mt-2.5">
+                  {mobileSlides.map((_, i) => (
+                    <span
+                      key={i}
+                      className={cn(
+                        "h-1 rounded-full transition-all duration-300",
+                        i === carouselIndex
+                          ? "w-5 bg-foreground"
+                          : "w-1.5 bg-foreground/25"
+                      )}
+                    />
+                  ))}
+                </div>
+
+                {/* Ficha del slide activo: nombre + descripción que cambian al deslizar */}
+                {sliderOption &&
+                  (() => {
+                    const slide = mobileSlides[carouselIndex]
+                    if (!slide?.value) return null
+                    return (
+                      <div className="mt-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="inline-flex items-center gap-1 text-[11px] uppercase tracking-[0.14em] text-dunaru-oliva-claro font-medium">
+                            <Check className="h-3 w-3" strokeWidth={3} />
+                            {optionLabel(sliderOption.name, logic.product?.slug)}{" "}
+                            elegido
+                          </span>
+                          <span className="text-[11px] text-muted-foreground">
+                            {carouselIndex + 1}/{sliderOption.values.length}
+                          </span>
+                        </div>
+                        <p className="mt-1 text-2xl font-light tracking-tight leading-tight">
+                          {slide.value}
+                        </p>
+                        {slide.subtitle && (
+                          <p className="mt-0.5 text-xs text-muted-foreground">
+                            {slide.subtitle}
+                          </p>
+                        )}
+                        {slide.description && (
+                          <p className="mt-1.5 text-sm text-foreground/80 leading-snug">
+                            {slide.description}
+                          </p>
+                        )}
+                        <p className="mt-1.5 text-[11px] text-muted-foreground">
+                          Desliza para ver los demás
+                        </p>
+                      </div>
+                    )
+                  })()}
               </div>
             ) : (
               <div className="md:hidden relative aspect-[4/5] max-h-[46vh] rounded-lg overflow-hidden bg-muted/30">
@@ -976,7 +1126,14 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             {logic.product.options && logic.product.options.length > 0 && (
               <div className="space-y-5">
                 {logic.product.options.map((option: any) => (
-                  <div key={option.name} className="space-y-2.5">
+                  <div
+                    key={option.name}
+                    className={cn(
+                      "space-y-2.5",
+                      /* En móvil esta opción ya se elige deslizando el carrusel */
+                      sliderOption?.name === option.name && "hidden md:block"
+                    )}
+                  >
                     <div className="flex items-baseline justify-between">
                       <Label className="text-sm font-medium uppercase tracking-wider">
                         {optionLabel(option.name, logic.product?.slug)}

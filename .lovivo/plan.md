@@ -112,20 +112,25 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### 🖼️ GALERÍA DE LA PDP — imagen por variante (2026-08-27)
 - `HeadlessProduct.getDisplayImages()` devuelve `[...variant.image_urls, ...imágenes generales]`. **No basta** en dos escenarios reales.
-- **`ProductPageUI` calcula `galleryImages`** (useMemo) con DOS estrategias, en orden:
+- **`ProductPageUI` calcula `galleryImages`** (useMemo, lo usa el DESKTOP) con DOS estrategias, en orden:
   1. **Foto exclusiva de la variante**: la primera `image_url` que ninguna otra variante usa (arregla `kit-vaso-de-vidrio`).
   2. **Fallback por nombre de aroma**: `getScentImageByVariantName(...)` de `src/lib/scents.ts`.
-- `displayImage = selectedImage || galleryImages[0]`. Thumbnails y carrusel móvil consumen `galleryImages`.
-- Al cambiar de variante: `setSelectedImage(null)` + `carouselApi.scrollTo(0)`.
-- **📐 FOTO PRINCIPAL EN MÓVIL: `aspect-[4/5] max-h-[46vh]`** (2026-08-27) para que el selector de variante entre en pantalla sin scroll doble.
+- `displayImage = selectedImage || galleryImages[0]`. Thumbnails de desktop consumen `galleryImages`.
 
-### 🎛️ SELECTOR DE VARIANTE CON MINIATURA (2026-08-27)
+### 📱 CARRUSEL MÓVIL = SELECTOR DESLIZABLE (2026-08-27) ⭐
+- **`sliderOption`** (useMemo en `ProductPageUI`): la primera opción cuyos valores TODOS tienen foto en `optionValueImages` y tiene >1 valor. Hoy: `Aroma` de la esencia y `Color` de `kit-vaso-de-vidrio`.
+- **`mobileSlides`**: orden ESTABLE = una slide por valor de la opción (nunca se reordena al cambiar de variante) + el resto de fotos del producto (`product.images` que no son de un valor) como slides pasivas.
+- **Sincronización bidireccional**: `carouselApi.on("select")` → `handleOptionSelect(...)`; cambio de valor desde fuera (chips de desktop, `?variante=`) → `carouselApi.scrollTo(activeSlideIndex)`.
+- Debajo del carrusel: puntos de posición + **ficha del slide activo** (chip "X elegido" + contador, nombre grande, `scent.profile`, `scent.description`, hint "Desliza para ver los demás").
+- **El bloque de opción de `sliderOption` se oculta en móvil** (`hidden md:block`): el carrusel ES el selector. Desktop conserva el grid de miniaturas.
+- ⚠️ El `useEffect` de reset ya NO hace `scrollTo(0)` cuando hay `sliderOption` (rompería el gesto).
+- Foto principal móvil: `aspect-[4/5] max-h-[46vh]`.
+
+### 🎛️ SELECTOR DE VARIANTE CON MINIATURA — DESKTOP (2026-08-27)
 - `ProductPageUI` calcula **`optionValueImages`** (useMemo): `{ [optionName]: { [value]: url } }`.
   - Aroma → `getScentImageByVariantName(value)`.
   - Resto → primera `image_url` **exclusiva** de las variantes con ese valor.
 - Si **TODOS** los valores de una opción tienen imagen, el selector se dibuja como **grid de 3 columnas con miniatura cuadrada + etiqueta**; si no, cae al chip de texto de siempre.
-- Motivo: en móvil la clienta bajaba a elegir y volvía a subir para ver la foto. Con miniaturas ve las 6 opciones y elige en el mismo bloque.
-- Aplica hoy a: `esencia-para-vela-10-ml` (Aroma) y `kit-vaso-de-vidrio` (Color).
 
 ### 🌿 SELECTOR DE AROMA ADD-ON — panel compacto en móvil (2026-08-27)
 - `src/components/ProductScentSelector.tsx`: el panel "Conoce los aromas" (expandido por default) es **flex-row incluso en móvil**; foto `w-24 aspect-square` en móvil, `w-full aspect-[4/3]` en `sm:`. Padding `p-2.5`.
@@ -145,7 +150,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### 🌿 SISTEMA DE AROMAS
 - **`src/lib/scents.ts`** = fuente única. `SCENT_ENABLED_SLUGS` incluye ya `vela-bowl-de-acero`. PostHog: `scent_selected`, `scent_details_toggled`.
-- Helpers clave: `getScentImageByVariantName()`, `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`.
+- Helpers clave: `getScentImageByVariantName()`, `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`. `SCENTS` se importa también en `ProductPageUI` para la ficha del carrusel.
 
 ### 🧾 CARRITO Y CHECKOUT — persistencia (2026-08-27)
 - **⚠️ REGLA: el carrito SOLO se vacía cuando el pago se confirma.** `useCheckout.checkout()` ya NO llama `clearCart()`. Limpian: `StripePayment`, `PaypalExpressButton`, `/gracias`, `useURLCartLoader` y el "Comprar ahora".
@@ -156,7 +161,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero creada y cableada. ✅ Galería por variante arreglada. ✅ Carrito persistente + back links. ✅ Esencia visible en el catálogo. ✅ Selector de variante con miniaturas + foto móvil más corta. 🔜 **Verificación visual + precio tachado + copy de la cera.**
+**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente + back links. ✅ Esencia visible en catálogo. ✅ **Carrusel móvil convertido en selector deslizable con ficha por slide.** 🔜 **Verificación visual en 360 px + precio tachado + copy de la cera.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
@@ -164,8 +169,9 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- **PDP de la esencia en 360 px: miniaturas de aroma visibles junto a la foto principal sin scroll doble.**
-- **PDP `kit-vaso-de-vidrio`: el selector de Color ahora sale con miniaturas — confirmar que se ve bien.**
+- **PDP de la esencia en 360 px: deslizar el carrusel debe cambiar el aroma seleccionado y la ficha de abajo.**
+- **PDP `kit-vaso-de-vidrio`: deslizar cambia el color; las fotos generales del producto quedan al final sin cambiar la selección.**
+- **Confirmar que el precio/CTA del buy box refleja la variante elegida al deslizar.**
 - Video hero móvil (iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, acordeón "Más detalles", flujo carrito → /pagar → atrás.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
@@ -178,8 +184,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (`ProductPageUI.tsx`): nuevo `optionValueImages` + render en grid de 3 columnas con foto cuadrada cuando todos los valores tienen imagen. Además la foto principal en móvil se limitó a `max-h-[46vh]`. Arregla el "bajo a elegir, subo a ver" de la PDP de aromas.
-- 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL** (`ProductScentSelector.tsx`): foto de 96px al lado del texto, padding y spacing reducidos.
+- 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`ProductPageUI.tsx`): nuevos `sliderOption` + `mobileSlides` + sync bidireccional con `carouselApi`. Deslizar elige la variante; debajo aparecen puntos, nombre, perfil y descripción del aroma. El bloque de opción se oculta en móvil (`hidden md:block`). Resuelve el "no puedo ver la foto y elegir a la vez".
+- 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (desktop) + foto principal móvil `max-h-[46vh]`.
+- 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL** (`ProductScentSelector.tsx`).
 - 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO**: grupo **"Accesorios"**, `CHOOSE_ON_PDP` + CTA "Elegir aroma".
 - 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT** + back links.
 - 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → **"Más detalles"**.
@@ -192,7 +199,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-26 — 🎬 **VIDEO HERO MÓVIL** (`HeroMobileVideo.tsx`).
 - 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**.
 - 2026-08-25 — 🔁 **Paso 1 corregido** y pasos 3 y 4 intercambiados.
-- 2026-08-25 — 🕯️ **`RitualSection` migrada** al bowl negro.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -209,10 +215,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-27 — 🟡 **Las miniaturas de aroma usan el flat-lay 4:3 recortado a cuadrado**: se ve bien, pero mejorará con packshots propios.
+- 2026-08-27 — 🟡 **Los flat-lays de aroma son 4:3 y el carrusel móvil es 4:5**: se recortan por `object-cover`. Con packshots 4:5 propios se resuelve.
 - 2026-08-27 — 🟡 **La tarjeta de la esencia en el catálogo usa el flat-lay 4:3 en contenedor cuadrado**.
 - 2026-08-27 — 🟡 **Órdenes abandonadas duplicadas** (efecto del carrito persistente).
-- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no cambia de foto al elegir color** (sus variantes no tienen `image_urls`; tampoco saldrá con miniaturas).
+- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no entra al modo slider** (sus variantes no tienen `image_urls`).
 - 2026-08-27 — 🟡 Los `steps` de `kit-vaso-de-concreto` en `ProductStorySections` siguen con `PLACEHOLDER`.
 - 2026-08-26 — 🔴 **`compare_at_price` de `vela-bowl-de-acero` NO persistió** ($1,299).
 - 2026-08-26 — 🟠 **Copy sin verificar del kit de acero** ("500 g" vs bowl de 7 × 4 cm).
@@ -233,10 +239,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
+- [ALTA] **Verificar en 360 px real el carrusel-selector** (esencia y vaso de vidrio).
 - [ALTA] **Packshots del frasco de esencia (4:5)**.
-- [ALTA] **Verificar en 360 px real la PDP de aromas con miniaturas**.
 - [ALTA] **Verificar el flujo carrito → /pagar → volver atrás**.
-- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard (así también saldría con miniaturas).
+- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard (lo activaría en modo slider).
 - [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299.
 - [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
