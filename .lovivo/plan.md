@@ -94,6 +94,12 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - ⚠️ **`HeadlessProduct` auto-selecciona la primera variante disponible al cargar y pisa la preselección.** Por eso el effect depende de `logic.selected` y **reintenta hasta que coincide**; solo entonces marca `appliedVariantRef` y suelta el control (el cliente puede cambiar de variante sin que la URL lo revierta). ⛔ No simplificar ese effect a `[search, product.id]`: vuelve el bug.
 - Lo usan: "Elige tu tono" (`TONOS` en `IndexUI`) y **`ScentsSection`**.
 
+### 💰 PRECIO DEL CTA — `ctaTotal` es la ÚNICA fuente
+- `ctaTotal = ctaUnitPrice (con descuento por volumen) × cantidad + precio del aroma`.
+- Lo usan **los 3 CTAs**: el "Comprar ahora" del buy box, el sticky desktop y el sticky móvil.
+- La barra sticky pinta además `stickyPriceNote` ("2 uds · + Tabaco Vainilla") para explicar por qué el total no es el precio unitario.
+- ⛔ NUNCA volver a pintar `logic.currentPrice` en la barra sticky: ese es el precio unitario y desincroniza el add-on de aroma.
+
 ### ✅ CHECKLIST PDP — qué tocar al añadir una vela nueva
 Una PDP "completa" (como `kit-vaso-de-vidrio`) necesita entrada en **5 lugares**:
 1. `src/components/ProductStorySections.tsx` → `PDP_CONTENT[slug]` = `{ steps?, blocks, compareRows, faqs }`. **Sin esta entrada NO se renderiza NADA**. Causa #1 de "esta PDP se ve vacía".
@@ -151,6 +157,7 @@ Una PDP "completa" (como `kit-vaso-de-vidrio`) necesita entrada en **5 lugares**
 - **ORDEN DE LA PDP**: garantías → carrusel 4 pasos → reseñas → bloques editoriales → `<CompareTable />` → FAQ → CTA de cierre.
 - **🏠 ORDEN DE LA HOME**: hero → beneficios → 4 pasos → "Elige tu vela" → `RitualSection` → `Reviews` → `ScentsSection` → "Elige tu tono" → `CasaRealSection` → `BrandStorySection` → `<CompareTable />` → FAQ → newsletter.
 - **📦 `/categorias/todos`** agrupa con `groupByCatalog`.
+- **📌 BARRA STICKY DE LA PDP**: solo aparece cuando el usuario ya scrolleó por encima del CTA inline (`scrolledPastCta`).
 
 ### ⚖️ TABLA COMPARATIVA (`src/components/CompareTable.tsx`) — FUENTE ÚNICA, sin título propio.
 ### 🌿 SISTEMA DE AROMAS — `src/lib/scents.ts` fuente única.
@@ -160,13 +167,14 @@ Una PDP "completa" (como `kit-vaso-de-vidrio`) necesita entrada en **5 lugares**
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO, CUENCO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado. ✅ Foto por variante. ✅ Deep link `?variante=`. ✅ Reseña de Jimena C. añadida. 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado. ✅ Foto por variante. ✅ Deep link `?variante=`. ✅ Reseña de Jimena C. ✅ Precio del sticky sincronizado con aroma y cantidad. 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner
 1. Bowl de acero: ¿el kit incluye 500 g si el bowl mide 7 × 4 cm? ¿Acero pulido o cromado? Falta `compare_at_price`.
 2. Cuenco Dunaru: swatches mal (3 en `#101010`). ¿Lleva `compare_at_price`? **¿Cuánta cera incluye el kit de $1,199?** ¿Cuántas mechas se recomiendan encender a la vez en 20 cm?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
+- **Sticky de la PDP**: elegir un aroma y confirmar que el precio de la barra sube $99 y muestra la nota "+ <aroma>"; subir cantidad y ver "N uds".
 - **Home → tarjeta de aroma** (ej. Musgo Mineral) debe abrir `/productos/esencia-para-vela-10-ml` con ESE aroma marcado.
 - **Home → "Elige tu tono"** (Ónix) debe abrir Cera Duna · 500 g con Ónix marcado.
 - Comprobar que **después de aterrizar se puede cambiar de variante a mano**.
@@ -183,8 +191,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — ⭐ **NUEVA RESEÑA REAL (Jimena C.)** en `src/data/reviews.ts`, id `r16`, 5 estrellas, con foto propia (`UGC.sala`). Insertada en **segunda posición** para que sea la 2ª reseña con imagen. Slugs: cuenco, cera 500 g y bowl de cerámica. Total: **16 reseñas**, promedio sigue en 4.9.
-- 2026-08-27 — 🔗 **DEEP LINK DE VARIANTE ARREGLADO**: el auto-select de `HeadlessProduct` pisaba la preselección. El effect ahora depende de `logic.selected`, reintenta hasta que coincide y normaliza acentos.
+- 2026-08-27 — 🐛 **BUG DEL PRECIO EN LA BARRA STICKY ARREGLADO** (`ProductPageUI.tsx`). Desktop y móvil pintaban `logic.currentPrice` (precio unitario) mientras el CTA inline ya usaba `ctaTotal`. Ahora los 3 CTAs usan `ctaTotal` (aroma + cantidad + descuento por volumen) y la sticky añade la micro-nota `stickyPriceNote` ("2 uds · + Tabaco Vainilla").
+- 2026-08-27 — ⭐ **NUEVA RESEÑA REAL (Jimena C.)** en `src/data/reviews.ts`, id `r16`, 5 estrellas, con foto propia (`UGC.sala`), en segunda posición. Total: **16 reseñas**, promedio 4.9.
+- 2026-08-27 — 🔗 **DEEP LINK DE VARIANTE ARREGLADO**: el auto-select de `HeadlessProduct` pisaba la preselección.
 - 2026-08-27 — 🌿 **TARJETAS DE AROMA APUNTAN AL PRODUCTO CORRECTO**: `/productos/esencia-para-vela-10-ml?variante=<aroma>`.
 - 2026-08-27 — 🧱 **PDP COMPLETA DEL CUENCO DUNARU** (los 5 archivos).
 - 2026-08-27 — 🛍️ **CUENCO DUNARU EN LA HOME** (`CATALOG_FALLBACK` + `SHOP_CARDS`, badge "Nuevo").
@@ -196,7 +205,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-27 — 🔗 **CTA HERO → `/categorias/todos`**.
 - 2026-08-27 — ✨ **FRANJA DE BENEFICIOS LIMPIADA**.
 - 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS**.
-- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL AMPLIADA**.
 - 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO** (`allOptionsAreSlider`).
 
 ## 5. Image Inventory
@@ -235,6 +243,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
 
 ## 7. Pending / Future Sessions
+- [ALTA] **Verificar el precio de la barra sticky con aroma y con cantidad > 1**.
 - [ALTA] **Verificar en vivo el deep link `?variante=`** en aromas y tonos.
 - [ALTA] **Confirmar el contenido real del Cuenco Dunaru ($1,199)**.
 - [ALTA] **Verificar la PDP del Cuenco y la home en 360 px**.

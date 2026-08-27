@@ -725,6 +725,18 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     )?.discountedPrice ?? (logic.currentPrice || 0)
   const ctaTotal = ctaUnitPrice * ctaQuantity + (scentSelection?.price || 0)
 
+  /**
+   * Micro-nota del precio en la barra sticky: explica por qué el total no es
+   * el precio unitario (cantidad y/o aroma elegido). Evita la sensación de
+   * "precio que cambió sin razón" cuando la clienta ya no ve el buy box.
+   */
+  const stickyPriceNote = [
+    ctaQuantity > 1 ? `${ctaQuantity} uds` : null,
+    scentSelection ? `+ ${scentSelection.scent.name}` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ")
+
   const headline = logic.product?.slug
     ? PDP_HEADLINE[logic.product.slug]
     : undefined
@@ -1601,8 +1613,13 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   </h3>
                   <div className="flex items-center gap-2.5">
                     <span className="font-semibold text-base">
-                      {logic.formatMoney(logic.currentPrice)}
+                      {logic.formatMoney(ctaTotal)}
                     </span>
+                    {stickyPriceNote && (
+                      <span className="text-xs text-muted-foreground truncate">
+                        {stickyPriceNote}
+                      </span>
+                    )}
                     {StickyRating}
                   </div>
                 </div>
@@ -1638,9 +1655,16 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     </h3>
                     {StickyRating}
                   </div>
-                  <span className="font-semibold shrink-0 text-sm">
-                    {logic.formatMoney(logic.currentPrice)}
-                  </span>
+                  <div className="shrink-0 text-right">
+                    <span className="block font-semibold text-sm">
+                      {logic.formatMoney(ctaTotal)}
+                    </span>
+                    {stickyPriceNote && (
+                      <span className="block text-[11px] leading-tight text-muted-foreground">
+                        {stickyPriceNote}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
               <div className="flex gap-2">
