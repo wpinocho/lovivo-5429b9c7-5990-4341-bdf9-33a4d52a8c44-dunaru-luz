@@ -116,7 +116,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN DEL BUY BOX** (`ProductPageUI.tsx`): título+precio+MSI+rating · `PDP_BENEFITS[slug]` · variantes · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
-- **📚 ACORDEONES DE LA PDP (3, orden fijo)**: `Qué incluye` → `La pieza` → `Envío y garantía`. El contenido de "Qué incluye" vive en **`src/lib/pdp-includes.ts`** (`PDP_INCLUDES` por slug).
+- **📚 ACORDEONES DE LA PDP (3, orden fijo)**: `Qué incluye` → **`Más detalles`** (antes "La pieza", renombrado 2026-08-27; renderiza `product.description`) → `Envío y garantía`. El contenido de "Qué incluye" vive en **`src/lib/pdp-includes.ts`** (`PDP_INCLUDES` por slug).
 - **📐 IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → carrusel → reseñas → bloques editoriales → `<CompareTable />` → FAQ → CTA de cierre.
 - **🏠 ORDEN DE LA HOME** (`IndexUI.tsx`): hero → credenciales → 4 pasos → "Elige tu vela" (7 cards) → `RitualSection` → `Reviews` → `ScentsSection` → "Elige tu tono" → `CasaRealSection` → `BrandStorySection` → `<CompareTable />` → FAQ → newsletter.
@@ -135,7 +135,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ 2 productos de acero creados y cableados. ✅ Bloques editoriales de la PDP de cerámica actualizados. ✅ Galería por variante arreglada (color + aroma). ✅ Copy de "Qué incluye" de la esencia aclarado. 🔜 **Verificación visual + precio tachado + copy de la cera.**
+**Estado**: ✅ 2 productos de acero creados y cableados. ✅ Bloques editoriales de la PDP de cerámica actualizados. ✅ Galería por variante arreglada (color + aroma). ✅ Copy de "Qué incluye" de la esencia aclarado. ✅ Acordeón renombrado a "Más detalles". 🔜 **Verificación visual + precio tachado + copy de la cera.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
@@ -143,7 +143,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado? La copy dice "acero pulido tipo espejo".
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- Video hero móvil (360 px, iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, bloques editoriales de `kit-vaso-de-concreto`, **cambio de foto al elegir color en `kit-vaso-de-vidrio`, `perlas-originales-500-g` y `reserva-1-kg`**, **cambio de foto al elegir aroma en `esencia-para-vela-10-ml`**.
+- Video hero móvil (360 px, iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, bloques editoriales de `kit-vaso-de-concreto`, **cambio de foto al elegir color en `kit-vaso-de-vidrio`, `perlas-originales-500-g` y `reserva-1-kg`**, **cambio de foto al elegir aroma en `esencia-para-vela-10-ml`**, **acordeón "Más detalles"**.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -155,7 +155,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`): el bullet 2 decía "Seis aromas para elegir", que sugería que el frasco traía los seis. Ahora dice **"El aroma que elijas, de seis disponibles"** con el beneficio "Cada frasco lleva un solo aroma. Eliges cuál arriba, antes de agregarlo." Aplica a los 6 aromas porque son variantes de un mismo slug.
+- 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → **"Más detalles"** en `ProductPageUI.tsx` (línea ~1202). Aplica a TODOS los productos; es el bloque que renderiza `product.description`.
+- 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`): el bullet 2 decía "Seis aromas para elegir", que sugería que el frasco traía los seis. Ahora dice **"El aroma que elijas, de seis disponibles"** con el beneficio "Cada frasco lleva un solo aroma. Eliges cuál arriba, antes de agregarlo."
 - 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA** (`ProductPageUI.tsx`): las 6 variantes de `esencia-para-vela-10-ml` no tienen `image_urls`, así que al elegir aroma la foto no cambiaba. Se añadió un segundo criterio en `galleryImages`: resolver la foto vía `getScentImageByVariantName()` y subirla al frente.
 - 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA** (`ProductPageUI.tsx`): nuevo `galleryImages` que sube al frente la primera foto exclusiva de la variante elegida. Thumbnails y carrusel móvil ahora consumen `galleryImages`; el carrusel se resetea a la posición 0 vía `setApi`.
 - 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas** en `ProductStorySections.tsx` (`kit-vaso-de-concreto`) con el bowl real.
@@ -169,7 +170,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🎨 **"Elige tu tono"** usa la imagen 1 de cada variante y linkea con `?variante=`.
 - 2026-08-25 — 🔗 **`ProductPageUI` preselecciona variante desde la URL**.
 - 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `navigation.ts` + `MainNav.tsx`.
-- 2026-08-25 — 🏷️ **NOMENCLATURA PREMIUM: 8 productos renombrados en la DB**. Slugs intactos.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -214,7 +214,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
 - [ALTA] **Asignar la foto de cada aroma a su variante en `esencia-para-vela-10-ml`** desde el Dashboard (hoy funciona por fallback de nombre, pero lo correcto es tenerlas en la variante).
 - [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299 en el Dashboard.
-- [ALTA] **Verificar tras el commit**: cambio de foto por color y por aroma, PDP de acero, PDP de cerámica, mega menú, grid de 7 cards, video hero móvil.
+- [ALTA] **Verificar tras el commit**: cambio de foto por color y por aroma, acordeón "Más detalles", PDP de acero, PDP de cerámica, mega menú, grid de 7 cards, video hero móvil.
 - [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
 - [ALTA] **Pedir al owner**: horas por mecha, nombre de la garantía, copy del empaque.

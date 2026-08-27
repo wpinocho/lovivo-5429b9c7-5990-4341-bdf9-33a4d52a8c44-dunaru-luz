@@ -1199,7 +1199,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               {logic.product.description && (
                 <AccordionItem value="description">
                   <AccordionTrigger className="text-sm font-medium uppercase tracking-wider">
-                    La pieza
+                    Más detalles
                   </AccordionTrigger>
                   <AccordionContent>
                     <div
