@@ -155,8 +155,8 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
       benefit: "Un frasco perfuma 500 g de Cera Duna.",
     },
     {
-      item: "Seis aromas para elegir",
-      benefit: "Cambias de aroma cuando quieras, sin cambiar de vela.",
+      item: "El aroma que elijas, de seis disponibles",
+      benefit: "Cada frasco lleva un solo aroma. Eliges cuál arriba, antes de agregarlo.",
     },
     ENVIO,
   ],
