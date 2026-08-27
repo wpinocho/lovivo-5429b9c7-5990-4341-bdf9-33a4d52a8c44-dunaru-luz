@@ -485,6 +485,21 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   }, [logic.product, optionValueImages])
 
   /**
+   * true cuando TODAS las opciones del producto ya se eligen deslizando el
+   * carrusel (p. ej. productos con una sola opción tipo Aroma o Color).
+   * En ese caso ocultamos el bloque de opciones completo en móvil para no
+   * dejar un contenedor vacío que sigue ocupando espacio vertical.
+   */
+  const allOptionsAreSlider = useMemo(() => {
+    const options: any[] = logic.product?.options || []
+    return (
+      options.length > 0 &&
+      !!sliderOption &&
+      options.every((o) => o?.name === sliderOption.name)
+    )
+  }, [logic.product, sliderOption])
+
+  /**
    * Slides del carrusel móvil: primero una por valor de la opción (en orden
    * estable, nunca reordenado al cambiar de variante) y después el resto de
    * fotos del producto, que no cambian la selección.
@@ -1147,7 +1162,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
             {/* Product Options */}
             {logic.product.options && logic.product.options.length > 0 && (
-              <div className="space-y-5">
+              <div
+                className={cn(
+                  "space-y-5",
+                  allOptionsAreSlider && "hidden md:block"
+                )}
+              >
                 {logic.product.options.map((option: any) => (
                   <div
                     key={option.name}
