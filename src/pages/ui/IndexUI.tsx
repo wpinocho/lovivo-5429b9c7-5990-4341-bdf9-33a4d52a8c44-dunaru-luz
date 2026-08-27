@@ -220,13 +220,13 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-24 md:pt-28 md:pb-20">
           <div className="max-w-xl">
             <p className="eyebrow eyebrow-light mb-6 sm:mb-7 animate-fade-up">
-              Cera vegetal rellenable · Hecha en México
+              Cera perlada 100% natural · Hecha en México
             </p>
             <h1 className="lockup text-4xl sm:text-5xl md:text-6xl leading-[1.12] text-dunaru-marfil mb-7 sm:mb-8 animate-fade-up delay-100">
               CREA LUZ <em className="text-dunaru-ambar">en el</em> RECIPIENTE QUE YA AMAS
             </h1>
             <p className="font-body text-base sm:text-lg text-dunaru-marfil/70 mb-10 sm:mb-12 leading-relaxed animate-fade-up delay-200 max-w-md">
-              Cera Duna vegetal en gránulos finos. Viertes, insertas una mecha y enciendes. El aroma lo eliges tú.
+              Convierte tus propios recipientes en velas, cera premium que se adapta a tu estilo. Reduce el desperdicio. Siempre como nuevas.
             </p>
 
             {/* CTAs */}

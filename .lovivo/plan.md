@@ -3,6 +3,7 @@
 - ⚠️ VOCABULARIO: **"rellenable"** (NO "recargable"). ⚠️ **PROHIBIDO el guion largo (—) en copy visible.**
 - **Cera Duna** = nombre propietario de la cera (vegetal, en gránulos, sin parafina). Ya migrado a títulos y descripciones de la DB.
 - **Cera 100% vegetal, biodegradable y ecológica** (claim aprobado por la owner). ⛔ NO usar porcentajes de soya/coco.
+- ⚠️ 2026-08-27: el eyebrow del hero ahora dice **"Cera perlada 100% natural"** (pedido explícito de la owner) — convive con el claim "100% vegetal" usado en el resto del sitio; no armonizado aún.
 - Tesis: no vendemos cera. Vendemos una forma simple de crear luz en el recipiente que ya tienes.
 - **AROMA**: la cera nace neutra. Add-on **Esencia para Vela · 10 ml** ($99) en la PDP. **1 frasco de 10 ml perfuma 500 g** (`SCENT_YIELD_GRAMS`). ⚠️ **Cada frasco = UN solo aroma**, elegido entre seis.
 - Target: mujer 25–45, urbana, CDMX/GDL/MTY/Puebla/QRO. Market: México, MXN, es-MX.
@@ -106,6 +107,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### 🎬 HERO
 - **Desktop**: `HERO_DESKTOP_IMAGE`. **Móvil**: `<HeroMobileVideo />` (MP4 9:16, 1.8 MB, sin audio).
 - **CTA hero "Comprar ahora" → `/categorias/todos`**. Secundario → `#como-funciona`.
+- Eyebrow: "Cera perlada 100% natural · Hecha en México". Subtítulo: "Convierte tus propios recipientes en velas, cera premium que se adapta a tu estilo. Reduce el desperdicio. Siempre como nuevas." (`IndexUI.tsx` líneas ~222-229).
 
 ### 🎨 "ELIGE TU TONO" (home)
 - `TONOS` usa la imagen 1 de cada variante de `perlas-originales-500-g`; linkea a `?variante=<Nombre>`.
@@ -135,7 +137,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO, CUENCO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado al catálogo y al menú. ✅ Foto por variante en tarjetas. ✅ Carrito persistente. 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado al catálogo y al menú. ✅ Foto por variante en tarjetas. ✅ Carrito persistente. ✅ Copy del hero actualizado. 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner
 1. Bowl de acero: ¿el kit incluye 500 g si el bowl mide 7 × 4 cm? ¿Acero inoxidable pulido o cromado? Falta `compare_at_price`.
@@ -144,6 +146,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### 7.2 🔴 P1 — Verificación visual tras el commit
 - **`/categorias/todos`**: los 4 kits en "Empieza aquí", Cuenco Dunaru recipiente en "Accesorios", y cambio de foto al elegir color.
 - Home 360 px, PDP esencia (carrusel), PDP vaso de vidrio (toggle), video hero iOS, mega menú, flujo carrito → /pagar.
+- Hero: revisar que el nuevo copy ("Cera perlada 100% natural") no choque visualmente con el resto del sitio que usa "100% vegetal".
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -155,6 +158,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-27 — ✍️ **COPY DEL HERO ACTUALIZADO** (`IndexUI.tsx`): eyebrow → "Cera perlada 100% natural · Hecha en México"; subtítulo → "Convierte tus propios recipientes en velas, cera premium que se adapta a tu estilo. Reduce el desperdicio. Siempre como nuevas." (pedido explícito de la owner, reemplaza mención de "Cera Duna vegetal en gránulos").
 - 2026-08-27 — 🗂️ **CUENCO DUNARU INTEGRADO**: `vela-rellenable-cuenco-dunaru` movido al grupo **"Empieza aquí"** (kits) y `cuenco-dunaru` al grupo **"Accesorios"** en `catalog-order.ts`. Antes caían en "Más de dunaru". También añadidos al mega menú (`navigation.ts`): "Cuenco Dunaru" en Velas rellenables y en Accesorios, ambos con tag "Nuevo".
 - 2026-08-27 — 🖼️ **FOTO POR VARIANTE EN LAS TARJETAS**: nuevo `src/lib/variant-image.ts` con `getVariantDisplayImage()`. `ProductCardUI` lo usa para `primaryImage` y desactiva la foto de hover cuando hay foto de variante.
 - 2026-08-27 — 🔗 **CTA HERO "Comprar ahora" → `/categorias/todos`** (`IndexUI.tsx`).
@@ -169,7 +173,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO** + CTA "Elegir aroma".
 - 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT** + back links.
 - 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → "Más detalles".
-- 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA**.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -185,6 +188,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
+- 2026-08-27 — 🟡 **Copy del hero usa "natural" mientras el resto del sitio usa "100% vegetal"**: revisar consistencia de claims con la owner.
 - 2026-08-27 — 🟡 **Swatches del Cuenco Dunaru mal**: los 3 colores en `#101010`. Corregir en el Dashboard.
 - 2026-08-27 — 🟡 **La lógica de "foto exclusiva de variante" está DUPLICADA**: `src/lib/variant-image.ts` (tarjetas) y el `useMemo galleryImages` de `ProductPageUI` (PDP).
 - 2026-08-27 — 🟡 **Los flat-lays de aroma son 4:3 y el carrusel móvil es 4:5**: se recortan.
@@ -199,10 +203,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🟡 `CATALOG_FALLBACK` (IndexUI) y el footer duplican los títulos de la DB.
 - 2026-08-25 — 🟡 `bowl-negro` y `vaso-extra-transparente` todavía dicen "perlas dunaru".
 - 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
-- 2026-08-21 — 🟡 La barra sticky de la PDP muestra el precio unitario sin aroma.
-- 2026-08-07 — 🟡 `getReviewStats()` es global (4.9/15), no por SKU.
-- 2026-07-31 — 🔴 `ecommerce--update-product` NO persiste `compare_at_price` explícito.
-- 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
 - [ALTA] **Verificar `/categorias/todos`**: 4 kits arriba, Cuenco Dunaru recipiente en Accesorios, cambio de foto por color.
