@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Reveal } from '@/components/Reveal';
-import { SCENTS } from '@/lib/scents';
+import { SCENTS, SCENT_PRODUCT_SLUG } from '@/lib/scents';
 
 /**
  * ScentsSection — "Seis aromas, una sola vela"
@@ -30,7 +30,7 @@ export const ScentsSection = () => (
         {SCENTS.map((scent, i) => (
           <Reveal key={scent.id} delay={(i % 3) * 90}>
             <Link
-              to="/productos/kit-vaso-de-vidrio#aroma"
+              to={`/productos/${SCENT_PRODUCT_SLUG}?variante=${encodeURIComponent(scent.name)}`}
               className="group flex h-full flex-col"
             >
               <div className="aspect-[4/3] overflow-hidden bg-dunaru-marfil">

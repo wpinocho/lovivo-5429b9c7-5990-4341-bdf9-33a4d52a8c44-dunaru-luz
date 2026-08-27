@@ -609,21 +609,41 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     if (!Array.isArray(options) || options.length === 0) return
 
     const key = `${logic.product?.id}:${wanted}`
+    // Ya aplicado: soltamos el control para que el cliente pueda cambiar de
+    // variante libremente sin que la URL se lo revierta.
     if (appliedVariantRef.current === key) return
 
-    const target = wanted.trim().toLowerCase()
+    // "Ónix" y "onix" deben apuntar a la misma variante.
+    const normalize = (v: string) =>
+      String(v)
+        .trim()
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+
+    const target = normalize(wanted)
+
     for (const opt of options) {
       const value = (opt.values || []).find(
-        (v: string) => String(v).trim().toLowerCase() === target
+        (v: string) => normalize(v) === target
       )
       if (!value) continue
-      appliedVariantRef.current = key
-      if (logic.selected?.[opt.name] !== value) {
+
+      if (logic.selected?.[opt.name] === value) {
+        // La preselección ya quedó firme.
+        appliedVariantRef.current = key
+      } else {
+        // El headless auto-selecciona la primera variante disponible justo
+        // después de cargar el producto y pisa esta elección. Por eso volvemos
+        // a aplicarla mientras no coincida, en vez de rendirnos al primer try.
         logic.handleOptionSelect(opt.name, value)
       }
-      break
+      return
     }
-  }, [search, logic.product?.id])
+
+    // El valor de la URL no existe en este producto: no insistimos.
+    appliedVariantRef.current = key
+  }, [search, logic.product?.id, logic.selected])
 
   useEffect(() => {
     window.scrollTo(0, 0)
