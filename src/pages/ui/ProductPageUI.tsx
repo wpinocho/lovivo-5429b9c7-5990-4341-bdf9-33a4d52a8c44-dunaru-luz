@@ -866,9 +866,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   opts={{ align: "start" }}
                   setApi={setCarouselApi}
                 >
-                  <CarouselContent className="-ml-2">
+                  <CarouselContent className="-ml-1">
                     {mobileSlides.map((slide, index: number) => (
-                      <CarouselItem key={index} className="basis-[95%] pl-2">
+                      <CarouselItem key={index} className="basis-[99%] pl-1">
                         <div className="relative aspect-[4/5] max-h-[50vh] rounded-lg overflow-hidden bg-muted/30">
                           <img
                             src={slide.image}
