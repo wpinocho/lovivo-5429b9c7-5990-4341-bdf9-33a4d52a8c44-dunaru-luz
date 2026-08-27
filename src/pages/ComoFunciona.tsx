@@ -3,6 +3,7 @@ import { EcommerceTemplate } from '@/templates/EcommerceTemplate'
 import { SEO } from '@/components/SEO'
 import { CompareTable } from '@/components/CompareTable'
 import { Reveal } from '@/components/Reveal'
+import { Reviews } from '@/components/Reviews'
 import { Button } from '@/components/ui/button'
 import {
   Accordion,
@@ -67,6 +68,33 @@ const FAQ = [
   },
 ]
 
+/** CTA reutilizable: botón principal + enlace secundario opcional. */
+const InlineCta = ({
+  label = 'Ver las velas rellenables',
+  to = '/categorias/todos',
+  secondary,
+}: {
+  label?: string
+  to?: string
+  secondary?: { label: string; to: string }
+}) => (
+  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+    <Link to={to} className="w-full sm:w-auto">
+      <Button className="w-full sm:w-auto h-12 px-9 font-body font-medium uppercase tracking-[0.12em] text-xs">
+        {label}
+      </Button>
+    </Link>
+    {secondary && (
+      <Link
+        to={secondary.to}
+        className="font-body text-xs uppercase tracking-[0.12em] text-foreground/60 underline underline-offset-4 hover:text-dunaru-terracota transition-editorial"
+      >
+        {secondary.label}
+      </Link>
+    )}
+  </div>
+)
+
 const ComoFunciona = () => (
   <EcommerceTemplate>
     <SEO
@@ -85,6 +113,12 @@ const ComoFunciona = () => (
           <p className="font-body text-[15px] sm:text-base text-foreground/60 leading-relaxed mt-5">
             No vendemos una vela que se acaba. Vendemos una forma de crear luz, otra vez,
             en el recipiente que ya amas. Toma menos de un minuto y no necesitas nada más.
+          </p>
+          <div className="mt-8">
+            <InlineCta secondary={{ label: 'Ver aromas', to: '/productos/esencia-para-vela-10-ml' }} />
+          </div>
+          <p className="font-body text-xs text-foreground/50 mt-4">
+            Envío gratis a todo México · 30 días de garantía
           </p>
         </Reveal>
       </div>
@@ -120,16 +154,33 @@ const ComoFunciona = () => (
             </div>
           </Reveal>
         ))}
+
+        {/* CTA a mitad de página, justo después del paso 04 */}
+        <Reveal>
+          <div className="border-t border-border/60 pt-10 sm:pt-12 text-center">
+            <h2 className="lockup text-xl sm:text-2xl text-foreground mb-3">
+              ASÍ DE <em>simple</em>
+            </h2>
+            <p className="font-body text-[15px] text-foreground/60 leading-relaxed max-w-md mx-auto mb-7">
+              Cada vela rellenable llega completa: recipiente, 500 g de Cera Duna y 30 mechas de
+              algodón. Solo eliges la tuya.
+            </p>
+            <InlineCta label="Elegir mi vela" />
+          </div>
+        </Reveal>
       </div>
     </section>
 
+    {/* Reseñas reales */}
+    <Reviews title="Lo que dicen quienes ya la rellenaron" />
+
     {/* Comparativa */}
-    <div className="bg-dunaru-arena texture-arena">
+    <div className="bg-background texture-grain">
       <CompareTable />
     </div>
 
     {/* FAQ */}
-    <section className="section-pad bg-background texture-grain">
+    <section className="section-pad bg-dunaru-arena texture-arena">
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         <Reveal className="text-center mb-9">
           <p className="eyebrow mb-4">Antes de encender</p>
@@ -147,6 +198,13 @@ const ComoFunciona = () => (
             </AccordionItem>
           ))}
         </Accordion>
+
+        <Reveal className="block text-center mt-10">
+          <InlineCta
+            label="Ver todo el catálogo"
+            secondary={{ label: 'Ver la vela de vidrio', to: '/productos/kit-vaso-de-vidrio' }}
+          />
+        </Reveal>
       </div>
     </section>
 
