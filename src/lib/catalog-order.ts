@@ -20,7 +20,12 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   {
     id: "kits",
     label: "Empieza aquí",
-    slugs: ["kit-vaso-de-vidrio", "kit-vaso-de-concreto", "vela-bowl-de-acero"],
+    slugs: [
+      "kit-vaso-de-vidrio",
+      "kit-vaso-de-concreto",
+      "vela-rellenable-cuenco-dunaru",
+      "vela-bowl-de-acero",
+    ],
   },
   {
     id: "recargas",
@@ -38,6 +43,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
     slugs: [
       "esencia-para-vela-10-ml",
       "vaso-extra-transparente",
+      "cuenco-dunaru",
       "bowl-negro",
       "bowl-espejo-de-acero",
       "pack-30-mechas",
