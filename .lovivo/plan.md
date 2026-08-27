@@ -88,6 +88,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - Exporta: `STEP_IMAGES` (`vierte`, `inserta`, `enciende`, `renueva`), `BRAND_STORY_IMAGE` (= `vierte`), **`RITUAL_IMAGE`**, **`HERO_DESKTOP_IMAGE`**, **`HERO_MOBILE_VIDEO`** y **`HERO_MOBILE_POSTER`**.
 - La consumen: `IndexUI` (STEPS + hero desktop), `HeroMobileVideo`, `ProductStorySections`, `ComoFunciona`, `BrandStorySection`, `RitualSection`.
 - ⛔ **Nunca hardcodear URLs de pasos, hero, ritual ni video.** Se cambia solo en `steps-media.ts`.
+- ⚠️ Los `blocks[].image` de `ProductStorySections` SÍ están hardcodeados por slug (son fotos propias de cada PDP, no compartidas).
 
 ### 🎬 HERO (desde 2026-08-26)
 - **Desktop**: foto horizontal `HERO_DESKTOP_IMAGE`, `object-center`. Sin video, nunca lo descarga.
@@ -122,67 +123,63 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ 2 productos de acero creados y cableados en todo el front. 🔜 **Verificación visual + precio tachado + copy de la cera.**
+**Estado**: ✅ 2 productos de acero creados y cableados. ✅ Bloques editoriales de la PDP de cerámica actualizados con fotos reales. 🔜 **Verificación visual + precio tachado + copy de la cera.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
-1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs. Si no caben, ajustar copy en DB, `pdp-includes.ts` y `PDP_BENEFITS`.
+1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
 2. Confirmar precios: kit $1,099 / bowl solo $599. **El `compare_at_price` de `vela-bowl-de-acero` NO persistió vía API: ponerlo a mano en el Dashboard ($1,299).**
 3. ¿Es acero inoxidable pulido o cromado? La copy dice "acero pulido tipo espejo".
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- Video hero móvil (360 px, iOS real), mega menú con 3 columnas actualizadas, grid de 7 cards en la home, las 2 PDP nuevas.
+- Video hero móvil (360 px, iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, **bloques editoriales de `kit-vaso-de-concreto`**.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
-Hoy "Aromas" apunta a la PDP de la esencia (oculta del catálogo, sin SEO propio).
-
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
-`ProductQuantityTiers` (solo `perlas-originales-500-g`).
-
 ### 7.5 DECISIONES PENDIENTES DEL OWNER
 1. ❓ Nombre de la garantía. 2. ❓ Horas por mecha. 3. ❓ Copy del empaque / inserto. 4. ❓ B2B / SKU sample.
-
 ### 7.6 Medición
 Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición secuencial con `posthog-query`.
 
 ---
 
 ## 4. Recent Changes
-- 2026-08-26 — 🪞 **LÍNEA DE ACERO**: creados `vela-bowl-de-acero` ($1,099, 5 fotos, variantes de color) y `bowl-espejo-de-acero` ($599, fotos 3 y 4). Añadidos a colecciones `kits` / `recipientes`, `catalog-order.ts`, `navigation.ts` (con tag "Nuevo"), `pdp-includes.ts`, `PDP_HEADLINE` + `PDP_BENEFITS`, `CATALOG_FALLBACK` + `SHOP_CARDS` de IndexUI, footer y `SCENT_ENABLED_SLUGS`.
+- 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas** en `ProductStorySections.tsx` (`kit-vaso-de-concreto`) con el bowl real: "Un objeto de diseño que da luz" → bowl encendido en mesa de travertino · "Por qué cerámica" → bowl vacío mostrando el acabado mate · "El regalo que se nota" → los 3 bowls con el tubo Dunaru. Las 3 anteriores quedan deprecadas.
+- 2026-08-26 — 🪞 **LÍNEA DE ACERO**: creados `vela-bowl-de-acero` ($1,099) y `bowl-espejo-de-acero` ($599). Añadidos a colecciones, `catalog-order.ts`, `navigation.ts`, `pdp-includes.ts`, `PDP_HEADLINE` + `PDP_BENEFITS`, IndexUI, footer y `SCENT_ENABLED_SLUGS`.
 - 2026-08-26 — 🗺️ `/como-funciona` añadida a `scripts/generate-sitemap.ts`.
-- 2026-08-26 — 🎬 **VIDEO HERO MÓVIL**: comprimido a 1.8 MB, componente `HeroMobileVideo.tsx` con póster webp y montaje diferido.
-- 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**: foto horizontal `1787702019949-nscqjcvsz0r.webp`.
+- 2026-08-26 — 🎬 **VIDEO HERO MÓVIL**: 1.8 MB, `HeroMobileVideo.tsx` con póster webp y montaje diferido.
+- 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**: `1787702019949-nscqjcvsz0r.webp`.
 - 2026-08-25 — 🔁 **Paso 1 corregido** y **pasos 3 y 4 intercambiados**.
-- 2026-08-25 — 🕯️ **`RitualSection` migrada** a la foto del bowl negro (`RITUAL_IMAGE`).
+- 2026-08-25 — 🕯️ **`RitualSection` migrada** al bowl negro (`RITUAL_IMAGE`).
 - 2026-08-25 — 🖼️ Fotos del ritual centralizadas en `src/lib/steps-media.ts`.
 - 2026-08-25 — 🎨 **"Elige tu tono"** usa la imagen 1 de cada variante y linkea con `?variante=`.
 - 2026-08-25 — 🔗 **`ProductPageUI` preselecciona variante desde la URL**.
-- 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `src/lib/navigation.ts` + `src/components/MainNav.tsx`.
+- 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `navigation.ts` + `MainNav.tsx`.
 - 2026-08-25 — 📄 **Nueva página `/como-funciona`** con SEO propio.
-- 2026-08-25 — 🏷️ **NOMENCLATURA PREMIUM: renombrados 8 productos en la DB**. Slugs intactos.
+- 2026-08-25 — 🏷️ **NOMENCLATURA PREMIUM: 8 productos renombrados en la DB**. Slugs intactos.
 - 2026-08-25 — 🔻 Tabla comparativa bajada en la home.
 - 2026-08-25 — ✂️ Acordeón "Cuidado y seguridad" eliminado de la PDP.
-- 2026-08-25 — 🔢 Mechas corregidas: Trío = 90, Cera Duna 1 kg = 60.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
 - Base de uploads del owner: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`
-- **🪞 BOWL DE ACERO (2026-08-26)**: `1787759673455-m5x9h5ouxwf` (bodegón día + tubo) · `1787759673455-uu86xb8ars` (mármol atardecer) · `1787759673455-vsmlwdqns` (sala de noche, cera oscura) · `1787759673455-e2tr1gctjfo` (baño, luz de día) · `1787759673455-udq3osxrsej` (specs 7 × 4 cm).
-  - Kit: 1, 2, baño, noche, specs. Recipiente solo: baño, noche.
+- **🏺 BLOQUES EDITORIALES CERÁMICA (2026-08-27)**: objeto de diseño `1787846317152-fp7km169wu7` (bowl encendido, travertino, 4:3) · por qué cerámica `1787846317152-d15my4ruzvs` (bowl vacío, mismo set) · el regalo `1787846317152-kecin16ha` (3 bowls + tubo Dunaru, vertical).
+- **🪞 BOWL DE ACERO (2026-08-26)**: `1787759673455-m5x9h5ouxwf` · `-uu86xb8ars` · `-vsmlwdqns` (noche) · `-e2tr1gctjfo` (baño) · `-udq3osxrsej` (specs 7 × 4 cm).
 - **🔥 4 PASOS**: Vierte `1787701006060-mdjjspbepql` (también BrandStory) · Inserta `1787699972902-6ha0kcq29g` · Enciende `1787699972902-pr81fsb4jso` · Renueva `1787699972902-11zjzn59pysq`
 - **🌅 HERO DESKTOP**: `1787702019949-nscqjcvsz0r.webp`.
 - **🎬 HERO MÓVIL (video)**: `store-videos/<STORE_ID>/hero-dunaru-mobile.mp4` (720×1280, 1.8 MB). **PÓSTER**: `product-images/<STORE_ID>/hero-dunaru-mobile-poster.webp`.
 - **🕯️ RITUAL**: `1787701006060-vpgjgog2juh.webp`.
-- ⛔ Deprecadas: `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b`, `1785521743156-3qeskqe43gv`, `1787699972902-dld268c7c0u`, `1787701006060-xuyehajl1yr`, `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
+- ⛔ Deprecadas: `1785182590879-i54i3sm6qk`, `1785182590879-u6xju9w4wjl`, `1785182590879-77nbrytmoii` (bloques viejos de cerámica), `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b`, `1785521743156-3qeskqe43gv`, `1787699972902-dld268c7c0u`, `1787701006060-xuyehajl1yr`, `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
 - **🌿 FLAT-LAYS DE AROMA (4:3)**: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `1787337333997-44wwhmmisy5` · Costa Mineral `1787337333998-jphdwvy2pbh` · Higo Matcha `1787337333998-enck999sju7` · Tabaco Vainilla `1787337333998-5e5poqkcxh8` · Musgo Mineral `1787337333998-n7f8zqhfx8m`.
 - **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **UGC** (5 fotos): constante `UGC` en `src/data/reviews.ts`. **FAVICON**: `/favicon.png`.
 - 🟡 Subidas sin usar: `1787681082141-dy7wr0dcp15`, `1787681082142-42qlfq25nvs`, `1787684660654-vr5uiznl7cj`.
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
+- 2026-08-27 — 🟡 Los `steps` del bloque de `kit-vaso-de-concreto` en `ProductStorySections` siguen con `PLACEHOLDER` en varios pasos.
 - 2026-08-26 — 🔴 **`compare_at_price` de `vela-bowl-de-acero` NO persistió** ($1,299). Ponerlo desde el Dashboard.
-- 2026-08-26 — 🟠 **Copy sin verificar del kit de acero**: dice "500 g de Cera Duna" pero el bowl mide 7 × 4 cm según la foto de specs.
+- 2026-08-26 — 🟠 **Copy sin verificar del kit de acero**: dice "500 g de Cera Duna" pero el bowl mide 7 × 4 cm.
 - 2026-08-26 — 🟡 `ProductStorySections` NO tiene entrada propia para `vela-bowl-de-acero`: usa el bloque genérico.
-- 2026-08-26 — 🟡 Video hero móvil sin verificar en dispositivo real (iOS Low Power Mode bloquea autoplay; se queda el póster).
+- 2026-08-26 — 🟡 Video hero móvil sin verificar en dispositivo real.
 - 2026-08-26 — 🟡 El póster del video es una escena diurna; verificar contraste del H1 en 360 px.
 - 2026-08-25 — 🟡 `public/hero-dunaru.webp` y `public/hero-dunaru-mobile.webp` huérfanos.
 - 2026-08-25 — 🟡 **Mega menú sin verificar visualmente**.
@@ -201,9 +198,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Confirmar con la owner los datos del bowl de acero** (gramaje incluido, precios, material) y poner el compare de $1,299 en el Dashboard.
-- [ALTA] **Verificar tras el commit**: PDP de acero, mega menú, grid de 7 cards, video hero móvil.
-- [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`** en `ProductStorySections.tsx`.
+- [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299 en el Dashboard.
+- [ALTA] **Verificar tras el commit**: PDP de acero, PDP de cerámica (3 fotos nuevas), mega menú, grid de 7 cards, video hero móvil.
+- [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
 - [ALTA] **Pedir al owner**: horas por mecha, nombre de la garantía, copy del empaque.
 - [ALTA] **Packshots del frasco de esencia (4:5)**.
