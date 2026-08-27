@@ -154,7 +154,7 @@ export const ProductScentSelector = ({
       : "border-border/70 bg-background text-foreground hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]"
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2 sm:space-y-3">
       {/* Encabezado */}
       <div className="flex items-baseline justify-between gap-3">
         <Label className="text-sm font-medium uppercase tracking-wider">
@@ -281,16 +281,16 @@ export const ProductScentSelector = ({
       {expanded && (
         <div
           id="panel-aromas"
-          className="border border-border/60 bg-dunaru-arena/40 texture-arena p-3.5"
+          className="border border-border/60 bg-dunaru-arena/40 texture-arena p-2.5 sm:p-3.5"
         >
           {!selectedScent ? (
             <p className="font-display text-[15px] text-foreground/80 leading-snug">
               Selecciona un aroma para conocer sus notas.
             </p>
           ) : (
-            <div className="space-y-2.5 sm:space-y-0 sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4 sm:items-start">
+            <div className="flex gap-3 items-start sm:grid sm:grid-cols-[minmax(0,44%)_1fr] sm:gap-4">
               {selectedScent.imageUrl && (
-                <div className="w-full aspect-[4/3] overflow-hidden bg-dunaru-arena">
+                <div className="w-24 shrink-0 aspect-square sm:w-full sm:aspect-[4/3] overflow-hidden bg-dunaru-arena">
                   <img
                     src={selectedScent.imageUrl}
                     alt={`Ingredientes del aroma ${selectedScent.name} de dunaru`}
@@ -303,8 +303,8 @@ export const ProductScentSelector = ({
                 </div>
               )}
 
-              <div className="space-y-2.5">
-                <div className="space-y-1">
+              <div className="flex-1 min-w-0 space-y-1.5 sm:space-y-2.5">
+                <div className="space-y-0.5 sm:space-y-1">
                   <h4 className="font-display text-lg leading-none text-foreground">
                     {selectedScent.name}
                   </h4>

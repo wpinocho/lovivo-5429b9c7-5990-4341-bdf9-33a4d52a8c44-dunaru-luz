@@ -119,6 +119,12 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - Al cambiar de variante: `setSelectedImage(null)` + `carouselApi.scrollTo(0)`.
 - ⚠️ Un producto con variantes sin `image_urls` y sin match de aroma sigue sin cambiar de foto (ej. `vela-bowl-de-acero`).
 
+### 🌿 SELECTOR DE AROMA — panel compacto en móvil (2026-08-27)
+- `src/components/ProductScentSelector.tsx`: el panel "Conoce los aromas" (expandido por default) ahora es **flex-row incluso en móvil** (antes stack vertical con foto arriba full-width).
+- Foto en móvil: `w-24 aspect-square` (antes full-width 4:3, mucho más alta) → en `sm:` vuelve a `w-full aspect-[4/3]` dentro del grid `[44%_1fr]`.
+- Padding del panel `p-2.5` en móvil (antes `p-3.5`). Spacing exterior `space-y-2` en móvil (antes `space-y-3`).
+- Motivo: la clienta tenía que bajar para tocar el botón de aroma y luego subir para ver la foto (el stack vertical hacía el panel muy alto). Con foto chica al lado del texto, todo cabe junto sin scroll extra.
+
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN DEL BUY BOX** (`ProductPageUI.tsx`): título+precio+MSI+rating · `PDP_BENEFITS[slug]` · variantes · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
@@ -145,7 +151,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero creada y cableada. ✅ Galería por variante arreglada. ✅ Carrito persistente + back links. ✅ Esencia visible en el catálogo con CTA "Elegir aroma". 🔜 **Verificación visual + precio tachado + copy de la cera.**
+**Estado**: ✅ Línea de acero creada y cableada. ✅ Galería por variante arreglada. ✅ Carrito persistente + back links. ✅ Esencia visible en el catálogo con CTA "Elegir aroma". ✅ Panel de aromas compacto en móvil. 🔜 **Verificación visual + precio tachado + copy de la cera.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
@@ -153,7 +159,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- Video hero móvil (360 px, iOS real), mega menú (columna "Accesorios"), grid de 7 cards, las 2 PDP nuevas, cambio de foto al elegir color/aroma, acordeón "Más detalles", flujo carrito → /pagar → atrás, **tarjeta de la esencia en `/categorias/todos` (sin selectores, CTA "Elegir aroma")**.
+- Video hero móvil (360 px, iOS real), mega menú (columna "Accesorios"), grid de 7 cards, las 2 PDP nuevas, cambio de foto al elegir color/aroma, acordeón "Más detalles", flujo carrito → /pagar → atrás, tarjeta de la esencia en `/categorias/todos`, **panel "Conoce los aromas" en móvil 360px (nuevo layout compacto)**.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -165,6 +171,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
+- 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL**: `ProductScentSelector.tsx` — foto de 96px al lado del texto (antes full-width arriba), padding y spacing reducidos. Evita el scroll doble (bajar a elegir, subir a ver foto).
 - 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO**: grupo `accesorios` renombrado a **"Accesorios"** (en `catalog-order.ts` y en la columna del mega menú de `navigation.ts`) y se agregó `esencia-para-vela-10-ml` como primer item. `HIDDEN_FROM_CATALOG_SLUGS` quedó vacío. Nuevo `CHOOSE_ON_PDP` + `getChooseOnPdp()`: la tarjeta oculta los selectores y su botón (**"Elegir aroma"**) navega a la PDP en vez de agregar al carrito.
 - 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT**: se removió el `clearCart()` de `useCheckout.ts` + back links en `CartUI` y `CheckoutUI`.
 - 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → **"Más detalles"**.
@@ -179,7 +186,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🔁 **Paso 1 corregido** y pasos 3 y 4 intercambiados.
 - 2026-08-25 — 🕯️ **`RitualSection` migrada** al bowl negro.
 - 2026-08-25 — 🎨 **"Elige tu tono"** con `?variante=`.
-- 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `navigation.ts` + `MainNav.tsx`.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -214,7 +220,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🟡 `bowl-negro` y `vaso-extra-transparente` todavía dicen "perlas dunaru".
 - 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
 - 2026-08-21 — 🟡 La barra sticky de la PDP muestra el precio unitario sin aroma.
-- 2026-08-21 — 🟠 El panel de aroma abierto por default empuja el CTA en móvil.
 - 2026-08-20 — 🟠 `ProductStorySections.tsx` aún tiene `dunaru-champagne` en los bullets.
 - 2026-08-07 — 🟠 Escalera de precio por gramo rota: Dúo 1 kg ($1.10/g) vs Cera Duna 1 kg ($0.80/g).
 - 2026-08-07 — 🟡 `getReviewStats()` es global (4.9/15), no por SKU.
@@ -236,3 +241,4 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - [MED] Tiers con nombre y % de ahorro.
 - [MED] Limpiar "perlas dunaru" de `bowl-negro` y `vaso-extra-transparente`.
 - [BAJA] Página B2B / wholesale. SKU sample barato. Banners de colección.
+- [MED] Verificar visualmente el nuevo panel compacto de aromas en 360px real.
