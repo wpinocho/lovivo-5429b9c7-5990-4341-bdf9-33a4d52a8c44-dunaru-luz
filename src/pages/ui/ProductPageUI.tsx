@@ -33,6 +33,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  type CarouselApi,
 } from "@/components/ui/carousel"
 import {
   Accordion,
@@ -354,15 +355,53 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     ]
   }, [scentSelection])
 
+  /**
+   * Galería con la foto del color al frente.
+   *
+   * Varios productos comparten la MISMA primera foto entre todas sus variantes
+   * (el packshot genérico), así que al cambiar de color la imagen principal no
+   * se movía. Aquí detectamos la primera foto EXCLUSIVA de la variante elegida
+   * (la que ninguna otra variante usa) y la ponemos al frente de la galería.
+   */
+  const galleryImages = useMemo<string[]>(() => {
+    const images: string[] = logic.displayImages || []
+    const variants = logic.product?.variants
+    const variant = logic.matchingVariant
+
+    if (!variant || !Array.isArray(variants) || variants.length < 2) {
+      return images
+    }
+
+    const variantImages: string[] = variant.image_urls || []
+    if (variantImages.length === 0) return images
+
+    const exclusive = variantImages.find(
+      (url) =>
+        !variants.some(
+          (other: any) =>
+            other?.id !== variant.id &&
+            Array.isArray(other?.image_urls) &&
+            other.image_urls.includes(url)
+        )
+    )
+
+    if (!exclusive || images[0] === exclusive) return images
+    return [exclusive, ...images.filter((img) => img !== exclusive)]
+  }, [logic.displayImages, logic.matchingVariant, logic.product])
+
   const displayImage =
     selectedImage ||
-    logic.displayImages?.[0] ||
+    galleryImages[0] ||
     logic.currentImage ||
     "/placeholder.svg"
 
+  // Al cambiar de color volvemos a la foto de esa variante (desktop y móvil)
+  const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null)
+
   useEffect(() => {
     setSelectedImage(null)
-  }, [logic.matchingVariant])
+    carouselApi?.scrollTo(0)
+  }, [logic.matchingVariant, carouselApi])
 
   /**
    * Preselección de variante desde la URL: /productos/slug?variante=Marfil
@@ -602,16 +641,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </div>
 
               {/* Horizontal thumbnails below main image (scrollable row) */}
-              {logic.displayImages && logic.displayImages.length > 1 && (
+              {galleryImages.length > 1 && (
                 <div className="flex gap-3 mt-4 overflow-x-auto pb-2 -mb-2 snap-x scroll-smooth thumbnails-scroll">
-                  {logic.displayImages.map((img: string, index: number) => {
-                    const isActive =
-                      selectedImage === img ||
-                      (!selectedImage &&
-                        logic.currentImage === img) ||
-                      (!selectedImage &&
-                        !logic.currentImage &&
-                        index === 0)
+                  {galleryImages.map((img: string, index: number) => {
+                    const isActive = displayImage === img
                     return (
                       <button
                         key={index}
@@ -639,11 +672,15 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             </div>
 
             {/* Mobile: carousel */}
-            {logic.displayImages && logic.displayImages.length > 1 ? (
+            {galleryImages.length > 1 ? (
               <div className="md:hidden">
-                <Carousel className="w-full" opts={{ align: "start" }}>
+                <Carousel
+                  className="w-full"
+                  opts={{ align: "start" }}
+                  setApi={setCarouselApi}
+                >
                   <CarouselContent>
-                    {logic.displayImages.map((img: string, index: number) => (
+                    {galleryImages.map((img: string, index: number) => (
                       <CarouselItem key={index} className="basis-[88%]">
                         <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
                           <img
