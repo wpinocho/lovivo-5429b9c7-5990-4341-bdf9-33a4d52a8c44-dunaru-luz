@@ -83,7 +83,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - ⛔ **REGLA DE ORO: el menú NO contiene anclas a la home (`/#...`).**
 - **Desktop**: `Tienda ▾` (mega menú de 4 columnas) + `Aromas` + `Cómo funciona`.
 - ⚠️ **"Aromas" del menú → `/productos/esencia-para-vela-10-ml`** (la PDP del add-on). No es una landing propia todavía.
-- Columna "Velas rellenables" con 3 items; la tercera columna se llama **"Accesorios"** (2026-08-27, antes "Recipientes y accesorios") y tiene 4 items.
+- Columna "Velas rellenables" con 3 items; la tercera columna se llama **"Accesorios"** (2026-08-27) y tiene 4 items.
 - ⚙️ El panel del mega menú es `absolute top-full left-0 right-0` y depende de que el wrapper `.max-w-7xl` del header tenga `relative`. **No quitar ese `relative`.**
 
 ### 🛒 TARJETA DE PRODUCTO — modo "elegir en la PDP" (2026-08-27)
@@ -114,21 +114,26 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - `HeadlessProduct.getDisplayImages()` devuelve `[...variant.image_urls, ...imágenes generales]`. **No basta** en dos escenarios reales.
 - **`ProductPageUI` calcula `galleryImages`** (useMemo) con DOS estrategias, en orden:
   1. **Foto exclusiva de la variante**: la primera `image_url` que ninguna otra variante usa (arregla `kit-vaso-de-vidrio`).
-  2. **Fallback por nombre de aroma**: `getScentImageByVariantName(...)` de `src/lib/scents.ts` (caso de la esencia, cuyas variantes no tienen `image_urls`).
+  2. **Fallback por nombre de aroma**: `getScentImageByVariantName(...)` de `src/lib/scents.ts`.
 - `displayImage = selectedImage || galleryImages[0]`. Thumbnails y carrusel móvil consumen `galleryImages`.
 - Al cambiar de variante: `setSelectedImage(null)` + `carouselApi.scrollTo(0)`.
-- ⚠️ Un producto con variantes sin `image_urls` y sin match de aroma sigue sin cambiar de foto (ej. `vela-bowl-de-acero`).
+- **📐 FOTO PRINCIPAL EN MÓVIL: `aspect-[4/5] max-h-[46vh]`** (2026-08-27) para que el selector de variante entre en pantalla sin scroll doble.
 
-### 🌿 SELECTOR DE AROMA — panel compacto en móvil (2026-08-27)
-- `src/components/ProductScentSelector.tsx`: el panel "Conoce los aromas" (expandido por default) ahora es **flex-row incluso en móvil** (antes stack vertical con foto arriba full-width).
-- Foto en móvil: `w-24 aspect-square` (antes full-width 4:3, mucho más alta) → en `sm:` vuelve a `w-full aspect-[4/3]` dentro del grid `[44%_1fr]`.
-- Padding del panel `p-2.5` en móvil (antes `p-3.5`). Spacing exterior `space-y-2` en móvil (antes `space-y-3`).
-- Motivo: la clienta tenía que bajar para tocar el botón de aroma y luego subir para ver la foto (el stack vertical hacía el panel muy alto). Con foto chica al lado del texto, todo cabe junto sin scroll extra.
+### 🎛️ SELECTOR DE VARIANTE CON MINIATURA (2026-08-27)
+- `ProductPageUI` calcula **`optionValueImages`** (useMemo): `{ [optionName]: { [value]: url } }`.
+  - Aroma → `getScentImageByVariantName(value)`.
+  - Resto → primera `image_url` **exclusiva** de las variantes con ese valor.
+- Si **TODOS** los valores de una opción tienen imagen, el selector se dibuja como **grid de 3 columnas con miniatura cuadrada + etiqueta**; si no, cae al chip de texto de siempre.
+- Motivo: en móvil la clienta bajaba a elegir y volvía a subir para ver la foto. Con miniaturas ve las 6 opciones y elige en el mismo bloque.
+- Aplica hoy a: `esencia-para-vela-10-ml` (Aroma) y `kit-vaso-de-vidrio` (Color).
+
+### 🌿 SELECTOR DE AROMA ADD-ON — panel compacto en móvil (2026-08-27)
+- `src/components/ProductScentSelector.tsx`: el panel "Conoce los aromas" (expandido por default) es **flex-row incluso en móvil**; foto `w-24 aspect-square` en móvil, `w-full aspect-[4/3]` en `sm:`. Padding `p-2.5`.
 
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN DEL BUY BOX** (`ProductPageUI.tsx`): título+precio+MSI+rating · `PDP_BENEFITS[slug]` · variantes · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
-- **📚 ACORDEONES DE LA PDP (3, orden fijo)**: `Qué incluye` → **`Más detalles`** → `Envío y garantía`. Contenido de "Qué incluye" en **`src/lib/pdp-includes.ts`**.
+- **📚 ACORDEONES DE LA PDP (3, orden fijo)**: `Qué incluye` → **`Más detalles`** → `Envío y garantía`. Contenido en **`src/lib/pdp-includes.ts`**.
 - **📐 IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → carrusel → reseñas → bloques editoriales → `<CompareTable />` → FAQ → CTA de cierre.
 - **🏠 ORDEN DE LA HOME** (`IndexUI.tsx`): hero → credenciales → 4 pasos → "Elige tu vela" (7 cards) → `RitualSection` → `Reviews` → `ScentsSection` → "Elige tu tono" → `CasaRealSection` → `BrandStorySection` → `<CompareTable />` → FAQ → newsletter.
@@ -151,7 +156,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero creada y cableada. ✅ Galería por variante arreglada. ✅ Carrito persistente + back links. ✅ Esencia visible en el catálogo con CTA "Elegir aroma". ✅ Panel de aromas compacto en móvil. 🔜 **Verificación visual + precio tachado + copy de la cera.**
+**Estado**: ✅ Línea de acero creada y cableada. ✅ Galería por variante arreglada. ✅ Carrito persistente + back links. ✅ Esencia visible en el catálogo. ✅ Selector de variante con miniaturas + foto móvil más corta. 🔜 **Verificación visual + precio tachado + copy de la cera.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
@@ -159,7 +164,9 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- Video hero móvil (360 px, iOS real), mega menú (columna "Accesorios"), grid de 7 cards, las 2 PDP nuevas, cambio de foto al elegir color/aroma, acordeón "Más detalles", flujo carrito → /pagar → atrás, tarjeta de la esencia en `/categorias/todos`, **panel "Conoce los aromas" en móvil 360px (nuevo layout compacto)**.
+- **PDP de la esencia en 360 px: miniaturas de aroma visibles junto a la foto principal sin scroll doble.**
+- **PDP `kit-vaso-de-vidrio`: el selector de Color ahora sale con miniaturas — confirmar que se ve bien.**
+- Video hero móvil (iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, acordeón "Más detalles", flujo carrito → /pagar → atrás.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -171,11 +178,12 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL**: `ProductScentSelector.tsx` — foto de 96px al lado del texto (antes full-width arriba), padding y spacing reducidos. Evita el scroll doble (bajar a elegir, subir a ver foto).
-- 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO**: grupo `accesorios` renombrado a **"Accesorios"** (en `catalog-order.ts` y en la columna del mega menú de `navigation.ts`) y se agregó `esencia-para-vela-10-ml` como primer item. `HIDDEN_FROM_CATALOG_SLUGS` quedó vacío. Nuevo `CHOOSE_ON_PDP` + `getChooseOnPdp()`: la tarjeta oculta los selectores y su botón (**"Elegir aroma"**) navega a la PDP en vez de agregar al carrito.
-- 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT**: se removió el `clearCart()` de `useCheckout.ts` + back links en `CartUI` y `CheckoutUI`.
+- 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (`ProductPageUI.tsx`): nuevo `optionValueImages` + render en grid de 3 columnas con foto cuadrada cuando todos los valores tienen imagen. Además la foto principal en móvil se limitó a `max-h-[46vh]`. Arregla el "bajo a elegir, subo a ver" de la PDP de aromas.
+- 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL** (`ProductScentSelector.tsx`): foto de 96px al lado del texto, padding y spacing reducidos.
+- 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO**: grupo **"Accesorios"**, `CHOOSE_ON_PDP` + CTA "Elegir aroma".
+- 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT** + back links.
 - 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → **"Más detalles"**.
-- 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`): "El aroma que elijas, de seis disponibles".
+- 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`).
 - 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA** vía `getScentImageByVariantName()`.
 - 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA** (`ProductPageUI.tsx`).
 - 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas**.
@@ -185,7 +193,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**.
 - 2026-08-25 — 🔁 **Paso 1 corregido** y pasos 3 y 4 intercambiados.
 - 2026-08-25 — 🕯️ **`RitualSection` migrada** al bowl negro.
-- 2026-08-25 — 🎨 **"Elige tu tono"** con `?variante=`.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -202,10 +209,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-27 — 🟡 **La tarjeta de la esencia en el catálogo usa el flat-lay 4:3 en un contenedor cuadrado**: se ve recortada. Urge el packshot 4:5.
+- 2026-08-27 — 🟡 **Las miniaturas de aroma usan el flat-lay 4:3 recortado a cuadrado**: se ve bien, pero mejorará con packshots propios.
+- 2026-08-27 — 🟡 **La tarjeta de la esencia en el catálogo usa el flat-lay 4:3 en contenedor cuadrado**.
 - 2026-08-27 — 🟡 **Órdenes abandonadas duplicadas** (efecto del carrito persistente).
-- 2026-08-27 — 🟡 **La PDP de la esencia usa flat-lays 4:3 en un contenedor 4:5**.
-- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no cambia de foto al elegir color**.
+- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no cambia de foto al elegir color** (sus variantes no tienen `image_urls`; tampoco saldrá con miniaturas).
 - 2026-08-27 — 🟡 Los `steps` de `kit-vaso-de-concreto` en `ProductStorySections` siguen con `PLACEHOLDER`.
 - 2026-08-26 — 🔴 **`compare_at_price` de `vela-bowl-de-acero` NO persistió** ($1,299).
 - 2026-08-26 — 🟠 **Copy sin verificar del kit de acero** ("500 g" vs bowl de 7 × 4 cm).
@@ -216,7 +223,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🟡 **"Aromas" del menú apunta a la PDP de la esencia**, sin SEO propio.
 - 2026-08-25 — 🟠 **Los nombres nuevos NO están en los anuncios de Meta ni en emails automatizados.**
 - 2026-08-25 — 🟡 `CATALOG_FALLBACK` (IndexUI) y el footer duplican los títulos de la DB.
-- 2026-08-25 — 🟡 Sin verificar en 360 px: `CompareTable` en la home, `ScentsSection`, `MobileNav`.
 - 2026-08-25 — 🟡 `bowl-negro` y `vaso-extra-transparente` todavía dicen "perlas dunaru".
 - 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
 - 2026-08-21 — 🟡 La barra sticky de la PDP muestra el precio unitario sin aroma.
@@ -227,10 +233,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Packshots del frasco de esencia (4:5)** — ahora se ve recortada también en el grid del catálogo.
+- [ALTA] **Packshots del frasco de esencia (4:5)**.
+- [ALTA] **Verificar en 360 px real la PDP de aromas con miniaturas**.
 - [ALTA] **Verificar el flujo carrito → /pagar → volver atrás**.
-- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
-- [ALTA] **Asignar la foto de cada aroma a su variante en `esencia-para-vela-10-ml`** desde el Dashboard.
+- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard (así también saldría con miniaturas).
 - [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299.
 - [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
@@ -241,4 +247,3 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - [MED] Tiers con nombre y % de ahorro.
 - [MED] Limpiar "perlas dunaru" de `bowl-negro` y `vaso-extra-transparente`.
 - [BAJA] Página B2B / wholesale. SKU sample barato. Banners de colección.
-- [MED] Verificar visualmente el nuevo panel compacto de aromas en 360px real.

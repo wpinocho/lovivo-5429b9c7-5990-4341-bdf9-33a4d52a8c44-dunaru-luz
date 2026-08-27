@@ -414,6 +414,55 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     logic.currentImage ||
     "/placeholder.svg"
 
+  /**
+   * Miniatura por valor de opción (aroma, color, etc.).
+   *
+   * En móvil la foto principal queda arriba y el selector abajo: la clienta
+   * tenía que bajar a elegir y volver a subir para ver la foto. Cuando TODOS
+   * los valores de una opción tienen imagen propia, el selector se dibuja con
+   * miniaturas para que elegir y ver ocurran al mismo tiempo.
+   */
+  const optionValueImages = useMemo<Record<string, Record<string, string>>>(() => {
+    const map: Record<string, Record<string, string>> = {}
+    const options: any[] = logic.product?.options || []
+    const variants: any[] = logic.product?.variants || []
+
+    for (const opt of options) {
+      const values: string[] = opt?.values || []
+      if (values.length === 0) continue
+      const per: Record<string, string> = {}
+
+      for (const value of values) {
+        // 1) Aroma: la foto vive en src/lib/scents.ts
+        if (opt.name === SCENT_OPTION_NAME) {
+          const scentImg = getScentImageByVariantName(value)
+          if (scentImg) {
+            per[value] = scentImg
+            continue
+          }
+        }
+
+        // 2) Foto exclusiva de las variantes con ese valor
+        const own = variants.filter((v) => v?.options?.[opt.name] === value)
+        const others = variants.filter((v) => v?.options?.[opt.name] !== value)
+        const candidate = own
+          .flatMap((v) => (Array.isArray(v?.image_urls) ? v.image_urls : []))
+          .find(
+            (url: string) =>
+              !others.some(
+                (o) =>
+                  Array.isArray(o?.image_urls) && o.image_urls.includes(url)
+              )
+          )
+        if (candidate) per[value] = candidate
+      }
+
+      if (Object.keys(per).length === values.length) map[opt.name] = per
+    }
+
+    return map
+  }, [logic.product])
+
   // Al cambiar de color volvemos a la foto de esa variante (desktop y móvil)
   const [carouselApi, setCarouselApi] = useState<CarouselApi | null>(null)
 
@@ -701,7 +750,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   <CarouselContent>
                     {galleryImages.map((img: string, index: number) => (
                       <CarouselItem key={index} className="basis-[88%]">
-                        <div className="relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
+                        <div className="relative aspect-[4/5] max-h-[46vh] rounded-lg overflow-hidden bg-muted/30">
                           <img
                             src={img}
                             alt={`${logic.product.title} ${index + 1}`}
@@ -721,7 +770,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </Carousel>
               </div>
             ) : (
-              <div className="md:hidden relative aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
+              <div className="md:hidden relative aspect-[4/5] max-h-[46vh] rounded-lg overflow-hidden bg-muted/30">
                 <img
                   src={displayImage}
                   alt={logic.product.title}
@@ -938,37 +987,91 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                         </span>
                       )}
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {option.values.map((value: string) => {
-                        const isSelected =
-                          logic.selected[option.name] === value
-                        const isAvailable = logic.isOptionValueAvailable(
-                          option.name,
-                          value
-                        )
+                    {optionValueImages[option.name] ? (
+                      /* Con miniatura: elegir y ver la foto al mismo tiempo */
+                      <div className="grid grid-cols-3 gap-2">
+                        {option.values.map((value: string) => {
+                          const isSelected =
+                            logic.selected[option.name] === value
+                          const isAvailable = logic.isOptionValueAvailable(
+                            option.name,
+                            value
+                          )
+                          const thumb = optionValueImages[option.name][value]
 
-                        return (
-                          <button
-                            key={value}
-                            type="button"
-                            disabled={!isAvailable}
-                            onClick={() =>
-                              logic.handleOptionSelect(option.name, value)
-                            }
-                            className={cn(
-                              "min-w-[3rem] px-4 h-11 rounded-md border text-sm font-medium transition-all",
-                              isSelected
-                                ? "border-dunaru-oliva-claro bg-dunaru-oliva-claro text-dunaru-marfil"
-                                : "border-border bg-background hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]",
-                              !isAvailable &&
-                                "opacity-40 cursor-not-allowed line-through"
-                            )}
-                          >
-                            {value}
-                          </button>
-                        )
-                      })}
-                    </div>
+                          return (
+                            <button
+                              key={value}
+                              type="button"
+                              disabled={!isAvailable}
+                              onClick={() =>
+                                logic.handleOptionSelect(option.name, value)
+                              }
+                              className={cn(
+                                "group overflow-hidden rounded-md border text-left transition-all",
+                                isSelected
+                                  ? "border-dunaru-oliva-claro ring-1 ring-dunaru-oliva-claro"
+                                  : "border-border hover:border-dunaru-periwinkle",
+                                !isAvailable && "opacity-40 cursor-not-allowed"
+                              )}
+                            >
+                              <span className="block aspect-square overflow-hidden bg-muted/30">
+                                <img
+                                  src={thumb}
+                                  alt={`${option.name} ${value}`}
+                                  loading="lazy"
+                                  decoding="async"
+                                  className="w-full h-full object-cover"
+                                />
+                              </span>
+                              <span
+                                className={cn(
+                                  "block px-1.5 py-1.5 text-[11px] font-medium leading-tight",
+                                  isSelected
+                                    ? "bg-dunaru-oliva-claro text-dunaru-marfil"
+                                    : "bg-background text-foreground/85",
+                                  !isAvailable && "line-through"
+                                )}
+                              >
+                                {value}
+                              </span>
+                            </button>
+                          )
+                        })}
+                      </div>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {option.values.map((value: string) => {
+                          const isSelected =
+                            logic.selected[option.name] === value
+                          const isAvailable = logic.isOptionValueAvailable(
+                            option.name,
+                            value
+                          )
+
+                          return (
+                            <button
+                              key={value}
+                              type="button"
+                              disabled={!isAvailable}
+                              onClick={() =>
+                                logic.handleOptionSelect(option.name, value)
+                              }
+                              className={cn(
+                                "min-w-[3rem] px-4 h-11 rounded-md border text-sm font-medium transition-all",
+                                isSelected
+                                  ? "border-dunaru-oliva-claro bg-dunaru-oliva-claro text-dunaru-marfil"
+                                  : "border-border bg-background hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]",
+                                !isAvailable &&
+                                  "opacity-40 cursor-not-allowed line-through"
+                              )}
+                            >
+                              {value}
+                            </button>
+                          )
+                        })}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
