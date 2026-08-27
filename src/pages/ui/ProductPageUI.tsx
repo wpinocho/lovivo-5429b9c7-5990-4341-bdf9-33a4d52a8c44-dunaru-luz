@@ -868,8 +868,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 >
                   <CarouselContent className="-ml-1">
                     {mobileSlides.map((slide, index: number) => (
-                      <CarouselItem key={index} className="basis-[99%] pl-1">
-                        <div className="relative aspect-[4/5] max-h-[50vh] rounded-lg overflow-hidden bg-muted/30">
+                      <CarouselItem key={index} className="basis-[90%] pl-2">
+                        <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden bg-muted/30">
                           <img
                             src={slide.image}
                             alt={

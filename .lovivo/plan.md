@@ -119,12 +119,14 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### 📱 CARRUSEL MÓVIL = SELECTOR DESLIZABLE (2026-08-27) ⭐
 - **`sliderOption`** (useMemo en `ProductPageUI`): la primera opción cuyos valores TODOS tienen foto en `optionValueImages` y tiene >1 valor. Hoy: `Aroma` de la esencia y `Color` de `kit-vaso-de-vidrio`.
-- **`allOptionsAreSlider`** (useMemo, 2026-08-27): true cuando TODAS las opciones del producto son la `sliderOption` (caso típico: un solo option). En ese caso el bloque completo "Product Options" se oculta en móvil (`hidden md:block` en el contenedor, no solo en el option individual) para no dejar un div vacío que sume margen extra entre la descripción del carrusel y "Cantidad".
-- **`mobileSlides`**: orden ESTABLE = una slide por valor de la opción + el resto de fotos del producto como slides pasivas.
+- **`allOptionsAreSlider`**: true cuando TODAS las opciones son la `sliderOption`. En ese caso el bloque "Product Options" se oculta completo en móvil (`hidden md:block` en el contenedor) para no dejar un div vacío con margen fantasma.
+- **`mobileSlides`**: orden ESTABLE = una slide por valor de la opción + el resto de fotos como slides pasivas.
 - **Sincronización bidireccional** con `carouselApi` (`on("select")` ⇄ `scrollTo(activeSlideIndex)`).
-- Slides `basis-[95%] pl-2`, contenedor `aspect-[4/5] max-h-[50vh]`.
+- **📐 DIMENSIONES DEL SLIDE (2026-08-27, definitivo)**: `CarouselItem` = `basis-[90%] pl-2`; contenedor interno = **`w-full aspect-[4/5]` SIN `max-h`**.
+  - ⛔ **NUNCA volver a poner `max-h-[Xvh]` junto a `aspect-[4/5]`**: al toparse el alto, el navegador recalcula el ANCHO desde la proporción y la foto deja de llenar el slide (se ve pequeña con un hueco enorme a la derecha). Fue el bug reportado por el owner el 2026-08-27.
+  - `basis-[90%]` deja asomar la siguiente foto (peek) — el owner lo pidió explícitamente.
 - Debajo: puntos + **ficha del slide activo**: chip "X elegido" + contador, y una fila `flex justify-between` con **nombre del valor a la izquierda y el PRECIO (+ compare tachado) a la derecha**, luego `profile` y `description` y el hint "Desliza para ver los demás".
-- **`priceInSlide = !!sliderOption && mobileSlides.length > 1`**: cuando es true, el precio NO se repite ni en el header móvil ni en el bloque de precio de la columna de info (`hidden lg:flex`). Desktop intacto.
+- **`priceInSlide = !!sliderOption && mobileSlides.length > 1`**: cuando es true, el precio NO se repite ni en el header móvil ni en el bloque de precio (`hidden lg:flex`). Desktop intacto.
 
 ### 🎛️ SELECTOR DE VARIANTE CON MINIATURA — DESKTOP (2026-08-27)
 - `ProductPageUI` calcula **`optionValueImages`** (useMemo): `{ [optionName]: { [value]: url } }`.
@@ -137,7 +139,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN DEL BUY BOX** (`ProductPageUI.tsx`): título+precio+rating · `PDP_BENEFITS[slug]` · variantes (oculto en móvil si `allOptionsAreSlider`) · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
-- ⚠️ **La línea de texto "6 pagos de $X a meses sin intereses" bajo el precio fue ELIMINADA (2026-08-27)**. Los MSI siguen comunicados en el badge de trust de la PDP, la top bar y el checkout.
+- ⚠️ **La línea "6 pagos de $X a meses sin intereses" bajo el precio fue ELIMINADA (2026-08-27)**. Los MSI siguen en el badge de trust, la top bar y el checkout.
 - **Espaciados móviles de la PDP**: grid `gap-5 lg:gap-12`, columna info `space-y-4 lg:space-y-6`, lista de beneficios `pb-4 lg:pb-6`.
 - **📚 ACORDEONES DE LA PDP (3, orden fijo)**: `Qué incluye` → **`Más detalles`** → `Envío y garantía`. Contenido en **`src/lib/pdp-includes.ts`**.
 - **📐 IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
@@ -161,7 +163,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente. ✅ Carrusel móvil = selector. ✅ Precio junto al nombre del aroma + PDP móvil más compacta + MSI fuera del buy box. ✅ **Hueco vacío entre descripción y cantidad eliminado (oculta el contenedor completo de opciones en móvil, no solo el option individual).** 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente. ✅ Carrusel móvil = selector. ✅ Precio junto al nombre del aroma. ✅ Hueco vacío entre descripción y cantidad eliminado. ✅ **Foto del carrusel a ancho completo del slide (bug `max-h` + `aspect-ratio` resuelto) con peek de la siguiente.** 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm.
@@ -169,8 +171,8 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- **PDP de la esencia en 360 px**: deslizar cambia aroma, nombre y precio de la ficha; el precio NO aparece dos veces; ya NO hay hueco vacío antes de "Cantidad".
-- **PDP `kit-vaso-de-vidrio`**: deslizar cambia el color y el precio de la ficha; mismo chequeo de espaciado.
+- **PDP de la esencia en 360 px**: la foto llena el slide (sin hueco a la derecha), se asoma la siguiente, deslizar cambia aroma + nombre + precio, sin hueco antes de "Cantidad".
+- **PDP `kit-vaso-de-vidrio`**: mismo chequeo.
 - Comprobar que en productos SIN slider el precio sigue junto al título móvil.
 - Video hero móvil (iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, flujo carrito → /pagar → atrás.
 
@@ -184,9 +186,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO** (`ProductPageUI.tsx`): nueva const `allOptionsAreSlider`; cuando todas las opciones del producto se eligen vía carrusel, se oculta el contenedor completo de "Product Options" en móvil (antes solo se ocultaba el option individual, dejando un div vacío con margen fantasma entre la descripción del aroma/color y "Cantidad").
-- 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA** (`ProductPageUI.tsx`): nueva const `priceInSlide`; el precio (+ compare tachado) va a la derecha del valor activo del carrusel y deja de repetirse en el header móvil y en el bloque de precio. Eliminada la línea "6 pagos de $X a meses sin intereses". Espaciados móviles reducidos (grid `gap-5`, info `space-y-4`, beneficios `pb-4`).
-- 2026-08-27 — 📱 **FOTOS MÁS GRANDES EN EL CARRUSEL**: slides `basis-[95%]`, gutter `pl-2`, alto `max-h-[50vh]`.
+- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL A ANCHO COMPLETO** (`ProductPageUI.tsx`): se quitó `max-h-[50vh]` del contenedor del slide (combinado con `aspect-[4/5]` hacía que el navegador recalculara el ANCHO desde el alto y la foto quedara pequeña con un hueco a la derecha). Ahora `w-full aspect-[4/5]` y `CarouselItem` en `basis-[90%] pl-2` para que vuelva a asomarse la siguiente foto.
+- 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO**: nueva const `allOptionsAreSlider`; se oculta el contenedor completo de "Product Options" en móvil.
+- 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA**: nueva const `priceInSlide`. Eliminada la línea de MSI del buy box. Espaciados móviles reducidos.
 - 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`sliderOption`, `mobileSlides`, sync bidireccional).
 - 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (desktop).
 - 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL** (`ProductScentSelector.tsx`).
@@ -215,7 +217,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-27 — 🟡 **Los flat-lays de aroma son 4:3 y el carrusel móvil es 4:5**: se recortan por `object-cover`.
+- 2026-08-27 — 🟡 **Los flat-lays de aroma son 4:3 y el carrusel móvil es 4:5**: se recortan por `object-cover`. Ahora que la foto llena todo el ancho el recorte es más notorio → prioridad alta a los packshots 4:5.
 - 2026-08-27 — 🟡 **La tarjeta de la esencia en el catálogo usa el flat-lay 4:3 en contenedor cuadrado**.
 - 2026-08-27 — 🟡 **Órdenes abandonadas duplicadas** (efecto del carrito persistente).
 - 2026-08-27 — 🟡 **`vela-bowl-de-acero` no entra al modo slider** (sus variantes no tienen `image_urls`).
@@ -239,8 +241,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar en 360 px real el carrusel-selector, el precio en la ficha y que ya no haya hueco antes de "Cantidad"**.
-- [ALTA] **Packshots del frasco de esencia (4:5)**.
+- [ALTA] **Verificar en 360 px real: foto del carrusel a ancho completo + peek de la siguiente**.
+- [ALTA] **Packshots del frasco de esencia (4:5)** — ahora más urgente por el recorte.
 - [ALTA] **Verificar el flujo carrito → /pagar → volver atrás**.
 - [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
 - [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299.
