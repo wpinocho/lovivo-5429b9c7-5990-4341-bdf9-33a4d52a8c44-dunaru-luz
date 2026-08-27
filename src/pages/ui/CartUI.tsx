@@ -47,6 +47,16 @@ export const CartUI = ({ logic }: CartUIProps) => {
   return (
     <EcommerceTemplate pageTitle="Tu Carrito" showCart={false}>
       <div className="max-w-6xl mx-auto">
+        <button
+          type="button"
+          onClick={logic.handleNavigateBack}
+          className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-editorial"
+          aria-label="Seguir comprando"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Seguir comprando
+        </button>
+
         {logic.isEmpty ? (
           <div className="text-center py-16">
             <ShoppingCart className="mx-auto h-16 w-16 text-muted-foreground mb-4" />
@@ -67,13 +77,7 @@ export const CartUI = ({ logic }: CartUIProps) => {
                 onAddGift={(product, variant) => logic.addItem(product, variant, undefined, true)}
                 isProductInCart={(pid) => logic.items.some((i: any) => i.type === 'product' && i.product?.id === pid)}
               />
-              <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Productos ({logic.itemCount})</h2>
-                <Button variant="ghost" onClick={logic.handleNavigateBack} className="text-muted-foreground">
-                  <ArrowLeft className="mr-2 h-4 w-4" />
-                  Seguir comprando
-                </Button>
-              </div>
+              <h2 className="text-xl font-semibold">Productos ({logic.itemCount})</h2>
 
               {logic.items.map((item) => (
                 <Card key={item.key}>

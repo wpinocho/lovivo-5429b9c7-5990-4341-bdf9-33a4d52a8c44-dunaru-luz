@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tag, X, ShoppingBag, Loader2, RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Truck, Lock, CreditCard, Star, ShieldCheck } from "lucide-react";
+import { Tag, X, ShoppingBag, Loader2, RefreshCw, ChevronDown, ChevronUp, AlertTriangle, Truck, Lock, CreditCard, Star, ShieldCheck, ArrowLeft } from "lucide-react";
 import { getReviewStats } from "@/data/reviews";
 import { PdpSocialProof, getDeliveryRange } from "@/components/PdpTrust";
 import { Badge } from "@/components/ui/badge";
@@ -130,8 +130,17 @@ export default function CheckoutUI() {
         <div className="min-h-screen bg-background">
           {/* Minimal checkout header - logo only */}
           <header className="border-b bg-background">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4">
               <BrandLogoLeft />
+              <button
+                type="button"
+                onClick={() => navigate('/carrito')}
+                className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-editorial shrink-0"
+                aria-label="Volver al carrito"
+              >
+                <ArrowLeft className="h-4 w-4" />
+                <span className="hidden sm:inline">Volver al carrito</span>
+              </button>
             </div>
           </header>
           <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

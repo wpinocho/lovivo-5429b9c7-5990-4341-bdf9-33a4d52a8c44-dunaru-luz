@@ -88,9 +88,11 @@ export const useCheckout = () => {
         }, 3000)
       }
 
-      // Limpiar carrito después de crear la orden
-      clearCart()
-      
+      // NO limpiamos el carrito aquí: la orden todavía no está pagada.
+      // Si el cliente vuelve atrás desde /pagar, su carrito debe seguir intacto.
+      // El carrito se limpia únicamente cuando el pago se confirma
+      // (StripePayment, PaypalExpressButton y /gracias).
+
       return order
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error desconocido'

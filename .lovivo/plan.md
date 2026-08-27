@@ -129,13 +129,16 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - **`src/lib/scents.ts`** = fuente única. `SCENT_ENABLED_SLUGS` incluye ya `vela-bowl-de-acero`. PostHog: `scent_selected`, `scent_details_toggled`.
 - Helpers clave: `getScentImageByVariantName()` (checkout, confirmación y **galería de la PDP de esencias**), `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`.
 
-### 🧾 CHECKOUT (`CheckoutUI.tsx`) — 🔒 no se toca.
+### 🧾 CARRITO Y CHECKOUT — persistencia (2026-08-27)
+- **⚠️ REGLA: el carrito SOLO se vacía cuando el pago se confirma.** `useCheckout.checkout()` crea la orden pero **NO** llama `clearCart()` (se removió). Los únicos puntos legítimos de limpieza son `StripePayment` (succeeded / OXXO / SPEI / processing), `PaypalExpressButton` y `/gracias` (`ThankYou.tsx`). También limpian, a propósito, `useURLCartLoader` (carga de carrito por URL) y el "Comprar ahora" de `ProductPageUI` / `HeadlessProduct`.
+- **Back links**: `CartUI` tiene un "← Seguir comprando" arriba de todo (visible también con carrito vacío) y `CheckoutUI` tiene "← Volver al carrito" en el header minimal, a la derecha del logo (texto oculto en móvil, solo flecha).
+- Efecto secundario esperado: si un cliente abandona `/pagar` y vuelve a pagar, se crea una **segunda orden** (la primera queda como abandonada). Es el comportamiento estándar y es preferible a perder el carrito.
 
 ---
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ 2 productos de acero creados y cableados. ✅ Bloques editoriales de la PDP de cerámica actualizados. ✅ Galería por variante arreglada (color + aroma). ✅ Copy de "Qué incluye" de la esencia aclarado. ✅ Acordeón renombrado a "Más detalles". 🔜 **Verificación visual + precio tachado + copy de la cera.**
+**Estado**: ✅ 2 productos de acero creados y cableados. ✅ Bloques editoriales de la PDP de cerámica actualizados. ✅ Galería por variante arreglada (color + aroma). ✅ Copy de "Qué incluye" de la esencia aclarado. ✅ Acordeón renombrado a "Más detalles". ✅ Carrito ya no se pierde al entrar a /pagar + back links. 🔜 **Verificación visual + precio tachado + copy de la cera.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
@@ -143,7 +146,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado? La copy dice "acero pulido tipo espejo".
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- Video hero móvil (360 px, iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, bloques editoriales de `kit-vaso-de-concreto`, **cambio de foto al elegir color en `kit-vaso-de-vidrio`, `perlas-originales-500-g` y `reserva-1-kg`**, **cambio de foto al elegir aroma en `esencia-para-vela-10-ml`**, **acordeón "Más detalles"**.
+- Video hero móvil (360 px, iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, bloques editoriales de `kit-vaso-de-concreto`, **cambio de foto al elegir color/aroma**, **acordeón "Más detalles"**, **flujo carrito → /pagar → atrás → carrito intacto**.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -155,12 +158,13 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → **"Más detalles"** en `ProductPageUI.tsx` (línea ~1202). Aplica a TODOS los productos; es el bloque que renderiza `product.description`.
-- 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`): el bullet 2 decía "Seis aromas para elegir", que sugería que el frasco traía los seis. Ahora dice **"El aroma que elijas, de seis disponibles"** con el beneficio "Cada frasco lleva un solo aroma. Eliges cuál arriba, antes de agregarlo."
-- 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA** (`ProductPageUI.tsx`): las 6 variantes de `esencia-para-vela-10-ml` no tienen `image_urls`, así que al elegir aroma la foto no cambiaba. Se añadió un segundo criterio en `galleryImages`: resolver la foto vía `getScentImageByVariantName()` y subirla al frente.
-- 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA** (`ProductPageUI.tsx`): nuevo `galleryImages` que sube al frente la primera foto exclusiva de la variante elegida. Thumbnails y carrusel móvil ahora consumen `galleryImages`; el carrusel se resetea a la posición 0 vía `setApi`.
-- 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas** en `ProductStorySections.tsx` (`kit-vaso-de-concreto`) con el bowl real.
-- 2026-08-26 — 🪞 **LÍNEA DE ACERO**: creados `vela-bowl-de-acero` ($1,099) y `bowl-espejo-de-acero` ($599). Añadidos a colecciones, `catalog-order.ts`, `navigation.ts`, `pdp-includes.ts`, `PDP_HEADLINE` + `PDP_BENEFITS`, IndexUI, footer y `SCENT_ENABLED_SLUGS`.
+- 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT**: `useCheckout.ts` vaciaba el carrito al crear la orden (antes de pagar), así que salir de `/pagar` dejaba el carrito vacío. Se removió ese `clearCart()`. Además: back link "← Seguir comprando" arriba en `CartUI` (y se quitó el duplicado junto a "Productos (n)") y "← Volver al carrito" en el header de `CheckoutUI`.
+- 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → **"Más detalles"** en `ProductPageUI.tsx`. Aplica a TODOS los productos; es el bloque que renderiza `product.description`.
+- 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`): ahora dice **"El aroma que elijas, de seis disponibles"** con "Cada frasco lleva un solo aroma. Eliges cuál arriba, antes de agregarlo."
+- 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA** (`ProductPageUI.tsx`): fallback vía `getScentImageByVariantName()` porque las 6 variantes no tienen `image_urls`.
+- 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA** (`ProductPageUI.tsx`): `galleryImages` sube al frente la primera foto exclusiva de la variante; carrusel móvil se resetea vía `setApi`.
+- 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas** en `ProductStorySections.tsx`.
+- 2026-08-26 — 🪞 **LÍNEA DE ACERO**: creados `vela-bowl-de-acero` ($1,099) y `bowl-espejo-de-acero` ($599).
 - 2026-08-26 — 🗺️ `/como-funciona` añadida a `scripts/generate-sitemap.ts`.
 - 2026-08-26 — 🎬 **VIDEO HERO MÓVIL**: 1.8 MB, `HeroMobileVideo.tsx` con póster webp y montaje diferido.
 - 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**: `1787702019949-nscqjcvsz0r.webp`.
@@ -168,7 +172,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🕯️ **`RitualSection` migrada** al bowl negro (`RITUAL_IMAGE`).
 - 2026-08-25 — 🖼️ Fotos del ritual centralizadas en `src/lib/steps-media.ts`.
 - 2026-08-25 — 🎨 **"Elige tu tono"** usa la imagen 1 de cada variante y linkea con `?variante=`.
-- 2026-08-25 — 🔗 **`ProductPageUI` preselecciona variante desde la URL**.
 - 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `navigation.ts` + `MainNav.tsx`.
 
 ## 5. Image Inventory
@@ -187,8 +190,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
+- 2026-08-27 — 🟡 **Órdenes abandonadas duplicadas**: al no vaciar el carrito en `/pagar`, un cliente que reintente pagar genera una orden nueva. Vigilar en el Dashboard si aparecen muchas órdenes pendientes.
 - 2026-08-27 — 🟡 **La PDP de la esencia usa flat-lays 4:3 en un contenedor 4:5**: se ven recortados. Faltan packshots verticales del frasco por aroma.
-- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no cambia de foto al elegir color**: sus variantes no tienen `image_urls` asignadas. Hay que asignarlas desde el Dashboard.
+- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no cambia de foto al elegir color**: sus variantes no tienen `image_urls` asignadas.
 - 2026-08-27 — 🟡 Los `steps` del bloque de `kit-vaso-de-concreto` en `ProductStorySections` siguen con `PLACEHOLDER` en varios pasos.
 - 2026-08-26 — 🔴 **`compare_at_price` de `vela-bowl-de-acero` NO persistió** ($1,299). Ponerlo desde el Dashboard.
 - 2026-08-26 — 🟠 **Copy sin verificar del kit de acero**: dice "500 g de Cera Duna" pero el bowl mide 7 × 4 cm.
@@ -211,10 +215,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
+- [ALTA] **Verificar el flujo carrito → /pagar → volver atrás** (carrito intacto) y que el pago sigue limpiando el carrito al confirmarse.
 - [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
-- [ALTA] **Asignar la foto de cada aroma a su variante en `esencia-para-vela-10-ml`** desde el Dashboard (hoy funciona por fallback de nombre, pero lo correcto es tenerlas en la variante).
+- [ALTA] **Asignar la foto de cada aroma a su variante en `esencia-para-vela-10-ml`** desde el Dashboard.
 - [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299 en el Dashboard.
-- [ALTA] **Verificar tras el commit**: cambio de foto por color y por aroma, acordeón "Más detalles", PDP de acero, PDP de cerámica, mega menú, grid de 7 cards, video hero móvil.
 - [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
 - [ALTA] **Pedir al owner**: horas por mecha, nombre de la garantía, copy del empaque.
