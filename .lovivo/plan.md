@@ -11,7 +11,7 @@
 - ⛔ **NO es founder-led. La owner NO aparece.**
 - Pagos: **hasta 6 MSI**. ⚠️ NUNCA nombrar "Stripe" ni "Mercado Pago".
 - Envío: **GRATIS A TODO MÉXICO, SIN MÍNIMO.** Garantía 30 días. WhatsApp: `525531215386`.
-- REGLA DE INTEGRIDAD: **nunca reseñas falsas** (15 reales, 4.9 vía `getReviewStats()`), **nunca precios tachados inventados**, **nunca logos de prensa**.
+- REGLA DE INTEGRIDAD: **nunca reseñas falsas** (**16 reales**, 4.9 vía `getReviewStats()`), **nunca precios tachados inventados**, **nunca logos de prensa**.
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - RUTAS: producto `/productos/:slug`, paquete `/paquete/:slug`, carrito `/carrito`, checkout `/pagar`, categoría `/categorias/:handle`, **`/como-funciona`**.
 - ⚠️ **kit-vaso-de-concreto** es de **CERÁMICA**; el slug NO se cambia (rompe los anuncios de Meta).
@@ -80,6 +80,12 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### 🪨 TEXTURAS / utilidades
 `.texture-grain` · `.texture-arena` · `.texture-travertino` · `.texture-terracota` · `.texture-ambar` (solo oscuros) · `.texture-metal` · `.hairline-metal` · `.lockup` · `.eyebrow` · `.h-editorial` · `.transition-editorial` · `<Reveal>` · `.full-bleed` · `.section-pad` / `.section-pad-sm`.
+
+### ⭐ RESEÑAS — `src/data/reviews.ts` es FUENTE ÚNICA
+- 16 reseñas reales. Helpers: `getReviews(slug)`, `getFeaturedReviews(slug)` (solo `featured: true` **con foto**), `getRatingDistribution`, `getReviewStats`.
+- **El orden del array manda** tanto en la lista como en el carrusel de fotos.
+- Fotos UGC centralizadas en el objeto `UGC` del mismo archivo (`visitas`, `completa`, `regalo`, `facil`, `reutilizar`, `sala`).
+- Para que una reseña aparezca en una PDP debe tener el slug en `productSlugs`.
 
 ### 🔗 DEEP LINK DE VARIANTE — `?variante=`
 - **Cualquier enlace a una PDP puede preseleccionar una variante**: `/productos/<slug>?variante=<Valor>`.
@@ -154,7 +160,7 @@ Una PDP "completa" (como `kit-vaso-de-vidrio`) necesita entrada en **5 lugares**
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO, CUENCO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado. ✅ Foto por variante. ✅ Deep link `?variante=` funcionando en aromas y tonos. 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado. ✅ Foto por variante. ✅ Deep link `?variante=`. ✅ Reseña de Jimena C. añadida. 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner
 1. Bowl de acero: ¿el kit incluye 500 g si el bowl mide 7 × 4 cm? ¿Acero pulido o cromado? Falta `compare_at_price`.
@@ -163,7 +169,8 @@ Una PDP "completa" (como `kit-vaso-de-vidrio`) necesita entrada en **5 lugares**
 ### 7.2 🔴 P1 — Verificación visual tras el commit
 - **Home → tarjeta de aroma** (ej. Musgo Mineral) debe abrir `/productos/esencia-para-vela-10-ml` con ESE aroma marcado.
 - **Home → "Elige tu tono"** (Ónix) debe abrir Cera Duna · 500 g con Ónix marcado.
-- Comprobar que **después de aterrizar se puede cambiar de variante a mano** (que la URL no lo revierta).
+- Comprobar que **después de aterrizar se puede cambiar de variante a mano**.
+- **Reseña de Jimena C. como 2ª foto** en home y en la PDP del Cuenco.
 - PDP del Cuenco, `/como-funciona`, `/categorias/todos`, home 360 px, video hero iOS, mega menú, flujo carrito → /pagar.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
@@ -176,9 +183,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 🔗 **DEEP LINK DE VARIANTE ARREGLADO (bug real)**: `?variante=` no funcionaba porque el auto-select de `HeadlessProduct` (que elige la primera variante disponible al cargar) pisaba la preselección. El effect de `ProductPageUI` ahora depende de `logic.selected` y **reintenta hasta que la variante coincide**, y normaliza acentos ("onix" = "Ónix"). Solo entonces marca `appliedVariantRef` y suelta el control.
-- 2026-08-27 — 🌿 **TARJETAS DE AROMA APUNTAN AL PRODUCTO CORRECTO**: `ScentsSection` enlazaba a `/productos/kit-vaso-de-vidrio#aroma`; ahora va a `/productos/esencia-para-vela-10-ml?variante=<aroma>` usando `SCENT_PRODUCT_SLUG`.
-- 2026-08-27 — 🧱 **PDP COMPLETA DEL CUENCO DUNARU**: entrada en los 5 archivos (`ProductStorySections`, `PDP_HEADLINE`, `PDP_BENEFITS`, `pdp-includes`, `SCENT_ENABLED_SLUGS`). Bloques editoriales con fotos nuevas de la owner.
+- 2026-08-27 — ⭐ **NUEVA RESEÑA REAL (Jimena C.)** en `src/data/reviews.ts`, id `r16`, 5 estrellas, con foto propia (`UGC.sala`). Insertada en **segunda posición** para que sea la 2ª reseña con imagen. Slugs: cuenco, cera 500 g y bowl de cerámica. Total: **16 reseñas**, promedio sigue en 4.9.
+- 2026-08-27 — 🔗 **DEEP LINK DE VARIANTE ARREGLADO**: el auto-select de `HeadlessProduct` pisaba la preselección. El effect ahora depende de `logic.selected`, reintenta hasta que coincide y normaliza acentos.
+- 2026-08-27 — 🌿 **TARJETAS DE AROMA APUNTAN AL PRODUCTO CORRECTO**: `/productos/esencia-para-vela-10-ml?variante=<aroma>`.
+- 2026-08-27 — 🧱 **PDP COMPLETA DEL CUENCO DUNARU** (los 5 archivos).
 - 2026-08-27 — 🛍️ **CUENCO DUNARU EN LA HOME** (`CATALOG_FALLBACK` + `SHOP_CARDS`, badge "Nuevo").
 - 2026-08-27 — ⚖️ **TÍTULO DE LA COMPARATIVA RESTAURADO** (`ComoFunciona.tsx`).
 - 2026-08-27 — 🧭 **`/como-funciona` REFORZADA**: `<Reviews>` tras el paso 04 y 4 puntos de conversión.
@@ -190,11 +198,11 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS**.
 - 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL AMPLIADA**.
 - 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO** (`allOptionsAreSlider`).
-- 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA**.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
 - Base de uploads del owner: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`
+- **⭐ UGC RESEÑAS**: `facil` `1784238899092-acdwwacyaq` · **`sala` `1787861715629-sjd49g0k2j` (Jimena C., cuenco encendido en la sala)** · `visitas` `1784238899091-zp99w7xbo5a` · `reutilizar` `-i6pb49ce8vp` · `regalo` `-0snwjx0f7w7` · `completa` `-ztn82bcfir`.
 - **🏺 CUENCO DUNARU — bloques editoriales de la PDP (4:3 lifestyle)**: `1787859462824-br3pyp2cr9k` · `1787859462825-p6zo71cvpai`.
 - **🏺 CUENCO DUNARU (vela)**: Marfil `biyop92l41t` + `srrf9e1v9yh` · Champagne `eb0630mux1c` + `gnvgvl9g2z6` · Ónix `9qpn00vexkt` + `bvww9lwbol`. **Cuenco suelto**: `z2wsj39j63`, `sorsudu67w`, `3wluzx3dk3o`, `as3ysmbal8e`, `wuzqds86opf`.
 - **🏺 BLOQUES EDITORIALES CERÁMICA**: `1787846317152-fp7km169wu7` · `-d15my4ruzvs` · `-kecin16ha`.
@@ -204,10 +212,11 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - **🕯️ RITUAL**: `1787701006060-vpgjgog2juh.webp`.
 - ⛔ Deprecadas: `1785182590879-i54i3sm6qk`, `-u6xju9w4wjl`, `-77nbrytmoii`, `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b`, `1785521743156-3qeskqe43gv`, `1787699972902-dld268c7c0u`, `1787701006060-xuyehajl1yr`, `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
 - **🌿 FLAT-LAYS DE AROMA (4:3)**: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `1787337333997-44wwhmmisy5` · Costa Mineral `1787337333998-jphdwvy2pbh` · Higo Matcha `1787337333998-enck999sju7` · Tabaco Vainilla `1787337333998-5e5poqkcxh8` · Musgo Mineral `1787337333998-n7f8zqhfx8m`.
-- **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **UGC**: `src/data/reviews.ts`. **FAVICON**: `/favicon.png`.
+- **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **FAVICON**: `/favicon.png`.
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
+- 2026-08-27 — 🟡 **La foto de la reseña de Jimena C. muestra un cuenco de cerámica verde/oliva** que no corresponde exactamente a los tonos del Cuenco Dunaru de catálogo (Marfil/Champagne/Ónix). Confirmar con la owner si es una pieza real vendida.
 - 2026-08-27 — 🟠 **La PDP del Cuenco Dunaru afirma "500 g + 30 mechas" sin confirmación de la owner**.
 - 2026-08-27 — 🟡 **`CATALOG_FALLBACK` de `IndexUI` tiene precios viejos hardcodeados** (vidrio $799, cerámica $999, acero $1,099).
 - 2026-08-27 — 🟡 **Copy del hero usa "natural" mientras el resto del sitio usa "100% vegetal"**.
@@ -226,7 +235,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar en vivo el deep link `?variante=`** en aromas y tonos (y que se pueda cambiar de variante después).
+- [ALTA] **Verificar en vivo el deep link `?variante=`** en aromas y tonos.
 - [ALTA] **Confirmar el contenido real del Cuenco Dunaru ($1,199)**.
 - [ALTA] **Verificar la PDP del Cuenco y la home en 360 px**.
 - [ALTA] **Corregir swatches del Cuenco Dunaru** en el Dashboard.

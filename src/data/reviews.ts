@@ -31,11 +31,13 @@ const UGC = {
   regalo: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784238899092-0snwjx0f7w7.webp",
   facil: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784238899092-acdwwacyaq.webp",
   reutilizar: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1784238899092-i6pb49ce8vp.webp",
+  sala: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1787861715629-sjd49g0k2j.webp",
 } as const
 
 const PERLAS = "perlas-originales-500-g"
 const VIDRIO = "kit-vaso-de-vidrio"
 const CONCRETO = "kit-vaso-de-concreto"
+const CUENCO = "vela-rellenable-cuenco-dunaru"
 
 export const reviews: Review[] = [
   {
@@ -48,6 +50,17 @@ export const reviews: Review[] = [
     featured: true,
     image: UGC.facil,
     date: "2026-06-28",
+  },
+  {
+    id: "r16",
+    name: "Jimena C.",
+    rating: 5,
+    title: "Se ve mejor en persona",
+    text: "Se ve todavía más bonita en persona. La puse en la sala y quedó perfecta.",
+    productSlugs: [CUENCO, PERLAS, CONCRETO],
+    featured: true,
+    image: UGC.sala,
+    date: "2026-08-27",
   },
   {
     id: "r2",
