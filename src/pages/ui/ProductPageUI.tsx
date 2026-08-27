@@ -469,15 +469,22 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const [carouselIndex, setCarouselIndex] = useState(0)
 
   /**
-   * Opción "deslizable": la primera opción cuyos valores TODOS tienen foto.
-   * En móvil el carrusel deja de ser una galería pasiva y se convierte en el
-   * selector: deslizas, se elige ese valor y debajo aparece su nombre y su
-   * descripción. Así elegir y ver ocurren en el mismo gesto.
+   * Opción "deslizable": SOLO la opción de Aroma.
+   * En la esencia el carrusel deja de ser una galería pasiva y se convierte en
+   * el selector: deslizas, se elige ese aroma y debajo aparece su nombre, su
+   * perfil olfativo y su descripción. Así elegir y oler ocurren en un gesto.
+   *
+   * ⚠️ Decisión de producto (2026-08-27): el resto de opciones (Color de vela,
+   * etc.) NO usan este modo. Ahí se mantiene el toggle clásico de botones,
+   * porque el color se compara mejor viendo las tres opciones a la vez.
    */
   const sliderOption = useMemo(() => {
     const options: any[] = logic.product?.options || []
     const opt = options.find(
-      (o) => o?.name && optionValueImages[o.name] && (o.values || []).length > 1
+      (o) =>
+        o?.name === SCENT_OPTION_NAME &&
+        optionValueImages[o.name] &&
+        (o.values || []).length > 1
     )
     return opt
       ? { name: String(opt.name), values: (opt.values || []) as string[] }
