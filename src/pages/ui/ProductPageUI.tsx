@@ -768,9 +768,14 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   {vendor}
                 </p>
               )}
-              <h1 className="text-2xl sm:text-3xl font-light tracking-tight leading-[1.15]">
-                {logic.product.title}
-              </h1>
+              <div className="flex items-start justify-between gap-3">
+                <h1 className="text-2xl sm:text-3xl font-light tracking-tight leading-[1.15]">
+                  {logic.product.title}
+                </h1>
+                <span className="shrink-0 pt-1 text-xl font-semibold tracking-tight">
+                  {logic.formatMoney(logic.currentPrice)}
+                </span>
+              </div>
               {headline && (
                 <p className="text-sm text-foreground/75 leading-snug max-w-md">
                   {headline}
@@ -841,10 +846,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   opts={{ align: "start" }}
                   setApi={setCarouselApi}
                 >
-                  <CarouselContent>
+                  <CarouselContent className="-ml-2">
                     {mobileSlides.map((slide, index: number) => (
-                      <CarouselItem key={index} className="basis-[88%]">
-                        <div className="relative aspect-[4/5] max-h-[46vh] rounded-lg overflow-hidden bg-muted/30">
+                      <CarouselItem key={index} className="basis-[95%] pl-2">
+                        <div className="relative aspect-[4/5] max-h-[50vh] rounded-lg overflow-hidden bg-muted/30">
                           <img
                             src={slide.image}
                             alt={
@@ -920,7 +925,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   })()}
               </div>
             ) : (
-              <div className="md:hidden relative aspect-[4/5] max-h-[46vh] rounded-lg overflow-hidden bg-muted/30">
+              <div className="md:hidden relative aspect-[4/5] max-h-[50vh] rounded-lg overflow-hidden bg-muted/30">
                 <img
                   src={displayImage}
                   alt={logic.product.title}
