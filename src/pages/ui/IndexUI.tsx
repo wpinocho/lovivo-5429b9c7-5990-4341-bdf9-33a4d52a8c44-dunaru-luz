@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, ChevronDown, MessageCircle } from 'lucide-react';
+import { ArrowRight, ChevronDown, MessageCircle, Leaf, RefreshCw, MapPin, Truck } from 'lucide-react';
 import { FloatingCart } from '@/components/FloatingCart';
 import { ProductStepsCarousel } from '@/components/ProductStepsCarousel';
 import { CompareTable } from '@/components/CompareTable';
@@ -92,7 +92,12 @@ const SHOP_CARDS: { slug: string; tag: string; badge?: string }[] = [
 
 // Credenciales de marca, no specs. Las specs (120 h, 30 mechas, cualquier
 // recipiente) ya viven en PDP_BENEFITS y en las tarjetas de producto.
-const BENEFITS = ['100% vegetal y biodegradable', 'Rellenable para siempre', 'Hecha en México', 'Envío gratis + 30 días'];
+const BENEFITS = [
+  { icon: Leaf, text: '100% vegetal y biodegradable' },
+  { icon: RefreshCw, text: 'Rellenable para siempre' },
+  { icon: MapPin, text: 'Hecha en México' },
+  { icon: Truck, text: 'Envío gratis + 30 días' },
+];
 
 const STEPS = [
   {
@@ -256,10 +261,11 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       {/* ── BENEFICIOS ────────────────────────────────────────────────────── */}
       <section className="bg-dunaru-arena texture-travertino border-b border-foreground/10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-4 divide-x divide-foreground/10">
-            {BENEFITS.map((text, i) => (
-              <div key={i} className="flex items-center justify-center py-5 px-1.5 sm:px-4 text-center">
-                <span className="font-body text-[9px] sm:text-[11px] uppercase leading-tight tracking-[0.16em] sm:tracking-[0.2em] text-foreground/70">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-4 py-6 sm:flex sm:items-center sm:justify-between sm:gap-6 sm:py-5">
+            {BENEFITS.map(({ icon: Icon, text }, i) => (
+              <div key={i} className="flex items-center gap-2 sm:gap-2.5">
+                <Icon className="h-3.5 w-3.5 shrink-0 text-dunaru-terracota" strokeWidth={1.5} />
+                <span className="font-body text-[10px] sm:text-[11px] uppercase leading-[1.35] tracking-[0.12em] sm:tracking-[0.18em] text-foreground/65">
                   {text}
                 </span>
               </div>

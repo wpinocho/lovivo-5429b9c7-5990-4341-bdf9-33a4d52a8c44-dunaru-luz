@@ -71,11 +71,16 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 | Metal (latón) | 36 46% 50% | `dunaru-laton` |
 - ⚠️ Sobre fondos oscuros usar **`dunaru-ambar`**, NUNCA `dunaru-champagne`.
 - **Fuente de verdad = `src/index.css`.** Display: Instrument Serif · Body: Manrope. **`--radius: 0rem`**.
-- 🎯 **oliva = selección + CTA** · **periwinkle = navegación y hovers** · **terracota = hover de CTA, precios de add-on, acentos editoriales**.
+- 🎯 **oliva = selección + CTA** · **periwinkle = navegación y hovers** · **terracota = hover de CTA, precios de add-on, acentos editoriales, iconos de beneficios**.
 - ⚠️ **MÓVIL-FIRST: nada de información que dependa de `:hover`.**
 
 ### 🪨 TEXTURAS / utilidades
 `.texture-grain` · `.texture-arena` · `.texture-travertino` · `.texture-terracota` · `.texture-ambar` (solo oscuros) · `.texture-metal` · `.hairline-metal` · `.lockup` · `.eyebrow` · `.h-editorial` · `.transition-editorial` · `<Reveal>` · `.full-bleed` · `.section-pad` / `.section-pad-sm`.
+
+### ✨ FRANJA DE BENEFICIOS (home, bajo el hero) — 2026-08-27
+- `BENEFITS` en `IndexUI.tsx` es ahora un array de objetos `{ icon, text }` con iconos lucide: `Leaf`, `RefreshCw`, `MapPin`, `Truck`.
+- Layout: **móvil `grid-cols-2 gap-x-5 gap-y-4 py-6`** · **sm+ `flex justify-between`**.
+- ⛔ **Sin `divide-x`, sin bordes internos, sin cajas.** Icono `h-3.5 w-3.5` terracota `strokeWidth={1.5}` + texto uppercase `text-[10px]` tracking `0.12em`.
 
 ### 🧭 NAVEGACIÓN
 - **FUENTE ÚNICA: `src/lib/navigation.ts`** → `SHOP_COLUMNS`, `SHOP_FEATURED`, `SHOP_ALL`, `PRIMARY_LINKS`, `UTILITY_LINKS`.
@@ -118,20 +123,17 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - `displayImage = selectedImage || galleryImages[0]`. Thumbnails de desktop consumen `galleryImages`.
 
 ### 📱 CARRUSEL MÓVIL = SELECTOR DESLIZABLE — **SOLO AROMAS** (2026-08-27) ⭐
-- **`sliderOption`** (useMemo en `ProductPageUI`): ahora exige `o.name === SCENT_OPTION_NAME` ("Aroma") + todos los valores con foto + >1 valor. **Hoy aplica ÚNICAMENTE a `esencia-para-vela-10-ml`.**
-  - ⛔ **DECISIÓN DEL OWNER (2026-08-27): el color de vela NO usa carrusel-selector.** `kit-vaso-de-vidrio` y cualquier opción `Color` conservan el **toggle clásico de 3 botones** con miniatura. El color se compara mejor viendo las tres opciones a la vez.
-- **`allOptionsAreSlider`**: true cuando TODAS las opciones son la `sliderOption`. Oculta el bloque "Product Options" en móvil (`hidden md:block`) para no dejar un div vacío.
-- **`mobileSlides`**: si `sliderOption` es null → simplemente `galleryImages` (galería pasiva de siempre). Si existe → una slide por aroma + el resto de fotos como slides pasivas.
-- **Sincronización bidireccional** con `carouselApi` (`on("select")` ⇄ `scrollTo(activeSlideIndex)`). Sin `sliderOption`, al cambiar de variante el carrusel vuelve al slide 0.
+- **`sliderOption`** (useMemo en `ProductPageUI`): exige `o.name === SCENT_OPTION_NAME` ("Aroma") + todos los valores con foto + >1 valor. **Hoy aplica ÚNICAMENTE a `esencia-para-vela-10-ml`.**
+  - ⛔ **DECISIÓN DEL OWNER (2026-08-27): el color de vela NO usa carrusel-selector.** `kit-vaso-de-vidrio` y cualquier opción `Color` conservan el **toggle clásico de 3 botones** con miniatura.
+- **`allOptionsAreSlider`**: true cuando TODAS las opciones son la `sliderOption`. Oculta el bloque "Product Options" en móvil (`hidden md:block`).
+- **`mobileSlides`**: si `sliderOption` es null → `galleryImages`. Si existe → una slide por aroma + el resto de fotos como slides pasivas.
+- **Sincronización bidireccional** con `carouselApi` (`on("select")` ⇄ `scrollTo(activeSlideIndex)`).
 - **📐 DIMENSIONES DEL SLIDE (definitivo)**: `CarouselItem` = `basis-[90%] pl-2`; contenedor interno = **`w-full aspect-[4/5]` SIN `max-h`**.
-  - ⛔ **NUNCA volver a poner `max-h-[Xvh]` junto a `aspect-[4/5]`**: al toparse el alto el navegador recalcula el ANCHO desde la proporción y la foto deja de llenar el slide.
-  - `basis-[90%]` deja asomar la siguiente foto (peek) — pedido explícito del owner.
-- Debajo: puntos + ficha del slide activo (chip "Aroma elegido" + contador, fila `flex justify-between` con nombre a la izquierda y PRECIO a la derecha, luego `profile`, `description` y el hint "Desliza para ver los demás").
-- **`priceInSlide = !!sliderOption && mobileSlides.length > 1`**: solo en la esencia el precio va en la ficha del slide. En productos con Color el precio vuelve al header móvil.
+  - ⛔ **NUNCA volver a poner `max-h-[Xvh]` junto a `aspect-[4/5]`**.
+- **`priceInSlide = !!sliderOption && mobileSlides.length > 1`**.
 
 ### 🎛️ SELECTOR DE VARIANTE CON MINIATURA — DESKTOP + MÓVIL en productos de Color (2026-08-27)
 - `ProductPageUI` calcula **`optionValueImages`** (useMemo): `{ [optionName]: { [value]: url } }`.
-  - Aroma → `getScentImageByVariantName(value)`. Resto → primera `image_url` **exclusiva**.
 - Si TODOS los valores tienen imagen → grid de 3 columnas con miniatura; si no, chip de texto.
 
 ### 🌿 SELECTOR DE AROMA ADD-ON — panel compacto en móvil (2026-08-27)
@@ -140,12 +142,12 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN DEL BUY BOX** (`ProductPageUI.tsx`): título+precio+rating · `PDP_BENEFITS[slug]` · variantes (oculto en móvil solo si `allOptionsAreSlider`) · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
-- ⚠️ **La línea "6 pagos de $X a meses sin intereses" bajo el precio fue ELIMINADA (2026-08-27)**. Los MSI siguen en el badge de trust, la top bar y el checkout.
+- ⚠️ **La línea "6 pagos de $X a meses sin intereses" bajo el precio fue ELIMINADA (2026-08-27)**.
 - **Espaciados móviles de la PDP**: grid `gap-5 lg:gap-12`, columna info `space-y-4 lg:space-y-6`, lista de beneficios `pb-4 lg:pb-6`.
 - **📚 ACORDEONES DE LA PDP (3, orden fijo)**: `Qué incluye` → **`Más detalles`** → `Envío y garantía`. Contenido en **`src/lib/pdp-includes.ts`**.
 - **📐 IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → carrusel → reseñas → bloques editoriales → `<CompareTable />` → FAQ → CTA de cierre.
-- **🏠 ORDEN DE LA HOME** (`IndexUI.tsx`): hero → credenciales → 4 pasos → "Elige tu vela" (7 cards) → `RitualSection` → `Reviews` → `ScentsSection` → "Elige tu tono" → `CasaRealSection` → `BrandStorySection` → `<CompareTable />` → FAQ → newsletter.
+- **🏠 ORDEN DE LA HOME** (`IndexUI.tsx`): hero → **franja de beneficios con iconos** → 4 pasos → "Elige tu vela" (7 cards) → `RitualSection` → `Reviews` → `ScentsSection` → "Elige tu tono" → `CasaRealSection` → `BrandStorySection` → `<CompareTable />` → FAQ → newsletter.
 - **📄 `/como-funciona`**: intro → 4 pasos alternados → `<CompareTable />` → FAQ de 6 → CTA oscuro. Ya en el sitemap.
 - **📦 `/categorias/todos`** agrupa con `groupByCatalog`: Empieza aquí → Cera Duna → Colecciones de tonos → **Accesorios** (esencia primero).
 
@@ -164,7 +166,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente. ✅ **Carrusel-selector limitado a Aromas; el color vuelve al toggle de 3 botones.** ✅ Precio junto al nombre del aroma. ✅ Foto del carrusel a ancho completo con peek. 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente. ✅ Carrusel-selector limitado a Aromas. ✅ **Franja de beneficios de la home limpiada (iconos, sin cajas).** 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm.
@@ -172,8 +174,9 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- **PDP de la esencia en 360 px**: carrusel-selector con foto a ancho completo, peek de la siguiente, sin hueco antes de "Cantidad".
-- **PDP `kit-vaso-de-vidrio` en 360 px**: debe verse el **toggle de 3 botones con miniatura**, el carrusel como galería pasiva y el **precio en el header móvil**.
+- **Home en 360 px**: franja de beneficios en 2×2 con iconos, sin líneas divisorias.
+- **PDP de la esencia en 360 px**: carrusel-selector con foto a ancho completo, peek de la siguiente.
+- **PDP `kit-vaso-de-vidrio` en 360 px**: toggle de 3 botones con miniatura + precio en el header móvil.
 - Video hero móvil (iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, flujo carrito → /pagar → atrás.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
@@ -186,8 +189,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS** (`ProductPageUI.tsx`): `sliderOption` ahora filtra por `o.name === SCENT_OPTION_NAME`. Los productos con opción `Color` (`kit-vaso-de-vidrio`, Cera Duna, bowl de acero) recuperan el toggle de 3 botones con miniatura en móvil, el carrusel vuelve a ser galería pasiva y el precio regresa al header móvil. Decisión explícita del owner.
-- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL A ANCHO COMPLETO**: se quitó `max-h-[50vh]` (combinado con `aspect-[4/5]` recalculaba el ancho). Ahora `w-full aspect-[4/5]` y `CarouselItem` en `basis-[90%] pl-2`.
+- 2026-08-27 — ✨ **FRANJA DE BENEFICIOS LIMPIADA** (`IndexUI.tsx`): `BENEFITS` pasó de `string[]` a `{ icon, text }[]` con iconos lucide (Leaf, RefreshCw, MapPin, Truck) en terracota. Se eliminó `divide-x` y el aspecto de cajas: móvil `grid-cols-2 gap-x-5 gap-y-4 py-6`, desktop `flex justify-between`. Pedido explícito del owner ("que no parezcan cajitas").
+- 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS** (`ProductPageUI.tsx`): `sliderOption` filtra por `o.name === SCENT_OPTION_NAME`. Los productos con opción `Color` recuperan el toggle de 3 botones.
+- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL A ANCHO COMPLETO**: se quitó `max-h-[50vh]`. Ahora `w-full aspect-[4/5]` y `CarouselItem` en `basis-[90%] pl-2`.
 - 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO**: nueva const `allOptionsAreSlider`.
 - 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA** (`priceInSlide`). Eliminada la línea de MSI del buy box.
 - 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`sliderOption`, `mobileSlides`, sync bidireccional).
@@ -199,7 +203,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`).
 - 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA**.
 - 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA**.
-- 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas**.
 - 2026-08-26 — 🪞 **LÍNEA DE ACERO**: `vela-bowl-de-acero` y `bowl-espejo-de-acero`.
 
 ## 5. Image Inventory
@@ -213,7 +216,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - ⛔ Deprecadas: `1785182590879-i54i3sm6qk`, `-u6xju9w4wjl`, `-77nbrytmoii`, `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b`, `1785521743156-3qeskqe43gv`, `1787699972902-dld268c7c0u`, `1787701006060-xuyehajl1yr`, `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
 - **🌿 FLAT-LAYS DE AROMA (4:3)**: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `1787337333997-44wwhmmisy5` · Costa Mineral `1787337333998-jphdwvy2pbh` · Higo Matcha `1787337333998-enck999sju7` · Tabaco Vainilla `1787337333998-5e5poqkcxh8` · Musgo Mineral `1787337333998-n7f8zqhfx8m`.
 - **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **UGC**: `src/data/reviews.ts`. **FAVICON**: `/favicon.png`.
-- 🟡 Subidas sin usar: `1787681082141-dy7wr0dcp15`, `1787681082142-42qlfq25nvs`, `1787684660654-vr5uiznl7cj`.
+- 🟡 Subidas sin usar: `1787681082141-dy7wr0dcp15`, `1787681082142-42qlfq25nvs`, `1787684660654-vr5uiznl7cj`, `1787853688231-5ub5pe3srgs`, `1787853832985-m02rux3cxqn` (screenshots de referencia del owner, no son assets).
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
@@ -240,7 +243,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar en 360 px: esencia con carrusel-selector vs vaso de vidrio con toggle de 3 botones**.
+- [ALTA] **Verificar en 360 px: franja de beneficios, esencia con carrusel-selector, vaso de vidrio con toggle**.
 - [ALTA] **Packshots del frasco de esencia (4:5)** — más urgente por el recorte.
 - [ALTA] **Verificar el flujo carrito → /pagar → volver atrás**.
 - [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
