@@ -110,7 +110,8 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - Eyebrow: "Cera perlada 100% natural · Hecha en México". Subtítulo: "Convierte tus propios recipientes en velas, cera premium que se adapta a tu estilo. Reduce el desperdicio. Siempre como nuevas." (`IndexUI.tsx` líneas ~222-229).
 
 ### 🧭 PÁGINA `/como-funciona` (`src/pages/ComoFunciona.tsx`)
-- Orden: intro + CTA → 4 pasos → **CTA de mitad de página** → `<Reviews title="Lo que dicen quienes ya la rellenaron" />` → `<CompareTable />` (fondo `bg-background`) → FAQ (fondo `bg-dunaru-arena`) + CTA → cierre oscuro con 2 botones.
+- Orden: intro + CTA → 4 pasos → **CTA de mitad de página** → `<Reviews title="Lo que dicen quienes ya la rellenaron" />` → **sección comparativa con encabezado propio** ("La diferencia / DUNARU vs VELA NORMAL", `bg-background`, `section-pad-sm`, `border-t`) → FAQ (`bg-dunaru-arena`) + CTA → cierre oscuro con 2 botones.
+- ⚠️ **La `<CompareTable />` NUNCA va suelta**: siempre dentro de una `<section className="section-pad-sm">` con su eyebrow + `<h2>`, igual que en `IndexUI`. Sin eso pierde título y aire (bug del 2026-08-27).
 - **`InlineCta`** = helper local del archivo (`label`, `to`, `secondary`). Default → `/categorias/todos`.
 - Alternancia de fondos: arena → background → arena (Reviews) → background (CompareTable) → arena (FAQ) → carbon (cierre). **No romper la alternancia al insertar secciones.**
 
@@ -131,6 +132,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - **📦 `/categorias/todos`** agrupa con `groupByCatalog`: Empieza aquí → Cera Duna → Colecciones de tonos → Accesorios.
 
 ### ⚖️ TABLA COMPARATIVA (`src/components/CompareTable.tsx`) — FUENTE ÚNICA.
+- El componente **NO trae título propio**: solo la rejilla + footnote. El encabezado lo pone la página que la usa.
 
 ### 🌿 SISTEMA DE AROMAS
 - **`src/lib/scents.ts`** = fuente única. `getScentImageByVariantName()`, `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`.
@@ -142,14 +144,14 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO, CUENCO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado. ✅ Foto por variante en tarjetas. ✅ Carrito persistente. ✅ Copy del hero. ✅ `/como-funciona` con reseñas + 4 CTAs. 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado. ✅ Foto por variante en tarjetas. ✅ Carrito persistente. ✅ Copy del hero. ✅ `/como-funciona` con reseñas + 4 CTAs + comparativa con encabezado. 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner
 1. Bowl de acero: ¿el kit incluye 500 g si el bowl mide 7 × 4 cm? ¿Acero inoxidable pulido o cromado? Falta `compare_at_price`.
 2. Cuenco Dunaru: swatches de color mal (los 3 en `#101010`). ¿Lleva `compare_at_price`? ¿Cuánta cera incluye el kit de $1,199?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- **`/como-funciona`**: alternancia de fondos correcta, CTAs no repetitivos en móvil, carrusel de reseñas funcionando.
+- **`/como-funciona`**: encabezado de la comparativa visible, alternancia de fondos, CTAs no repetitivos en móvil, carrusel de reseñas.
 - **`/categorias/todos`**: los 4 kits en "Empieza aquí", Cuenco Dunaru recipiente en "Accesorios", y cambio de foto al elegir color.
 - Home 360 px, PDP esencia (carrusel), PDP vaso de vidrio (toggle), video hero iOS, mega menú, flujo carrito → /pagar.
 - Hero: revisar que el nuevo copy ("Cera perlada 100% natural") no choque con el resto del sitio que usa "100% vegetal".
@@ -164,8 +166,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 🧭 **`/como-funciona` REFORZADA** (`ComoFunciona.tsx`): añadido `<Reviews>` justo después del paso 04, nuevo helper local `InlineCta` y **4 puntos de conversión** (intro con "Ver las velas rellenables" + "Ver aromas" y micro-línea de envío/garantía; CTA "Elegir mi vela" tras el paso 04; CTA tras el FAQ; cierre existente). Fondos realternados: CompareTable → `bg-background`, FAQ → `bg-dunaru-arena`.
-- 2026-08-27 — ✍️ **COPY DEL HERO ACTUALIZADO** (`IndexUI.tsx`): eyebrow → "Cera perlada 100% natural · Hecha en México"; subtítulo → "Convierte tus propios recipientes en velas, cera premium que se adapta a tu estilo. Reduce el desperdicio. Siempre como nuevas."
+- 2026-08-27 — ⚖️ **TÍTULO DE LA COMPARATIVA RESTAURADO** (`ComoFunciona.tsx`): la `<CompareTable />` había quedado dentro de un `<div>` pelón sin encabezado ni padding tras insertar las reseñas. Ahora vive en una `<section className="section-pad-sm bg-background texture-grain border-t">` con eyebrow "La diferencia" + `<h2> DUNARU vs VELA NORMAL` + bajada, replicando el bloque de `IndexUI`.
+- 2026-08-27 — 🧭 **`/como-funciona` REFORZADA**: `<Reviews>` tras el paso 04, helper local `InlineCta` y **4 puntos de conversión** (intro, tras paso 04, tras FAQ, cierre).
+- 2026-08-27 — ✍️ **COPY DEL HERO ACTUALIZADO** (`IndexUI.tsx`): eyebrow → "Cera perlada 100% natural · Hecha en México".
 - 2026-08-27 — 🗂️ **CUENCO DUNARU INTEGRADO**: `vela-rellenable-cuenco-dunaru` → "Empieza aquí" y `cuenco-dunaru` → "Accesorios" en `catalog-order.ts`; ambos al mega menú con tag "Nuevo".
 - 2026-08-27 — 🖼️ **FOTO POR VARIANTE EN LAS TARJETAS**: nuevo `src/lib/variant-image.ts` con `getVariantDisplayImage()`, consumido por `ProductCardUI`.
 - 2026-08-27 — 🔗 **CTA HERO "Comprar ahora" → `/categorias/todos`**.
@@ -176,7 +179,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA** (`priceInSlide`).
 - 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`sliderOption`, `mobileSlides`).
 - 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (desktop).
-- 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL**.
 - 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO** + CTA "Elegir aroma".
 - 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT** + back links.
 
@@ -211,7 +213,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar `/como-funciona`** en 360 px (CTAs y reseñas).
+- [ALTA] **Verificar `/como-funciona`** en 360 px (título de la comparativa, CTAs y reseñas).
 - [ALTA] **Verificar `/categorias/todos`**: 4 kits arriba, Cuenco Dunaru recipiente en Accesorios, cambio de foto por color.
 - [ALTA] **Corregir swatches del Cuenco Dunaru** en el Dashboard.
 - [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`**.

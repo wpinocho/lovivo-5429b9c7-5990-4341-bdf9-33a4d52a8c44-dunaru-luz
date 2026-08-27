@@ -175,9 +175,23 @@ const ComoFunciona = () => (
     <Reviews title="Lo que dicen quienes ya la rellenaron" />
 
     {/* Comparativa */}
-    <div className="bg-background texture-grain">
-      <CompareTable />
-    </div>
+    <section className="section-pad-sm bg-background texture-grain border-t border-foreground/10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <Reveal className="text-center mb-10 sm:mb-12">
+          <p className="eyebrow mb-4">La diferencia</p>
+          <h2 className="lockup text-3xl sm:text-4xl text-foreground">
+            DUNARU <em>vs</em> VELA NORMAL
+          </h2>
+          <p className="font-body text-sm text-foreground/55 max-w-md mx-auto mt-4">
+            Una vela normal se consume y se tira. La nuestra se rellena, cambia de aroma y se
+            queda en tu casa.
+          </p>
+        </Reveal>
+        <Reveal delay={90}>
+          <CompareTable />
+        </Reveal>
+      </div>
+    </section>
 
     {/* FAQ */}
     <section className="section-pad bg-dunaru-arena texture-arena">
