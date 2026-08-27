@@ -61,7 +61,7 @@ export const SHOP_COLUMNS: NavColumn[] = [
   },
   {
     id: "accesorios",
-    title: "Recipientes y accesorios",
+    title: "Accesorios",
     items: [
       { label: "Vaso de Vidrio", to: "/productos/vaso-extra-transparente", desc: "Recipiente extra" },
       { label: "Bowl Artesanal", to: "/productos/bowl-negro", desc: "Cerámica negra mate" },

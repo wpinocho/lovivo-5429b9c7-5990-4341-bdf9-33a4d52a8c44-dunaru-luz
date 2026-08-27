@@ -6,6 +6,7 @@ import { PriceRuleBadge } from "@/components/ui/PriceRuleBadge"
 import { usePriceRules } from "@/hooks/usePriceRules"
 import type { Product } from "@/lib/supabase"
 import { getReviewStats } from "@/data/reviews"
+import { getChooseOnPdp } from "@/lib/catalog-order"
 import { Star } from "lucide-react"
 
 /**
@@ -29,6 +30,8 @@ interface ProductCardUIProps {
 export const ProductCardUI = ({ product }: ProductCardUIProps) => {
   const { getRulesForProduct } = usePriceRules()
   const productRules = getRulesForProduct(product.id)
+  // Productos que se eligen en su propia página (ej. la esencia: primero el aroma).
+  const chooseOnPdp = getChooseOnPdp(product.slug)
 
   return (
     <HeadlessProductCard product={product}>
@@ -128,7 +131,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
               )}
             </Link>
 
-            {logic.hasVariants && logic.options && (
+            {!chooseOnPdp && logic.hasVariants && logic.options && (
               <div className="mb-3 space-y-2">
                 {logic.options.map((opt) => (
                   <div key={opt.id}>
@@ -193,18 +196,29 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                   </span>
                 )}
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  logic.onAddToCartSuccess() // Hook para features adicionales
-                  logic.handleAddToCart()
-                }}
-                disabled={!logic.canAddToCart}
-                className="border-0 px-5 bg-dunaru-marfil text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil transition-colors duration-300 disabled:opacity-50"
-              >
-                {logic.inStock ? 'Agregar' : 'Agotado'}
-              </Button>
+              {chooseOnPdp ? (
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="border-0 px-5 bg-dunaru-marfil text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil transition-colors duration-300"
+                >
+                  <Link to={`/productos/${logic.product.slug}`}>{chooseOnPdp.cta}</Link>
+                </Button>
+              ) : (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    logic.onAddToCartSuccess() // Hook para features adicionales
+                    logic.handleAddToCart()
+                  }}
+                  disabled={!logic.canAddToCart}
+                  className="border-0 px-5 bg-dunaru-marfil text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil transition-colors duration-300 disabled:opacity-50"
+                >
+                  {logic.inStock ? 'Agregar' : 'Agotado'}
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>

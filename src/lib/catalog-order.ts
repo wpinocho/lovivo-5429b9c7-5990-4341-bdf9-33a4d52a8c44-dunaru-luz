@@ -34,17 +34,36 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
   },
   {
     id: "accesorios",
-    label: "Recipientes y accesorios",
-    slugs: ["vaso-extra-transparente", "bowl-negro", "bowl-espejo-de-acero", "pack-30-mechas"],
+    label: "Accesorios",
+    slugs: [
+      "esencia-para-vela-10-ml",
+      "vaso-extra-transparente",
+      "bowl-negro",
+      "bowl-espejo-de-acero",
+      "pack-30-mechas",
+    ],
   },
 ]
 
 /**
  * Productos que SÍ se pueden comprar (y aparecen en carrito y checkout) pero
  * NO deben listarse en grids, colecciones ni recomendaciones automáticas.
- * Caso de uso: complementos que solo se agregan desde la PDP, como la esencia.
+ * Hoy está vacío: la esencia ya se lista en "Accesorios" como tarjeta que
+ * lleva a su propia página (ver CHOOSE_ON_PDP).
  */
-export const HIDDEN_FROM_CATALOG_SLUGS: string[] = ["esencia-para-vela-10-ml"]
+export const HIDDEN_FROM_CATALOG_SLUGS: string[] = []
+
+/**
+ * Productos que se listan en el catálogo pero NO se agregan al carrito desde la
+ * tarjeta: primero hay que elegir una opción en su propia página (el aroma).
+ * La tarjeta oculta los selectores y su botón navega a la PDP.
+ */
+export const CHOOSE_ON_PDP: Record<string, { cta: string }> = {
+  "esencia-para-vela-10-ml": { cta: "Elegir aroma" },
+}
+
+export const getChooseOnPdp = (slug?: string | null) =>
+  (slug && CHOOSE_ON_PDP[slug]) || null
 
 export const isHiddenFromCatalog = (slug?: string | null): boolean =>
   !!slug && HIDDEN_FROM_CATALOG_SLUGS.includes(slug)
