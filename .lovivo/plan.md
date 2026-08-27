@@ -14,7 +14,7 @@
 - STORE_ID: `5429b9c7-5990-4341-bdf9-33a4d52a8c44`
 - RUTAS: producto `/productos/:slug`, paquete `/paquete/:slug`, carrito `/carrito`, checkout `/pagar`, categoría `/categorias/:handle`, **`/como-funciona`**.
 - ⚠️ **kit-vaso-de-concreto** es de **CERÁMICA**; el slug NO se cambia (rompe los anuncios de Meta).
-- ⚠️ **PRODUCTO ANCLA DE PAUTA = `kit-vaso-de-vidrio`.**
+- ⚠️ **PRODUCTO ANCLA DE PAUTA (Meta Ads) = `kit-vaso-de-vidrio`** — los anuncios de Instagram deben apuntar a esa PDP ($899, envío gratis, kit completo). El hero de la home NO usa este anclaje (ver Active Plan).
 - ⚠️ El owner repriza desde el Dashboard. **NUNCA hardcodear precios.**
 - ⚠️ **STAGING**: los cambios se commitean al final del turno. Pedir refresh duro.
 
@@ -108,6 +108,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - **Móvil**: **`<HeroMobileVideo />`** → video 9:16 720×1280 MP4 H.264, **sin audio, 1.8 MB**, `autoPlay muted loop playsInline`.
 - **Estrategia LCP (no romper)**: póster `<img fetchPriority="high">` (webp 55 KB, primer frame exacto); el `<video>` no se monta hasta `requestIdleCallback` (fallback 1200 ms) y solo si `useIsMobile()`. Respeta `prefers-reduced-motion`.
 - ⛔ **El póster debe ser siempre el primer frame del video.**
+- **CTA hero "Comprar ahora" (2026-08-27) → `/categorias/todos`** (todos los productos). CTA secundario "Ver cómo funciona" → `#como-funciona`. ⚠️ Distinto del ancla de pauta de Meta Ads, que sigue siendo `kit-vaso-de-vidrio`.
 - Huérfanos en repo: `/hero-dunaru.webp`, `/hero-dunaru-mobile.webp`.
 
 ### 🎨 "ELIGE TU TONO" (home)
@@ -128,7 +129,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - **`allOptionsAreSlider`**: true cuando TODAS las opciones son la `sliderOption`. Oculta el bloque "Product Options" en móvil (`hidden md:block`).
 - **`mobileSlides`**: si `sliderOption` es null → `galleryImages`. Si existe → una slide por aroma + el resto de fotos como slides pasivas.
 - **Sincronización bidireccional** con `carouselApi` (`on("select")` ⇄ `scrollTo(activeSlideIndex)`).
-- **📐 DIMENSIONES DEL SLIDE (definitivo)**: `CarouselItem` = `basis-[90%] pl-2`; contenedor interno = **`w-full aspect-[4/5]` SIN `max-h`**.
+- **📐 DIMENSIONES DEL SLIDE (definitivo)**: `CarouselItem` = `basis-[99%] pl-1`; contenedor interno = **`w-full aspect-[4/5]` SIN `max-h`**.
   - ⛔ **NUNCA volver a poner `max-h-[Xvh]` junto a `aspect-[4/5]`**.
 - **`priceInSlide = !!sliderOption && mobileSlides.length > 1`**.
 
@@ -166,7 +167,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente. ✅ Carrusel-selector limitado a Aromas. ✅ **Franja de beneficios de la home limpiada (iconos, sin cajas).** 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente. ✅ Carrusel-selector limitado a Aromas. ✅ Franja de beneficios de la home limpiada. ✅ Carrusel de aroma ampliado a 99% ancho. ✅ **CTA hero "Comprar ahora" → catálogo completo.** 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm.
@@ -174,8 +175,8 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- **Home en 360 px**: franja de beneficios en 2×2 con iconos, sin líneas divisorias.
-- **PDP de la esencia en 360 px**: carrusel-selector con foto a ancho completo, peek de la siguiente.
+- **Home en 360 px**: franja de beneficios en 2×2 con iconos, CTA hero → catálogo completo.
+- **PDP de la esencia en 360 px**: carrusel-selector con foto casi a ancho completo (99%).
 - **PDP `kit-vaso-de-vidrio` en 360 px**: toggle de 3 botones con miniatura + precio en el header móvil.
 - Video hero móvil (iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, flujo carrito → /pagar → atrás.
 
@@ -189,9 +190,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — ✨ **FRANJA DE BENEFICIOS LIMPIADA** (`IndexUI.tsx`): `BENEFITS` pasó de `string[]` a `{ icon, text }[]` con iconos lucide (Leaf, RefreshCw, MapPin, Truck) en terracota. Se eliminó `divide-x` y el aspecto de cajas: móvil `grid-cols-2 gap-x-5 gap-y-4 py-6`, desktop `flex justify-between`. Pedido explícito del owner ("que no parezcan cajitas").
+- 2026-08-27 — 🔗 **CTA HERO "Comprar ahora" → `/categorias/todos`** (`IndexUI.tsx`): antes apuntaba a `kit-vaso-de-vidrio`; el owner quiere que la home enlace al catálogo completo, no a un solo producto. El ancla de pauta de Meta Ads sigue siendo `kit-vaso-de-vidrio` (sin cambios, es para anuncios externos).
+- 2026-08-27 — ✨ **FRANJA DE BENEFICIOS LIMPIADA** (`IndexUI.tsx`): `BENEFITS` pasó de `string[]` a `{ icon, text }[]` con iconos lucide (Leaf, RefreshCw, MapPin, Truck) en terracota. Se eliminó `divide-x` y el aspecto de cajas: móvil `grid-cols-2 gap-x-5 gap-y-4 py-6`, desktop `flex justify-between`.
 - 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS** (`ProductPageUI.tsx`): `sliderOption` filtra por `o.name === SCENT_OPTION_NAME`. Los productos con opción `Color` recuperan el toggle de 3 botones.
-- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL A ANCHO COMPLETO**: se quitó `max-h-[50vh]`. Ahora `w-full aspect-[4/5]` y `CarouselItem` en `basis-[90%] pl-2`.
+- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL AMPLIADA**: `basis-[99%] pl-1`, `w-full aspect-[4/5]` sin `max-h`.
 - 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO**: nueva const `allOptionsAreSlider`.
 - 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA** (`priceInSlide`). Eliminada la línea de MSI del buy box.
 - 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`sliderOption`, `mobileSlides`, sync bidireccional).
@@ -203,7 +205,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`).
 - 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA**.
 - 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA**.
-- 2026-08-26 — 🪞 **LÍNEA DE ACERO**: `vela-bowl-de-acero` y `bowl-espejo-de-acero`.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -243,7 +244,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar en 360 px: franja de beneficios, esencia con carrusel-selector, vaso de vidrio con toggle**.
+- [ALTA] **Verificar en 360 px: franja de beneficios, esencia con carrusel-selector, vaso de vidrio con toggle, CTA hero → catálogo**.
 - [ALTA] **Packshots del frasco de esencia (4:5)** — más urgente por el recorte.
 - [ALTA] **Verificar el flujo carrito → /pagar → volver atrás**.
 - [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
