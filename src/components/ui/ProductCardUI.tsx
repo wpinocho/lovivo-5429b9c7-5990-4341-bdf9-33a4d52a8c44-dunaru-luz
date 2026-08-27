@@ -7,6 +7,7 @@ import { usePriceRules } from "@/hooks/usePriceRules"
 import type { Product } from "@/lib/supabase"
 import { getReviewStats } from "@/data/reviews"
 import { getChooseOnPdp } from "@/lib/catalog-order"
+import { getVariantDisplayImage } from "@/lib/variant-image"
 import { Star } from "lucide-react"
 
 /**
@@ -35,29 +36,36 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
 
   return (
     <HeadlessProductCard product={product}>
-      {(logic) => (
+      {(logic) => {
+        // Foto propia de la variante elegida (color, aroma...). Si todas las
+        // variantes comparten el mismo packshot, esto devuelve la exclusiva.
+        const variantImage = getVariantDisplayImage(logic.matchingVariant, logic.variants)
+        const primaryImage = variantImage || logic.product.images?.[0]
+        const showHoverImage =
+          !variantImage && !!logic.product.images && logic.product.images.length > 1
+
+        return (
         <Card className="bg-card border-0 shadow-none">
           <CardContent className="p-4">
             <Link to={`/productos/${logic.product.slug}`} className="block">
               <div className="aspect-square bg-dunaru-arena/40 mb-3 overflow-hidden relative group" style={{ aspectRatio: '1/1' }}>
-                {(logic.matchingVariant?.image || (logic.product.images && logic.product.images.length > 0)) ? (
+                {primaryImage ? (
                   <>
                     {/* Primary image - only fade on hover if there's a second image */}
                     <img
-                      src={logic.matchingVariant?.image_urls?.[0] || (logic.matchingVariant?.image as any) || logic.product.images![0]}
+                      key={primaryImage}
+                      src={primaryImage}
                       alt={logic.product.title}
                       loading="lazy"
                       decoding="async"
                       className={`w-full h-full object-contain transition-opacity duration-300 ${
-                        logic.product.images && logic.product.images.length > 1 && !logic.matchingVariant?.image && !logic.matchingVariant?.image_urls?.[0]
-                          ? 'group-hover:opacity-0'
-                          : ''
+                        showHoverImage ? 'group-hover:opacity-0' : ''
                       }`}
                     />
                     {/* Secondary image on hover (only if exists and no variant image) */}
-                    {logic.product.images && logic.product.images.length > 1 && !logic.matchingVariant?.image && !logic.matchingVariant?.image_urls?.[0] && (
+                    {showHoverImage && (
                       <img
-                        src={logic.product.images[1]}
+                        src={logic.product.images![1]}
                         alt={`${logic.product.title} - alternativa`}
                         loading="lazy"
                         decoding="async"
@@ -222,7 +230,8 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
             </div>
           </CardContent>
         </Card>
-      )}
+        )
+      }}
     </HeadlessProductCard>
   )
 }
