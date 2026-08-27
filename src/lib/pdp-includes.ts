@@ -71,6 +71,16 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
     ENVIO,
   ],
 
+  "vela-rellenable-cuenco-dunaru": [
+    {
+      item: "Cuenco Dunaru de cerámica, 20 cm de diámetro",
+      benefit: "Admite varias mechas a la vez. Se lava y vuelve a empezar.",
+    },
+    CERA_500,
+    MECHAS_30,
+    ENVIO,
+  ],
+
   "vela-bowl-de-acero": [
     {
       item: "Bowl de acero pulido tipo espejo",

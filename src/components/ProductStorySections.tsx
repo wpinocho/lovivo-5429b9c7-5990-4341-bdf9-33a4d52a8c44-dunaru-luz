@@ -276,6 +276,92 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     ],
   },
 
+  "vela-rellenable-cuenco-dunaru": {
+    steps: [
+      {
+        title: "Abre tu vela",
+        text: "Cuenco de cerámica, 500 g de perlas y 30 mechas. Todo lo que necesitas, en una sola caja.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Vierte las perlas",
+        text: "Llena el cuenco con las perlas de cera. Sin moldes, sin derretir nada.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Enciende hoy mismo",
+        text: "Coloca varias mechas repartidas y préndelas. Tu vela queda lista en segundos.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Recarga sin fin",
+        text: "Cuando se consuma, agrega más perlas y mechas nuevas. El mismo cuenco, otra vela.",
+        image: PLACEHOLDER,
+      },
+    ],
+    blocks: [
+      {
+        title: "Todo listo para encender hoy",
+        body: "Sin armar, sin buscar recipiente, sin complicaciones. Tu Cuenco Dunaru llega **completo y listo para usar o regalar**.",
+        bullets: [
+          "Cuenco de cerámica de 20 cm, resistente al calor",
+          "500 g de Cera Duna vegetal",
+          "30 mechas de algodón incluidas",
+          "Envío gratis a todo México",
+        ],
+        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1787859462824-br3pyp2cr9k.webp",
+        photo: true,
+      },
+      {
+        title: "Se compra una vez, se rellena para siempre",
+        body: "Cuando las perlas se consumen, **no tiras nada**: vuelves a llenar el mismo cuenco con una recarga y tu vela empieza de nuevo. Una compra, luz para mucho tiempo.",
+        bullets: [
+          "El cuenco se reutiliza infinitas veces",
+          "Recarga con cualquier bolsa de Cera Duna",
+        ],
+        image: "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1787859462825-p6zo71cvpai.webp",
+        photo: true,
+        flip: true,
+      },
+    ],
+    compareRows: [
+      { label: "Llega listo para encender", dunaru: true, traditional: false },
+      { label: "Varias mechas a la vez", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+      { label: "Cera 100% vegetal y biodegradable", dunaru: true, traditional: false },
+      { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
+      { label: "Cuenco de cerámica reutilizable", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
+    ],
+    faqs: [
+      {
+        q: "¿Qué incluye?",
+        a: "El cuenco de cerámica de 20 cm de diámetro por 6 cm de alto, 500 g de Cera Duna y 30 mechas de algodón. Todo listo para encender o regalar.",
+      },
+      {
+        q: "¿Cuántas mechas puedo encender a la vez?",
+        a: "Por su diámetro de 20 cm admite varias mechas al mismo tiempo. Repártelas de forma pareja sobre las perlas y deja espacio entre ellas.",
+      },
+      {
+        q: "¿Tiene costo el envío?",
+        a: "No. El Cuenco Dunaru incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+      },
+      {
+        q: "¿Puedo recargarlo después?",
+        a: "Sí. Cuando las perlas se consuman, agregas una recarga y mechas nuevas en el mismo cuenco. Se reutiliza infinitas veces.",
+      },
+      {
+        q: "¿Sirve para regalar?",
+        a: "Totalmente. Llega en una presentación cuidada, listo para usar desde el primer momento. Es un regalo con intención y diseño.",
+      },
+      {
+        q: "¿Qué colores hay?",
+        a: "Elige entre Marfil, Champagne y Ónix. Cada tono crea un ambiente distinto en el mismo cuenco.",
+      },
+    ],
+  },
+
   "kit-vaso-de-concreto": {
     steps: [
       {

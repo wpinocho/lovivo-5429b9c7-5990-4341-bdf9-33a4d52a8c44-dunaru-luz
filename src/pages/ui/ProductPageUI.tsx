@@ -96,6 +96,8 @@ const PDP_HEADLINE: Record<string, string> = {
     "Enciende tu primera vela hoy. Cuando se acabe, la vuelves a llenar — no la tiras.",
   "kit-vaso-de-concreto":
     "El objeto de diseño que nunca se acaba: se rellena, no se tira.",
+  "vela-rellenable-cuenco-dunaru":
+    "20 cm de cerámica y varias mechas encendidas a la vez. Cuando se acaba, la vuelves a llenar.",
   "vela-bowl-de-acero":
     "Acero pulido que refleja la llama y la duplica sobre la mesa. Llega lista para encender.",
   "bowl-espejo-de-acero":
@@ -123,6 +125,11 @@ const PDP_BENEFITS: Record<string, string[]> = {
   "kit-vaso-de-concreto": [
     "Incluye: bowl de cerámica + 500 g de Cera Duna + 30 mechas de algodón",
     "Bowl de cerámica negra mate hecho a mano: se ve bien encendido y apagado",
+    "Se rellena infinitas veces: compras una vez y sigue dando luz",
+  ],
+  "vela-rellenable-cuenco-dunaru": [
+    "Incluye: cuenco de cerámica de 20 cm + 500 g de Cera Duna + 30 mechas de algodón",
+    "Admite varias mechas a la vez: una luz amplia que llena la mesa",
     "Se rellena infinitas veces: compras una vez y sigue dando luz",
   ],
   "vela-bowl-de-acero": [

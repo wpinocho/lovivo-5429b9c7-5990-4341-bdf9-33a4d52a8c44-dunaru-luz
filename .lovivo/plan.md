@@ -16,7 +16,7 @@
 - RUTAS: producto `/productos/:slug`, paquete `/paquete/:slug`, carrito `/carrito`, checkout `/pagar`, categoría `/categorias/:handle`, **`/como-funciona`**.
 - ⚠️ **kit-vaso-de-concreto** es de **CERÁMICA**; el slug NO se cambia (rompe los anuncios de Meta).
 - ⚠️ **PRODUCTO ANCLA DE PAUTA (Meta Ads) = `kit-vaso-de-vidrio`**. El hero de la home NO usa este anclaje (CTA → `/categorias/todos`).
-- ⚠️ El owner repriza y **crea productos** desde el Dashboard. **NUNCA hardcodear precios.** 🔁 Todo producto nuevo debe añadirse a `catalog-order.ts`, a `navigation.ts` **y a `SHOP_CARDS` + `CATALOG_FALLBACK` de `IndexUI.tsx`**, si no queda fuera de la home.
+- ⚠️ El owner repriza y **crea productos** desde el Dashboard. **NUNCA hardcodear precios.** 🔁 Todo producto nuevo debe añadirse a `catalog-order.ts`, a `navigation.ts`, a **`SHOP_CARDS` + `CATALOG_FALLBACK` de `IndexUI.tsx`** y, si es una vela completa, a los **5 archivos de PDP** (ver §2 "CHECKLIST PDP").
 - ⚠️ **STAGING**: los cambios se commitean al final del turno. Pedir refresh duro.
 
 ### 🏷️ SISTEMA DE NOMBRES (nomenclatura premium vigente)
@@ -43,10 +43,10 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### CATÁLOGO — otros datos
 - **CUENCO DUNARU (2026-08-27, creado por la owner)**: cerámica, **20 cm de diámetro × 6 cm de alto**, admite varias mechas.
-  - `vela-rellenable-cuenco-dunaru` id `ec006544-6039-46ff-a15d-d7aa04ac82f3` — 11 imágenes, opción `Color` (Marfil/Champagne/Ónix) **con `image_urls` por variante** (2 c/u, exclusivas → la tarjeta sí cambia de foto). Imagen 1 = `biyop92l41t.webp`.
+  - `vela-rellenable-cuenco-dunaru` id `ec006544-6039-46ff-a15d-d7aa04ac82f3` — 11 imágenes, opción `Color` (Marfil/Champagne/Ónix) **con `image_urls` por variante** (2 c/u, exclusivas → la tarjeta sí cambia de foto). Imagen 1 = `biyop92l41t.webp`. **PDP completa desde 2026-08-27.**
   - `cuenco-dunaru` id `72c2c10d-b302-40e4-8925-abef8f7a5453` — 5 imágenes, sin variantes, $799.
   - ⚠️ Sus swatches en la DB están los tres en `#101010` (mal). Corregir en el Dashboard.
-- **BOWL DE ACERO**: `vela-bowl-de-acero` id `5e40d590-9c02-4924-a2e4-3dd3700954d2` — variantes **SIN `image_urls`** (su tarjeta no cambia de foto). `bowl-espejo-de-acero` id `a28c4628-2ed9-4890-a321-ca4ef0d3bc61`.
+- **BOWL DE ACERO**: `vela-bowl-de-acero` id `5e40d590-9c02-4924-a2e4-3dd3700954d2` — variantes **SIN `image_urls`**. `bowl-espejo-de-acero` id `a28c4628-2ed9-4890-a321-ca4ef0d3bc61`.
 - **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, opción **`Aroma`**, 6 variantes **SIN `image_urls`**. Las 6 fotos flat-lay viven en `product.images` en el MISMO orden que `SCENTS` de `scents.ts`.
 - **CERA DUNA · 500 g** (`90445ca9-...`) y **· 1 kg** (`64317fa8-...`): opción `Color` → Marfil / Champagne / Ónix con `image_urls` propias.
 - **KIT VASO DE VIDRIO** (`8213d069-...`): las 3 variantes comparten `1nbg1xmhf5uh` como **imagen 1** y su foto de color va **en segunda posición**. Por eso existe la lógica de "imagen exclusiva".
@@ -81,87 +81,79 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### 🪨 TEXTURAS / utilidades
 `.texture-grain` · `.texture-arena` · `.texture-travertino` · `.texture-terracota` · `.texture-ambar` (solo oscuros) · `.texture-metal` · `.hairline-metal` · `.lockup` · `.eyebrow` · `.h-editorial` · `.transition-editorial` · `<Reveal>` · `.full-bleed` · `.section-pad` / `.section-pad-sm`.
 
+### ✅ CHECKLIST PDP — qué tocar al añadir una vela nueva
+Una PDP "completa" (como `kit-vaso-de-vidrio`) necesita entrada en **5 lugares**:
+1. `src/components/ProductStorySections.tsx` → `PDP_CONTENT[slug]` = `{ steps?, blocks, compareRows, faqs }`. **Sin esta entrada NO se renderiza NADA** (garantías, 4 pasos, reseñas, bloques, comparativa, FAQ, CTA de cierre). Es la causa #1 de "esta PDP se ve vacía".
+2. `src/pages/ui/ProductPageUI.tsx` → `PDP_HEADLINE[slug]` (promesa de 1 línea bajo el título).
+3. `src/pages/ui/ProductPageUI.tsx` → `PDP_BENEFITS[slug]` (3 bullets sobre el selector de variantes).
+4. `src/lib/pdp-includes.ts` → `PDP_INCLUDES[slug]` (acordeón "Qué incluye").
+5. `src/lib/scents.ts` → `SCENT_ENABLED_SLUGS` si el producto trae Cera Duna (habilita el add-on de aroma).
+⚠️ Los `steps` de `PDP_CONTENT` hoy son decorativos: el carrusel real usa `HOW_IT_WORKS_STEPS` (compartido con la home) y por eso los `PLACEHOLDER` no se ven.
+
 ### 🛍️ REJILLA "ELIGE TU VELA" (home, sección `#comprar`)
-- **`SHOP_CARDS` en `IndexUI.tsx`** = lista curada `{ slug, tag, badge? }`. Hoy 8 tarjetas, en este orden:
-  vidrio (Todo incluido · Más elegido) → Cera 500 g → cerámica → **cuenco dunaru (Varias mechas · Nuevo)** → acero (Acero espejo) → dúo → trío → 1 kg.
-- ⚠️ Una tarjeta **solo se renderiza si su slug existe en `CATALOG_FALLBACK`** (`buildCatalog` ignora productos de la DB sin entrada previa). Añadir producto nuevo = **dos ediciones**: `CATALOG_FALLBACK` + `SHOP_CARDS`.
-- ⚠️ **Un solo badge "Nuevo" a la vez** para que no pierda fuerza.
+- **`SHOP_CARDS` en `IndexUI.tsx`** = lista curada `{ slug, tag, badge? }`. Hoy 8 tarjetas.
+- ⚠️ Una tarjeta **solo se renderiza si su slug existe en `CATALOG_FALLBACK`**. Añadir producto = **dos ediciones**: `CATALOG_FALLBACK` + `SHOP_CARDS`.
+- ⚠️ **Un solo badge "Nuevo" a la vez.**
 
 ### ✨ FRANJA DE BENEFICIOS (home, bajo el hero)
-- `BENEFITS` en `IndexUI.tsx`: `{ icon, text }` con iconos lucide `Leaf`, `RefreshCw`, `MapPin`, `Truck`.
-- Layout: **móvil `grid-cols-2 gap-x-5 gap-y-4 py-6`** · **sm+ `flex justify-between`**. ⛔ Sin `divide-x`, sin cajas.
+- `BENEFITS` en `IndexUI.tsx`: iconos lucide `Leaf`, `RefreshCw`, `MapPin`, `Truck`. Móvil `grid-cols-2`, sm+ `flex justify-between`. ⛔ Sin `divide-x`.
 
 ### 🧭 NAVEGACIÓN
-- **FUENTE ÚNICA: `src/lib/navigation.ts`** → `SHOP_COLUMNS`, `SHOP_FEATURED`, `SHOP_ALL`, `PRIMARY_LINKS`, `UTILITY_LINKS`.
-- **Componente: `src/components/MainNav.tsx`** → `DesktopNav` y `MobileNav({ onNavigate })`.
+- **FUENTE ÚNICA: `src/lib/navigation.ts`** → `SHOP_COLUMNS`, `SHOP_FEATURED`, `SHOP_ALL`, `PRIMARY_LINKS`, `UTILITY_LINKS`. Componente: `src/components/MainNav.tsx`.
 - ⛔ **REGLA DE ORO: el menú NO contiene anclas a la home (`/#...`).**
-- **Desktop**: `Tienda ▾` (mega menú de 3 columnas) + `Aromas` + `Cómo funciona`.
-- ⚠️ **"Aromas" del menú → `/productos/esencia-para-vela-10-ml`**.
-- ⚙️ El panel del mega menú depende de que el wrapper `.max-w-7xl` del header tenga `relative`. **No quitar ese `relative`.**
+- ⚠️ **"Aromas" del menú → `/productos/esencia-para-vela-10-ml`**. El panel del mega menú exige que el wrapper `.max-w-7xl` del header tenga `relative`.
 
 ### 🖼️ FOTO POR VARIANTE — FUENTE ÚNICA (`src/lib/variant-image.ts`)
-- Exporta **`getVariantDisplayImage(variant, variants)`**: primera `image_url` **exclusiva** de esa variante; si no, flat-lay de aroma por nombre (`scents.ts`); si no, `image_urls[0]` / `variant.image`.
-- **Lo consume `ProductCardUI`** (tarjetas del catálogo y home). `ProductPageUI.galleryImages` duplica la lógica inline.
-- ⚠️ La rejilla `SHOP_CARDS` de la home **no** usa `ProductCardUI`: pinta `<img>` directo con `catalog[slug].img`, así que **no cambia de foto por color**.
+- `getVariantDisplayImage(variant, variants)`. Lo consume `ProductCardUI`. `ProductPageUI.galleryImages` duplica la lógica inline.
+- ⚠️ La rejilla `SHOP_CARDS` de la home **no** usa `ProductCardUI`.
 
 ### 🛒 TARJETA DE PRODUCTO — modo "elegir en la PDP"
-- `catalog-order.ts` exporta **`CHOOSE_ON_PDP`** + `getChooseOnPdp(slug)`. Hoy solo `esencia-para-vela-10-ml` → CTA **"Elegir aroma"**.
-- `HIDDEN_FROM_CATALOG_SLUGS` vacío (la API sigue existiendo).
+- `catalog-order.ts` exporta **`CHOOSE_ON_PDP`** + `getChooseOnPdp(slug)`. Hoy solo `esencia-para-vela-10-ml`.
 
 ### 🖼️ IMÁGENES EDITORIALES — FUENTE ÚNICA (`src/lib/steps-media.ts`)
 - `STEP_IMAGES`, `BRAND_STORY_IMAGE`, `RITUAL_IMAGE`, `HERO_DESKTOP_IMAGE`, `HERO_MOBILE_VIDEO`, `HERO_MOBILE_POSTER`. ⛔ Nunca hardcodear estas URLs.
 
 ### 🎬 HERO
-- **Desktop**: `HERO_DESKTOP_IMAGE`. **Móvil**: `<HeroMobileVideo />` (MP4 9:16, 1.8 MB, sin audio).
-- **CTA hero "Comprar ahora" → `/categorias/todos`**. Secundario → `#como-funciona`.
-- Eyebrow: "Cera perlada 100% natural · Hecha en México". Subtítulo: "Convierte tus propios recipientes en velas, cera premium que se adapta a tu estilo. Reduce el desperdicio. Siempre como nuevas."
+- Desktop `HERO_DESKTOP_IMAGE` · Móvil `<HeroMobileVideo />`. CTA → `/categorias/todos`; secundario → `#como-funciona`.
+- Eyebrow: "Cera perlada 100% natural · Hecha en México".
 
 ### 🧭 PÁGINA `/como-funciona` (`src/pages/ComoFunciona.tsx`)
-- Orden: intro + CTA → 4 pasos → **CTA de mitad de página** → `<Reviews title="Lo que dicen quienes ya la rellenaron" />` → **sección comparativa con encabezado propio** ("La diferencia / DUNARU vs VELA NORMAL", `bg-background`, `section-pad-sm`, `border-t`) → FAQ (`bg-dunaru-arena`) + CTA → cierre oscuro con 2 botones.
-- ⚠️ **La `<CompareTable />` NUNCA va suelta**: siempre dentro de una `<section className="section-pad-sm">` con su eyebrow + `<h2>`.
-- **`InlineCta`** = helper local del archivo (`label`, `to`, `secondary`). Default → `/categorias/todos`.
-- Alternancia de fondos: arena → background → arena (Reviews) → background (CompareTable) → arena (FAQ) → carbon (cierre). **No romper la alternancia al insertar secciones.**
+- Orden: intro + CTA → 4 pasos → CTA de mitad → `<Reviews />` → sección comparativa con encabezado propio → FAQ + CTA → cierre oscuro.
+- ⚠️ **La `<CompareTable />` NUNCA va suelta.** `InlineCta` = helper local. Alternancia arena → background → arena → background → arena → carbon.
 
 ### 🎨 "ELIGE TU TONO" (home)
-- `TONOS` usa la imagen 1 de cada variante de `perlas-originales-500-g`; linkea a `?variante=<Nombre>`.
+- `TONOS` usa la imagen 1 de cada variante de `perlas-originales-500-g`.
 
 ### 📱 CARRUSEL MÓVIL = SELECTOR DESLIZABLE — **SOLO AROMAS**
-- `sliderOption` exige `o.name === SCENT_OPTION_NAME`. ⛔ El color usa **toggle de 3 botones con miniatura**.
-- **📐 Slide**: `basis-[99%] pl-1` + `w-full aspect-[4/5]` **SIN `max-h`**.
+- `sliderOption` exige `o.name === SCENT_OPTION_NAME`. Slide: `basis-[99%] pl-1` + `aspect-[4/5]` sin `max-h`.
 
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
 - **🛒 ORDEN DEL BUY BOX**: título+precio+rating · `PDP_BENEFITS[slug]` · variantes · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
-- **📚 ACORDEONES DE LA PDP**: `Qué incluye` → `Más detalles` → `Envío y garantía` (`src/lib/pdp-includes.ts`).
+- **📚 ACORDEONES**: `Qué incluye` → `Más detalles` → `Envío y garantía`.
 - **📐 IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
-- **ORDEN DE LA PDP**: garantías → carrusel → reseñas → bloques editoriales → `<CompareTable />` → FAQ → CTA de cierre.
+- **ORDEN DE LA PDP**: garantías → carrusel 4 pasos → reseñas → bloques editoriales → `<CompareTable />` → FAQ → CTA de cierre.
 - **🏠 ORDEN DE LA HOME**: hero → beneficios → 4 pasos → "Elige tu vela" → `RitualSection` → `Reviews` → `ScentsSection` → "Elige tu tono" → `CasaRealSection` → `BrandStorySection` → `<CompareTable />` → FAQ → newsletter.
-- **📦 `/categorias/todos`** agrupa con `groupByCatalog`: Empieza aquí → Cera Duna → Colecciones de tonos → Accesorios.
+- **📦 `/categorias/todos`** agrupa con `groupByCatalog`.
 
-### ⚖️ TABLA COMPARATIVA (`src/components/CompareTable.tsx`) — FUENTE ÚNICA.
-- El componente **NO trae título propio**: solo la rejilla + footnote. El encabezado lo pone la página que la usa.
-
-### 🌿 SISTEMA DE AROMAS
-- **`src/lib/scents.ts`** = fuente única. `getScentImageByVariantName()`, `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`.
-
-### 🧾 CARRITO Y CHECKOUT
-- **⚠️ El carrito SOLO se vacía cuando el pago se confirma.** Back links en `CartUI` y `CheckoutUI`.
+### ⚖️ TABLA COMPARATIVA (`src/components/CompareTable.tsx`) — FUENTE ÚNICA, sin título propio.
+### 🌿 SISTEMA DE AROMAS — `src/lib/scents.ts` fuente única.
+### 🧾 CARRITO Y CHECKOUT — **el carrito SOLO se vacía cuando el pago se confirma.**
 
 ---
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO, CUENCO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado (catálogo, menú **y home**). ✅ Foto por variante en tarjetas. ✅ Carrito persistente. ✅ Copy del hero. ✅ `/como-funciona`. 🔜 **Verificación visual en 360 px.**
+**Estado**: ✅ Línea de acero. ✅ Cuenco Dunaru integrado (catálogo, menú, home **y PDP completa**). ✅ Foto por variante. ✅ Carrito persistente. ✅ `/como-funciona`. 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner
-1. Bowl de acero: ¿el kit incluye 500 g si el bowl mide 7 × 4 cm? ¿Acero inoxidable pulido o cromado? Falta `compare_at_price`.
-2. Cuenco Dunaru: swatches de color mal (los 3 en `#101010`). ¿Lleva `compare_at_price`? ¿Cuánta cera incluye el kit de $1,199?
+1. Bowl de acero: ¿el kit incluye 500 g si el bowl mide 7 × 4 cm? ¿Acero pulido o cromado? Falta `compare_at_price`.
+2. Cuenco Dunaru: swatches mal (3 en `#101010`). ¿Lleva `compare_at_price`? **¿Cuánta cera incluye el kit de $1,199? La PDP hoy dice 500 g + 30 mechas por analogía con el kit de vidrio — SIN CONFIRMAR.** ¿Cuántas mechas se recomiendan encender a la vez en 20 cm?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- **Home**: la rejilla "Elige tu vela" ahora tiene **8 tarjetas** (3+3+2 en desktop, 4 filas en móvil). Revisar que no se sienta larga y que el badge "Nuevo" solo salga en el Cuenco.
-- **`/como-funciona`**: encabezado de la comparativa, alternancia de fondos, CTAs, carrusel de reseñas.
-- **`/categorias/todos`**: los 4 kits en "Empieza aquí", Cuenco Dunaru recipiente en "Accesorios", cambio de foto al elegir color.
-- Home 360 px, PDP esencia, PDP vaso de vidrio, video hero iOS, mega menú, flujo carrito → /pagar.
+- **PDP `/productos/vela-rellenable-cuenco-dunaru`**: garantías, 4 pasos, reseñas, los 2 bloques editoriales con las fotos nuevas, comparativa, FAQ y CTA de cierre.
+- **Home**: rejilla de 8 tarjetas, badge "Nuevo" solo en el Cuenco.
+- **`/como-funciona`** y **`/categorias/todos`**. Home 360 px, video hero iOS, mega menú, flujo carrito → /pagar.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -173,25 +165,26 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 🛍️ **CUENCO DUNARU EN LA HOME** (`IndexUI.tsx`): faltaba en la rejilla "Elige tu vela" porque `buildCatalog` solo pinta slugs presentes en `CATALOG_FALLBACK`. Se agregó su entrada (título, $1,199, imagen `biyop92l41t.webp`) y su tarjeta en `SHOP_CARDS` en 4ª posición, con tag "Varias mechas" y badge "Nuevo". El badge "Nuevo" se quitó del Bowl de Acero para no duplicarlo.
-- 2026-08-27 — ⚖️ **TÍTULO DE LA COMPARATIVA RESTAURADO** (`ComoFunciona.tsx`): la `<CompareTable />` recuperó su `<section>` con eyebrow "La diferencia" + `<h2> DUNARU vs VELA NORMAL`.
-- 2026-08-27 — 🧭 **`/como-funciona` REFORZADA**: `<Reviews>` tras el paso 04, helper local `InlineCta` y 4 puntos de conversión.
-- 2026-08-27 — ✍️ **COPY DEL HERO ACTUALIZADO**: eyebrow → "Cera perlada 100% natural · Hecha en México".
-- 2026-08-27 — 🗂️ **CUENCO DUNARU INTEGRADO** en `catalog-order.ts` y mega menú con tag "Nuevo".
+- 2026-08-27 — 🧱 **PDP COMPLETA DEL CUENCO DUNARU**: `vela-rellenable-cuenco-dunaru` no tenía entrada en `PDP_CONTENT`, así que su PDP salía sin garantías, sin "Crea tu vela en 4 pasos", sin reseñas, sin comparativa ni FAQ. Se replicó la estructura de `kit-vaso-de-vidrio` en los 5 archivos (`ProductStorySections`, `PDP_HEADLINE`, `PDP_BENEFITS`, `pdp-includes`, `SCENT_ENABLED_SLUGS`). Los 2 bloques editoriales usan **fotos nuevas subidas por la owner** (`1787859462824-br3pyp2cr9k` y `1787859462825-p6zo71cvpai`). Copy adaptado a cerámica de 20 cm y varias mechas.
+- 2026-08-27 — 🛍️ **CUENCO DUNARU EN LA HOME** (`IndexUI.tsx`): entrada en `CATALOG_FALLBACK` + tarjeta en `SHOP_CARDS` (4ª posición, tag "Varias mechas", badge "Nuevo"). Se quitó el badge del Bowl de Acero.
+- 2026-08-27 — ⚖️ **TÍTULO DE LA COMPARATIVA RESTAURADO** (`ComoFunciona.tsx`).
+- 2026-08-27 — 🧭 **`/como-funciona` REFORZADA**: `<Reviews>` tras el paso 04 y 4 puntos de conversión.
+- 2026-08-27 — ✍️ **COPY DEL HERO ACTUALIZADO**.
+- 2026-08-27 — 🗂️ **CUENCO DUNARU INTEGRADO** en `catalog-order.ts` y mega menú.
 - 2026-08-27 — 🖼️ **FOTO POR VARIANTE EN LAS TARJETAS**: `src/lib/variant-image.ts` + `ProductCardUI`.
-- 2026-08-27 — 🔗 **CTA HERO "Comprar ahora" → `/categorias/todos`**.
-- 2026-08-27 — ✨ **FRANJA DE BENEFICIOS LIMPIADA** (`IndexUI.tsx`).
-- 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS** (`ProductPageUI.tsx`).
-- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL AMPLIADA**: `basis-[99%]`, sin `max-h`.
-- 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO**: `allOptionsAreSlider`.
-- 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA** (`priceInSlide`).
-- 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`sliderOption`, `mobileSlides`).
-- 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (desktop).
+- 2026-08-27 — 🔗 **CTA HERO → `/categorias/todos`**.
+- 2026-08-27 — ✨ **FRANJA DE BENEFICIOS LIMPIADA**.
+- 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS**.
+- 2026-08-27 — 🖼️ **FOTO DEL CARRUSEL MÓVIL AMPLIADA**.
+- 2026-08-27 — 📏 **HUECO VACÍO ELIMINADO** (`allOptionsAreSlider`).
+- 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA**.
+- 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS**.
 - 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO** + CTA "Elegir aroma".
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
 - Base de uploads del owner: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/`
+- **🏺 CUENCO DUNARU — bloques editoriales de la PDP (4:3 lifestyle)**: `1787859462824-br3pyp2cr9k` ("Todo listo para encender hoy") · `1787859462825-p6zo71cvpai` ("Se compra una vez, se rellena para siempre").
 - **🏺 CUENCO DUNARU (vela)**: Marfil `biyop92l41t` + `srrf9e1v9yh` · Champagne `eb0630mux1c` + `gnvgvl9g2z6` · Ónix `9qpn00vexkt` + `bvww9lwbol`. **Cuenco suelto**: `z2wsj39j63`, `sorsudu67w`, `3wluzx3dk3o`, `as3ysmbal8e`, `wuzqds86opf`.
 - **🏺 BLOQUES EDITORIALES CERÁMICA**: `1787846317152-fp7km169wu7` · `-d15my4ruzvs` · `-kecin16ha`.
 - **🪞 BOWL DE ACERO**: `1787759673455-m5x9h5ouxwf` · `-uu86xb8ars` · `-vsmlwdqns` · `-e2tr1gctjfo` · `-udq3osxrsej`.
@@ -204,13 +197,14 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-27 — 🟡 **`CATALOG_FALLBACK` de `IndexUI` tiene precios viejos hardcodeados** (vidrio $799, cerámica $999, acero $1,099). Solo se ven si la DB no responde, pero conviene depurarlo: la home debería leer 100% de la DB.
+- 2026-08-27 — 🟠 **La PDP del Cuenco Dunaru afirma "500 g + 30 mechas" sin confirmación de la owner** (se copió del kit de vidrio). Verificar antes de escalar pauta.
+- 2026-08-27 — 🟡 **`CATALOG_FALLBACK` de `IndexUI` tiene precios viejos hardcodeados** (vidrio $799, cerámica $999, acero $1,099).
 - 2026-08-27 — 🟡 **Copy del hero usa "natural" mientras el resto del sitio usa "100% vegetal"**.
 - 2026-08-27 — 🟡 **Swatches del Cuenco Dunaru mal**: los 3 colores en `#101010`.
-- 2026-08-27 — 🟡 **La lógica de "foto exclusiva de variante" está DUPLICADA**: `variant-image.ts` y el `useMemo galleryImages` de `ProductPageUI`.
+- 2026-08-27 — 🟡 **Lógica de "foto exclusiva de variante" DUPLICADA**: `variant-image.ts` y el `useMemo galleryImages` de `ProductPageUI`.
 - 2026-08-27 — 🟡 **Los flat-lays de aroma son 4:3 y el carrusel móvil es 4:5**: se recortan.
 - 2026-08-27 — 🟡 **Órdenes abandonadas duplicadas** (efecto del carrito persistente).
-- 2026-08-27 — 🟡 Los `steps` de `kit-vaso-de-concreto` en `ProductStorySections` siguen con `PLACEHOLDER`.
+- 2026-08-27 — 🟡 Los `steps` de `PDP_CONTENT` siguen con `PLACEHOLDER` en varios slugs (no se renderizan: el carrusel usa `HOW_IT_WORKS_STEPS`).
 - 2026-08-26 — 🔴 **`compare_at_price` de `vela-bowl-de-acero` NO persistió**.
 - 2026-08-26 — 🟠 **Copy sin verificar del kit de acero** ("500 g" vs bowl de 7 × 4 cm).
 - 2026-08-26 — 🟡 `vela-bowl-de-acero` sin variantes con `image_urls`.
@@ -221,16 +215,16 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar la home en 360 px** con las 8 tarjetas de "Elige tu vela".
+- [ALTA] **Confirmar el contenido real del Cuenco Dunaru ($1,199)** y corregir la PDP si no son 500 g.
+- [ALTA] **Verificar la PDP del Cuenco y la home en 360 px**.
 - [ALTA] **Corregir swatches del Cuenco Dunaru** en el Dashboard.
-- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`**.
+- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** y darle PDP completa (`PDP_CONTENT`).
 - [ALTA] **Packshots del frasco de esencia (4:5)**.
 - [ALTA] **Verificar el flujo carrito → /pagar → volver atrás**.
-- [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero` y `vela-rellenable-cuenco-dunaru`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
 - [ALTA] **Medir el attach rate de aroma** en PostHog.
 - [ALTA] **Crear la colección `recargas`**.
-- [MED] **Hacer que `SHOP_CARDS` lea precios/imágenes solo de la DB** y eliminar los precios viejos de `CATALOG_FALLBACK`.
+- [MED] **Hacer que `SHOP_CARDS` lea precios/imágenes solo de la DB**.
 - [MED] Refactorizar `ProductPageUI` para que use `getVariantDisplayImage`.
 - [MED] **Página `/aromas`** propia. Tiers con nombre y % de ahorro.
 - [MED] Limpiar "perlas dunaru" de `bowl-negro` y `vaso-extra-transparente`.
