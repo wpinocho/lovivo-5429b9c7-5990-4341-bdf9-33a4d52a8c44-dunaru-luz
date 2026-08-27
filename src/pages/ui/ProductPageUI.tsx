@@ -51,7 +51,11 @@ import {
   ProductScentSelector,
   type ScentSelection,
 } from "@/components/ProductScentSelector"
-import { supportsScentAddon } from "@/lib/scents"
+import {
+  supportsScentAddon,
+  getScentImageByVariantName,
+  SCENT_OPTION_NAME,
+} from "@/lib/scents"
 import { usePriceRules } from "@/hooks/usePriceRules"
 import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
@@ -362,31 +366,46 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
    * (el packshot genérico), así que al cambiar de color la imagen principal no
    * se movía. Aquí detectamos la primera foto EXCLUSIVA de la variante elegida
    * (la que ninguna otra variante usa) y la ponemos al frente de la galería.
+   *
+   * Fallback de aromas: el producto de esencias tiene una foto por aroma en el
+   * arreglo general del producto pero NINGUNA imagen asignada a sus variantes.
+   * Como el flat-lay de cada aroma sí vive en src/lib/scents.ts, lo usamos para
+   * subir al frente la foto del aroma elegido.
    */
   const galleryImages = useMemo<string[]>(() => {
     const images: string[] = logic.displayImages || []
     const variants = logic.product?.variants
     const variant = logic.matchingVariant
 
-    if (!variant || !Array.isArray(variants) || variants.length < 2) {
-      return images
+    if (!variant) return images
+
+    const moveToFront = (url?: string | null) =>
+      url && images.includes(url) && images[0] !== url
+        ? [url, ...images.filter((img) => img !== url)]
+        : null
+
+    // 1) Foto exclusiva de la variante (color de cera, recipiente, etc.)
+    const variantImages: string[] = variant.image_urls || []
+    if (Array.isArray(variants) && variants.length >= 2 && variantImages.length > 0) {
+      const exclusive = variantImages.find(
+        (url) =>
+          !variants.some(
+            (other: any) =>
+              other?.id !== variant.id &&
+              Array.isArray(other?.image_urls) &&
+              other.image_urls.includes(url)
+          )
+      )
+      if (exclusive) {
+        if (images[0] === exclusive) return images
+        return moveToFront(exclusive) || [exclusive, ...images]
+      }
     }
 
-    const variantImages: string[] = variant.image_urls || []
-    if (variantImages.length === 0) return images
-
-    const exclusive = variantImages.find(
-      (url) =>
-        !variants.some(
-          (other: any) =>
-            other?.id !== variant.id &&
-            Array.isArray(other?.image_urls) &&
-            other.image_urls.includes(url)
-        )
-    )
-
-    if (!exclusive || images[0] === exclusive) return images
-    return [exclusive, ...images.filter((img) => img !== exclusive)]
+    // 2) Fallback por nombre de aroma
+    const scentName =
+      (variant as any)?.options?.[SCENT_OPTION_NAME] || (variant as any)?.title
+    return moveToFront(getScentImageByVariantName(scentName)) || images
   }, [logic.displayImages, logic.matchingVariant, logic.product])
 
   const displayImage =

@@ -42,7 +42,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - **BOWL DE ACERO (2026-08-26)**: acero pulido tipo espejo. Medidas de la foto de specs: **7 cm de diámetro × 4 cm de alto**. ⚠️ Verificar con la owner: 500 g de cera probablemente NO caben en un bowl de 7 cm; la copy actual dice "incluye 500 g".
   - `vela-bowl-de-acero` id `5e40d590-9c02-4924-a2e4-3dd3700954d2` — 5 imágenes, opción `Color` (Marfil/Champagne/Ónix), featured.
   - `bowl-espejo-de-acero` id `a28c4628-2ed9-4890-a321-ca4ef0d3bc61` — 2 imágenes (baño + noche), sin variantes.
-- **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, opción **`Aroma`**, 6 variantes. 6 fotos flat-lay.
+- **ESENCIA**: id `f11fc30d-b36e-4c07-b756-79d1ecc44c71`, `track_inventory: false`, opción **`Aroma`**, 6 variantes **SIN `image_urls`**. Las 6 fotos flat-lay viven en `product.images` en el MISMO orden que `SCENTS` de `scents.ts`.
 - **CERA DUNA · 500 g** (`90445ca9-cf01-4e6a-a879-7487649e787c`): opción `Color` → Marfil / Champagne / Ónix. Imagen 1 de cada variante: `m4gndhjxsj` · `siffm8eo71e` · `smwszrq34a`.
 - **CERA DUNA · 1 kg** (`64317fa8-...`): mismos 3 colores. Imagen 1: `tsdmco2i81` · `mryl7toxxm` · `obhn43su2qk`.
 - **KIT VASO DE VIDRIO** (`8213d069-ec98-4d52-b502-4c79de9698d5`): las 3 variantes comparten `1nbg1xmhf5uh` como **imagen 1** y su foto de color va **en segunda posición** (Marfil `b9ve1duuu6t` · Champagne `gq2wh6irnr7` · Ónix `j0ymm7ajekb`). Por eso existe la lógica de "imagen exclusiva" en la galería.
@@ -82,6 +82,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - **Componente: `src/components/MainNav.tsx`** → exporta `DesktopNav` y `MobileNav({ onNavigate })`.
 - ⛔ **REGLA DE ORO: el menú NO contiene anclas a la home (`/#...`).**
 - **Desktop**: `Tienda ▾` (mega menú de 4 columnas) + `Aromas` + `Cómo funciona`.
+- ⚠️ **"Aromas" del menú → `/productos/esencia-para-vela-10-ml`** (la PDP del add-on). No es una landing propia todavía.
 - Columna "Velas rellenables" ahora tiene 3 items (vidrio, cerámica, acero); "Recipientes y accesorios" tiene 4.
 - ⚙️ El panel del mega menú es `absolute top-full left-0 right-0` y depende de que el wrapper `.max-w-7xl` del header tenga `relative`. **No quitar ese `relative`.**
 
@@ -104,11 +105,13 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - `ProductPageUI` lee `?variante=` con `useLocation` y llama `logic.handleOptionSelect` una sola vez (guard con `appliedVariantRef`).
 
 ### 🖼️ GALERÍA DE LA PDP — imagen por variante (2026-08-27)
-- `HeadlessProduct.getDisplayImages()` devuelve `[...variant.image_urls, ...imágenes generales]`. **No basta**: si todas las variantes comparten el mismo packshot en la posición 1, la foto principal no cambia al elegir color.
-- **`ProductPageUI` calcula `galleryImages`** (useMemo): busca la primera imagen **EXCLUSIVA** de la variante activa (la que ninguna otra variante usa) y la pone al frente. Si no hay exclusiva, respeta el orden original.
+- `HeadlessProduct.getDisplayImages()` devuelve `[...variant.image_urls, ...imágenes generales]`. **No basta** en dos escenarios reales.
+- **`ProductPageUI` calcula `galleryImages`** (useMemo) con DOS estrategias, en orden:
+  1. **Foto exclusiva de la variante**: la primera `image_url` que ninguna otra variante usa (arregla `kit-vaso-de-vidrio`, donde las 3 variantes comparten el mismo packshot en posición 1).
+  2. **Fallback por nombre de aroma**: si la variante NO tiene `image_urls` (caso del producto de esencias), se resuelve la foto con `getScentImageByVariantName(variant.options.Aroma ?? variant.title)` de `src/lib/scents.ts` y se sube al frente si existe dentro de `product.images`.
 - `displayImage = selectedImage || galleryImages[0]`. Los thumbnails y el carrusel móvil consumen `galleryImages`, NUNCA `logic.displayImages` directo.
 - Al cambiar de variante: `setSelectedImage(null)` + `carouselApi.scrollTo(0)` (el Carousel móvil expone `setApi`).
-- ⚠️ Si un producto tiene variantes SIN `image_urls`, la galería cae al set completo del producto y no cambia (ej. `vela-bowl-de-acero`).
+- ⚠️ Un producto con variantes sin `image_urls` y sin match de aroma sigue sin cambiar de foto (ej. `vela-bowl-de-acero`).
 
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
@@ -124,6 +127,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### 🌿 SISTEMA DE AROMAS
 - **`src/lib/scents.ts`** = fuente única. `SCENT_ENABLED_SLUGS` incluye ya `vela-bowl-de-acero`. PostHog: `scent_selected`, `scent_details_toggled`.
+- Helpers clave: `getScentImageByVariantName()` (checkout, confirmación y **galería de la PDP de esencias**), `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`.
 
 ### 🧾 CHECKOUT (`CheckoutUI.tsx`) — 🔒 no se toca.
 
@@ -131,7 +135,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ 2 productos de acero creados y cableados. ✅ Bloques editoriales de la PDP de cerámica actualizados. ✅ Galería por variante arreglada. 🔜 **Verificación visual + precio tachado + copy de la cera.**
+**Estado**: ✅ 2 productos de acero creados y cableados. ✅ Bloques editoriales de la PDP de cerámica actualizados. ✅ Galería por variante arreglada (color + aroma). 🔜 **Verificación visual + precio tachado + copy de la cera.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
 1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
@@ -139,7 +143,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 3. ¿Es acero inoxidable pulido o cromado? La copy dice "acero pulido tipo espejo".
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- Video hero móvil (360 px, iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, bloques editoriales de `kit-vaso-de-concreto`, **cambio de foto al elegir color en `kit-vaso-de-vidrio`, `perlas-originales-500-g` y `reserva-1-kg`**.
+- Video hero móvil (360 px, iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, bloques editoriales de `kit-vaso-de-concreto`, **cambio de foto al elegir color en `kit-vaso-de-vidrio`, `perlas-originales-500-g` y `reserva-1-kg`**, **cambio de foto al elegir aroma en `esencia-para-vela-10-ml`**.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -151,7 +155,8 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA** (`ProductPageUI.tsx`): nuevo `galleryImages` que sube al frente la primera foto exclusiva de la variante elegida (las 3 variantes de `kit-vaso-de-vidrio` compartían el mismo packshot en posición 1). Thumbnails y carrusel móvil ahora consumen `galleryImages`; el carrusel se resetea a la posición 0 vía `setApi`. Se importó `type CarouselApi`.
+- 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA** (`ProductPageUI.tsx`): las 6 variantes de `esencia-para-vela-10-ml` no tienen `image_urls`, así que al elegir aroma la foto no cambiaba. Se añadió un segundo criterio en `galleryImages`: resolver la foto vía `getScentImageByVariantName()` y subirla al frente. Se importaron `getScentImageByVariantName` y `SCENT_OPTION_NAME`.
+- 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA** (`ProductPageUI.tsx`): nuevo `galleryImages` que sube al frente la primera foto exclusiva de la variante elegida (las 3 variantes de `kit-vaso-de-vidrio` compartían el mismo packshot en posición 1). Thumbnails y carrusel móvil ahora consumen `galleryImages`; el carrusel se resetea a la posición 0 vía `setApi`.
 - 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas** en `ProductStorySections.tsx` (`kit-vaso-de-concreto`) con el bowl real.
 - 2026-08-26 — 🪞 **LÍNEA DE ACERO**: creados `vela-bowl-de-acero` ($1,099) y `bowl-espejo-de-acero` ($599). Añadidos a colecciones, `catalog-order.ts`, `navigation.ts`, `pdp-includes.ts`, `PDP_HEADLINE` + `PDP_BENEFITS`, IndexUI, footer y `SCENT_ENABLED_SLUGS`.
 - 2026-08-26 — 🗺️ `/como-funciona` añadida a `scripts/generate-sitemap.ts`.
@@ -165,7 +170,6 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-08-25 — 🧭 **MENÚ REDISEÑADO**: `navigation.ts` + `MainNav.tsx`.
 - 2026-08-25 — 📄 **Nueva página `/como-funciona`** con SEO propio.
 - 2026-08-25 — 🏷️ **NOMENCLATURA PREMIUM: 8 productos renombrados en la DB**. Slugs intactos.
-- 2026-08-25 — 🔻 Tabla comparativa bajada en la home.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -177,13 +181,14 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - **🎬 HERO MÓVIL (video)**: `store-videos/<STORE_ID>/hero-dunaru-mobile.mp4` (720×1280, 1.8 MB). **PÓSTER**: `product-images/<STORE_ID>/hero-dunaru-mobile-poster.webp`.
 - **🕯️ RITUAL**: `1787701006060-vpgjgog2juh.webp`.
 - ⛔ Deprecadas: `1785182590879-i54i3sm6qk`, `1785182590879-u6xju9w4wjl`, `1785182590879-77nbrytmoii`, `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b`, `1785521743156-3qeskqe43gv`, `1787699972902-dld268c7c0u`, `1787701006060-xuyehajl1yr`, `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
-- **🌿 FLAT-LAYS DE AROMA (4:3)**: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `1787337333997-44wwhmmisy5` · Costa Mineral `1787337333998-jphdwvy2pbh` · Higo Matcha `1787337333998-enck999sju7` · Tabaco Vainilla `1787337333998-5e5poqkcxh8` · Musgo Mineral `1787337333998-n7f8zqhfx8m`.
+- **🌿 FLAT-LAYS DE AROMA (4:3)** — mismos URLs en `scents.ts` y en `product.images` de la esencia, en este orden: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `1787337333997-44wwhmmisy5` · Costa Mineral `1787337333998-jphdwvy2pbh` · Higo Matcha `1787337333998-enck999sju7` · Tabaco Vainilla `1787337333998-5e5poqkcxh8` · Musgo Mineral `1787337333998-n7f8zqhfx8m`.
 - **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **UGC** (5 fotos): constante `UGC` en `src/data/reviews.ts`. **FAVICON**: `/favicon.png`.
 - 🟡 Subidas sin usar: `1787681082141-dy7wr0dcp15`, `1787681082142-42qlfq25nvs`, `1787684660654-vr5uiznl7cj`.
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no cambia de foto al elegir color**: sus variantes no tienen `image_urls` asignadas. Hay que asignarlas desde el Dashboard para que funcione la galería por variante.
+- 2026-08-27 — 🟡 **La PDP de la esencia usa flat-lays 4:3 en un contenedor 4:5**: se ven recortados. Faltan packshots verticales del frasco por aroma.
+- 2026-08-27 — 🟡 **`vela-bowl-de-acero` no cambia de foto al elegir color**: sus variantes no tienen `image_urls` asignadas. Hay que asignarlas desde el Dashboard.
 - 2026-08-27 — 🟡 Los `steps` del bloque de `kit-vaso-de-concreto` en `ProductStorySections` siguen con `PLACEHOLDER` en varios pasos.
 - 2026-08-26 — 🔴 **`compare_at_price` de `vela-bowl-de-acero` NO persistió** ($1,299). Ponerlo desde el Dashboard.
 - 2026-08-26 — 🟠 **Copy sin verificar del kit de acero**: dice "500 g de Cera Duna" pero el bowl mide 7 × 4 cm.
@@ -207,8 +212,9 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 
 ## 7. Pending / Future Sessions
 - [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
+- [ALTA] **Asignar la foto de cada aroma a su variante en `esencia-para-vela-10-ml`** desde el Dashboard (hoy funciona por fallback de nombre, pero lo correcto es tenerlas en la variante).
 - [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299 en el Dashboard.
-- [ALTA] **Verificar tras el commit**: cambio de foto por color, PDP de acero, PDP de cerámica, mega menú, grid de 7 cards, video hero móvil.
+- [ALTA] **Verificar tras el commit**: cambio de foto por color y por aroma, PDP de acero, PDP de cerámica, mega menú, grid de 7 cards, video hero móvil.
 - [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**
 - [ALTA] **Pedir al owner**: horas por mecha, nombre de la garantía, copy del empaque.
