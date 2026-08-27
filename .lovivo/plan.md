@@ -119,25 +119,26 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### 📱 CARRUSEL MÓVIL = SELECTOR DESLIZABLE (2026-08-27) ⭐
 - **`sliderOption`** (useMemo en `ProductPageUI`): la primera opción cuyos valores TODOS tienen foto en `optionValueImages` y tiene >1 valor. Hoy: `Aroma` de la esencia y `Color` de `kit-vaso-de-vidrio`.
-- **`mobileSlides`**: orden ESTABLE = una slide por valor de la opción (nunca se reordena al cambiar de variante) + el resto de fotos del producto (`product.images` que no son de un valor) como slides pasivas.
-- **Sincronización bidireccional**: `carouselApi.on("select")` → `handleOptionSelect(...)`; cambio de valor desde fuera (chips de desktop, `?variante=`) → `carouselApi.scrollTo(activeSlideIndex)`.
-- Debajo del carrusel: puntos de posición + **ficha del slide activo** (chip "X elegido" + contador, nombre grande, `scent.profile`, `scent.description`, hint "Desliza para ver los demás").
-- **El bloque de opción de `sliderOption` se oculta en móvil** (`hidden md:block`): el carrusel ES el selector. Desktop conserva el grid de miniaturas.
-- ⚠️ El `useEffect` de reset ya NO hace `scrollTo(0)` cuando hay `sliderOption` (rompería el gesto).
-- Foto principal móvil: `aspect-[4/5] max-h-[46vh]`.
+- **`mobileSlides`**: orden ESTABLE = una slide por valor de la opción + el resto de fotos del producto como slides pasivas.
+- **Sincronización bidireccional** con `carouselApi` (`on("select")` ⇄ `scrollTo(activeSlideIndex)`).
+- Slides `basis-[95%] pl-2`, contenedor `aspect-[4/5] max-h-[50vh]`.
+- Debajo: puntos + **ficha del slide activo**: chip "X elegido" + contador, y una fila `flex justify-between` con **nombre del valor a la izquierda y el PRECIO (+ compare tachado) a la derecha**, luego `profile` y `description` y el hint "Desliza para ver los demás".
+- **`priceInSlide = !!sliderOption && mobileSlides.length > 1`**: cuando es true, el precio NO se repite ni en el header móvil ni en el bloque de precio de la columna de info (`hidden lg:flex`). Desktop intacto.
+- **El bloque de opción de `sliderOption` se oculta en móvil** (`hidden md:block`).
 
 ### 🎛️ SELECTOR DE VARIANTE CON MINIATURA — DESKTOP (2026-08-27)
 - `ProductPageUI` calcula **`optionValueImages`** (useMemo): `{ [optionName]: { [value]: url } }`.
-  - Aroma → `getScentImageByVariantName(value)`.
-  - Resto → primera `image_url` **exclusiva** de las variantes con ese valor.
-- Si **TODOS** los valores de una opción tienen imagen, el selector se dibuja como **grid de 3 columnas con miniatura cuadrada + etiqueta**; si no, cae al chip de texto de siempre.
+  - Aroma → `getScentImageByVariantName(value)`. Resto → primera `image_url` **exclusiva**.
+- Si TODOS los valores tienen imagen → grid de 3 columnas con miniatura; si no, chip de texto.
 
 ### 🌿 SELECTOR DE AROMA ADD-ON — panel compacto en móvil (2026-08-27)
-- `src/components/ProductScentSelector.tsx`: el panel "Conoce los aromas" (expandido por default) es **flex-row incluso en móvil**; foto `w-24 aspect-square` en móvil, `w-full aspect-[4/3]` en `sm:`. Padding `p-2.5`.
+- `src/components/ProductScentSelector.tsx`: panel "Conoce los aromas" flex-row incluso en móvil; foto `w-24 aspect-square` en móvil.
 
 ### Reglas de layout
 - **TOP BAR** fija en `EcommerceTemplate.tsx`; **HEADER OVERLAY** solo en `IndexUI`.
-- **🛒 ORDEN DEL BUY BOX** (`ProductPageUI.tsx`): título+precio+MSI+rating · `PDP_BENEFITS[slug]` · variantes · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
+- **🛒 ORDEN DEL BUY BOX** (`ProductPageUI.tsx`): título+precio+rating · `PDP_BENEFITS[slug]` · variantes · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · micro-línea `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
+- ⚠️ **La línea de texto "6 pagos de $X a meses sin intereses" bajo el precio fue ELIMINADA (2026-08-27)**. Los MSI siguen comunicados en el badge de trust de la PDP, la top bar y el checkout.
+- **Espaciados móviles de la PDP**: grid `gap-5 lg:gap-12`, columna info `space-y-4 lg:space-y-6`, lista de beneficios `pb-4 lg:pb-6`.
 - **📚 ACORDEONES DE LA PDP (3, orden fijo)**: `Qué incluye` → **`Más detalles`** → `Envío y garantía`. Contenido en **`src/lib/pdp-includes.ts`**.
 - **📐 IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
 - **ORDEN DE LA PDP** (`ProductStorySections.tsx`): garantías → carrusel → reseñas → bloques editoriales → `<CompareTable />` → FAQ → CTA de cierre.
@@ -150,29 +151,28 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### 🌿 SISTEMA DE AROMAS
 - **`src/lib/scents.ts`** = fuente única. `SCENT_ENABLED_SLUGS` incluye ya `vela-bowl-de-acero`. PostHog: `scent_selected`, `scent_details_toggled`.
-- Helpers clave: `getScentImageByVariantName()`, `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`. `SCENTS` se importa también en `ProductPageUI` para la ficha del carrusel.
+- Helpers clave: `getScentImageByVariantName()`, `SCENT_OPTION_NAME = "Aroma"`, `SCENT_PRODUCT_SLUG`.
 
 ### 🧾 CARRITO Y CHECKOUT — persistencia (2026-08-27)
-- **⚠️ REGLA: el carrito SOLO se vacía cuando el pago se confirma.** `useCheckout.checkout()` ya NO llama `clearCart()`. Limpian: `StripePayment`, `PaypalExpressButton`, `/gracias`, `useURLCartLoader` y el "Comprar ahora".
+- **⚠️ REGLA: el carrito SOLO se vacía cuando el pago se confirma.** Limpian: `StripePayment`, `PaypalExpressButton`, `/gracias`, `useURLCartLoader` y el "Comprar ahora".
 - **Back links**: "← Seguir comprando" en `CartUI` y "← Volver al carrito" en el header de `CheckoutUI`.
-- Efecto secundario esperado: reintento de pago = segunda orden (la primera queda abandonada).
 
 ---
 
 ## 3. Active Plan — FASE 7: LÍNEA DE ACERO Y VERIFICACIÓN
 
-**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente + back links. ✅ Esencia visible en catálogo. ✅ **Carrusel móvil convertido en selector deslizable con ficha por slide.** 🔜 **Verificación visual en 360 px + precio tachado + copy de la cera.**
+**Estado**: ✅ Línea de acero creada. ✅ Galería por variante. ✅ Carrito persistente. ✅ Carrusel móvil = selector. ✅ **Precio junto al nombre del aroma + PDP móvil más compacta + MSI fuera del buy box.** 🔜 **Verificación visual en 360 px.**
 
 ### 7.1 🔴 P1 — Confirmar con la owner (bowl de acero)
-1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm según la foto de specs.
-2. Confirmar precios: kit $1,099 / bowl solo $599. **El `compare_at_price` de `vela-bowl-de-acero` NO persistió vía API: ponerlo a mano en el Dashboard ($1,299).**
+1. ¿El kit realmente incluye **500 g** de Cera Duna? El bowl mide 7 × 4 cm.
+2. Confirmar precios: kit $1,099 / bowl solo $599. **`compare_at_price` de `vela-bowl-de-acero` a mano en el Dashboard ($1,299).**
 3. ¿Es acero inoxidable pulido o cromado?
 
 ### 7.2 🔴 P1 — Verificación visual tras el commit
-- **PDP de la esencia en 360 px: deslizar el carrusel debe cambiar el aroma seleccionado y la ficha de abajo.**
-- **PDP `kit-vaso-de-vidrio`: deslizar cambia el color; las fotos generales del producto quedan al final sin cambiar la selección.**
-- **Confirmar que el precio/CTA del buy box refleja la variante elegida al deslizar.**
-- Video hero móvil (iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, acordeón "Más detalles", flujo carrito → /pagar → atrás.
+- **PDP de la esencia en 360 px**: deslizar cambia aroma, nombre y precio de la ficha; el precio NO aparece dos veces.
+- **PDP `kit-vaso-de-vidrio`**: deslizar cambia el color y el precio de la ficha.
+- Comprobar que en productos SIN slider el precio sigue junto al título móvil.
+- Video hero móvil (iOS real), mega menú, grid de 7 cards, las 2 PDP nuevas, flujo carrito → /pagar → atrás.
 
 ### 7.3 🟡 P2 — Página `/aromas` propia
 ### 7.4 🟡 P2 — AOV: tiers con nombre y % de ahorro
@@ -184,21 +184,21 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 ---
 
 ## 4. Recent Changes
-- 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`ProductPageUI.tsx`): nuevos `sliderOption` + `mobileSlides` + sync bidireccional con `carouselApi`. Deslizar elige la variante; debajo aparecen puntos, nombre, perfil y descripción del aroma. El bloque de opción se oculta en móvil (`hidden md:block`). Resuelve el "no puedo ver la foto y elegir a la vez".
-- 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (desktop) + foto principal móvil `max-h-[46vh]`.
+- 2026-08-27 — 💰 **PRECIO JUNTO AL NOMBRE DEL AROMA** (`ProductPageUI.tsx`): nueva const `priceInSlide`; el precio (+ compare tachado) va a la derecha del valor activo del carrusel y deja de repetirse en el header móvil y en el bloque de precio. **Eliminada la línea "6 pagos de $X a meses sin intereses"**. Espaciados móviles reducidos (grid `gap-5`, info `space-y-4`, beneficios `pb-4`).
+- 2026-08-27 — 📱 **FOTOS MÁS GRANDES EN EL CARRUSEL**: slides `basis-[95%]`, gutter `pl-2`, alto `max-h-[50vh]`.
+- 2026-08-27 — 📱 **CARRUSEL MÓVIL = SELECTOR** (`sliderOption`, `mobileSlides`, sync bidireccional).
+- 2026-08-27 — 🎛️ **SELECTOR DE VARIANTE CON MINIATURAS** (desktop).
 - 2026-08-27 — 📱 **PANEL DE AROMAS COMPACTO EN MÓVIL** (`ProductScentSelector.tsx`).
-- 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO**: grupo **"Accesorios"**, `CHOOSE_ON_PDP` + CTA "Elegir aroma".
+- 2026-08-27 — 🧴 **ESENCIA EN EL CATÁLOGO**: grupo "Accesorios", `CHOOSE_ON_PDP` + CTA "Elegir aroma".
 - 2026-08-27 — 🛒 **CARRITO PERSISTENTE EN CHECKOUT** + back links.
-- 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → **"Más detalles"**.
+- 2026-08-27 — 📚 **ACORDEÓN RENOMBRADO**: "La pieza" → "Más detalles".
 - 2026-08-27 — 🧾 **"QUÉ INCLUYE" DE LA ESENCIA ACLARADO** (`pdp-includes.ts`).
-- 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA** vía `getScentImageByVariantName()`.
-- 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA** (`ProductPageUI.tsx`).
+- 2026-08-27 — 🌿 **GALERÍA DE LA PDP DE AROMAS ARREGLADA**.
+- 2026-08-27 — 🎨 **GALERÍA POR VARIANTE ARREGLADA**.
 - 2026-08-27 — 🏺 **PDP CERÁMICA: 3 fotos editoriales reemplazadas**.
-- 2026-08-26 — 🪞 **LÍNEA DE ACERO**: `vela-bowl-de-acero` ($1,099) y `bowl-espejo-de-acero` ($599).
-- 2026-08-26 — 🗺️ `/como-funciona` añadida al sitemap.
+- 2026-08-26 — 🪞 **LÍNEA DE ACERO**: `vela-bowl-de-acero` y `bowl-espejo-de-acero`.
 - 2026-08-26 — 🎬 **VIDEO HERO MÓVIL** (`HeroMobileVideo.tsx`).
 - 2026-08-25 — 🌅 **HERO REEMPLAZADO (v2)**.
-- 2026-08-25 — 🔁 **Paso 1 corregido** y pasos 3 y 4 intercambiados.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -215,7 +215,7 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-08-27 — 🟡 **Los flat-lays de aroma son 4:3 y el carrusel móvil es 4:5**: se recortan por `object-cover`. Con packshots 4:5 propios se resuelve.
+- 2026-08-27 — 🟡 **Los flat-lays de aroma son 4:3 y el carrusel móvil es 4:5**: se recortan por `object-cover`.
 - 2026-08-27 — 🟡 **La tarjeta de la esencia en el catálogo usa el flat-lay 4:3 en contenedor cuadrado**.
 - 2026-08-27 — 🟡 **Órdenes abandonadas duplicadas** (efecto del carrito persistente).
 - 2026-08-27 — 🟡 **`vela-bowl-de-acero` no entra al modo slider** (sus variantes no tienen `image_urls`).
@@ -239,10 +239,10 @@ Volumen insuficiente para A/B (122 usuarios/mes en la PDP principal). Medición 
 - 2026-07-06 — 🔴 `meta-capi` edge function falla en preview.
 
 ## 7. Pending / Future Sessions
-- [ALTA] **Verificar en 360 px real el carrusel-selector** (esencia y vaso de vidrio).
+- [ALTA] **Verificar en 360 px real el carrusel-selector y el precio en la ficha**.
 - [ALTA] **Packshots del frasco de esencia (4:5)**.
 - [ALTA] **Verificar el flujo carrito → /pagar → volver atrás**.
-- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard (lo activaría en modo slider).
+- [ALTA] **Asignar `image_urls` por variante a `vela-bowl-de-acero`** desde el Dashboard.
 - [ALTA] **Confirmar con la owner los datos del bowl de acero** y poner el compare de $1,299.
 - [ALTA] **Escribir bloques editoriales propios de `vela-bowl-de-acero`**.
 - [ALTA] **Avisar al owner que sincronice los nombres en anuncios de Meta y emails.**

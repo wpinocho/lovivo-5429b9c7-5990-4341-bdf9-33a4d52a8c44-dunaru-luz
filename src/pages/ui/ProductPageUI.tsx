@@ -708,6 +708,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     ) : null
 
   const { storeName, currencyCode } = useSettings()
+  /* En móvil, si el carrusel es el selector, el precio vive junto al nombre
+     del valor activo (aroma/color) y NO se repite en la columna de info. */
+  const priceInSlide = !!sliderOption && mobileSlides.length > 1
   const product = logic.product
   const seoTitle = product.title
   const seoDescription = plainText(product.description, 160) || `Compra ${product.title} en ${storeName}.`
@@ -758,7 +761,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           </span>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-12">
           {/* ========== GALLERY (lg:col-span-7, sticky on desktop) ========== */}
           <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)]">
             {/* Móvil/tablet: título + promesa ARRIBA de la foto (arriba del fold) */}
@@ -772,9 +775,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 <h1 className="text-2xl sm:text-3xl font-light tracking-tight leading-[1.15]">
                   {logic.product.title}
                 </h1>
-                <span className="shrink-0 pt-1 text-xl font-semibold tracking-tight">
-                  {logic.formatMoney(logic.currentPrice)}
-                </span>
+                {!priceInSlide && (
+                  <span className="shrink-0 pt-1 text-xl font-semibold tracking-tight">
+                    {logic.formatMoney(logic.currentPrice)}
+                  </span>
+                )}
               </div>
               {headline && (
                 <p className="text-sm text-foreground/75 leading-snug max-w-md">
@@ -904,9 +909,22 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                             {carouselIndex + 1}/{sliderOption.values.length}
                           </span>
                         </div>
-                        <p className="mt-1 text-2xl font-light tracking-tight leading-tight">
-                          {slide.value}
-                        </p>
+                        <div className="mt-1 flex items-baseline justify-between gap-3">
+                          <p className="text-2xl font-light tracking-tight leading-tight">
+                            {slide.value}
+                          </p>
+                          <span className="shrink-0 flex items-baseline gap-2">
+                            <span className="text-xl font-semibold tracking-tight">
+                              {logic.formatMoney(logic.currentPrice)}
+                            </span>
+                            {logic.currentCompareAt &&
+                              logic.currentCompareAt > logic.currentPrice && (
+                                <span className="text-xs text-muted-foreground line-through">
+                                  {logic.formatMoney(logic.currentCompareAt)}
+                                </span>
+                              )}
+                          </span>
+                        </div>
                         {slide.subtitle && (
                           <p className="mt-0.5 text-xs text-muted-foreground">
                             {slide.subtitle}
@@ -941,7 +959,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           </div>
 
           {/* ========== INFO COLUMN (lg:col-span-5, scrolls while gallery sticks) ========== */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-4 lg:space-y-6">
             {/* Title block */}
             <div className="space-y-3">
               {vendor && (
@@ -954,8 +972,13 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 {logic.product.title}
               </p>
 
-              {/* Price block */}
-              <div className="flex items-baseline gap-3 pt-2">
+              {/* Price block — oculto en móvil si ya va junto al valor activo */}
+              <div
+                className={cn(
+                  "items-baseline gap-3 pt-2",
+                  priceInSlide ? "hidden lg:flex" : "flex"
+                )}
+              >
                 <span className="text-3xl font-semibold tracking-tight">
                   {logic.formatMoney(logic.currentPrice)}
                 </span>
@@ -973,11 +996,6 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     </>
                   )}
               </div>
-
-              {/* MSI — recordatorio pegado al precio */}
-              <p className="text-sm text-muted-foreground pt-1">
-                o <span className="font-medium text-foreground/90">6 pagos de {logic.formatMoney(logic.currentPrice / 6)}</span> a meses sin intereses
-              </p>
 
 
               {/* Mini rating — prueba social arriba del fold */}
@@ -1021,7 +1039,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
             {/* Beneficios del producto — el argumento de compra, arriba del selector */}
             {benefits.length > 0 && (
-              <ul className="space-y-2.5 pb-6 border-b border-border/60">
+              <ul className="space-y-2.5 pb-4 lg:pb-6 border-b border-border/60">
                 {benefits.map((item) => (
                   <li
                     key={item}
