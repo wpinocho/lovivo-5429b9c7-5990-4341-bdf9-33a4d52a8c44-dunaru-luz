@@ -61,6 +61,13 @@ const buildCatalog = (products: UseIndexLogicReturn['products']): Record<string,
     };
   });
 
+  // Slugs que la base de datos devolvió como activos. Si el owner archiva un
+  // producto desde el Dashboard, deja de venir aquí y su tarjeta desaparece
+  // de la home sola. Si lo desarchiva, vuelve a aparecer sin tocar código.
+  const activeSlugs = new Set<string>(
+    products.map((raw) => (raw as any)?.slug).filter(Boolean) as string[],
+  );
+
   products.forEach((raw) => {
     const p = raw as any;
     if (!p?.slug || !entries[p.slug]) return;
@@ -74,6 +81,14 @@ const buildCatalog = (products: UseIndexLogicReturn['products']): Record<string,
       img: Array.isArray(p.images) && p.images[0] ? p.images[0] : entries[p.slug].img,
     };
   });
+
+  // Mientras carga (activeSlugs vacío) se muestra el respaldo para que la
+  // rejilla no parpadee vacía. Una vez cargado, manda la base de datos.
+  if (activeSlugs.size > 0) {
+    Object.keys(entries).forEach((slug) => {
+      if (!activeSlugs.has(slug)) delete entries[slug];
+    });
+  }
 
   return entries;
 };

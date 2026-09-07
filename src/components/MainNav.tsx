@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { ChevronDown, ArrowRight } from 'lucide-react'
 import {
@@ -8,13 +8,45 @@ import {
   PRIMARY_LINKS,
   UTILITY_LINKS,
 } from '@/lib/navigation'
+import {
+  useActiveProductSlugs,
+  filterActiveLinks,
+  slugFromPath,
+} from '@/hooks/useActiveProductSlugs'
+
+/**
+ * El menú solo muestra productos con status = 'active'. Si la owner archiva
+ * un producto desde el Dashboard desaparece del menú; si lo desarchiva, vuelve.
+ */
+const useLiveNav = () => {
+  const slugs = useActiveProductSlugs()
+
+  return useMemo(() => {
+    const columns = SHOP_COLUMNS.map((col) => ({
+      ...col,
+      items: filterActiveLinks(col.items, slugs),
+    })).filter((col) => col.items.length > 0)
+
+    const featuredSlug = slugFromPath(SHOP_FEATURED.to)
+    const showFeatured = !slugs || slugs.size === 0 || !featuredSlug || slugs.has(featuredSlug)
+
+    return {
+      columns,
+      showFeatured,
+      primaryLinks: filterActiveLinks(PRIMARY_LINKS, slugs),
+    }
+  }, [slugs])
+}
 
 /* ────────────────────────────────────────────────────────────────────────────
    DESKTOP — mega menú "Tienda" + links primarios.
    Todo son rutas reales, así que el menú se comporta igual en la home que
    dentro de una PDP.
    ──────────────────────────────────────────────────────────────────────────── */
-export const DesktopNav = () => (
+export const DesktopNav = () => {
+  const { columns, showFeatured, primaryLinks } = useLiveNav()
+
+  return (
   <nav className="hidden md:flex items-center gap-8 font-body text-sm font-medium">
     {/* Tienda — mega menú */}
     <div className="group">
@@ -32,7 +64,7 @@ export const DesktopNav = () => (
         <div className="pt-3 opacity-0 invisible translate-y-1 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto focus-within:opacity-100 focus-within:visible transition-all duration-200">
           <div className="border-y border-border bg-background shadow-xl">
             <div className="px-6 lg:px-8 py-9 grid grid-cols-12 gap-8">
-              {SHOP_COLUMNS.map((col) => (
+              {columns.map((col) => (
                 <div key={col.id} className="col-span-3">
                   <p className="eyebrow mb-4 text-foreground/40">{col.title}</p>
                   <ul className="space-y-3">
@@ -63,6 +95,7 @@ export const DesktopNav = () => (
               ))}
 
               {/* Destacado — empuja el add-on de aroma */}
+              {showFeatured && (
               <div className="col-span-3">
                 <div className="bg-dunaru-arena texture-arena h-full p-6 flex flex-col">
                   <p className="eyebrow mb-3 text-dunaru-terracota">{SHOP_FEATURED.eyebrow}</p>
@@ -81,6 +114,7 @@ export const DesktopNav = () => (
                   </Link>
                 </div>
               </div>
+              )}
             </div>
 
             <div className="border-t border-border">
@@ -101,23 +135,25 @@ export const DesktopNav = () => (
       </div>
     </div>
 
-    {PRIMARY_LINKS.map((item) => (
+    {primaryLinks.map((item) => (
       <Link key={item.to} to={item.to} className="nav-link text-foreground/60 py-2">
         {item.label}
       </Link>
     ))}
   </nav>
-)
+  )
+}
 
 /* ────────────────────────────────────────────────────────────────────────────
    MÓVIL — acordeón. Nada depende de :hover.
    ──────────────────────────────────────────────────────────────────────────── */
 export const MobileNav = ({ onNavigate }: { onNavigate: () => void }) => {
+  const { columns, primaryLinks } = useLiveNav()
   const [openCol, setOpenCol] = useState<string | null>(SHOP_COLUMNS[0]?.id ?? null)
 
   return (
     <nav className="md:hidden pt-4 pb-3 border-t border-border mt-3 font-body text-sm animate-fade-in">
-      {SHOP_COLUMNS.map((col) => {
+      {columns.map((col) => {
         const isOpen = openCol === col.id
         return (
           <div key={col.id} className="border-b border-border/60">
@@ -164,7 +200,7 @@ export const MobileNav = ({ onNavigate }: { onNavigate: () => void }) => {
       })}
 
       <div className="flex flex-col pt-2">
-        {[SHOP_ALL, ...PRIMARY_LINKS].map((item) => (
+        {[SHOP_ALL, ...primaryLinks].map((item) => (
           <Link
             key={item.to}
             to={item.to}

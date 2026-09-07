@@ -10,6 +10,17 @@ import { ShoppingCart, MessageCircle, Truck, Heart } from 'lucide-react'
 import { useCartUISafe } from '@/components/CartProvider'
 import { useCart } from '@/contexts/CartContext'
 import { DesktopNav, MobileNav } from '@/components/MainNav'
+import { useActiveProductSlugs, filterActiveLinks } from '@/hooks/useActiveProductSlugs'
+
+/** Links de producto del footer. Se ocultan solos si el producto se archiva. */
+const FOOTER_SHOP_LINKS = [
+  { to: '/productos/kit-vaso-de-vidrio', label: 'Vela · Vaso de Vidrio' },
+  { to: '/productos/kit-vaso-de-concreto', label: 'Vela · Bowl de Cerámica' },
+  { to: '/productos/vela-rellenable-cuenco-dunaru', label: 'Vela · Cuenco Dunaru' },
+  { to: '/productos/vela-bowl-de-acero', label: 'Vela · Bowl de Acero' },
+  { to: '/productos/perlas-originales-500-g', label: 'Cera Duna · 500 g' },
+  { to: '/productos/reserva-1-kg', label: 'Cera Duna · 1 kg' },
+]
 
 
 interface EcommerceTemplateProps {
@@ -137,6 +148,9 @@ export const EcommerceTemplate = ({
     </div>
   )
 
+  const activeSlugs = useActiveProductSlugs()
+  const footerShopLinks = filterActiveLinks(FOOTER_SHOP_LINKS, activeSlugs)
+
   const footer = (
     <div className={`bg-dunaru-carbon text-dunaru-marfil ${footerClassName ?? ''}`}>
       {/* MSI bar */}
@@ -167,13 +181,7 @@ export const EcommerceTemplate = ({
           <div>
             <h4 className="font-body font-semibold text-xs uppercase tracking-widest text-dunaru-marfil/50 mb-4">Comprar</h4>
             <div className="space-y-2 text-sm font-body">
-              {[
-                { to: '/productos/kit-vaso-de-vidrio', label: 'Vela · Vaso de Vidrio' },
-                { to: '/productos/kit-vaso-de-concreto', label: 'Vela · Bowl de Cerámica' },
-                { to: '/productos/vela-bowl-de-acero', label: 'Vela · Bowl de Acero' },
-                { to: '/productos/perlas-originales-500-g', label: 'Cera Duna · 500 g' },
-                { to: '/productos/reserva-1-kg', label: 'Cera Duna · 1 kg' },
-              ].map(({ to, label }) => (
+              {footerShopLinks.map(({ to, label }) => (
                 <Link key={to} to={to} className="nav-link-dark block text-dunaru-marfil/70 py-0.5">
                   {label}
                 </Link>
