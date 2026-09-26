@@ -279,11 +279,18 @@ class TrackingUtility {
   }
 
   /**
-   * Generate a deterministic event_id so the same logical event (same order,
-   * same product, etc.) always produces the same id — even if it's fired
-   * multiple times from pixel + CAPI + retries + 3DS round-trip. Meta uses
-   * event_id to dedupe, so a stable id collapses duplicates into 1 conversion.
-   * Falls back to a UUID when no stable id is available.
+   * Generate the event_id shared by Browser Pixel + CAPI for ONE occurrence.
+   *
+   * - No stableId → random UUID (unique per real occurrence). This is the
+   *   default for ViewContent, AddToCart, Search, PageView, custom events.
+   * - stableId → deterministic id. ONLY pass a key that identifies a single
+   *   real business event (e.g. order_id for Purchase), so retries / 3DS
+   *   round-trips of that SAME event collapse into one conversion.
+   *   NEVER pass product_id, search query, etc.: those are shared across many
+   *   distinct occurrences and would make Meta drop real events as duplicates.
+   *
+   * Pixel/CAPI dedup works because the caller generates the id ONCE and
+   * passes the same string to both channels (see trackHybrid / trackSearch).
    */
   private generateEventId(eventName: string = 'evt', stableId?: string): string {
     const ev = eventName.toLowerCase();
@@ -431,8 +438,8 @@ class TrackingUtility {
         content_category
       };
 
-      const vcStableId = products?.[0]?.id;
-      this.trackHybrid('ViewContent', browserParams, customData, vcStableId);
+      // No stableId: each real view gets its own random event_id.
+      this.trackHybrid('ViewContent', browserParams, customData);
     } catch (error) {
       this.logError('ViewContent', error);
     }
@@ -465,8 +472,8 @@ class TrackingUtility {
         num_items: params.num_items || products.length
       };
 
-      const atcStableId = products?.[0]?.id;
-      this.trackHybrid('AddToCart', browserParams, customData, atcStableId);
+      // No stableId: each real add-to-cart gets its own random event_id.
+      this.trackHybrid('AddToCart', browserParams, customData);
     } catch (error) {
       this.logError('AddToCart', error);
     }
@@ -503,8 +510,9 @@ class TrackingUtility {
         num_items: browserParams.num_items
       };
 
-      const icStableId = params.order_id || (products?.[0]?.id);
-      this.trackHybrid('InitiateCheckout', browserParams, customData, icStableId);
+      // order_id (if present) identifies this real checkout; otherwise random.
+      // Never fall back to product id.
+      this.trackHybrid('InitiateCheckout', browserParams, customData, params.order_id);
     } catch (error) {
       this.logError('InitiateCheckout', error);
     }
@@ -558,7 +566,8 @@ class TrackingUtility {
         return;
       }
 
-      const eventId = this.generateEventId('Search', search_string?.trim().toLowerCase());
+      // Random per call: two searches of the same term are two real events.
+      const eventId = this.generateEventId('Search');
       const browserParams = {
         search_string: search_string.trim(),
         ...(products && products.length > 0 && {
