@@ -11,6 +11,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import type { ReactNode } from "react"
 import { cn } from "@/lib/utils"
 import { Reviews } from "@/components/Reviews"
 import { ProductStepsCarousel } from "@/components/ProductStepsCarousel"
@@ -793,9 +794,11 @@ const GUARANTEES = [
 
 interface ProductStorySectionsProps {
   slug: string
+  /** Contenido opcional entre las reseñas y los bloques de beneficios (ej. galería de temporada). */
+  afterReviews?: ReactNode
 }
 
-export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
+export const ProductStorySections = ({ slug, afterReviews }: ProductStorySectionsProps) => {
   const content = PDP_CONTENT[contentSlug(slug)]
   if (!content) return null
 
@@ -822,6 +825,9 @@ export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
 
       {/* 3 — Prueba social: reseñas reales, justo después de entender el producto */}
       <Reviews title="Opiniones de quienes ya la tienen" />
+
+      {/* 3b — Slot opcional (ej. "Ideas para tu altar" en PDPs de temporada) */}
+      {afterReviews}
 
       {/* 4 — Bloques editoriales alternados */}
       <section className="max-w-[1400px] mx-auto space-y-16 lg:space-y-24">

@@ -1608,12 +1608,14 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
         {/* Editorial story sections (driven by slug) */}
         {logic.product?.slug && (
-          <ProductStorySections slug={logic.product.slug} />
+          <ProductStorySections
+            slug={logic.product.slug}
+            afterReviews={
+              isSeasonal ? <DdmInspirationGallery className="full-bleed" /> : undefined
+            }
+          />
         )}
       </div>
-
-      {/* Día de Muertos: ideas para tu altar */}
-      {isSeasonal && <DdmInspirationGallery className="mt-10" />}
 
       {/* Sticky Add to Cart Bar */}
       {logic.inStock && (

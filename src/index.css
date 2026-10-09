@@ -139,6 +139,8 @@ html {
     background-image: var(--grain);
     background-size: 200px 200px;
     background-attachment: fixed;
+    /* Evita scroll horizontal de secciones full-bleed (clip no rompe sticky) */
+    overflow-x: clip;
   }
 
   h1, h2, h3 {
@@ -335,6 +337,8 @@ html {
 /* ══ Section spacing ══ */
 .section-pad { @apply py-16 md:py-24; }
 .section-pad-sm { @apply py-10 md:py-16; }
+/* Sección a ancho completo aunque viva dentro de un contenedor centrado */
+.full-bleed { margin-inline: calc(50% - 50vw); }
 
 /* ══ Full-bleed: rompe el contenedor centrado ══ */
 .full-bleed {
