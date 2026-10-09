@@ -18,19 +18,20 @@
 - ⚠️ **PRODUCTO ANCLA DE PAUTA (Meta Ads) = `kit-vaso-de-vidrio`**. El hero de la home NO usa este anclaje (CTA → `/categorias/todos`).
 - ⚠️ El owner repriza, **crea y ARCHIVA productos** desde el Dashboard. **NUNCA hardcodear precios.**
 - ✅ **2026-09-07: ARCHIVAR = DESAPARECER.** El menú, el footer y la rejilla de la home ya respetan `status`. Ver §2 "ESTATUS DEL PRODUCTO".
+- 🏵️ **2026-10-09: EDICIÓN DE TEMPORADA "CEMPASÚCHIL" (Día de Muertos)** en planeación. Productos separados (no variante), colección propia, sección en la home. Se archivan al terminar la temporada. Ver §3.
 - ⚠️ **STAGING**: los cambios se commitean al final del turno. Pedir refresh duro.
 
 ### 🏷️ SISTEMA DE NOMBRES (nomenclatura premium vigente)
 Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
-| Slug (INTACTO) | Título en DB | Precio | Compare |
+| Slug (INTACTO) | Título en DB | Precio (DB 2026-10-09) | Compare |
 |---|---|---|---|
 | kit-vaso-de-vidrio | **Vela Rellenable · Vaso de Vidrio** | $749 | $899 |
-| kit-vaso-de-concreto | **Vela Rellenable · Bowl de Cerámica** | $949 | $1,199 |
+| kit-vaso-de-concreto | **Vela Rellenable · Bowl de Cerámica** | $999 | $1,199 |
 | **vela-rellenable-cuenco-dunaru** | **Vela Rellenable · Cuenco Dunaru** | $1,199 | — |
-| vela-bowl-de-acero | **Vela Rellenable · Bowl de Acero** | $849 | ⚠️ **ARCHIVADO 2026-09-07 por la owner** |
+| vela-bowl-de-acero | **Vela Rellenable · Bowl de Acero** | $899 | ⚠️ **ARCHIVADO 2026-09-07 por la owner** |
 | perlas-originales-500-g | **Cera Duna · 500 g** | $499 | — |
-| reserva-1-kg | **Cera Duna · 1 kg** | $799 | $999 |
+| reserva-1-kg | **Cera Duna · 1 kg** | **$849** | $999 |
 | d-o-de-tonos | **Dúo de Tonos · 1 kg** | $899 | $999 |
 | tr-o-de-tonos | **Trío de Tonos · 1.5 kg** | $1,199 | $1,499 |
 | bowl-negro | **Bowl Artesanal de Cerámica** | $499 | $549 |
@@ -49,8 +50,8 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
   - ⚠️ Swatches en la DB los tres en `#101010` (mal). Corregir en el Dashboard.
 - **BOWL DE ACERO**: `vela-bowl-de-acero` id `5e40d590-...` (**archivado**). `bowl-espejo-de-acero` id `a28c4628-...`.
 - **ESENCIA**: id `f11fc30d-...`, `track_inventory: false`, opción **`Aroma`**, 6 variantes SIN `image_urls`. Las 6 fotos flat-lay viven en `product.images` en el MISMO orden que `SCENTS`.
-- **CERA DUNA · 500 g** (`90445ca9-...`) y **· 1 kg** (`64317fa8-...`): opción `Color` con `image_urls` propias.
-- **KIT VASO DE VIDRIO** (`8213d069-...`): las 3 variantes comparten `1nbg1xmhf5uh` como imagen 1.
+- **CERA DUNA · 500 g** (`90445ca9-cf01-4e6a-a879-7487649e787c`) y **· 1 kg** (`64317fa8-9659-4201-861e-9e4dfcb068e9`): opción `Color` con `image_urls` propias.
+- **KIT VASO DE VIDRIO** (`8213d069-ec98-4d52-b502-4c79de9698d5`): las 3 variantes comparten `1nbg1xmhf5uh` como imagen 1.
 - Price rule activa: `perlas-originales-500-g` → 2 uds 10% OFF, 3 uds 15% OFF.
 - **MECHAS: 30 por bolsa de 500 g → Dúo 60, Trío 90, Cera Duna 1 kg = 60.**
 - **COLECCIONES**: `kits` (3), `recipientes` (3), `accesorios` (1). Falta **`recargas`**.
@@ -106,6 +107,7 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 
 ### ✅ CHECKLIST PDP — vela nueva
 1. `ProductStorySections.tsx` → `PDP_CONTENT[slug]` (sin esto no renderiza nada). 2. `PDP_HEADLINE[slug]`. 3. `PDP_BENEFITS[slug]`. 4. `src/lib/pdp-includes.ts`. 5. `SCENT_ENABLED_SLUGS`.
+- 🏵️ Para ediciones de temporada: NO duplicar estas entradas; usar el alias `SEASONAL_BASE_SLUG` (ver §3 FASE 9).
 
 ### 🛍️ REJILLA "ELIGE TU VELA" — `SHOP_CARDS` en `IndexUI.tsx`; requiere slug en `CATALOG_FALLBACK` y producto activo. Un solo badge "Nuevo" (Cuenco Dunaru).
 ### ✨ FRANJA DE BENEFICIOS — `BENEFITS` en `IndexUI.tsx`. ⛔ Sin `divide-x`.
@@ -120,28 +122,97 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 ### Reglas de layout
 - **🛒 ORDEN DEL BUY BOX**: título+precio+rating · `PDP_BENEFITS` · variantes · `<ProductScentSelector />` · cantidad · `<DeliveryEstimate />` · express + CTA `h-12` · CTA outline `h-11` · `Lock` · badges · `<PdpSocialProof />` · WhatsApp · acordeones.
 - **📐 IMAGEN DE PRODUCTO = 4:5 (1122×1402)** + `object-cover`.
-- **🏠 ORDEN DE LA HOME**: hero → beneficios → 4 pasos → "Elige tu vela" → Ritual → Reviews → Scents → Tonos → CasaReal → BrandStory → CompareTable → FAQ → newsletter.
+- **🏠 ORDEN DE LA HOME**: hero → beneficios → **[🏵️ Día de Muertos, temporal]** → 4 pasos → "Elige tu vela" → Ritual → Reviews → Scents → Tonos → CasaReal → BrandStory → CompareTable → FAQ → newsletter.
 - **🧾 El carrito SOLO se vacía cuando el pago se confirma.**
 
 ---
 
-## 3. Active Plan — FASE 8: CATÁLOGO VIVO Y VERIFICACIÓN
+## 3. Active Plan — FASE 9: EDICIÓN CEMPASÚCHIL (DÍA DE MUERTOS) 🏵️
 
-**Estado**: ✅ Estatus del producto. ✅ Sticky. ✅ 2026-09-26 fix de event_id Pixel/CAPI. 🔜 Verificación visual + correr tests.
+**Estado (2026-10-09)**: 📋 Planeado en Chat Mode, aprobado en concepto. ⏳ Esperando respuestas de la owner (ver 9.0). Fecha límite real: Día de Muertos 1–2 nov; entrega 2–5 días hábiles → la tienda debe estar lista **antes del 15 oct**.
 
-### 8.0 🔴 P1 — Validar fix de tracking (2026-09-26)
-- Correr `npx vitest run src/lib/__tests__/tracking-utils.test.ts` y `npx tsc -p tsconfig.app.json --noEmit` (el agente no tiene shell; no se pudieron ejecutar).
-- En Meta Events Manager → Test Events: confirmar que ViewContent/AddToCart llegan "Deduplicados" (browser + server) con event_id distinto en cada ocurrencia.
+### Por qué productos separados (y no una 4ª variante) — decisión
+- Protagonismo: URL, foto principal, título y anuncio propios. Una variante quedaría escondida en un selector.
+- Los 4 productos base quedan 100% intactos (reseñas, anuncios, URLs, variantes).
+- Fin de temporada = archivar 4 productos. Menú/footer/rejilla ya respetan `status` (§2). La sección nueva y el link del menú deben hacer lo mismo (ver 9.4/9.5).
 
-### 8.1 🔴 P1 — Verificación visual tras el commit (Bowl de Acero archivado fuera de menú/footer/home; sticky; deep links; 360 px; video iOS; carrito → /pagar).
-### 8.2 🔴 P1 — Confirmar con la owner: contenido y swatches del Cuenco Dunaru; ¿archivar `bowl-espejo-de-acero`?
-### 8.3 🟡 P2 — Página `/aromas`. 8.4 🟡 P2 — Tiers AOV con nombre.
-### 8.6 Medición — volumen insuficiente para A/B; medición secuencial con PostHog.
+### 9.0 Preguntas abiertas a la owner (NO bloquean crear productos en borrador)
+1. ¿Ya existe la cera naranja física y tiene fotos reales? ¿Qué tono exacto (hex)? → define si generamos portadas con IA (temporales) o usamos fotos reales.
+2. ¿Es edición limitada real (cantidad fija)? Solo así se puede decir "edición limitada" o activar inventario. Si no, usar "edición de temporada".
+3. Fecha de corte de envíos para llegar antes del 1 nov (propuesta: **pide antes del 26 de octubre**). Confirmar.
+4. Precio: propuesta = **mismo precio que el producto base, SIN precio tachado** (no hay precio anterior real para un producto nuevo; regla de integridad). ¿De acuerdo?
+5. ¿Aplicar a "Cera Duna Cempasúchil · 500 g" la misma promo 2 uds 10% / 3 uds 15%? (requiere price rule nueva).
+
+### 9.1 Crear 4 productos (ecommerce create-product) — SIN variantes
+Mismo precio que la base, `track_inventory: false` (salvo que 9.0.2 diga lo contrario), `status: active` (o draft hasta tener fotos), tags `["dia-de-muertos","cempasuchil","edicion-temporada", ...tags base]`. Verificar el slug resultante tras crear (si la herramienta lo genera del título, corregir con update-product).
+
+| Slug nuevo | Título | Base (alias) | Precio |
+|---|---|---|---|
+| `cera-duna-cempasuchil-500-g` | Cera Duna Cempasúchil · 500 g | `perlas-originales-500-g` | $499 |
+| `cera-duna-cempasuchil-1-kg` | Cera Duna Cempasúchil · 1 kg | `reserva-1-kg` | $849 |
+| `vela-rellenable-cempasuchil-vaso-de-vidrio` | Vela Rellenable Cempasúchil · Vaso de Vidrio | `kit-vaso-de-vidrio` | $749 |
+| `vela-rellenable-cempasuchil-cuenco-dunaru` | Vela Rellenable Cempasúchil · Cuenco Dunaru | `vela-rellenable-cuenco-dunaru` | $1,199 |
+
+**Imágenes**: la owner pidió copiar TODAS las del producto base (ella depura después desde el Dashboard). Hacerlo, PERO:
+- Las fotos con cera Marfil/Champagne/Ónix muestran otro color → ordenar al final; primero las neutras (empaque, mechas, medidas, lifestyle sin color protagonista).
+- **Imagen 1 = portada naranja.** Si no hay foto real: generar 1 portada por producto con `imagegen--generate_image` usando la foto real del producto como `reference_images` (cargar skill `media.product-imagery`), cera en tono cempasúchil, 4:5 1122×1402, fondo cálido con flor de cempasúchil discreta. Marcar en §5 como TEMPORAL hasta foto real.
+- Origen de las URLs (DB 2026-10-09):
+  - 500 g: 18 imgs (`m4gndhjxsj`…`1uw63qn80ye`). Por variante: Marfil m4gndhjxsj/wjrp5b6unfo/0fxyjfz8hpv5/7d84s8xv6k6/5vig8ko6ums · Champagne siffm8eo71e/30mhqgzkaxn/3wya2db93dp/4od2429ynab · Ónix smwszrq34a/jictndzmx2p/pi5pwhdzvv/7h7b7ivxkfu/iilwov035y8 · neutras: qqmcg71lw2k, 1xb5mgphkap, binneg1kw2o, 1uw63qn80ye.
+  - 1 kg: 19 imgs; neutras (no ligadas a variante): d4ufr9di3p? (Marfil) … neutras reales: yszeg5ljr2k, vd0moi1fdye, 3tta8f9f87, ezdaye7y0kp.
+  - Vaso de Vidrio: 8 imgs; neutras: zuyxmh5y3ok, 3q6ic91u8l4, r3jfwx7yvqk, pe6rcxptc4r (1nbg1xmhf5uh = imagen compartida por las 3 variantes).
+  - Cuenco Dunaru (vela): 11 imgs; neutras: ztiuazxuif, xq7an639brl, acdrhpl3z5, p29jyylwjuk, b74rpferib8.
+  - Base de URL: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/<id>.webp`
+
+**Descripciones** (cargar skill `craft.copywriting`; sin guion largo; "rellenable"; nada de % soya/coco). Ángulo: el cempasúchil es la flor que guía e ilumina el camino en la ofrenda → "una luz para recordar". Respetuoso, no caricaturesco (nada de calaveritas de caricatura). Mantener los datos duros de la base (500 g, 30 mechas, 120 h, 20×6 cm, envío gratis). Borrador 500 g:
+"Edición de temporada. El naranja del cempasúchil, la flor que ilumina el camino en la ofrenda, ahora en Cera Duna. 500 g de cera 100% vegetal y biodegradable en gránulos finos, con 30 mechas de algodón. Viértela en tu recipiente favorito, coloca una mecha y enciende. Hasta 120 horas de luz. Disponible solo por Día de Muertos."
+
+### 9.2 Colección `dia-de-muertos` (create-collection)
+- Nombre "Día de Muertos · Edición Cempasúchil", handle `dia-de-muertos`, descripción editorial corta. Agregar los 4 productos.
+- URL: `/categorias/dia-de-muertos`. Agregar alias corto **`/dia-de-muertos`** → `<Navigate to="/categorias/dia-de-muertos" replace />` en `App.tsx` (para bio de IG y anuncios).
+- `Collection.tsx`: si `handle === 'dia-de-muertos'`, encabezado editorial propio (eyebrow "Edición de temporada" en vez de "Categoría", texto de fecha de corte de envío). Opcional banner con imagen.
+
+### 9.3 Alias de contenido (evita duplicar 5 diccionarios por slug)
+- Nuevo `src/lib/seasonal.ts`:
+  - `SEASONAL_BASE_SLUG: Record<string,string>` (tabla 9.1).
+  - `contentSlug(slug) => SEASONAL_BASE_SLUG[slug] ?? slug`.
+  - `SEASONAL_SLUGS`, `DDM_COLLECTION_HANDLE = 'dia-de-muertos'`, `DDM_SHIP_CUTOFF` (fecha, ej. '2026-10-26'), `DDM_END` ('2026-11-03').
+- Usar `contentSlug()` en: `PDP_CONTENT` (ProductStorySections), `PDP_HEADLINE`/`PDP_BENEFITS` (ProductPageUI), `getIncludes()` (pdp-includes), `supportsScentAddon()` (scents.ts), `getReviews/getFeaturedReviews/getReviewStats` (reviews.ts: mismo producto en otro color → reseñas del base; es honesto porque es la misma cera y el mismo recipiente). Override solo de `PDP_HEADLINE` para las 4 con un titular de temporada.
+- Si la owner prefiere NO heredar reseñas, quitar el alias solo en reviews.
+
+### 9.4 Sección en la home `<DiaDeMuertosSection />`
+- Posición: después de la franja de beneficios, antes de los 4 pasos.
+- Contenido: eyebrow "Edición de temporada", H2 tipo "Cempasúchil. Una luz para recordar.", 2 líneas de copy, 4 tarjetas (foto 4:5, título y precio desde DB, link a PDP), CTA "Ver la edición" → `/dia-de-muertos`, línea de fecha de corte ("Pide antes del 26 de octubre y llega antes del 1 de noviembre", solo si la owner confirma).
+- Datos: leer productos de la colección `dia-de-muertos` con `status='active'` (o filtrar `logic.products` por `SEASONAL_SLUGS`). **Si hay 0 activos → no renderizar nada** (así al archivar desaparece sola). Opcional: ocultar también después de `DDM_END`.
+- Color: añadir token `--dunaru-cempasuchil` (~`28 85% 52%`) en `index.css` + tailwind, SOLO para acentos de esta sección (hairline, eyebrow, borde). No tocar la paleta base.
+- Móvil-first; nada dependiente de hover.
+
+### 9.5 Menú, footer, catálogo
+- `navigation.ts`: añadir a `PRIMARY_LINKS` (primero) `{ label: "Día de Muertos", to: "/dia-de-muertos" }`. En `MainNav` ocultarlo cuando no haya ningún slug de `SEASONAL_SLUGS` activo (usar `useActiveProductSlugs`; ojo: `filterActiveLinks` usa `slugFromPath` de `/productos/`, así que este link necesita su propia condición).
+- `catalog-order.ts`: nuevo grupo PRIMERO `{ id: "dia-de-muertos", label: "Edición Día de Muertos", slugs: [4 slugs] }` (los grupos vacíos ya se ocultan solos → al archivar desaparece de `/categorias/todos`).
+- NO tocar `SHOP_CARDS` ("Elige tu vela") para no desplazar el catálogo base; la temporada vive en su sección propia.
+- Sitemap (`public/sitemap.xml` / `scripts/generate-sitemap.ts`): añadir 4 PDPs + colección. Quitar al terminar.
+
+### 9.6 Fin de temporada (post 2 nov)
+- La owner archiva los 4 productos (y opcionalmente la colección) desde el Dashboard → sección, link de menú y grupo del catálogo desaparecen solos.
+- PDPs archivadas siguen abriendo por URL directa (Known Issue). Para la temporada: en `ProductPageUI`/`Product.tsx`, si el slug está en `SEASONAL_BASE_SLUG` y el producto ya no está activo → `<Navigate>` al slug base. Evita anuncios/links viejos a página muerta.
+
+### 9.7 QA
+- 4 PDPs: contenido heredado, add-on de aroma, sticky con precio correcto, sin selector de variantes.
+- Home 360 px; sección se oculta si se archivan los 4 (probar con 1 en draft).
+- Carrito → /pagar con producto de temporada; Purchase/ViewContent con el nuevo product_id.
+- Avisar a la owner: anuncios de Meta nuevos apuntando a `/dia-de-muertos` o a las PDPs nuevas.
+
+### FASE 8 (sigue pendiente)
+- 8.0 🔴 Correr `npx vitest run src/lib/__tests__/tracking-utils.test.ts` + `npx tsc -p tsconfig.app.json --noEmit`; validar dedup en Meta Test Events.
+- 8.1 🔴 Verificación visual (Bowl de Acero archivado fuera de menú/footer/home; sticky; deep links; 360 px; video iOS; carrito → /pagar).
+- 8.2 🔴 Confirmar con la owner: contenido y swatches del Cuenco Dunaru; ¿archivar `bowl-espejo-de-acero`?
+- 8.3 🟡 Página `/aromas`. 8.4 🟡 Tiers AOV con nombre. 8.6 Medición secuencial con PostHog.
 
 ---
 
 ## 4. Recent Changes
-- 2026-09-26 — 📡 **FIX DEDUP META PIXEL + CAPI**: `tracking-utils.ts` ya no usa product_id/search query como event_id. ViewContent, AddToCart, Search → UUID por ocurrencia; InitiateCheckout → order_id o UUID (sin fallback a product id); Purchase intacto (`order_id`). Agregado `vitest` + `src/lib/__tests__/tracking-utils.test.ts` (casos A–H).
+- 2026-10-09 — 📋 **PLAN EDICIÓN CEMPASÚCHIL** (Chat Mode, sin cambios de código): 4 productos separados + colección `dia-de-muertos` + sección temporal en home + alias de contenido. Precios de la tabla §1 actualizados desde la DB (1 kg = $849, Bowl Cerámica = $999).
+- 2026-09-26 — 📡 **FIX DEDUP META PIXEL + CAPI**: `tracking-utils.ts` ya no usa product_id/search query como event_id. ViewContent, AddToCart, Search → UUID por ocurrencia; InitiateCheckout → order_id o UUID; Purchase intacto (`order_id`). Agregado `vitest` + `src/lib/__tests__/tracking-utils.test.ts` (casos A–H).
 - 2026-09-07 — 🗂️ **ARCHIVAR UN PRODUCTO YA LO OCULTA DE TODO EL SITIO** (`useActiveProductSlugs`).
 - 2026-08-27 — 🐛 **BUG DEL PRECIO EN LA BARRA STICKY ARREGLADO** (`ctaTotal`).
 - 2026-08-27 — ⭐ **NUEVA RESEÑA REAL (Jimena C.)**, id `r16`.
@@ -155,7 +226,6 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - 2026-08-27 — 🖼️ **FOTO POR VARIANTE EN LAS TARJETAS**.
 - 2026-08-27 — 🔗 **CTA HERO → `/categorias/todos`**.
 - 2026-08-27 — ✨ **FRANJA DE BENEFICIOS LIMPIADA**.
-- 2026-08-27 — 🎚️ **CARRUSEL-SELECTOR SOLO PARA AROMAS**.
 
 ## 5. Image Inventory
 - **📐 Fotos de producto: 1122×1402 (4:5), webp.**
@@ -171,13 +241,14 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - ⛔ Deprecadas: `1785182590879-i54i3sm6qk`, `-u6xju9w4wjl`, `-77nbrytmoii`, `/paso-vierte.webp`, `/paso-renueva.webp`, `1785521743155-htw95tvbi4b`, `1785521743156-3qeskqe43gv`, `1787699972902-dld268c7c0u`, `1787701006060-xuyehajl1yr`, `public/hero-dunaru.webp`, `public/hero-dunaru-mobile.webp`.
 - **🌿 FLAT-LAYS DE AROMA (4:3)**: Madera Nocturna `1787337333998-ynkiiz87l1n` · Ámbar Cristal `-44wwhmmisy5` · Costa Mineral `-jphdwvy2pbh` · Higo Matcha `-enck999sju7` · Tabaco Vainilla `-5e5poqkcxh8` · Musgo Mineral `-n7f8zqhfx8m`.
 - **Casa real**: `/casa-real-{sala,comedor,recibidor,recamara}.webp`. **FAVICON**: `/favicon.png`.
+- 🏵️ **CEMPASÚCHIL**: pendiente. Portadas 4:5 de los 4 productos (reales o IA temporales) + 1 imagen editorial para la sección de la home.
 - 🔴 **FALTAN: packshots 4:5 del frasco de esencia · foto del EMPAQUE NUEVO.**
 
 ## 6. Known Issues
-- 2026-09-26 — 🟡 **Tests y tsc no ejecutados por el agente** (sin shell en el entorno). Vitest quedó agregado vía `lov-add-dependency` (puede haber caído en `dependencies`, no `devDependencies`). No hay script `test` en package.json: usar `npx vitest run`.
-- 2026-09-26 — ℹ️ Tras el fix, eventos disparados dos veces por la MISMA ocurrencia (p. ej. StrictMode en dev) ya no se colapsan. En producción ViewContent se dispara 1 vez por carga de producto e InitiateCheckout está protegido por `useRef`.
+- 2026-09-26 — 🟡 **Tests y tsc no ejecutados por el agente** (sin shell en el entorno). Vitest quedó agregado vía `lov-add-dependency` (puede haber caído en `dependencies`). No hay script `test` en package.json: usar `npx vitest run`.
+- 2026-09-26 — ℹ️ Tras el fix, eventos disparados dos veces por la MISMA ocurrencia (p. ej. StrictMode en dev) ya no se colapsan.
 - 2026-09-07 — 🟡 Set de slugs activos cacheado por sesión (recargar tras archivar).
-- 2026-09-07 — 🟡 PDP de producto archivado sigue abriendo por URL directa.
+- 2026-09-07 — 🟡 PDP de producto archivado sigue abriendo por URL directa (para Cempasúchil se resuelve con redirect 9.6).
 - 2026-08-27 — 🟡 Foto de la reseña de Jimena C. (cuenco oliva fuera de catálogo).
 - 2026-08-27 — 🟠 PDP del Cuenco Dunaru afirma "500 g + 30 mechas" sin confirmación.
 - 2026-08-27 — 🟡 `CATALOG_FALLBACK` con precios viejos (visibles ~1 s).
@@ -188,9 +259,10 @@ Regla: **`[Qué es] · [Formato]`**. Nada de "Kit", "Pack" ni "Recarga".
 - 2026-08-27 — 🟡 Órdenes abandonadas duplicadas.
 - 2026-08-25 — 🟠 Nombres nuevos no están en anuncios de Meta ni emails.
 - 2026-08-25 — 🟡 `bowl-negro` y `vaso-extra-transparente` dicen "perlas dunaru".
-- 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante.
+- 2026-08-21 — 🔴 `ecommerce--update-product` NO soporta imágenes por variante (no afecta Cempasúchil: van sin variantes).
 
 ## 7. Pending / Future Sessions
+- [URGENTE, antes del 15 oct] **FASE 9 Edición Cempasúchil** (ver §3).
 - [ALTA] **Correr tests de tracking + tsc y validar dedup en Meta Test Events.**
 - [ALTA] Verificar Bowl de Acero archivado fuera de menú, footer y home.
 - [ALTA] Preguntar si `bowl-espejo-de-acero` también se archiva.
