@@ -13,6 +13,8 @@ import {
   groupByCatalog,
   filterCatalogVisible,
 } from "@/lib/catalog-order"
+import { DDM_COLLECTION_HANDLE } from "@/lib/seasonal"
+import { DdmInspirationGallery } from "@/components/DdmInspirationGallery"
 
 /**
  * Collection — Landing de categoría.
@@ -43,6 +45,7 @@ const Collection = () => {
   const [notFound, setNotFound] = useState(false)
 
   const isAll = handle === ALL_HANDLE
+  const isDdm = handle === DDM_COLLECTION_HANDLE
 
   useEffect(() => {
     let active = true
@@ -145,7 +148,7 @@ const Collection = () => {
         {/* Encabezado */}
         <header className="text-center max-w-2xl mx-auto mb-10 lg:mb-14">
           <p className="font-body text-xs uppercase tracking-[0.2em] text-dunaru-champagne mb-3">
-            Categoría
+            {isDdm ? "Edición limitada · Día de Muertos" : "Categoría"}
           </p>
           <h1 className="font-display text-4xl md:text-5xl text-foreground">
             {title}
@@ -215,6 +218,8 @@ const Collection = () => {
           </div>
         )}
       </div>
+
+      {isDdm && !loading && !notFound && <DdmInspirationGallery className="mt-6" />}
     </EcommerceTemplate>
   )
 }

@@ -58,7 +58,9 @@ import {
   SCENTS,
 } from "@/lib/scents"
 import { usePriceRules } from "@/hooks/usePriceRules"
-import { contentSlug, SEASONAL_HEADLINE } from "@/lib/seasonal"
+import { contentSlug, isSeasonalSlug, SEASONAL_HEADLINE } from "@/lib/seasonal"
+import { LimitedEditionNotice, LimitedEditionTag } from "@/components/LimitedEditionBadge"
+import { DdmInspirationGallery } from "@/components/DdmInspirationGallery"
 import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
@@ -746,6 +748,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     (logic.product?.slug && PDP_BENEFITS[contentSlug(logic.product.slug)]) || []
   /** "Qué incluye": componente + beneficio, driven por slug. */
   const productIncludes = getIncludes(logic.product?.slug)
+  /** Edición de temporada (Día de Muertos): sello + galería de inspiración. */
+  const isSeasonal = isSeasonalSlug(logic.product?.slug)
 
   // Rating compacto reutilizable (móvil arriba del fold)
   const InlineRating =
@@ -830,6 +834,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)]">
             {/* Móvil/tablet: título + promesa ARRIBA de la foto (arriba del fold) */}
             <div className="lg:hidden mb-4 space-y-2">
+              {isSeasonal && <LimitedEditionTag />}
               {vendor && (
                 <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   {vendor}
@@ -1031,6 +1036,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   {vendor}
                 </p>
               )}
+              {isSeasonal && <LimitedEditionTag className="hidden lg:inline-flex" />}
               {/* El <h1> vive en el bloque de arriba (mobile-first). Aquí solo la versión desktop. */}
               <p className="hidden lg:block text-3xl md:text-4xl lg:text-5xl font-light tracking-tight leading-[1.1]">
                 {logic.product.title}
@@ -1386,6 +1392,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             {/* Disponibilidad + fecha concreta de entrega */}
             {logic.inStock && <DeliveryEstimate />}
 
+            {isSeasonal && logic.inStock && <LimitedEditionNotice />}
+
             {/* CTAs */}
             <div ref={ctaRef} className="flex flex-col gap-2.5">
               {logic.inStock &&
@@ -1589,6 +1597,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           <ProductStorySections slug={logic.product.slug} />
         )}
       </div>
+
+      {/* Día de Muertos: ideas para tu altar */}
+      {isSeasonal && <DdmInspirationGallery className="mt-10" />}
 
       {/* Sticky Add to Cart Bar */}
       {logic.inStock && (
