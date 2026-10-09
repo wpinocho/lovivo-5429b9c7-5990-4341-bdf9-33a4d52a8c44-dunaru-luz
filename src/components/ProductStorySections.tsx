@@ -16,6 +16,7 @@ import { Reviews } from "@/components/Reviews"
 import { ProductStepsCarousel } from "@/components/ProductStepsCarousel"
 import { CompareTable, type CompareRow } from "@/components/CompareTable"
 import { STEP_IMAGES } from "@/lib/steps-media"
+import { contentSlug } from "@/lib/seasonal"
 
 /**
  * ProductStorySections — Secciones editoriales full-width de la PDP.
@@ -737,7 +738,7 @@ interface ProductStorySectionsProps {
 }
 
 export const ProductStorySections = ({ slug }: ProductStorySectionsProps) => {
-  const content = PDP_CONTENT[slug]
+  const content = PDP_CONTENT[contentSlug(slug)]
   if (!content) return null
 
   return (

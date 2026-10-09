@@ -58,6 +58,7 @@ import {
   SCENTS,
 } from "@/lib/scents"
 import { usePriceRules } from "@/hooks/usePriceRules"
+import { contentSlug, SEASONAL_HEADLINE } from "@/lib/seasonal"
 import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
@@ -738,9 +739,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     .join(" · ")
 
   const headline = logic.product?.slug
-    ? PDP_HEADLINE[logic.product.slug]
+    ? SEASONAL_HEADLINE[logic.product.slug] ??
+      PDP_HEADLINE[contentSlug(logic.product.slug)]
     : undefined
-  const benefits = (logic.product?.slug && PDP_BENEFITS[logic.product.slug]) || []
+  const benefits =
+    (logic.product?.slug && PDP_BENEFITS[contentSlug(logic.product.slug)]) || []
   /** "Qué incluye": componente + beneficio, driven por slug. */
   const productIncludes = getIncludes(logic.product?.slug)
 

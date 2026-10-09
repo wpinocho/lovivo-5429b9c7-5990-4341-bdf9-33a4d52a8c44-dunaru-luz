@@ -1,3 +1,5 @@
+import { contentSlug } from "@/lib/seasonal"
+
 /**
  * scents — Configuración central de los aromas dunaru.
  *
@@ -72,7 +74,7 @@ export const SCENT_ENABLED_SLUGS: string[] = [
 ]
 
 export const supportsScentAddon = (slug?: string | null): boolean =>
-  !!slug && SCENT_ENABLED_SLUGS.includes(slug)
+  !!slug && SCENT_ENABLED_SLUGS.includes(contentSlug(slug))
 
 /**
  * Devuelve la foto editorial de un aroma a partir del NOMBRE de la variante.

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
 import { trackPageView } from "@/lib/tracking-utils";
 import { captureAttributionFromCurrentUrl } from "@/lib/attribution";
@@ -73,6 +73,7 @@ const App = () => (
                         <Route path="/" element={<Index />} />
                         <Route path="/productos/:slug" element={<Product />} />
                         <Route path="/categorias/:handle" element={<Collection />} />
+            <Route path="/dia-de-muertos" element={<Navigate to="/categorias/dia-de-muertos" replace />} />
                         <Route path="/paquete/:slug" element={<Bundle />} />
                         <Route path="/carrito" element={<Cart />} />
                         <Route path="/pagar" element={<Checkout />} />

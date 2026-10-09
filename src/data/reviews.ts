@@ -1,3 +1,5 @@
+import { contentSlug } from "@/lib/seasonal"
+
 /**
  * FUENTE ÚNICA DE VERDAD — Reseñas reales de clientes dunaru.
  *
@@ -201,7 +203,9 @@ export const reviews: Review[] = [
 /** Reseñas de un producto (por slug) o todas si no se pasa slug. */
 export function getReviews(slug?: string): Review[] {
   if (!slug) return reviews
-  return reviews.filter((r) => r.productSlugs.includes(slug))
+  // Ediciones de temporada = misma cera y mismo recipiente → reseñas del base.
+  const key = contentSlug(slug)
+  return reviews.filter((r) => r.productSlugs.includes(key))
 }
 
 /** Reseñas destacadas (con foto) de un producto o de toda la tienda. */

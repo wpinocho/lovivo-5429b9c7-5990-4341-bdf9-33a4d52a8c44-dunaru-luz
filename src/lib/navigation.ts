@@ -95,6 +95,8 @@ export const SHOP_ALL: NavItem = { label: "Ver todo el catálogo", to: "/categor
  * Todos son rutas reales: funcionan igual desde la home que desde una PDP.
  */
 export const PRIMARY_LINKS: NavItem[] = [
+  // Temporal: MainNav lo oculta si no hay productos de temporada activos.
+  { label: "Día de Muertos", to: "/dia-de-muertos" },
   { label: "Aromas", to: "/productos/esencia-para-vela-10-ml" },
   { label: "Cómo funciona", to: "/como-funciona" },
 ]

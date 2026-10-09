@@ -1,3 +1,5 @@
+import { contentSlug } from "@/lib/seasonal"
+
 /**
  * PDP_INCLUDES — "Qué incluye" por slug.
  *
@@ -174,5 +176,5 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
 
 export function getIncludes(slug?: string): IncludeItem[] | undefined {
   if (!slug) return undefined
-  return PDP_INCLUDES[slug]
+  return PDP_INCLUDES[contentSlug(slug)]
 }

@@ -13,6 +13,7 @@ import {
   filterActiveLinks,
   slugFromPath,
 } from '@/hooks/useActiveProductSlugs'
+import { DDM_PATH, SEASONAL_SLUGS } from '@/lib/seasonal'
 
 /**
  * El menú solo muestra productos con status = 'active'. Si la owner archiva
@@ -33,7 +34,13 @@ const useLiveNav = () => {
     return {
       columns,
       showFeatured,
-      primaryLinks: filterActiveLinks(PRIMARY_LINKS, slugs),
+      // "Día de Muertos" solo se muestra si hay algún producto de temporada activo
+      // (mientras carga, se oculta para no mostrar un link a una edición archivada).
+      primaryLinks: filterActiveLinks(PRIMARY_LINKS, slugs).filter(
+        (l) =>
+          l.to !== DDM_PATH ||
+          (!!slugs && SEASONAL_SLUGS.some((s) => slugs.has(s))),
+      ),
     }
   }, [slugs])
 }

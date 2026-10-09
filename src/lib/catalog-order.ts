@@ -10,6 +10,8 @@
  * y al final refacciones y recipientes sueltos.
  */
 
+import { SEASONAL_SLUGS } from "@/lib/seasonal"
+
 export type CatalogGroup = {
   id: string
   label: string
@@ -17,6 +19,12 @@ export type CatalogGroup = {
 }
 
 export const CATALOG_GROUPS: CatalogGroup[] = [
+  // Temporal: al archivar los 4 productos el grupo vacío se oculta solo.
+  {
+    id: "dia-de-muertos",
+    label: "Edición limitada · Día de Muertos",
+    slugs: SEASONAL_SLUGS,
+  },
   {
     id: "kits",
     label: "Empieza aquí",
