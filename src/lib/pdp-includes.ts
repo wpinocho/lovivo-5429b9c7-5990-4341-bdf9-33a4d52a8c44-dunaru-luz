@@ -83,6 +83,28 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
     ENVIO,
   ],
 
+  "vela-rellenable-bowl-ambar": [
+    {
+      item: "Bowl Ámbar de vidrio con borde ondulado",
+      benefit: "Se ilumina desde adentro con la llama. Se lava y vuelve a empezar.",
+    },
+    CERA_500,
+    MECHAS_30,
+    ENVIO,
+  ],
+
+  "bowl-ambar": [
+    {
+      item: "Bowl de vidrio color ámbar con borde ondulado",
+      benefit: "Una pieza que se ve bien encendida y apagada. Se rellena las veces que quieras.",
+    },
+    {
+      item: "Solo el recipiente",
+      benefit: "La cera y las mechas se piden aparte, para encenderlo cuando quieras.",
+    },
+    ENVIO,
+  ],
+
   "vela-bowl-de-acero": [
     {
       item: "Bowl de acero pulido tipo espejo",

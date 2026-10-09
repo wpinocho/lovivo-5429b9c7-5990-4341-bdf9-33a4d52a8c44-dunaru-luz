@@ -101,6 +101,10 @@ const PDP_HEADLINE: Record<string, string> = {
     "El objeto de diseño que nunca se acaba: se rellena, no se tira.",
   "vela-rellenable-cuenco-dunaru":
     "20 cm de cerámica y varias mechas encendidas a la vez. Cuando se acaba, la vuelves a llenar.",
+  "vela-rellenable-bowl-ambar":
+    "Vidrio ámbar que se ilumina desde adentro. Cuando la cera se acaba, la vuelves a llenar.",
+  "bowl-ambar":
+    "Solo el recipiente: vidrio ámbar con borde ondulado para rellenar con tu Cera Duna.",
   "vela-bowl-de-acero":
     "Acero pulido que refleja la llama y la duplica sobre la mesa. Llega lista para encender.",
   "bowl-espejo-de-acero":
@@ -134,6 +138,16 @@ const PDP_BENEFITS: Record<string, string[]> = {
     "Incluye: cuenco de cerámica de 20 cm + 500 g de Cera Duna + 30 mechas de algodón",
     "Admite varias mechas a la vez: una luz amplia que llena la mesa",
     "Se rellena infinitas veces: compras una vez y sigue dando luz",
+  ],
+  "vela-rellenable-bowl-ambar": [
+    "Incluye: Bowl Ámbar de vidrio + 500 g de Cera Duna + 30 mechas de algodón",
+    "El vidrio ámbar se ilumina con la llama: toda la pieza brilla en tonos dorados",
+    "Se rellena infinitas veces: compras una vez y sigue dando luz",
+  ],
+  "bowl-ambar": [
+    "Vidrio color ámbar con borde ondulado: cada pieza es distinta",
+    "Solo el recipiente: la cera y las mechas se piden aparte",
+    "Ideal como segunda vela para otro rincón de la casa",
   ],
   "vela-bowl-de-acero": [
     "Incluye: bowl de acero espejo + 500 g de Cera Duna + 30 mechas de algodón",

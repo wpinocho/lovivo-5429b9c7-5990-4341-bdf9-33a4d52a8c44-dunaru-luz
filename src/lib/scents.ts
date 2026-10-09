@@ -67,6 +67,7 @@ export const SCENT_ENABLED_SLUGS: string[] = [
   "kit-vaso-de-concreto",
   "vela-bowl-de-acero",
   "vela-rellenable-cuenco-dunaru",
+  "vela-rellenable-bowl-ambar",
   "perlas-originales-500-g",
   "reserva-1-kg",
   "d-o-de-tonos",

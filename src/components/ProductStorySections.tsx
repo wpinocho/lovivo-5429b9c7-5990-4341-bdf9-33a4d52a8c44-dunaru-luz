@@ -363,6 +363,64 @@ const PDP_CONTENT: Record<string, PdpContent> = {
     ],
   },
 
+  "vela-rellenable-bowl-ambar": {
+    steps: [
+      {
+        title: "Abre tu vela",
+        text: "Bowl Ámbar, 500 g de Cera Duna y 30 mechas. Todo lo que necesitas, en una sola caja.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Vierte la cera",
+        text: "Llena el bowl con la Cera Duna. Sin moldes, sin derretir nada.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Enciende hoy mismo",
+        text: "Coloca la mecha y préndela. El vidrio ámbar se ilumina desde adentro.",
+        image: PLACEHOLDER,
+      },
+      {
+        title: "Rellena sin fin",
+        text: "Cuando se consuma, agrega más cera y una mecha nueva. El mismo bowl, otra vela.",
+        image: PLACEHOLDER,
+      },
+    ],
+    // Bloques con foto: pendientes de las imágenes de la owner.
+    blocks: [],
+    compareRows: [
+      { label: "Llega listo para encender", dunaru: true, traditional: false },
+      { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+      { label: "Cera 100% vegetal y biodegradable", dunaru: true, traditional: false },
+      { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
+      { label: "Bowl de vidrio reutilizable", dunaru: true, traditional: false },
+      { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
+      { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
+    ],
+    faqs: [
+      {
+        q: "¿Qué incluye?",
+        a: "El Bowl Ámbar de vidrio, 500 g de Cera Duna en el tono que elijas y 30 mechas de algodón. Todo listo para encender o regalar.",
+      },
+      {
+        q: "¿Cómo se ve encendida?",
+        a: "El vidrio ámbar deja pasar la luz de la llama, así que todo el bowl brilla en tonos dorados. Con luz de día, sus ondas dibujan reflejos sobre la mesa.",
+      },
+      {
+        q: "¿Tiene costo el envío?",
+        a: "No. Incluye envío gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+      },
+      {
+        q: "¿Puedo rellenarla después?",
+        a: "Sí. Cuando la cera se consuma, agregas Cera Duna y una mecha nueva en el mismo bowl. Se reutiliza infinitas veces.",
+      },
+      {
+        q: "¿Qué colores hay?",
+        a: "Elige entre Marfil, Champagne y Ónix. Cada tono cambia por completo cómo se ve el ámbar.",
+      },
+    ],
+  },
+
   "kit-vaso-de-concreto": {
     steps: [
       {

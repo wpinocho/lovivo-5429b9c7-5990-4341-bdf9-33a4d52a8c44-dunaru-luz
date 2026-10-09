@@ -14,6 +14,7 @@
 export const SEASONAL_BASE_SLUG: Record<string, string> = {
   "vela-rellenable-cempasuchil-vaso-de-vidrio": "kit-vaso-de-vidrio",
   "vela-rellenable-cempasuchil-cuenco-dunaru": "vela-rellenable-cuenco-dunaru",
+  "vela-rellenable-cempasuchil-bowl-ambar": "vela-rellenable-bowl-ambar",
   "cera-duna-cempasuchil-500-g": "perlas-originales-500-g",
   "cera-duna-cempasuchil-1-kg": "reserva-1-kg",
 }
@@ -30,6 +31,8 @@ export const SEASONAL_HEADLINE: Record<string, string> = {
     "El naranja del cempasúchil en una vela lista para tu ofrenda. Cuando se acabe, la vuelves a llenar.",
   "vela-rellenable-cempasuchil-cuenco-dunaru":
     "Una luz generosa para el centro de tu altar, en el color de la flor que guía el camino.",
+  "vela-rellenable-cempasuchil-bowl-ambar":
+    "Vidrio ámbar y cera cempasúchil: una vela que brilla en tonos de fuego sobre tu altar.",
   "cera-duna-cempasuchil-500-g":
     "El color del cempasúchil para el recipiente que ya tienes. Edición limitada de temporada.",
   "cera-duna-cempasuchil-1-kg":
