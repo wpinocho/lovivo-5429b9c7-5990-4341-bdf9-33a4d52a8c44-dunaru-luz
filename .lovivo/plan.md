@@ -45,12 +45,12 @@
 
 ### CATÁLOGO — otros datos
 - CUENCO DUNARU: cerámica 20×6 cm, varias mechas. Swatches en DB todos `#101010` (mal).
-- 🟠 **BOWL ÁMBAR (2026-10-09)**: vidrio color ámbar, borde ondulado. Medidas y nº de mechas NO confirmados (no se afirman en copy). Owner subió fotos y confirmó "quedó todo bien".
+- 🟠 **BOWL ÁMBAR (2026-10-09)**: vidrio color ámbar, borde ondulado. Medidas y nº de mechas NO confirmados (no se afirman en copy).
 - ESENCIA: opción `Aroma`, 6 variantes; fotos en `product.images` en el orden de `SCENTS`.
-- 🏵️ AROMA DE TEMPORADA (2026-10-09): **Cempasúchil** es PRODUCTO PROPIO (no variante) para que la esencia normal siga con 6 aromas. En PDPs de temporada el selector muestra: Cempasúchil (primero, etiqueta "Temporada") + los 5 regulares sin Costa Mineral. Config en `src/lib/scents.ts` (`SEASONAL_SCENTS`, `HIDDEN_IN_SEASONAL`, `getScentsForProduct`). Si el producto se archiva, el aroma desaparece solo.
+- 🏵️ AROMA DE TEMPORADA: **Cempasúchil** es PRODUCTO PROPIO (no variante). En PDPs de temporada: Cempasúchil primero ("Temporada") + 5 regulares sin Costa Mineral. Config `src/lib/scents.ts` (`SEASONAL_SCENTS`, `HIDDEN_IN_SEASONAL`, `getScentsForProduct`).
 - Price rule: `perlas-originales-500-g` 2 uds 10% / 3 uds 15% (NO aplica a Cempasúchil 500 g).
 - MECHAS: 30 por 500 g.
-- COLECCIONES: `kits`, `recipientes`, `accesorios`, **`dia-de-muertos`** (id `fdd25437-...`, 5 productos). Falta `recargas`.
+- COLECCIONES: `kits`, `recipientes`, `accesorios`, **`dia-de-muertos`** (id `fdd25437-...`). Falta `recargas`.
 - ORDEN DE MERCHANDISING = `src/lib/catalog-order.ts` (grupo `dia-de-muertos` primero). `HIDDEN_FROM_CATALOG_SLUGS` = esencia cempasúchil.
 
 ---
@@ -68,20 +68,21 @@
 | Saffron | 38 62% 56% | `dunaru-ambar` |
 | Periwinkle | 230 25% 64% | `dunaru-periwinkle` |
 | Latón | 36 46% 50% | `dunaru-laton` |
-| 🏵️ **Cempasúchil** | **30 88% 55%** | **`dunaru-cempasuchil`** — SOLO edición Día de Muertos. Usar como fondo (texto onix) o acento, nunca texto pequeño sobre claro. |
+| 🏵️ **Cempasúchil** | **30 88% 55%** | **`dunaru-cempasuchil`**: SOLO edición Día de Muertos. Fondo (texto onix) o acento. |
 - Fuente de verdad = `src/index.css`. Display Instrument Serif · Body Manrope. `--radius: 0rem`. Móvil-first, nada dependiente de hover.
 - oliva = selección + CTA · periwinkle = navegación · terracota = acentos.
-- `.full-bleed` (index.css) = sección a ancho completo dentro de un contenedor centrado. `body { overflow-x: clip }` evita scroll horizontal.
+- `.full-bleed` (index.css) = sección a ancho completo dentro de un contenedor centrado. `body { overflow-x: clip }`.
+- ⚠️ `PageTemplate` layout `default` YA agrega `max-w-7xl px-4` + `py-6`. Páginas con contenedor propio deben usar `layout="full-width"` (Collection ya lo hace) para evitar doble padding.
+- 🃏 **TARJETA DE CATÁLOGO** (`ProductCardUI`, 2026-10-10): mismo lenguaje que las tarjetas de la home: foto 4:5 object-cover a sangre, sin padding, título Manrope text-sm, estrellas, descripción solo sm+, precio + "Agregar". Prop `tone="dark"` para fondos ónix (DDM). Sello "Edición limitada" automático si `isSeasonalSlug`.
 
 ### 🏵️ EDICIÓN DE TEMPORADA — `src/lib/seasonal.ts`
-- `SEASONAL_BASE_SLUG` (temporada → base), `SEASONAL_SLUGS`, `SEASONAL_HEADLINE`, `contentSlug(slug)`, `isSeasonalSlug`, `DDM_PATH`, `DDM_COLLECTION_HANDLE`.
-- `contentSlug()` usado en: `ProductStorySections` (PDP_CONTENT), `ProductPageUI` (PDP_HEADLINE/PDP_BENEFITS; `SEASONAL_HEADLINE` tiene prioridad), `getIncludes()`, `supportsScentAddon()`, `getReviews()`.
-- ⛔ NO aliasado: `TIER_SELECTOR_SLUGS`.
-- `<DiaDeMuertosSection />` (home): carrusel con scroll-snap (2 visibles móvil, 3 tablet, 4 desktop, flechas md+).
-- `<DdmInspirationGallery />` ("Ideas para tu altar"): en `Collection.tsx` y en PDPs `isSeasonal` vía prop `afterReviews` de `ProductStorySections`.
+- `SEASONAL_BASE_SLUG`, `SEASONAL_SLUGS`, `SEASONAL_HEADLINE`, `contentSlug(slug)`, `isSeasonalSlug`, `DDM_PATH`, `DDM_COLLECTION_HANDLE`.
+- `contentSlug()` usado en: ProductStorySections, ProductPageUI, `getIncludes()`, `supportsScentAddon()`, `getReviews()`. ⛔ NO aliasado: `TIER_SELECTOR_SLUGS`.
+- Home: `<DiaDeMuertosSection />` carrusel.
+- **Landing `/categorias/dia-de-muertos` (2026-10-10)**: `<DdmCollectionHero />` (banner compacto con foto "Un campo de luz" + velo ónix, H1 "CEMPASÚCHIL") → grid sobre `dark bg-dunaru-onix` con tarjetas `tone="dark"` → `<DdmInspirationGallery />`. Clase `dark` invierte tokens para estados vacíos.
+- **PDPs de temporada (2026-10-10)**: `useSeasonalTheme()` añade `.theme-ddm` a `<html>` (papel más cálido/oscuro: background 31 40% 87%); `<SeasonalRibbon />` franja ónix pegada al header que enlaza a `/dia-de-muertos`; breadcrumb desktop = Inicio › Día de Muertos › producto. Archivo `src/components/SeasonalRibbon.tsx`.
 - `LimitedEditionBadge.tsx`: `<LimitedEditionTag />` + `<LimitedEditionNotice />` en PDPs de temporada.
-- Aromas de temporada: `SEASONAL_SCENTS` en scents.ts (selector `ProductScentSelector` carga esencia normal + productos de temporada en una sola query).
-- Para la próxima temporada: añadir slugs a `SEASONAL_BASE_SLUG` + headline; cambiar fotos de `IDEAS`; cambiar `SEASONAL_SCENTS`.
+- Para la próxima temporada: añadir slugs a `SEASONAL_BASE_SLUG` + headline; cambiar fotos de `IDEAS` y `HERO_IMG`; cambiar `SEASONAL_SCENTS`.
 
 ### Otros sistemas (ver historial)
 - TRACKING Meta Pixel + CAPI: `src/lib/tracking-utils.ts`. Tests `src/lib/__tests__/tracking-utils.test.ts`.
@@ -99,36 +100,40 @@
 ---
 
 ## 3. Active Plan
+### FASE 11: LOOK DE EDICIÓN DDM + TARJETAS (2026-10-10) ✅ construido, falta QA
+- 11.a 🔴 QA visual móvil: `/categorias/todos`, `/categorias/dia-de-muertos` (banner, grid oscuro, galería sin hueco marfil abajo), PDP de temporada (franja pegada al header, fondo cálido; al volver a una PDP normal el fondo regresa a marfil).
+- 11.b 🟡 Ideas siguientes si la owner quiere más: fondo ónix en el bloque de compra de PDPs DDM, bloques editoriales propios por producto de temporada, packshots reales en vez de IA.
+
 ### FASE 10: BOWL ÁMBAR 🟠
 - 10.b 🟡 Confirmar medidas y si admite varias mechas → añadir a copy/FAQ.
 - 10.c 🟡 Añadir `blocks` con foto a PDP_CONTENT `vela-rellenable-bowl-ambar`; revisar swatches.
 - 10.d 🟡 Opcional: añadir a `SHOP_CARDS`/`CATALOG_FALLBACK` (IndexUI), footer y navigation.ts.
 
 ### FASE 9: EDICIÓN CEMPASÚCHIL 🏵️
-- 9.a 🔴 QA visual: carrusel home, PDPs, `/dia-de-muertos`, carrito → /pagar. **Incluye: agregar aroma Cempasúchil desde PDP de temporada y verificar línea + foto en carrito/checkout.**
-- 9.i 🟡 Confirmar con owner las notas del aroma Cempasúchil (redactadas por el agente: hoja verde / flor de cempasúchil / madera).
+- 9.a 🔴 QA: agregar aroma Cempasúchil desde PDP de temporada y verificar línea + foto en carrito/checkout.
+- 9.i 🟡 Confirmar notas del aroma Cempasúchil (hoja verde / flor de cempasúchil / madera).
 - 9.b 🟡 Portadas IA temporales; reemplazar por fotos reales.
 - 9.c 🟡 Inventario: `track_inventory: false`.
 - 9.e 🟡 Sitemap: PDPs + colección.
-- 9.f 🟡 Fin de temporada: archivar 5 productos + esencia cempasúchil; redirect slug de temporada → base.
-- 9.g Anuncios Meta → `/dia-de-muertos`.
-- 9.h Idea: "Comprar esta idea" en galería.
+- 9.f 🟡 Fin de temporada: archivar productos + esencia cempasúchil; redirect slug de temporada → base.
+- 9.g Anuncios Meta → `/dia-de-muertos`. 9.h Idea: "Comprar esta idea" en galería.
 
 ### FASE 8 (sigue pendiente)
 - 8.0 🔴 Tests de tracking + `tsc`; dedup en Meta Test Events.
-- 8.1 🔴 Verificación visual general.
 - 8.2 🔴 Contenido y swatches del Cuenco Dunaru; ¿archivar `bowl-espejo-de-acero`?
 - 8.3 🟡 `/aromas`. 8.4 🟡 Tiers AOV. 8.6 PostHog.
 
 ---
 
 ## 4. Recent Changes
-- 2026-10-09 — 🏵️ Aroma de temporada **Cempasúchil**: producto nuevo `esencia-para-vela-cempasuchil-10-ml` ($99, oculto del catálogo). En PDPs de temporada aparece primero con etiqueta "Temporada"; Costa Mineral se oculta ahí. Colección normal sin cambios (6 aromas).
-- 2026-10-09 — 🎠 Home: sección Día de Muertos en carrusel. PDPs de temporada: "Ideas para tu altar" después de opiniones.
+- 2026-10-10 — 🏵️ PDPs de temporada: fondo cálido (`.theme-ddm`), franja "Edición Cempasúchil · Ver todo" y breadcrumb a Día de Muertos.
+- 2026-10-10 — 🏵️ `/categorias/dia-de-muertos` rediseñada: banner compacto con foto, página ónix, tarjetas oscuras, galería al final.
+- 2026-10-10 — 🃏 Tarjetas de catálogo rediseñadas (4:5 a sangre, estilo home). Arreglado doble padding en Collection (`layout="full-width"`). Encabezado de categoría compacto en móvil.
+- 2026-10-09 — 🏵️ Aroma de temporada **Cempasúchil** (producto propio, oculto del catálogo).
+- 2026-10-09 — 🎠 Home: sección Día de Muertos en carrusel. PDPs de temporada: "Ideas para tu altar".
 - 2026-10-09 — 🟠 **BOWL ÁMBAR**: 3 productos creados y conectados.
-- 2026-10-09 — 🏵️ Galería "Ideas para tu altar" + sello "Edición limitada" en PDPs de temporada.
+- 2026-10-09 — 🏵️ Galería "Ideas para tu altar" + sello "Edición limitada".
 - 2026-10-09 — 🏵️ EDICIÓN LIMITADA CEMPASÚCHIL CONSTRUIDA.
-- 2026-10-09 — 📋 Plan Edición Cempasúchil (Chat Mode).
 - 2026-09-26 — 📡 Fix dedup Meta Pixel + CAPI.
 - 2026-09-07 — 🗂️ Archivar un producto lo oculta de todo el sitio.
 - 2026-08-27 — 🐛 Precio en barra sticky arreglado (`ctaTotal`).
@@ -136,11 +141,10 @@
 - 2026-08-27 — 🔗 Deep link de variante arreglado.
 - 2026-08-27 — 🌿 Tarjetas de aroma apuntan al producto correcto.
 - 2026-08-27 — 🧱 PDP completa del Cuenco Dunaru.
-- 2026-08-27 — 🛍️ Cuenco Dunaru en la home.
-- 2026-08-27 — ⚖️ Título de la comparativa restaurado.
 
 ## 5. Image Inventory
 - Fotos de producto: 1122×1402 (4:5), webp. Base uploads owner: `.../message-images/58337cbc-5a9f-4862-810a-1470616566de/`.
+- 🏵️ Banner landing DDM = inspiración `1791586723101-uqttcs5raf.webp` (en `DdmCollectionHero.tsx`).
 - 🏵️ Aroma Cempasúchil flat-lay (owner, 1448×1086): `1791590350527-o3gpv79gzvi.webp`.
 - 🟠 Bowl Ámbar referencia (owner): `1791588734332-bzvkrpcdmwe.webp`.
 - 🏵️ INSPIRACIÓN DDM (owner, 4:5): `1791586723101-uqttcs5raf` · `-beyoys9qmbm` · `-m6tb2khuzlr` · `-1fvs134xdv6` · `-b7696bizhwg` · `-bcdckoare7`.
@@ -155,11 +159,12 @@
 - 🔴 FALTAN: fotos reales cempasúchil · packshots esencia · empaque nuevo.
 
 ## 6. Known Issues
-- 2026-10-09 — 🟡 Notas olfativas del aroma Cempasúchil redactadas por el agente, sin confirmar.
-- 2026-10-09 — 🟡 Esencia Cempasúchil tiene PDP accesible por URL directa (oculta de grids, sin selector propio).
+- 2026-10-10 — 🟡 Tarjetas de catálogo ahora usan object-cover 4:5: fotos de producto que no sean 4:5 se recortan (revisar esencia/mechas en `/categorias/todos`).
+- 2026-10-10 — 🟡 `.theme-ddm` también tiñe header/footer claros mientras se ve una PDP de temporada (intencional).
+- 2026-10-09 — 🟡 Notas olfativas del aroma Cempasúchil sin confirmar.
+- 2026-10-09 — 🟡 Esencia Cempasúchil tiene PDP accesible por URL directa.
 - 2026-10-09 — 🟡 Bowl Ámbar: swatches posiblemente sin color correcto.
-- 2026-10-09 — 🟡 Portadas Cempasúchil son IA.
-- 2026-10-09 — 🟡 Cempasúchil hereda reseñas del base.
+- 2026-10-09 — 🟡 Portadas Cempasúchil son IA. Cempasúchil hereda reseñas del base.
 - 2026-09-26 — 🟡 Tests y tsc no ejecutados por el agente.
 - 2026-09-07 — 🟡 Slugs activos cacheados por sesión. PDP archivada sigue abriendo por URL (9.f).
 - 2026-08-27 — 🟠 PDP Cuenco Dunaru afirma "500 g + 30 mechas" sin confirmación. 🟡 Swatches Cuenco mal. 🟡 `CATALOG_FALLBACK` precios viejos.
@@ -167,7 +172,7 @@
 - 2026-08-21 — 🔴 `update-product` NO soporta imágenes por variante.
 
 ## 7. Pending / Future Sessions
-- [URGENTE] QA Edición Cempasúchil (9.a) + redirect fin de temporada (9.f) antes del 3 nov.
+- [URGENTE] QA visual fase 11 + QA Edición Cempasúchil (9.a) + redirect fin de temporada (9.f) antes del 3 nov.
 - [ALTA] Confirmar notas del aroma Cempasúchil (9.i).
 - [ALTA] Bowl Ámbar: medidas/mechas (10.b), bloques con foto (10.c).
 - [ALTA] Fotos reales cempasúchil; stock real si quiere piezas contadas.

@@ -1,4 +1,4 @@
-import { ProductCardUI } from "@/components/ui/ProductCardUI"
+import { ProductCardUI, type ProductCardTone } from "@/components/ui/ProductCardUI"
 import type { Product } from "@/lib/supabase"
 
 /**
@@ -10,8 +10,10 @@ import type { Product } from "@/lib/supabase"
 
 interface ProductCardProps {
   product: Product
+  /** "dark" para fondos oscuros (edición Día de Muertos). */
+  tone?: ProductCardTone
 }
 
-export const ProductCard = ({ product }: ProductCardProps) => {
-  return <ProductCardUI product={product} />
+export const ProductCard = ({ product, tone }: ProductCardProps) => {
+  return <ProductCardUI product={product} tone={tone} />
 }

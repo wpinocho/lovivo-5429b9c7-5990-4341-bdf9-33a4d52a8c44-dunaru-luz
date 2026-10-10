@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Link } from "react-router-dom"
 import { HeadlessProductCard } from "@/components/headless/HeadlessProductCard"
@@ -8,31 +7,36 @@ import type { Product } from "@/lib/supabase"
 import { getReviewStats } from "@/data/reviews"
 import { getChooseOnPdp } from "@/lib/catalog-order"
 import { getVariantDisplayImage } from "@/lib/variant-image"
+import { isSeasonalSlug } from "@/lib/seasonal"
+import { cn } from "@/lib/utils"
 import { Star } from "lucide-react"
 
 /**
  * EDITABLE UI COMPONENT - ProductCardUI
- * 
- * Este componente solo maneja la presentación del ProductCard.
- * Toda la lógica viene del HeadlessProductCard.
- * 
- * PUEDES MODIFICAR LIBREMENTE:
- * - Colores, temas, estilos
- * - Textos e idioma
- * - Layout y estructura visual
- * - Animaciones y efectos
- * - Agregar features visuales (hover effects, etc.)
+ *
+ * Tarjeta de catálogo (/categorias/*). Mismo lenguaje que las tarjetas de la
+ * home: foto 4:5 a sangre (object-cover), sin padding interno, texto debajo.
+ * tone="dark" → versión para fondos oscuros (edición Día de Muertos).
  */
+
+export type ProductCardTone = "light" | "dark"
 
 interface ProductCardUIProps {
   product: Product
+  tone?: ProductCardTone
 }
 
-export const ProductCardUI = ({ product }: ProductCardUIProps) => {
+export const ProductCardUI = ({ product, tone = "light" }: ProductCardUIProps) => {
   const { getRulesForProduct } = usePriceRules()
   const productRules = getRulesForProduct(product.id)
   // Productos que se eligen en su propia página (ej. la esencia: primero el aroma).
   const chooseOnPdp = getChooseOnPdp(product.slug)
+  const dark = tone === "dark"
+  const seasonal = isSeasonalSlug(product.slug)
+
+  const ctaClass = dark
+    ? "border border-dunaru-cempasuchil/60 bg-transparent text-dunaru-cempasuchil hover:bg-dunaru-cempasuchil hover:text-dunaru-onix"
+    : "border-0 bg-transparent text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil"
 
   return (
     <HeadlessProductCard product={product}>
@@ -43,108 +47,129 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
         const primaryImage = variantImage || logic.product.images?.[0]
         const showHoverImage =
           !variantImage && !!logic.product.images && logic.product.images.length > 1
+        const stats = getReviewStats(logic.product.slug)
+
+        const badges: React.ReactNode[] = []
+        if (seasonal) {
+          badges.push(
+            <span key="ddm" className="bg-dunaru-cempasuchil px-2 py-1 font-body text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-dunaru-onix">
+              Edición limitada
+            </span>
+          )
+        }
+        if (logic.discountPercentage) {
+          badges.push(
+            <span key="discount" className="bg-destructive text-destructive-foreground text-[10px] px-1.5 py-0.5 font-medium">
+              -{logic.discountPercentage}%
+            </span>
+          )
+        }
+        if (!logic.inStock) {
+          badges.push(
+            <span key="oos" className="bg-muted text-muted-foreground text-[10px] px-1.5 py-0.5 font-medium">
+              Agotado
+            </span>
+          )
+        }
+        for (const rule of productRules.filter(r => r.rule_type === 'volume' || r.rule_type === 'bogo')) {
+          if (badges.length >= 2) break
+          badges.push(<PriceRuleBadge key={rule.id} rule={rule} />)
+        }
 
         return (
-        <Card className="bg-card border-0 shadow-none">
-          <CardContent className="p-4">
+          <article className="group flex h-full flex-col">
             <Link to={`/productos/${logic.product.slug}`} className="block">
-              <div className="aspect-square bg-dunaru-arena/40 mb-3 overflow-hidden relative group" style={{ aspectRatio: '1/1' }}>
+              <div
+                className={cn(
+                  "relative aspect-[4/5] overflow-hidden",
+                  dark ? "bg-dunaru-carbon" : "bg-dunaru-arena/60"
+                )}
+              >
                 {primaryImage ? (
                   <>
-                    {/* Primary image - only fade on hover if there's a second image */}
                     <img
                       key={primaryImage}
                       src={primaryImage}
                       alt={logic.product.title}
                       loading="lazy"
                       decoding="async"
-                      className={`w-full h-full object-contain transition-opacity duration-300 ${
-                        showHoverImage ? 'group-hover:opacity-0' : ''
-                      }`}
+                      className={cn(
+                        "h-full w-full object-cover transition-editorial group-hover:scale-[1.03]",
+                        showHoverImage && "md:group-hover:opacity-0"
+                      )}
                     />
-                    {/* Secondary image on hover (only if exists and no variant image) */}
+                    {/* Segunda foto al pasar el mouse (solo desktop) */}
                     {showHoverImage && (
                       <img
                         src={logic.product.images![1]}
-                        alt={`${logic.product.title} - alternativa`}
+                        alt=""
+                        aria-hidden
                         loading="lazy"
                         decoding="async"
-                        className="absolute inset-0 w-full h-full object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                        className="absolute inset-0 hidden h-full w-full object-cover opacity-0 transition-opacity duration-500 md:block md:group-hover:opacity-100"
                       />
                     )}
                   </>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400">
+                  <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
                     Sin imagen
                   </div>
                 )}
 
-                {/* Badges — max 2, compact */}
-                {(() => {
-                  const badges: React.ReactNode[] = []
-                  if (logic.discountPercentage) {
-                    badges.push(
-                      <span key="discount" className="bg-destructive text-destructive-foreground text-[10px] px-1.5 py-0.5 rounded-sm font-medium">
-                        -{logic.discountPercentage}%
-                      </span>
-                    )
-                  }
-                  if (!logic.inStock) {
-                    badges.push(
-                      <span key="oos" className="bg-muted text-muted-foreground text-[10px] px-1.5 py-0.5 rounded-sm font-medium">
-                        Agotado
-                      </span>
-                    )
-                  }
-                  // Volume & BOGO badges (rendered inline to count them)
-                  const volBogo = productRules.filter(r => r.rule_type === 'volume' || r.rule_type === 'bogo')
-                  for (const rule of volBogo) {
-                    if (badges.length >= 2) break
-                    badges.push(<PriceRuleBadge key={rule.id} rule={rule} />)
-                  }
-                  if (badges.length === 0) return null
-                  return (
-                    <div className="absolute top-2 left-2 flex flex-col gap-1">
-                      {badges.slice(0, 2)}
-                    </div>
-                  )
-                })()}
+                {badges.length > 0 && (
+                  <div className="absolute left-2 top-2 flex flex-col items-start gap-1">
+                    {badges.slice(0, 2)}
+                  </div>
+                )}
               </div>
 
-              <h3 className="font-display text-dunaru-carbon text-base mb-1 line-clamp-2">
+              <h3
+                className={cn(
+                  "mt-3 font-body text-sm leading-snug line-clamp-2",
+                  dark ? "text-dunaru-marfil" : "text-foreground"
+                )}
+              >
                 {logic.product.title}
               </h3>
-              {(() => {
-                const stats = getReviewStats(logic.product.slug)
-                if (stats.count === 0) return null
-                return (
-                  <div className="flex items-center gap-1.5 mb-1">
-                    <span className="flex items-center gap-0.5">
-                      {Array.from({ length: 5 }).map((_, i) => (
-                        <Star
-                          key={i}
-                          className={`h-3 w-3 ${i < Math.round(stats.average) ? "fill-dunaru-ambar text-dunaru-ambar" : "text-dunaru-ambar/30"}`}
-                          strokeWidth={1.5}
-                        />
-                      ))}
-                    </span>
-                    <span className="text-xs text-muted-foreground">({stats.count})</span>
-                  </div>
-                )
-              })()}
+
+              {stats.count > 0 && (
+                <div className="mt-1.5 flex items-center gap-1.5">
+                  <span className="flex items-center gap-0.5">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`h-3 w-3 ${i < Math.round(stats.average) ? "fill-dunaru-ambar text-dunaru-ambar" : "text-dunaru-ambar/30"}`}
+                        strokeWidth={1.5}
+                      />
+                    ))}
+                  </span>
+                  <span className={cn("text-[11px]", dark ? "text-dunaru-marfil/55" : "text-muted-foreground")}>
+                    ({stats.count})
+                  </span>
+                </div>
+              )}
+
+              {/* Descripción solo en tablet/desktop: en móvil, más producto y menos texto */}
               {logic.product.description && (
-                <p className="text-muted-foreground text-xs mb-3 line-clamp-2 leading-relaxed">
+                <p
+                  className={cn(
+                    "mt-1.5 hidden text-xs leading-relaxed line-clamp-2 sm:block",
+                    dark ? "text-dunaru-marfil/60" : "text-muted-foreground"
+                  )}
+                >
                   {logic.product.description.replace(/<[^>]*>/g, '')}
                 </p>
               )}
             </Link>
 
             {!chooseOnPdp && logic.hasVariants && logic.options && (
-              <div className="mb-3 space-y-2">
+              <div className="mt-3 space-y-2">
                 {logic.options.map((opt) => (
                   <div key={opt.id}>
-                    <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground mb-1.5">{opt.name}</div>
-                    <div className="flex flex-wrap gap-2">
+                    <div className={cn("mb-1.5 text-[10px] uppercase tracking-[0.14em]", dark ? "text-dunaru-marfil/55" : "text-muted-foreground")}>
+                      {opt.name}
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
                       {opt.values.filter(val => logic.isOptionValueAvailable(opt.name, val)).map((val) => {
                         const isSelected = logic.selected[opt.name] === val
                         const swatch = opt.name.toLowerCase() === 'color' ? opt.swatches?.[val] : undefined
@@ -174,11 +199,14 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                             key={val}
                             type="button"
                             onClick={() => logic.handleOptionChange(opt.name, val)}
-                            className={`border-0 px-3 py-1.5 text-xs transition-colors duration-200 ${
+                            className={cn(
+                              "border-0 px-2.5 py-1 text-[11px] transition-colors duration-200",
                               isSelected
-                                ? 'bg-dunaru-oliva-claro text-dunaru-marfil'
-                                : 'bg-dunaru-arena/70 text-dunaru-carbon hover:bg-dunaru-periwinkle/25 hover:text-[hsl(var(--dunaru-periwinkle-deep))]'
-                            }`}
+                                ? "bg-dunaru-oliva-claro text-dunaru-marfil"
+                                : dark
+                                  ? "bg-dunaru-marfil/10 text-dunaru-marfil hover:bg-dunaru-marfil/20"
+                                  : "bg-dunaru-arena/70 text-dunaru-carbon hover:bg-dunaru-periwinkle/25"
+                            )}
                             aria-pressed={isSelected}
                             aria-label={`${opt.name}: ${val}`}
                             title={`${opt.name}: ${val}`}
@@ -193,13 +221,13 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
               </div>
             )}
 
-            <div className="flex items-center justify-between">
-              <div className="flex flex-col">
-                <span className="text-dunaru-carbon font-semibold">
+            <div className="mt-auto flex items-center justify-between gap-2 pt-3">
+              <div className="flex items-baseline gap-2">
+                <span className={cn("font-body text-sm font-semibold", dark ? "text-dunaru-cempasuchil" : "text-foreground")}>
                   {logic.formatMoney(logic.currentPrice)}
                 </span>
                 {logic.currentCompareAt && logic.currentCompareAt > logic.currentPrice && (
-                  <span className="text-muted-foreground/70 text-xs line-through">
+                  <span className={cn("text-[11px] line-through", dark ? "text-dunaru-marfil/40" : "text-foreground/35")}>
                     {logic.formatMoney(logic.currentCompareAt)}
                   </span>
                 )}
@@ -209,7 +237,7 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                   asChild
                   variant="ghost"
                   size="sm"
-                  className="border-0 px-5 bg-dunaru-marfil text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil transition-colors duration-300"
+                  className={cn("h-8 px-3 text-xs transition-colors duration-300", ctaClass)}
                 >
                   <Link to={`/productos/${logic.product.slug}`}>{chooseOnPdp.cta}</Link>
                 </Button>
@@ -222,14 +250,13 @@ export const ProductCardUI = ({ product }: ProductCardUIProps) => {
                     logic.handleAddToCart()
                   }}
                   disabled={!logic.canAddToCart}
-                  className="border-0 px-5 bg-dunaru-marfil text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil transition-colors duration-300 disabled:opacity-50"
+                  className={cn("h-8 px-3 text-xs transition-colors duration-300 disabled:opacity-50", ctaClass)}
                 >
                   {logic.inStock ? 'Agregar' : 'Agotado'}
                 </Button>
               )}
             </div>
-          </CardContent>
-        </Card>
+          </article>
         )
       }}
     </HeadlessProductCard>

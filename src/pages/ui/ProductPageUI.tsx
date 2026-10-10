@@ -60,6 +60,8 @@ import {
 import { usePriceRules } from "@/hooks/usePriceRules"
 import { contentSlug, isSeasonalSlug, SEASONAL_HEADLINE } from "@/lib/seasonal"
 import { LimitedEditionNotice, LimitedEditionTag } from "@/components/LimitedEditionBadge"
+import { SeasonalRibbon, useSeasonalTheme } from "@/components/SeasonalRibbon"
+import { DDM_PATH } from "@/lib/seasonal"
 import { DdmInspirationGallery } from "@/components/DdmInspirationGallery"
 import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
@@ -666,6 +668,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     window.scrollTo(0, 0)
   }, [])
 
+  // 🏵️ PDP de temporada: paleta cálida (antes de cualquier return temprano)
+  useSeasonalTheme(isSeasonalSlug(logic.product?.slug))
+
   if (logic.loading) {
     return (
       <EcommerceTemplate>
@@ -822,6 +827,13 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
       />
     <EcommerceTemplate hideFloatingCartOnMobile>
       <div className="max-w-[1400px] mx-auto -mt-4 md:mt-0 pb-24 md:pb-0">
+        {/* 🏵️ Franja de la edición, pegada al header */}
+        {isSeasonal && (
+          <div className="-mt-2 mb-4 md:-mt-6 md:mb-6">
+            <SeasonalRibbon />
+          </div>
+        )}
+
         {/* Breadcrumbs */}
         <nav
           aria-label="Migas de pan"
@@ -832,10 +844,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           </Link>
           <ChevronRight className="h-3 w-3" />
           <Link
-            to="/"
+            to={isSeasonal ? DDM_PATH : "/"}
             className="hover:text-foreground transition-colors"
           >
-            Productos
+            {isSeasonal ? "Día de Muertos" : "Productos"}
           </Link>
           <ChevronRight className="h-3 w-3" />
           <span className="text-foreground/80 truncate max-w-[280px]">

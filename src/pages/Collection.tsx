@@ -15,6 +15,8 @@ import {
 } from "@/lib/catalog-order"
 import { DDM_COLLECTION_HANDLE } from "@/lib/seasonal"
 import { DdmInspirationGallery } from "@/components/DdmInspirationGallery"
+import { DdmCollectionHero } from "@/components/DdmCollectionHero"
+import { cn } from "@/lib/utils"
 
 /**
  * Collection — Landing de categoría.
@@ -136,7 +138,8 @@ const Collection = () => {
     : collection?.description || `Descubre los productos de ${title} en dunaru.`
 
   return (
-    <EcommerceTemplate>
+    // full-width: la plantilla no agrega su propio contenedor (evita doble padding)
+    <EcommerceTemplate layout="full-width">
       <SEO
         title={title}
         description={description}
@@ -144,27 +147,36 @@ const Collection = () => {
         storeName={storeName}
       />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14">
-        {/* Encabezado */}
-        <header className="text-center max-w-2xl mx-auto mb-10 lg:mb-14">
-          <p className="font-body text-xs uppercase tracking-[0.2em] text-dunaru-champagne mb-3">
-            {isDdm ? "Edición limitada · Día de Muertos" : "Categoría"}
-          </p>
-          <h1 className="font-display text-4xl md:text-5xl text-foreground">
-            {title}
-          </h1>
-          {description && (
-            <p className="mt-4 text-muted-foreground font-body leading-relaxed">
-              {description}
-            </p>
-          )}
-        </header>
+      {/* Día de Muertos: banner propio + página oscura (edición de temporada) */}
+      {isDdm && (
+        <div className="-mt-6">
+          <DdmCollectionHero />
+        </div>
+      )}
+
+      {/* `dark` invierte los tokens: los estados vacíos también se leen sobre ónix */}
+      <div className={cn(isDdm && "dark bg-dunaru-onix texture-grain")}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-12 sm:pt-8 lg:pt-12 lg:pb-16">
+        {/* Encabezado compacto: en móvil, producto antes que texto */}
+        {!isDdm && (
+          <header className="text-center max-w-2xl mx-auto mb-6 sm:mb-10 lg:mb-12">
+            <p className="eyebrow text-[10px] sm:text-xs mb-2">Categoría</p>
+            <h1 className="font-display text-3xl sm:text-4xl md:text-5xl text-foreground leading-tight">
+              {title}
+            </h1>
+            {description && (
+              <p className="mt-2 sm:mt-3 text-sm text-muted-foreground font-body leading-relaxed line-clamp-2 sm:line-clamp-none">
+                {description}
+              </p>
+            )}
+          </header>
+        )}
 
         {/* Grid */}
         {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
             {Array.from({ length: 6 }).map((_, i) => (
-              <Skeleton key={i} className="aspect-[3/4] w-full rounded-xl" />
+              <Skeleton key={i} className={cn("aspect-[4/5] w-full", isDdm && "bg-dunaru-carbon")} />
             ))}
           </div>
         ) : notFound ? (
@@ -202,7 +214,7 @@ const Collection = () => {
                 >
                   {group.label}
                 </h2>
-                <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
                   {(group.items as Product[]).map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}
@@ -211,15 +223,18 @@ const Collection = () => {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-3 gap-y-8 sm:gap-x-6 sm:gap-y-12">
             {visibleProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} tone={isDdm ? "dark" : "light"} />
             ))}
           </div>
         )}
       </div>
+      </div>
 
-      {isDdm && !loading && !notFound && <DdmInspirationGallery className="mt-6" />}
+      {isDdm && !loading && !notFound && (
+        <DdmInspirationGallery className="-mb-6 border-t border-dunaru-cempasuchil/25" />
+      )}
     </EcommerceTemplate>
   )
 }

@@ -123,6 +123,17 @@ html {
     --sidebar-border: 75 9% 25%;
     --sidebar-ring: 38 62% 56%;
   }
+
+  /* 🏵️ Edición Día de Muertos: papel más cálido y un punto más oscuro.
+     Se activa en <html> desde las PDPs de temporada (useSeasonalTheme). */
+  .theme-ddm {
+    --background: 31 40% 87%;
+    --card: 31 40% 87%;
+    --muted: 29 36% 80%;
+    --border: 29 26% 72%;
+    --input: 29 26% 72%;
+    --dunaru-arena: 29 36% 80%;
+  }
 }
 
 @layer base {
