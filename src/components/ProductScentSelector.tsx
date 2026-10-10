@@ -6,7 +6,7 @@ import { ChevronDown } from "lucide-react"
 import { cn, isVariantAvailable } from "@/lib/utils"
 import { usePostHog } from "@/contexts/PostHogContext"
 import {
-  SCENTS,
+  getScentsForProduct,
   SCENT_OPTION_NAME,
   SCENT_PRODUCT_SLUG,
   type Scent,
@@ -50,29 +50,55 @@ export const ProductScentSelector = ({
 }: ProductScentSelectorProps) => {
   const posthog = usePostHog()
   const [scentProduct, setScentProduct] = useState<Product | null>(null)
+  // Productos propios de los aromas de temporada (slug → producto activo)
+  const [seasonalProducts, setSeasonalProducts] = useState<Record<string, Product>>({})
   const [selectedId, setSelectedId] = useState<string>(NONE)
   // Los detalles vienen ABIERTOS por defecto: la clienta ve la foto y las notas
   // sin tener que descubrir el toggle. Puede cerrarlos con "Ocultar detalles".
   const [expanded, setExpanded] = useState(true)
 
-  // Carga el producto de esencias (una sola vez por PDP)
+  // Aromas que corresponden a este producto (temporada primero si aplica)
+  const candidateScents = useMemo(() => getScentsForProduct(productSlug), [productSlug])
+  const seasonalSlugs = useMemo(
+    () =>
+      candidateScents
+        .map((s) => s.seasonalProductSlug)
+        .filter((s): s is string => !!s),
+    [candidateScents]
+  )
+
+  // Carga el producto de esencias + los de temporada que apliquen
   useEffect(() => {
     let active = true
     ;(async () => {
       const { data } = await supabase
         .from("products")
         .select("*")
-        .eq("slug", SCENT_PRODUCT_SLUG)
+        .in("slug", [SCENT_PRODUCT_SLUG, ...seasonalSlugs])
         .eq("status", "active")
         .eq("store_id", STORE_ID)
-        .maybeSingle()
       if (!active) return
-      setScentProduct((data as Product) || null)
+      const rows = (data as Product[]) || []
+      setScentProduct(rows.find((p: any) => p.slug === SCENT_PRODUCT_SLUG) || null)
+      const map: Record<string, Product> = {}
+      rows.forEach((p: any) => {
+        if (p.slug !== SCENT_PRODUCT_SLUG) map[p.slug] = p
+      })
+      setSeasonalProducts(map)
     })()
     return () => {
       active = false
     }
-  }, [])
+  }, [seasonalSlugs])
+
+  /** Producto de la DB que se agrega al carrito para este aroma. */
+  const productFor = (scent: Scent): Product | null =>
+    scent.seasonalProductSlug
+      ? seasonalProducts[scent.seasonalProductSlug] || null
+      : scentProduct
+
+  // Si el producto de temporada está archivado, el aroma simplemente no aparece
+  const scents = candidateScents.filter((s) => !!productFor(s))
 
   // Al cambiar de producto, resetear a "Sin aroma"
   useEffect(() => {
@@ -80,20 +106,21 @@ export const ProductScentSelector = ({
     setExpanded(true)
   }, [productSlug])
 
-  const variants = (scentProduct as any)?.variants as ProductVariant[] | undefined
-  const trackInventory = (scentProduct as any)?.track_inventory !== false
-
-  const variantFor = useMemo(
-    () => (scent: Scent) =>
-      (variants || []).find((v: any) => {
-        const ov = v?.options || {}
-        return ov[SCENT_OPTION_NAME] === scent.name || v?.title === scent.name
-      }),
-    [variants]
-  )
+  const variantFor = (scent: Scent): ProductVariant | undefined => {
+    const variants = (productFor(scent) as any)?.variants as ProductVariant[] | undefined
+    return (variants || []).find((v: any) => {
+      const ov = v?.options || {}
+      return ov[SCENT_OPTION_NAME] === scent.name || v?.title === scent.name
+    })
+  }
 
   const availableFor = (scent: Scent) => {
-    if (!trackInventory) return true
+    const product = productFor(scent) as any
+    if (!product) return false
+    if (product.track_inventory === false) return true
+    const variants = product.variants as ProductVariant[] | undefined
+    // Producto sin variantes (aroma de temporada): se rige por su inventario
+    if (!variants || variants.length === 0) return (product.inventory_quantity ?? 0) > 0
     const v = variantFor(scent)
     if (!v) return false
     return isVariantAvailable(v)
@@ -101,14 +128,15 @@ export const ProductScentSelector = ({
 
   const priceFor = (scent: Scent) => {
     const v = variantFor(scent) as any
-    return (v?.price ?? scentProduct?.price ?? 0) as number
+    return (v?.price ?? productFor(scent)?.price ?? 0) as number
   }
 
-  const selectedScent = SCENTS.find((s) => s.id === selectedId) || null
+  const selectedScent = scents.find((s) => s.id === selectedId) || null
 
   // Reportar selección al padre
   useEffect(() => {
-    if (!selectedScent || !scentProduct) {
+    const selectedProduct = selectedScent ? productFor(selectedScent) : null
+    if (!selectedScent || !selectedProduct) {
       onSelectionChange(null)
       return
     }
@@ -121,8 +149,8 @@ export const ProductScentSelector = ({
     onSelectionChange({
       scent: selectedScent,
       product: image
-        ? ({ ...(scentProduct as any), images: [image] } as Product)
-        : scentProduct,
+        ? ({ ...(selectedProduct as any), images: [image] } as Product)
+        : selectedProduct,
       variant:
         rawVariant && image
           ? ({ ...rawVariant, image, image_urls: [image] } as ProductVariant)
@@ -130,9 +158,9 @@ export const ProductScentSelector = ({
       price: priceFor(selectedScent),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedId, scentProduct])
+  }, [selectedId, scentProduct, seasonalProducts])
 
-  if (!scentProduct) return null
+  if (scents.length === 0) return null
 
   const handleSelect = (id: string, scent: Scent | null) => {
     setSelectedId(id)
@@ -229,9 +257,10 @@ export const ProductScentSelector = ({
           </span>
         </button>
 
-        {SCENTS.map((scent) => {
+        {scents.map((scent) => {
           const isSelected = selectedId === scent.id
           const isAvailable = availableFor(scent)
+          const isSeasonal = !!scent.seasonalProductSlug
           return (
             <button
               key={scent.id}
@@ -241,10 +270,21 @@ export const ProductScentSelector = ({
               aria-disabled={!isAvailable}
               disabled={!isAvailable}
               onClick={() => handleSelect(scent.id, scent)}
-              className={cn(optionBase, optionState(isSelected, isAvailable))}
+              className={cn(
+                optionBase,
+                optionState(isSelected, isAvailable),
+                isSeasonal && !isSelected && isAvailable && "border-dunaru-cempasuchil"
+              )}
             >
-              <span className="font-display text-[15px] leading-tight">
-                {scent.name}
+              <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                <span className="font-display text-[15px] leading-tight">
+                  {scent.name}
+                </span>
+                {isSeasonal && (
+                  <span className="bg-dunaru-cempasuchil text-dunaru-onix px-1.5 py-0.5 text-[9px] font-semibold uppercase leading-none tracking-[0.14em]">
+                    Temporada
+                  </span>
+                )}
               </span>
               <span
                 className={cn(

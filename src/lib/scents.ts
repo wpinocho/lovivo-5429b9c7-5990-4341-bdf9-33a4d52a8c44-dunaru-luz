@@ -1,4 +1,4 @@
-import { contentSlug } from "@/lib/seasonal"
+import { contentSlug, isSeasonalSlug } from "@/lib/seasonal"
 
 /**
  * scents — Configuración central de los aromas dunaru.
@@ -39,6 +39,12 @@ export type Scent = {
    * imagen simplemente no se renderiza (sin placeholders grises).
    */
   imageUrl: string | null
+  /**
+   * Aroma de temporada: vive como PRODUCTO PROPIO en la DB (sin variantes),
+   * no como variante de la esencia normal. Así la esencia normal conserva sus
+   * 6 aromas y al terminar la temporada basta con archivar este producto.
+   */
+  seasonalProductSlug?: string
 }
 
 /** Base de las imágenes editoriales de aromas (flat-lays de ingredientes). */
@@ -90,8 +96,54 @@ export const getScentImageByVariantName = (
 ): string | undefined => {
   if (!variantName) return undefined
   const clean = variantName.trim().toLowerCase()
-  return SCENTS.find((s) => s.name.toLowerCase() === clean)?.imageUrl || undefined
+  return (
+    [...SCENTS, ...SEASONAL_SCENTS].find((s) => s.name.toLowerCase() === clean)
+      ?.imageUrl || undefined
+  )
 }
+
+/**
+ * 🏵️ AROMAS DE TEMPORADA (Día de Muertos 2026)
+ * Solo aparecen en los productos de temporada (isSeasonalSlug), SIEMPRE primero
+ * y con la etiqueta "Temporada".
+ */
+export const SEASONAL_SCENTS: Scent[] = [
+  {
+    id: "cempasuchil",
+    name: "Cempasúchil",
+    inspiredBy: "Flor de la ofrenda",
+    profile: "Floral · herbal · cálido",
+    description:
+      "Flor de cempasúchil con un toque verde de hoja y un fondo tibio de madera.",
+    recommendedFor: "llenar tu casa del aroma de la ofrenda.",
+    notes: ["Flor de cempasúchil", "Hoja verde", "Madera"],
+    story: "La ofrenda recién puesta. Flor, tierra y luz para recordar.",
+    pyramid: {
+      salida: "Hoja verde",
+      corazon: "Flor de cempasúchil",
+      fondo: "Madera",
+    },
+    imageUrl: `${SCENT_IMG}1791590350527-o3gpv79gzvi.webp`,
+    seasonalProductSlug: "esencia-para-vela-cempasuchil-10-ml",
+  },
+]
+
+/** Aromas regulares que NO se muestran en los productos de temporada. */
+const HIDDEN_IN_SEASONAL: string[] = ["costa-mineral"]
+
+/**
+ * Lista de aromas a mostrar en el selector de un producto.
+ * - Colección normal: los 6 de siempre.
+ * - Productos de temporada: aromas de temporada primero + los regulares menos
+ *   los de HIDDEN_IN_SEASONAL (siempre 6 en total).
+ */
+export const getScentsForProduct = (slug?: string | null): Scent[] =>
+  isSeasonalSlug(slug)
+    ? [
+        ...SEASONAL_SCENTS,
+        ...SCENTS.filter((s) => !HIDDEN_IN_SEASONAL.includes(s.id)),
+      ]
+    : SCENTS
 
 export const SCENTS: Scent[] = [
   {

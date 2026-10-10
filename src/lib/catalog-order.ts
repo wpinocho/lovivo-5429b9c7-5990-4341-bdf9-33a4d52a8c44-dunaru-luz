@@ -64,10 +64,12 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
 /**
  * Productos que SÍ se pueden comprar (y aparecen en carrito y checkout) pero
  * NO deben listarse en grids, colecciones ni recomendaciones automáticas.
- * Hoy está vacío: la esencia ya se lista en "Accesorios" como tarjeta que
- * lleva a su propia página (ver CHOOSE_ON_PDP).
+ * - Esencia Cempasúchil: solo se ofrece como aroma dentro de los productos de
+ *   temporada (ver SEASONAL_SCENTS en src/lib/scents.ts).
  */
-export const HIDDEN_FROM_CATALOG_SLUGS: string[] = []
+export const HIDDEN_FROM_CATALOG_SLUGS: string[] = [
+  "esencia-para-vela-cempasuchil-10-ml",
+]
 
 /**
  * Productos que se listan en el catálogo pero NO se agregan al carrito desde la
