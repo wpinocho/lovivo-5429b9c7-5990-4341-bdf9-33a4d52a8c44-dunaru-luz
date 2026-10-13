@@ -67,6 +67,13 @@ import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
 import { DeliveryEstimate, PdpSocialProof } from "@/components/PdpTrust"
+import { DuoTonePicker } from "@/components/DuoTonePicker"
+import {
+  isDuoSlug,
+  duoValueFromTones,
+  DUO_OPTION_NAME,
+  DUO_PICK_COUNT,
+} from "@/lib/duo-tones"
 
 // Slugs que usan el selector "Lleva más y ahorra" en lugar del stepper + add-ons
 const TIER_SELECTOR_SLUGS = ["perlas-originales-500-g"]
@@ -664,6 +671,55 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     appliedVariantRef.current = key
   }, [search, logic.product?.id, logic.selected])
 
+  /**
+   * DÚO DE TONOS: la clienta elige 2 tonos; nosotros seleccionamos la variante
+   * de la combinación ("Marfil + Ónix"). Mientras no complete la pareja, los
+   * botones de compra la regresan al selector en vez de agregar.
+   */
+  const duoRef = useRef<HTMLDivElement>(null)
+  const isDuo =
+    isDuoSlug(logic.product?.slug) &&
+    (logic.product?.options || []).some(
+      (o: any) => o?.name === DUO_OPTION_NAME
+    )
+  const [duoTones, setDuoTones] = useState<string[]>([])
+  const [duoError, setDuoError] = useState(false)
+  const duoIncomplete = isDuo && duoTones.length < DUO_PICK_COUNT
+
+  useEffect(() => {
+    setDuoTones([])
+    setDuoError(false)
+  }, [logic.product?.id])
+
+  // Mantener la variante alineada con los tonos (el headless puede
+  // auto-seleccionar la primera variante al cargar).
+  useEffect(() => {
+    if (!isDuo || duoTones.length !== DUO_PICK_COUNT) return
+    const wanted = duoValueFromTones(duoTones)
+    if (logic.selected?.[DUO_OPTION_NAME] !== wanted) {
+      logic.handleOptionSelect(DUO_OPTION_NAME, wanted)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isDuo, duoTones, logic.selected])
+
+  const handleDuoChange = (next: string[]) => {
+    setDuoTones(next)
+    if (next.length === DUO_PICK_COUNT) setDuoError(false)
+  }
+
+  const requireDuo = (fn: () => unknown) => () => {
+    if (duoIncomplete) {
+      setDuoError(true)
+      duoRef.current?.scrollIntoView({ behavior: "smooth", block: "center" })
+      toast({
+        title: duoTones.length ? "Elige 1 tono más" : "Elige tus 2 tonos",
+        description: "El Dúo trae dos bolsas: elige el tono de cada una.",
+      })
+      return
+    }
+    fn()
+  }
+
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
@@ -1242,7 +1298,14 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             )}
 
             {/* Product Options */}
-            {logic.product.options && logic.product.options.length > 0 && (
+            {isDuo ? (
+              <DuoTonePicker
+                ref={duoRef}
+                value={duoTones}
+                onChange={handleDuoChange}
+                showError={duoError}
+              />
+            ) : logic.product.options && logic.product.options.length > 0 && (
               <div
                 className={cn(
                   "space-y-5",
@@ -1424,6 +1487,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             <div ref={ctaRef} className="flex flex-col gap-2.5">
               {logic.inStock &&
                 logic.canAddToCart &&
+                !duoIncomplete &&
                 !logic.selectedPlan && (
                   <>
                     <ProductExpressCheckout
@@ -1449,7 +1513,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
               {logic.inStock && (
                 <Button
-                  onClick={handleBuyNowWithScent}
+                  onClick={requireDuo(handleBuyNowWithScent)}
                   disabled={isBuyingNowWithScent || logic.isBuyingNow}
                   className="w-full h-12 text-[15px] font-semibold rounded-lg shadow-sm"
                   size="lg"
@@ -1467,7 +1531,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               )}
 
               <Button
-                onClick={handleAddToCartWithAddOns}
+                onClick={requireDuo(handleAddToCartWithAddOns)}
                 disabled={!logic.inStock}
                 variant={logic.inStock ? "outline" : "default"}
                 className="w-full h-11 text-sm font-medium rounded-lg border-border/80 bg-transparent text-foreground/90 hover:border-dunaru-periwinkle hover:bg-dunaru-periwinkle/10 hover:text-[hsl(var(--dunaru-periwinkle-deep))]"
@@ -1667,11 +1731,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </div>
               </div>
               <div className="flex items-center gap-3 shrink-0">
-                <Button onClick={handleBuyNowWithScent} size="default">
+                <Button onClick={requireDuo(handleBuyNowWithScent)} size="default">
                   Comprar ahora
                 </Button>
                 <Button
-                  onClick={handleAddToCartWithAddOns}
+                  onClick={requireDuo(handleAddToCartWithAddOns)}
                   variant="outline"
                   size="default"
                 >
@@ -1711,7 +1775,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </div>
               <div className="flex gap-2">
                 <Button
-                  onClick={handleBuyNowWithScent}
+                  onClick={requireDuo(handleBuyNowWithScent)}
                   disabled={isBuyingNowWithScent || logic.isBuyingNow}
                   size="sm"
                   className="flex-1"
@@ -1721,7 +1785,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     : "Comprar ahora"}
                 </Button>
                 <Button
-                  onClick={handleAddToCartWithAddOns}
+                  onClick={requireDuo(handleAddToCartWithAddOns)}
                   variant="outline"
                   size="sm"
                   className="flex-1"

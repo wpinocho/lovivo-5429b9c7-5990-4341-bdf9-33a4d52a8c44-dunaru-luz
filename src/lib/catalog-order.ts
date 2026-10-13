@@ -78,6 +78,9 @@ export const HIDDEN_FROM_CATALOG_SLUGS: string[] = [
  */
 export const CHOOSE_ON_PDP: Record<string, { cta: string }> = {
   "esencia-para-vela-10-ml": { cta: "Elegir aroma" },
+  // El Dúo necesita que elijan 2 tonos: el "Agregar" rápido mandaría una
+  // combinación que la clienta no eligió.
+  "d-o-de-tonos": { cta: "Elegir tonos" },
 }
 
 export const getChooseOnPdp = (slug?: string | null) =>
