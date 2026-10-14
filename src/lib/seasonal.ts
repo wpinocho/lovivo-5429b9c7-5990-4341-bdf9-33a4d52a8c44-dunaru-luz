@@ -14,6 +14,12 @@
 export const SEASONAL_BASE_SLUG: Record<string, string> = {
   "vela-rellenable-cempasuchil-vaso-de-vidrio": "kit-vaso-de-vidrio",
   "vela-rellenable-cempasuchil-cuenco-dunaru": "vela-rellenable-cuenco-dunaru",
+  // ⚠️ Slugs con "-copy-": los generó el Dashboard al duplicar. No se pueden
+  // cambiar desde el agente; si la owner los renombra, actualizar aquí.
+  // Cempasúchil · Cuenco Eclipse → hereda de Vela Rellenable · Cuenco Eclipse
+  "vela-rellenable-cempasuchil-cuenco-dunaru-copy-da2k8": "kit-vaso-de-concreto",
+  // Cempasúchil · Cuenco Alba → hereda de Vela Rellenable · Cuenco Alba
+  "vela-rellenable-cempasuchil-cuenco-dunaru-copy-ksihd": "vela-rellenable-cuenco-eclipse-copy-ppsiy",
   "vela-rellenable-cempasuchil-bowl-ambar": "vela-rellenable-bowl-ambar",
   "cera-duna-cempasuchil-500-g": "perlas-originales-500-g",
   "cera-duna-cempasuchil-1-kg": "reserva-1-kg",
@@ -31,6 +37,10 @@ export const SEASONAL_HEADLINE: Record<string, string> = {
     "El naranja del cempasúchil en una vela lista para tu ofrenda. Cuando se acabe, la vuelves a llenar.",
   "vela-rellenable-cempasuchil-cuenco-dunaru":
     "Una luz generosa para el centro de tu altar, en el color de la flor que guía el camino.",
+  "vela-rellenable-cempasuchil-cuenco-dunaru-copy-da2k8":
+    "Cerámica oscura y cera cempasúchil: el naranja de la ofrenda resalta todavía más.",
+  "vela-rellenable-cempasuchil-cuenco-dunaru-copy-ksihd":
+    "Cerámica artesanal y cera cempasúchil para iluminar tu ofrenda. Cuando se acabe, la vuelves a llenar.",
   "vela-rellenable-cempasuchil-bowl-ambar":
     "Vidrio ámbar y cera cempasúchil: una vela que brilla en tonos de fuego sobre tu altar.",
   "cera-duna-cempasuchil-500-g":

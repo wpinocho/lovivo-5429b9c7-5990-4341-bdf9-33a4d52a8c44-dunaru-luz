@@ -83,6 +83,17 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
     ENVIO,
   ],
 
+  // Vela Rellenable · Cuenco Alba (slug generado al duplicar en el Dashboard)
+  "vela-rellenable-cuenco-eclipse-copy-ppsiy": [
+    {
+      item: "Cuenco Alba de cerámica artesanal",
+      benefit: "Pieza de diseño que se queda en la casa. Se lava y vuelve a empezar.",
+    },
+    CERA_500,
+    MECHAS_30,
+    ENVIO,
+  ],
+
   "vela-rellenable-bowl-ambar": [
     {
       item: "Bowl Ámbar de vidrio con borde ondulado",

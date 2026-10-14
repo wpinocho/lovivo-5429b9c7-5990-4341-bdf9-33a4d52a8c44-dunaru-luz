@@ -110,6 +110,9 @@ const PDP_HEADLINE: Record<string, string> = {
     "El objeto de diseño que nunca se acaba: se rellena, no se tira.",
   "vela-rellenable-cuenco-dunaru":
     "20 cm de cerámica y varias mechas encendidas a la vez. Cuando se acaba, la vuelves a llenar.",
+  // Vela Rellenable · Cuenco Alba
+  "vela-rellenable-cuenco-eclipse-copy-ppsiy":
+    "Un cuenco de cerámica que se queda en tu casa. Cuando la cera se acaba, lo vuelves a llenar.",
   "vela-rellenable-bowl-ambar":
     "Vidrio ámbar que se ilumina desde adentro. Cuando la cera se acaba, la vuelves a llenar.",
   "bowl-ambar":
@@ -146,6 +149,11 @@ const PDP_BENEFITS: Record<string, string[]> = {
   "vela-rellenable-cuenco-dunaru": [
     "Incluye: cuenco de cerámica de 20 cm + 500 g de Cera Duna + 30 mechas de algodón",
     "Admite varias mechas a la vez: una luz amplia que llena la mesa",
+    "Se rellena infinitas veces: compras una vez y sigue dando luz",
+  ],
+  "vela-rellenable-cuenco-eclipse-copy-ppsiy": [
+    "Incluye: Cuenco Alba de cerámica + 500 g de Cera Duna + 30 mechas de algodón",
+    "Cerámica artesanal: una pieza que se ve bien encendida y apagada",
     "Se rellena infinitas veces: compras una vez y sigue dando luz",
   ],
   "vela-rellenable-bowl-ambar": [

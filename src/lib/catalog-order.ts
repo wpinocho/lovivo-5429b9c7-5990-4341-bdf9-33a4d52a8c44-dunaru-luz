@@ -32,6 +32,7 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
       "kit-vaso-de-vidrio",
       "kit-vaso-de-concreto",
       "vela-rellenable-cuenco-dunaru",
+      "vela-rellenable-cuenco-eclipse-copy-ppsiy", // Vela Rellenable · Cuenco Alba
       "vela-rellenable-bowl-ambar",
       "vela-bowl-de-acero",
     ],
@@ -54,7 +55,8 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
       "vaso-extra-transparente",
       "cuenco-dunaru",
       "bowl-ambar",
-      "bowl-negro",
+      "bowl-negro", // Cuenco Eclipse
+      "cuenco-eclipse-copy-tjby7", // Cuenco Alba (solo recipiente)
       "bowl-espejo-de-acero",
       "pack-30-mechas",
     ],
