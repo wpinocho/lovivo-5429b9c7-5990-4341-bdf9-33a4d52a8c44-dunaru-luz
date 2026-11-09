@@ -50,7 +50,7 @@
 ⚠️ Copias hardcodeadas de títulos: `CATALOG_FALLBACK` (IndexUI), `FOOTER_SHOP_LINKS` (EcommerceTemplate, aún dice "Bowl de Cerámica"), `src/lib/navigation.ts`.
 
 ### CATÁLOGO — otros datos
-- CUENCO DUNARU: cerámica 20×6 cm, varias mechas. Swatches en DB todos `#101010` (mal).
+- CUENCO DUNARU: cerámica 20×6 cm, varias mechas. Swatches en DB todos `#101010` (mal) → desde 2026-11-09 las tarjetas IGNORAN swatches (ver §2), ya no importa.
 - CUENCO ECLIPSE / ALBA: las descripciones Cempasúchil de la owner dicen 14×5 cm (no confirmado para las versiones regulares). Descripción de "Vela Rellenable · Cuenco Alba" en DB dice "cerámica negra mate" (copiada de Eclipse, probablemente mal).
 - 🟠 BOWL ÁMBAR: vidrio ámbar, borde ondulado. Medidas y nº de mechas NO confirmados.
 - ESENCIA: opción `Aroma`, 6 variantes; fotos en `product.images` en el orden de `SCENTS`.
@@ -81,7 +81,7 @@
 - oliva = selección + CTA · periwinkle = navegación · terracota = acentos/errores suaves.
 - `.full-bleed` (index.css). `body { overflow-x: clip }`.
 - ⚠️ `PageTemplate` layout `default` YA agrega `max-w-7xl px-4` + `py-6`. Páginas con contenedor propio deben usar `layout="full-width"`.
-- 🃏 TARJETA DE CATÁLOGO (`ProductCardUI`): foto 4:5, título Manrope text-sm, estrellas, precio + "Agregar" (o CTA de `CHOOSE_ON_PDP`). Prop `tone="dark"` para ediciones.
+- 🃏 TARJETA DE CATÁLOGO (`ProductCardUI`): foto 4:5, título Manrope text-sm, estrellas, precio + "Agregar" (o CTA de `CHOOSE_ON_PDP`). Prop `tone="dark"` para ediciones. **Opciones SIEMPRE como chips con nombre (Marfil/Champagne/Ónix); los swatches de color del Dashboard se ignoran (2026-11-09).**
 
 ### 🗓️ EDICIONES DE TEMPORADA (HOY: `src/lib/seasonal.ts`, solo DDM → MIGRAR a `src/lib/editions.ts`, ver FASE 14)
 - Hoy: `SEASONAL_BASE_SLUG`, `SEASONAL_SLUGS`, `SEASONAL_HEADLINE`, `contentSlug`, `isSeasonalSlug`, `DDM_PATH`, `DDM_COLLECTION_HANDLE`. Todo hardcodeado a DDM en ~16 archivos.
@@ -164,6 +164,7 @@
 ---
 
 ## 4. Recent Changes
+- 2026-11-09 — 🃏 Tarjetas de catálogo: se quitaron los círculos de color (swatches). Todas las opciones se muestran como chips con nombre; arregla Cuenco Dunaru (salían 3 círculos negro/gris).
 - 2026-10-14 — 🏵️ Cempasúchil · Cuenco Eclipse y Cempasúchil · Cuenco Alba: publicados (estaban en borrador), descripción corregida, en colección DDM y en `SEASONAL_BASE_SLUG`.
 - 2026-10-14 — 🏠 "Elige tu vela": + Cuenco Alba y Bowl Ámbar (badge Nuevo); Cuenco Dunaru pierde badge. Cuenco Alba registrado en catalog-order, scents, pdp-includes, PDP_HEADLINE/BENEFITS.
 - 2026-10-13 — 🎨 Dúo de Tonos: 3 variantes por combinación + selector "Elige tus 2 tonos".
@@ -178,7 +179,6 @@
 - 2026-09-07 — 🗂️ Archivar un producto lo oculta de todo el sitio.
 - 2026-08-27 — 🐛 Precio en barra sticky (`ctaTotal`).
 - 2026-08-27 — ⭐ Reseña real r16.
-- 2026-08-27 — 🔗 Deep link de variante arreglado.
 
 ## 5. Image Inventory
 - Fotos de producto: 1122×1402 (4:5), webp. Base uploads owner: `.../message-images/58337cbc-5a9f-4862-810a-1470616566de/`.

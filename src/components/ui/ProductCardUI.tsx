@@ -172,28 +172,8 @@ export const ProductCardUI = ({ product, tone = "light" }: ProductCardUIProps) =
                     <div className="flex flex-wrap gap-1.5">
                       {opt.values.filter(val => logic.isOptionValueAvailable(opt.name, val)).map((val) => {
                         const isSelected = logic.selected[opt.name] === val
-                        const swatch = opt.name.toLowerCase() === 'color' ? opt.swatches?.[val] : undefined
-
-                        if (swatch) {
-                          return (
-                            <button
-                              key={val}
-                              type="button"
-                              onClick={() => logic.handleOptionChange(opt.name, val)}
-                              title={`${opt.name}: ${val}`}
-                              className={`h-6 w-6 rounded-full border-0 transition-colors duration-200 ${
-                                isSelected
-                                  ? 'ring-2 ring-offset-2 ring-dunaru-terracota'
-                                  : logic.selected[opt.name]
-                                    ? 'opacity-40 hover:opacity-100'
-                                    : ''
-                              }`}
-                              style={{ backgroundColor: swatch }}
-                              aria-label={`${opt.name}: ${val}`}
-                            />
-                          )
-                        }
-
+                        // Convención dunaru: los tonos SIEMPRE se muestran por nombre (Marfil, Champagne, Ónix).
+                        // Se ignoran los swatches de color del Dashboard para que todas las tarjetas se vean igual.
                         return (
                           <button
                             key={val}
