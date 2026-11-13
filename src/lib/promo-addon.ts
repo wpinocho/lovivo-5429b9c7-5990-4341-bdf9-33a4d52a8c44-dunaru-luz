@@ -18,6 +18,8 @@ export const PROMO_ADDON = {
   slug: "cera-duna-500-g-buen-fin",
   baseSlug: "perlas-originales-500-g",
   label: "Precio Buen Fin",
+  /** Nombre corto de la línea en el carrito (sin "· Precio Buen Fin"). */
+  cartTitle: "Cera Duna · 500 g + 30 mechas",
   /** Sticker flotante sobre la foto (PDP + tarjetas de catálogo) */
   badgeImage:
     "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/buen-fin-badge.webp",
@@ -115,6 +117,32 @@ export const enforcePromoAddonLimit = (
     if (qty > 0) next.push({ ...i, quantity: qty })
   }
   return { items: next, changed: "lock" }
+}
+
+/**
+ * Color sugerido para la siguiente bolsa en el carrito: el de la última vela
+ * de la promo que todavía no tiene su bolsa del mismo color.
+ */
+export const suggestPromoAddonColor = (items: CartItem[]): string | null => {
+  const lines = items.filter((i) => i.type === "product") as CartProductItem[]
+  const kits = lines.filter((i) => isPromoKitSlug(i.product?.slug))
+  if (!kits.length) return null
+  const addonByColor: Record<string, number> = {}
+  lines
+    .filter((i) => isPromoAddonSlug(i.product?.slug))
+    .forEach((i) => {
+      const c = normalize(getColorValue(i.variant) || "")
+      addonByColor[c] = (addonByColor[c] || 0) + i.quantity
+    })
+  for (const kit of [...kits].reverse()) {
+    const color = getColorValue(kit.variant)
+    if (!color) continue
+    const c = normalize(color)
+    const covered = addonByColor[c] || 0
+    if (covered < kit.quantity) return color
+    addonByColor[c] = covered - kit.quantity
+  }
+  return getColorValue(kits[kits.length - 1].variant)
 }
 
 /** Cuántos add-ons más caben en el carrito (para deshabilitar el "+"). */

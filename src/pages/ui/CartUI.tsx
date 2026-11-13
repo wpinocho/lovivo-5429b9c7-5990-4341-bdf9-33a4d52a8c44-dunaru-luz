@@ -13,6 +13,9 @@ import type { CartProductItem } from "@/contexts/CartContext"
 import type { Product, PriceRule } from "@/lib/supabase"
 import { intervalLabel, calcSubscriptionPrice } from "@/lib/subscription-utils"
 import type { VolumeDiscountResult, BogoDiscountResult } from "@/lib/price-rule-utils"
+import { CartUpsell } from "@/components/cart/CartUpsell"
+import { usePromoAddon } from "@/hooks/usePromoAddon"
+import { PROMO_ADDON, isPromoAddonSlug, isPromoLive, promoAddonRoom } from "@/lib/promo-addon"
 
 interface CartUIProps {
   logic: {
@@ -44,6 +47,9 @@ interface CartUIProps {
 }
 
 export const CartUI = ({ logic }: CartUIProps) => {
+  const promo = usePromoAddon(isPromoLive())
+  const addonRoom = promoAddonRoom(logic.items)
+
   return (
     <EcommerceTemplate pageTitle="Tu Carrito" showCart={false}>
       <div className="max-w-6xl mx-auto">
@@ -140,7 +146,14 @@ export const CartUI = ({ logic }: CartUIProps) => {
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-semibold text-lg mb-1">{item.product.title}</h3>
+                          {isPromoAddonSlug(item.product?.slug) && (
+                            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-dunaru-terracota">
+                              {PROMO_ADDON.label}
+                            </p>
+                          )}
+                          <h3 className="font-semibold text-lg mb-1">
+                            {isPromoAddonSlug(item.product?.slug) ? PROMO_ADDON.cartTitle : item.product.title}
+                          </h3>
                           {item.variant?.title && <p className="text-muted-foreground mb-1">{item.variant.title}</p>}
                           {item.type === 'product' && (item as CartProductItem).sellingPlan && (
                             <div className="flex items-center gap-1.5 mb-2">
@@ -183,7 +196,14 @@ export const CartUI = ({ logic }: CartUIProps) => {
                                     <Minus className="h-4 w-4" />
                                   </Button>
                                   <span className="font-medium text-lg px-3">{item.quantity}</span>
-                                  <Button variant="outline" size="icon" onClick={() => logic.updateQuantity(item.key, item.quantity + 1)} className="h-9 w-9">
+                                  <Button
+                                    variant="outline"
+                                    size="icon"
+                                    onClick={() => logic.updateQuantity(item.key, item.quantity + 1)}
+                                    disabled={isPromoAddonSlug(item.product?.slug) && addonRoom <= 0}
+                                    aria-label={isPromoAddonSlug(item.product?.slug) && addonRoom <= 0 ? "Una bolsa por vela" : "Aumentar cantidad"}
+                                    className="h-9 w-9"
+                                  >
                                     <Plus className="h-4 w-4" />
                                   </Button>
                                 </div>
@@ -204,6 +224,11 @@ export const CartUI = ({ logic }: CartUIProps) => {
                                             <span className="text-xs text-accent-foreground font-medium">{activeDiscount.savingsLabel}</span>
                                           </>
                                         )}
+                                        {!activeDiscount && isPromoAddonSlug(item.product?.slug) && promo?.compareAt && promo.compareAt > unitPrice && (
+                                          <div className="text-muted-foreground text-sm line-through">
+                                            {formatMoney(promo.compareAt * item.quantity, logic.currencyCode)}
+                                          </div>
+                                        )}
                                       </>
                                     )
                                   })()}
@@ -221,6 +246,7 @@ export const CartUI = ({ logic }: CartUIProps) => {
                   </CardContent>
                 </Card>
               ))}
+              <CartUpsell promo={promo} />
             </div>
 
             <div className="lg:col-span-1">

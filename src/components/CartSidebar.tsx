@@ -19,6 +19,9 @@ import { intervalLabel, calcSubscriptionPrice } from "@/lib/subscription-utils"
 import { usePriceRules } from "@/hooks/usePriceRules"
 import { calcItemUnitPrice } from "@/lib/price-rule-utils"
 import { BOGOGiftBanner } from "@/components/ui/BOGOGiftBanner"
+import { CartUpsell } from "@/components/cart/CartUpsell"
+import { usePromoAddon } from "@/hooks/usePromoAddon"
+import { PROMO_ADDON, isPromoAddonSlug, isPromoLive, promoAddonRoom } from "@/lib/promo-addon"
 
 interface CartSidebarProps {
   isOpen: boolean
@@ -32,6 +35,8 @@ export const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
   const { currencyCode, formatMoney } = useSettings()
   const { toast } = useToast()
   const { getVolumeRulesForProduct, getBogoRulesForProduct, priceRules } = usePriceRules()
+  const promo = usePromoAddon(isPromoLive())
+  const addonRoom = promoAddonRoom(state.items)
 
   // Discount state
   const [couponCode, setCouponCode] = useState("")
@@ -219,8 +224,13 @@ export const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                             )}
                           </div>
                           <div className="flex-1 min-w-0">
+                            {isPromoAddonSlug(item.product.slug) && (
+                              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-dunaru-terracota">
+                                {PROMO_ADDON.label}
+                              </p>
+                            )}
                             <h4 className="font-medium text-sm text-foreground line-clamp-2">
-                              {item.product.title}{item.variant?.title ? ` - ${item.variant.title}` : ''}
+                              {isPromoAddonSlug(item.product.slug) ? PROMO_ADDON.cartTitle : item.product.title}{item.variant?.title ? ` - ${item.variant.title}` : ''}
                             </h4>
                             {item.type === 'product' && (item as CartProductItem).sellingPlan && (
                               <div className="flex items-center gap-1 mt-0.5">
@@ -262,7 +272,14 @@ export const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                                       <Minus className="h-3 w-3" />
                                     </Button>
                                     <span className="font-medium px-2 text-sm">{item.quantity}</span>
-                                    <Button variant="outline" size="icon" onClick={() => updateQuantity(item.key, item.quantity + 1)} className="h-7 w-7">
+                                    <Button
+                                      variant="outline"
+                                      size="icon"
+                                      onClick={() => updateQuantity(item.key, item.quantity + 1)}
+                                      disabled={isPromoAddonSlug(item.product.slug) && addonRoom <= 0}
+                                      aria-label={isPromoAddonSlug(item.product.slug) && addonRoom <= 0 ? "Una bolsa por vela" : "Aumentar cantidad"}
+                                      className="h-7 w-7"
+                                    >
                                       <Plus className="h-3 w-3" />
                                     </Button>
                                   </div>
@@ -287,6 +304,11 @@ export const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                                               <span className="text-[10px] text-accent-foreground font-medium">{activeDiscount.savingsLabel}</span>
                                             </>
                                           )}
+                                          {!activeDiscount && isPromoAddonSlug(item.product.slug) && promo?.compareAt && promo.compareAt > unitPrice && (
+                                            <div className="text-muted-foreground text-xs line-through">
+                                              {formatMoney(promo.compareAt * item.quantity)}
+                                            </div>
+                                          )}
                                         </>
                                       )
                                     })()}
@@ -303,6 +325,7 @@ export const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                     </CardContent>
                   </Card>
                 ))}
+                <CartUpsell promo={promo} />
               </div>
 
               <div className="border-t p-6">
