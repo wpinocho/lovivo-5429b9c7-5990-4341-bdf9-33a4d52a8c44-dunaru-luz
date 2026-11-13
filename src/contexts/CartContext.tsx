@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react'
 import type { Product, ProductVariant, Bundle, SellingPlan } from '@/lib/supabase'
 import { calcSubscriptionPrice } from '@/lib/subscription-utils'
+import {
+  enforcePromoAddonLimit,
+  PROMO_ENDED_MESSAGE,
+  PROMO_LOCK_MESSAGE,
+} from '@/lib/promo-addon'
+import { toast } from '@/hooks/use-toast'
 
 // --- Cart Item Types (Union) ---
 
@@ -141,6 +147,33 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
   }
 }
 
+/**
+ * CANDADO DE PROMO: después de CUALQUIER cambio del carrito, el add-on de
+ * temporada (p. ej. Cera Duna a precio Buen Fin) nunca supera al número de
+ * velas rellenables. Cubre PDP, carrito, links de carrito y localStorage viejo.
+ */
+let lastPromoNoticeAt = 0
+const notifyPromo = (kind: 'lock' | 'ended') => {
+  const now = Date.now()
+  if (now - lastPromoNoticeAt < 1500) return
+  lastPromoNoticeAt = now
+  setTimeout(() => {
+    toast({ description: kind === 'ended' ? PROMO_ENDED_MESSAGE : PROMO_LOCK_MESSAGE })
+  }, 0)
+}
+
+const applyPromoLock = (state: CartState): CartState => {
+  const { items, changed } = enforcePromoAddonLimit(state.items)
+  if (!changed) return state
+  notifyPromo(changed)
+  return { items, total: calcTotal(items) }
+}
+
+const guardedCartReducer = (state: CartState, action: CartAction): CartState => {
+  const next = cartReducer(state, action)
+  return next === state ? next : applyPromoLock(next)
+}
+
 // --- Context ---
 
 interface CartContextType {
@@ -164,7 +197,7 @@ const initializeCartFromStorage = (): CartState => {
       const parsed = JSON.parse(stored)
       // Normalize legacy items
       const items = (parsed.items || []).map(normalizeItem)
-      return { items, total: calcTotal(items) }
+      return applyPromoLock({ items, total: calcTotal(items) })
     }
   } catch (error) {
     console.error('Error loading cart from localStorage:', error)
@@ -173,7 +206,7 @@ const initializeCartFromStorage = (): CartState => {
 }
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-  const [state, dispatch] = useReducer(cartReducer, initializeCartFromStorage())
+  const [state, dispatch] = useReducer(guardedCartReducer, undefined, initializeCartFromStorage)
 
   useEffect(() => {
     try {

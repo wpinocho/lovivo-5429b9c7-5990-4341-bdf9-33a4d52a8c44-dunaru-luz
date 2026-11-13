@@ -71,6 +71,8 @@ export const CATALOG_GROUPS: CatalogGroup[] = [
  */
 export const HIDDEN_FROM_CATALOG_SLUGS: string[] = [
   "esencia-para-vela-cempasuchil-10-ml",
+  // Add-on de promo (Buen Fin): solo se ofrece dentro de la PDP de los kits
+  "cera-duna-500-g-buen-fin",
 ]
 
 /**

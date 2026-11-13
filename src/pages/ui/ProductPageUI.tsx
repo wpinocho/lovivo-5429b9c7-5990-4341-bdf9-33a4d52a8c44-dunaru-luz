@@ -58,6 +58,12 @@ import {
   SCENTS,
 } from "@/lib/scents"
 import { usePriceRules } from "@/hooks/usePriceRules"
+import {
+  PromoAddonSelector,
+  type PromoAddonSelection,
+} from "@/components/PromoAddonSelector"
+import { usePromoAddon } from "@/hooks/usePromoAddon"
+import { getColorValue, isPromoKitSlug } from "@/lib/promo-addon"
 import { contentSlug, isSeasonalSlug, SEASONAL_HEADLINE } from "@/lib/seasonal"
 import { LimitedEditionNotice, LimitedEditionTag } from "@/components/LimitedEditionBadge"
 import { SeasonalRibbon, useSeasonalTheme } from "@/components/SeasonalRibbon"
@@ -240,6 +246,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     null
   )
   const [isBuyingNowWithScent, setIsBuyingNowWithScent] = useState(false)
+  // Oferta de temporada (Buen Fin): bolsa extra a precio especial, solo en kits
+  const [addonSelection, setAddonSelection] =
+    useState<PromoAddonSelection | null>(null)
+  const isPromoKit = isPromoKitSlug(logic.product?.slug)
+  const promoAddon = usePromoAddon(isPromoKit)
+  const activeAddon = isPromoKit && promoAddon ? addonSelection : null
   const { addItem, clearCart } = useCart()
   const navigate = useNavigate()
   const { toast } = useToast()
@@ -261,6 +273,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     if (logic.canAddToCart && scentSelection) {
       addItem(scentSelection.product, scentSelection.variant)
     }
+    // El add-on va DESPUÉS del kit para que el candado del carrito ya lo cuente
+    if (logic.canAddToCart && activeAddon) {
+      addItem(activeAddon.product, activeAddon.variant)
+    }
   }
 
   /**
@@ -272,7 +288,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
    * de la esencia. Nunca pasa por el carrito.
    */
   const handleBuyNowWithScent = async () => {
-    if (!scentSelection) {
+    if (!scentSelection && !activeAddon) {
       logic.handleBuyNow()
       return
     }
@@ -306,13 +322,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           sellingPlan,
           quantity,
         },
-        {
-          key: `${scentSelection.product.id}:${scentSelection.variant?.id || ""}:`,
-          type: "product",
-          product: scentSelection.product,
-          variant: scentSelection.variant,
-          quantity: 1,
-        },
+        ...addOnExtraItems,
       ]
 
       const order = await createCheckoutFromCart(
@@ -335,7 +345,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
       clearCart()
 
       const totalValue =
-        logic.currentPrice * quantity + scentSelection.price
+        logic.currentPrice * quantity +
+        (scentSelection?.price || 0) +
+        (activeAddon?.price || 0)
 
       try {
         sessionStorage.setItem(
@@ -357,17 +369,21 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             category: "product",
             variant: variantToAdd,
           }),
-          tracking.createTrackingProduct({
-            id: scentSelection.product.id,
-            title: scentSelection.product.title,
-            price: scentSelection.price,
-            category: "product",
-            variant: scentSelection.variant,
-          }),
+          ...[scentSelection, activeAddon]
+            .filter((s): s is NonNullable<typeof s> => !!s)
+            .map((s) =>
+              tracking.createTrackingProduct({
+                id: s.product.id,
+                title: s.product.title,
+                price: s.price,
+                category: "product",
+                variant: s.variant,
+              })
+            ),
         ],
         value: totalValue,
         currency: tracking.getCurrencyFromSettings(checkoutCurrency),
-        num_items: quantity + 1,
+        num_items: quantity + addOnExtraItems.length,
       })
 
       navigate("/pagar")
@@ -388,18 +404,19 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
    * express (Apple Pay / Google Pay) para que la orden del wallet incluya
    * producto principal + aroma, igual que "Comprar ahora".
    */
-  const scentExtraItems = useMemo<CartItem[]>(() => {
-    if (!scentSelection) return []
-    return [
-      {
-        key: `${scentSelection.product.id}:${scentSelection.variant?.id || ""}:`,
-        type: "product",
-        product: scentSelection.product,
-        variant: scentSelection.variant,
-        quantity: 1,
-      },
-    ]
-  }, [scentSelection])
+  const addOnExtraItems = useMemo<CartItem[]>(
+    () =>
+      [scentSelection, activeAddon]
+        .filter((s): s is NonNullable<typeof s> => !!s)
+        .map((s) => ({
+          key: `${s.product.id}:${s.variant?.id || ""}:`,
+          type: "product" as const,
+          product: s.product,
+          variant: s.variant,
+          quantity: 1,
+        })),
+    [scentSelection, activeAddon]
+  )
 
   /**
    * Galería con la foto del color al frente.
@@ -809,7 +826,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
       ctaQuantity,
       getVolumeRulesForProduct(logic.product.id)
     )?.discountedPrice ?? (logic.currentPrice || 0)
-  const ctaTotal = ctaUnitPrice * ctaQuantity + (scentSelection?.price || 0)
+  const ctaTotal =
+    ctaUnitPrice * ctaQuantity +
+    (scentSelection?.price || 0) +
+    (activeAddon?.price || 0)
 
   /**
    * Micro-nota del precio en la barra sticky: explica por qué el total no es
@@ -819,6 +839,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const stickyPriceNote = [
     ctaQuantity > 1 ? `${ctaQuantity} uds` : null,
     scentSelection ? `+ ${scentSelection.scent.name}` : null,
+    activeAddon ? "+ 500 g extra" : null,
   ]
     .filter(Boolean)
     .join(" · ")
@@ -1429,6 +1450,17 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
               </div>
             )}
 
+            {/* Oferta de temporada (Buen Fin) — solo en kits */}
+            {logic.inStock && isPromoKit && promoAddon && (
+              <PromoAddonSelector
+                product={promoAddon.product}
+                compareAt={promoAddon.compareAt}
+                kitColor={getColorValue(logic.matchingVariant)}
+                formatMoney={logic.formatMoney}
+                onSelectionChange={setAddonSelection}
+              />
+            )}
+
             {/* Aroma opcional — solo en productos con cera perlada */}
             {logic.inStock && supportsScentAddon(logic.product?.slug) && (
               <ProductScentSelector
@@ -1504,7 +1536,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                       sellingPlan={logic.selectedPlan}
                       quantity={logic.quantity}
                       unitPrice={logic.currentPrice}
-                      extraItems={scentExtraItems}
+                      extraItems={addOnExtraItems}
                       onAvailabilityChange={setExpressAvailable}
                     />
                     {expressAvailable && (
@@ -1556,6 +1588,11 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     : "Agregar al carrito"
                   : "Agotado"}
               </Button>
+              {activeAddon && logic.inStock && (
+                <p className="text-center text-xs text-muted-foreground">
+                  Incluye 500 g + 30 mechas extra a precio Buen Fin
+                </p>
+              )}
 
               {!logic.inStock && (
                 <Badge variant="secondary" className="w-fit">
