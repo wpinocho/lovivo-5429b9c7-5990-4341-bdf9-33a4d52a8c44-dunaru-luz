@@ -66,6 +66,7 @@ import { usePromoAddon } from "@/hooks/usePromoAddon"
 import { getColorValue, isPromoKitSlug } from "@/lib/promo-addon"
 import { contentSlug, isSeasonalSlug, SEASONAL_HEADLINE } from "@/lib/seasonal"
 import { LimitedEditionNotice, LimitedEditionTag } from "@/components/LimitedEditionBadge"
+import { PromoStickerBadge } from "@/components/PromoStickerBadge"
 import { SeasonalRibbon, useSeasonalTheme } from "@/components/SeasonalRibbon"
 import { DDM_PATH } from "@/lib/seasonal"
 import { DdmInspirationGallery } from "@/components/DdmInspirationGallery"
@@ -990,6 +991,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     -{discountPct}%
                   </Badge>
                 )}
+                <PromoStickerBadge slug={logic.product.slug} />
               </div>
 
               {/* Horizontal thumbnails below main image (scrollable row) */}
@@ -1026,6 +1028,12 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             {/* Mobile: carousel — en productos con foto por variante ES el selector */}
             {mobileSlides.length > 1 ? (
               <div className="md:hidden">
+                <div className="relative">
+                {/* Sticker fijo: no se mueve al deslizar las fotos */}
+                <PromoStickerBadge
+                  slug={logic.product.slug}
+                  className="right-[calc(10%+0.5rem)]"
+                />
                 <Carousel
                   className="w-full"
                   opts={{ align: "start" }}
@@ -1056,6 +1064,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     ))}
                   </CarouselContent>
                 </Carousel>
+                </div>
 
                 {/* Puntos de posición */}
                 <div className="flex items-center gap-1.5 mt-2.5">
@@ -1134,6 +1143,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                     -{discountPct}%
                   </Badge>
                 )}
+                <PromoStickerBadge slug={logic.product.slug} />
               </div>
             )}
           </div>

@@ -9,6 +9,7 @@ import { getChooseOnPdp } from "@/lib/catalog-order"
 import { getVariantDisplayImage } from "@/lib/variant-image"
 import { isSeasonalSlug } from "@/lib/seasonal"
 import { cn } from "@/lib/utils"
+import { PromoStickerBadge } from "@/components/PromoStickerBadge"
 import { Star } from "lucide-react"
 
 /**
@@ -121,6 +122,7 @@ export const ProductCardUI = ({ product, tone = "light" }: ProductCardUIProps) =
                     {badges.slice(0, 2)}
                   </div>
                 )}
+                <PromoStickerBadge slug={logic.product.slug} size="card" />
               </div>
 
               <h3

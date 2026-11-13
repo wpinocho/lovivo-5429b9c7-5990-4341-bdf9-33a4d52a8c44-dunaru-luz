@@ -18,6 +18,10 @@ export const PROMO_ADDON = {
   slug: "cera-duna-500-g-buen-fin",
   baseSlug: "perlas-originales-500-g",
   label: "Precio Buen Fin",
+  /** Sticker flotante sobre la foto (PDP + tarjetas de catálogo) */
+  badgeImage:
+    "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/buen-fin-badge.webp",
+  badgeAlt: "Buen Fin: 50% off en tu 2da recarga, del 13 al 17 de noviembre",
   /** 17 nov 2026 23:59 hora CDMX */
   endsAt: "2026-11-18T06:00:00Z",
   kitSlugs: [

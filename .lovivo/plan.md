@@ -1,6 +1,6 @@
 ## 1. Brand & Context
 - Brand: **dunaru** (dunaru.mx). Velas **rellenables** de **Cera Duna**: gránulos vegetales finos tipo arena + mechas de algodón.
-- ⚠️ VOCABULARIO: **"rellenable"** (NO "recargable"). ⚠️ **PROHIBIDO el guion largo (—) en copy visible.**
+- ⚠️ VOCABULARIO: **"rellenable"** (NO "recargable"). ⚠️ **PROHIBIDO el guion largo (—) en copy visible.** (Excepción: el sticker Buen Fin de la owner dice "2DA RECARGA", es su arte.)
 - **Cera Duna** = nombre propietario de la cera (vegetal, en gránulos, sin parafina).
 - **Cera 100% vegetal, biodegradable y ecológica** (claim aprobado). ⛔ NO usar porcentajes de soya/coco.
 - ⚠️ 2026-08-27: eyebrow del hero dice **"Cera perlada 100% natural"** (pedido explícito de la owner).
@@ -14,7 +14,7 @@
 - ⚠️ `kit-vaso-de-concreto` ahora se llama **Cuenco Eclipse** (cerámica negra mate); slug no se cambia. Producto ancla de Meta Ads = `kit-vaso-de-vidrio`.
 - ⚠️ La owner repriza, crea, DUPLICA y ARCHIVA desde el Dashboard. **NUNCA hardcodear precios.** Archivar = desaparecer (§2). Al duplicar, el slug queda `...-copy-xxxxx` y el agente NO puede cambiar slugs.
 - 🗓️ **EDICIONES DE TEMPORADA = sistema anual reciclable** (decidido 2026-11-02). DDM regresa en 2027. Siguiente: **Navidad**. Archivar, nunca borrar; URL perenne sin año. ⛔ NO fecha límite de pedido en la web (excepción: promos con fecha real como Buen Fin).
-- 🛍️ **PROMOS DE TEMPORADA (Buen Fin, Hot Sale…)**: mecánica = **add-on con descuento en PDP de kits** (`src/lib/promo-addon.ts`, reusable). Producto APARTE, oculto, solo en carrito junto a un kit. La owner NO quiere copy "ya trae el mismo color": preselección + selector visible.
+- 🛍️ **PROMOS DE TEMPORADA (Buen Fin, Hot Sale…)**: mecánica = **add-on con descuento en PDP de kits** (`src/lib/promo-addon.ts`, reusable). Producto APARTE, oculto, solo en carrito junto a un kit. La owner NO quiere copy "ya trae el mismo color": preselección + selector visible. Sticker de la promo flotando arriba a la derecha de la foto (PDP + tarjetas).
 
 ### 🏷️ SISTEMA DE NOMBRES — `[Qué es] · [Formato]`
 | Slug | Título | Precio | Compare |
@@ -94,7 +94,8 @@
 - DEEP LINK `?variante=` en ProductPageUI (no simplificar).
 - 🧩 ADD-ONS PDP (ProductPageUI): `scentSelection` (aroma) + `addonSelection`/`activeAddon` (promo). `addOnExtraItems` = líneas extra (aroma + promo) usadas en Comprar ahora, express checkout y tracking. `handleAddToCartWithAddOns` agrega kit → aroma → promo (en ese orden, para que el candado cuente el kit). `ctaTotal` y `stickyPriceNote` suman ambos.
 - 🔒 CANDADO PROMO: `CartContext` usa `guardedCartReducer` → `enforcePromoAddonLimit` (promo-addon.ts) tras CADA acción + al cargar localStorage. Recorta add-on a nº de kits; si `!isPromoLive()` lo quita. Toast con dedup 1.5 s.
-- 🛍️ PROMO ADD-ON: `src/lib/promo-addon.ts` (config `PROMO_ADDON`), `src/hooks/usePromoAddon.ts`, `src/components/PromoAddonSelector.tsx` (tarjeta checkbox + chips de color; sigue color del kit hasta que la clienta toca un chip). `/productos/cera-duna-500-g-buen-fin` redirige a Cera Duna 500 g (`src/pages/Product.tsx`).
+- 🛍️ PROMO ADD-ON: `src/lib/promo-addon.ts` (config `PROMO_ADDON`, incl. `badgeImage`/`badgeAlt`), `src/hooks/usePromoAddon.ts`, `src/components/PromoAddonSelector.tsx` (tarjeta checkbox + chips de color). `/productos/cera-duna-500-g-buen-fin` redirige a Cera Duna 500 g (`src/pages/Product.tsx`).
+- 🏷️ STICKER PROMO: `src/components/PromoStickerBadge.tsx` (`slug`, `size="pdp"|"card"`). Solo kits de `PROMO_ADDON.kitSlugs` + `isPromoLive()`. Usado en ProductPageUI (galería desktop, carrusel móvil FUERA del carrusel para que no se mueva, imagen única móvil) y ProductCardUI (arriba derecha). Imagen sin fondo: `.../product-images/5429b9c7-.../buen-fin-badge.webp` (400×373). Para otra promo: cambiar `badgeImage`.
 - CHECKLIST PDP vela nueva: PDP_HEADLINE + PDP_BENEFITS, pdp-includes, SCENT_ENABLED_SLUGS, catalog-order, SHOP_CARDS + CATALOG_FALLBACK, [opc] PDP_CONTENT, [si hay promo] `PROMO_ADDON.kitSlugs`.
 - Orden PDP (ProductStorySections): garantías → 4 pasos → Reseñas → bloques → comparativa → FAQ → cierre.
 - 🏠 HOME: hero → beneficios → franja edición → 4 pasos → Elige tu vela → Ritual → Reviews → Scents → Tonos → CasaReal → BrandStory → CompareTable → FAQ → newsletter.
@@ -104,13 +105,13 @@
 ## 3. Active Plan
 
 ### 🛍️ FASE 15: BUEN FIN ADD-ON (500 g + 30 mechas a $249) — CORE CONSTRUIDO 2026-11-13 · promo vive hasta 17 nov 23:59 CDMX
-✅ Hecho: producto add-on creado (activo, oculto), config + hook + tarjeta en PDP de los 5 kits (arriba del aroma, desmarcada, chips de color con preselección), total en CTA + sticky, línea "Incluye 500 g + 30 mechas extra a precio Buen Fin", agregar al carrito / Comprar ahora / express con add-on, candado en CartContext, oculto del catálogo, redirect de su PDP.
+✅ Hecho: producto add-on creado (activo, oculto), config + hook + tarjeta en PDP de los 5 kits, total en CTA + sticky, agregar al carrito / Comprar ahora / express con add-on, candado en CartContext, oculto del catálogo, redirect de su PDP. ✅ 2026-11-13 sticker Buen Fin (arte de la owner) flotando arriba derecha en PDP y tarjetas de catálogo de los 5 kits.
 ⏳ Pendiente (siguiente sesión, en orden):
-- 15.a QA en preview: 5 kits muestran tarjeta; Cera Duna/recipientes no; chips cambian miniatura; total correcto; carrito: quitar kit → add-on se quita con toast; subir add-on > kits → se recorta. Móvil 375 px. `npx tsc --noEmit`.
-- 15.b Carrito (`CartSidebar.tsx` l.~191/265, `CartUI.tsx` l.~111/186): etiqueta "Precio Buen Fin" + tachado $499 en la línea del add-on, y `disabled` en "+" cuando `promoAddonRoom(items) <= 0` (helper ya existe). Hoy el candado recorta y avisa, pero el "+" no se deshabilita.
+- 15.a QA en preview: 5 kits muestran tarjeta + sticker; Cera Duna/recipientes no; chips cambian miniatura; total correcto; carrito: quitar kit → add-on se quita con toast; subir add-on > kits → se recorta. Móvil 375 px: sticker no tapa producto, posición en carrusel (right calc(10%+0.5rem)). `npx tsc --noEmit`.
+- 15.b Carrito (`CartSidebar.tsx` l.~191/265, `CartUI.tsx` l.~111/186): etiqueta "Precio Buen Fin" + tachado $499 en la línea del add-on, y `disabled` en "+" cuando `promoAddonRoom(items) <= 0`.
 - 15.c Excluir slug del sitemap (`scripts/generate-sitemap.ts`), búsqueda y upsells del carrito si no usan `filterCatalogVisible`.
-- 15.d Visibilidad: top bar "Buen Fin: 500 g extra a mitad de precio con tu vela" + badge "Buen Fin" en tarjetas de los 5 kits, condicionado a `isPromoLive()`.
-- 15.e Cierre 18 nov: owner ARCHIVA el producto add-on (la fecha ya lo apaga sola).
+- 15.d Top bar "Buen Fin: 500 g extra a mitad de precio con tu vela" condicionado a `isPromoLive()`. (Badge en tarjetas YA cubierto por el sticker.) [opc] sticker en tarjetas de "Elige tu vela" en home si la owner lo pide.
+- 15.e Cierre 18 nov: owner ARCHIVA el producto add-on (la fecha ya lo apaga sola, incluido el sticker).
 
 ### FASE 14: SISTEMA DE EDICIONES RECICLABLES (DDM → Navidad) 📋 planeado 2026-11-02, NO construido
 - 14.1 `src/lib/editions.ts` (reemplaza `seasonal.ts`) con `EDITIONS[]`, helpers y `useActiveEdition()`.
@@ -124,6 +125,7 @@
 ---
 
 ## 4. Recent Changes
+- 2026-11-13 — 🏷️ Sticker Buen Fin flotante (arriba derecha) en PDP y tarjetas de catálogo de los 5 kits (`PromoStickerBadge`). Fondo removido.
 - 2026-11-13 — 🛍️ FASE 15 core construido: add-on Buen Fin en PDP de 5 kits, candado en carrito, add-on oculto + redirect. Producto `cera-duna-500-g-buen-fin` creado.
 - 2026-11-13 — ✅ FASE 15 aprobada por owner (5 kits, bolsa con 30 mechas, color preseleccionado + selector).
 - 2026-11-13 — 📋 Plan FASE 15 guardado.
@@ -138,10 +140,10 @@
 - 2026-10-09 — 🎠 Home: sección DDM en carrusel.
 - 2026-10-09 — 🟠 BOWL ÁMBAR: 3 productos.
 - 2026-10-09 — 🏵️ EDICIÓN LIMITADA CEMPASÚCHIL CONSTRUIDA.
-- 2026-09-26 — 📡 Fix dedup Meta Pixel + CAPI.
 
 ## 5. Image Inventory
 - Fotos de producto: 1122×1402 (4:5), webp. Base uploads owner: `.../message-images/58337cbc-5a9f-4862-810a-1470616566de/`.
+- 🛍️ Sticker Buen Fin (sin fondo, 400×373): `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/5429b9c7-5990-4341-bdf9-33a4d52a8c44/buen-fin-badge.webp`. Original owner: `1794591349171-qik2qb5jzk.webp`. DEPRECAR tras 17 nov.
 - Portadas home fallback: Cuenco Eclipse `4miuldwd4fr` · Cuenco Alba `cjqxfk2uuyh` · Bowl Ámbar `ki2tpr6i8vh`.
 - Tonos / bolsa Cera Duna 500 g: Marfil `m4gndhjxsj` · Champagne `siffm8eo71e` · Ónix `smwszrq34a` (también son las 3 fotos del add-on Buen Fin, en ese orden).
 - 🏵️ Banner DDM `1791586723101-uqttcs5raf.webp`. Aroma Cempasúchil `1791590350527-o3gpv79gzvi.webp`. Bowl Ámbar ref `1791588734332-bzvkrpcdmwe.webp`.
@@ -153,8 +155,9 @@
 - 🔴 FALTAN: fotos reales cempasúchil · packshots esencia · empaque nuevo · todo Navidad.
 
 ## 6. Known Issues
-- 2026-11-13 — 🟠 `create-product`/`update-product` NO guardan `compare_at_price` en el add-on (create con compare en variantes lo metió como opción). Workaround: `usePromoAddon` usa precio de Cera Duna 500 g como "antes". Si la owner pone compare en Dashboard, se usa ese.
+- 2026-11-13 — 🟠 `create-product`/`update-product` NO guardan `compare_at_price` en el add-on. Workaround: `usePromoAddon` usa precio de Cera Duna 500 g como "antes". Si la owner pone compare en Dashboard, se usa ese.
 - 2026-11-13 — 🟡 Stepper "+" del carrito no se deshabilita para el add-on (15.b); el candado recorta y avisa con toast.
+- 2026-11-13 — 🟡 Sticker Buen Fin: posición en carrusel móvil calculada (slide 90%), validar visualmente en QA.
 - 2026-11-02 — 🟠 PDP de producto de temporada archivado muestra "Producto no encontrado". Fix en 14.7.
 - 2026-11-02 — 🟡 `/categorias/dia-de-muertos` sin productos = "Muy pronto" genérico. Fix en 14.5.
 - 2026-10-14 — 🟠 Duplicar en Dashboard copia los variant IDs. Para Navidad: crear productos nuevos, no duplicar.
@@ -166,8 +169,8 @@
 - 2026-08-21 — 🔴 `update-product` NO soporta imágenes por variante ni cambio de slug.
 
 ## 7. Pending / Future Sessions
-- [URGENTE HOY] FASE 15: QA (15.a), carrito label/stepper (15.b), sitemap (15.c), top bar + badge (15.d).
-- [2026-11-18] Owner: archivar producto add-on Buen Fin.
+- [URGENTE HOY] FASE 15: QA (15.a), carrito label/stepper (15.b), sitemap (15.c), top bar (15.d).
+- [2026-11-18] Owner: archivar producto add-on Buen Fin. Sticker se apaga solo por fecha.
 - [URGENTE] Craft: FASE 14 ANTES de lanzar Navidad. Owner: mandar datos de Navidad → 14.8.
 - [ALTA] QA Dúo (12.a/12.b). Owner: variantes + descripción Cuenco Alba. Menú/footer Eclipse/Alba (13.d con 14.4).
 - [ALTA] Bowl Ámbar medidas/bloques. Tests tracking + tsc.
