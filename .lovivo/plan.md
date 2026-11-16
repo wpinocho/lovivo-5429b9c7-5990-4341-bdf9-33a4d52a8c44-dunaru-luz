@@ -13,7 +13,7 @@
 - STORE_ID `5429b9c7-5990-4341-bdf9-33a4d52a8c44`. Rutas: `/productos/:slug`, `/paquete/:slug`, `/carrito`, `/pagar`, `/categorias/:handle`, `/como-funciona`, **`/dia-de-muertos`** (alias → `/categorias/dia-de-muertos`).
 - ⚠️ `kit-vaso-de-concreto` ahora se llama **Cuenco Eclipse** (cerámica negra mate); slug no se cambia. Producto ancla de Meta Ads = `kit-vaso-de-vidrio`.
 - ⚠️ La owner repriza, crea, DUPLICA y ARCHIVA desde el Dashboard. **NUNCA hardcodear precios.** Archivar = desaparecer (§2). Al duplicar, el slug queda `...-copy-xxxxx` y el agente NO puede cambiar slugs.
-- 🗓️ **EDICIONES DE TEMPORADA = sistema anual reciclable** (decidido 2026-11-02). DDM regresa en 2027. Siguiente: **Navidad**. Archivar, nunca borrar; URL perenne sin año. ⛔ NO fecha límite de pedido en la web (excepción: promos con fecha real como Buen Fin).
+- 🗓️ **EDICIONES DE TEMPORADA = sistema anual reciclable** (decidido 2026-11-02). DDM regresa en 2027. Siguiente: **Navidad / "Nieve"** (owner arrancando 2026-11-16). Archivar, nunca borrar; URL perenne sin año. ⛔ NO fecha límite de pedido en la web (excepción: promos con fecha real como Buen Fin).
 - 🛍️ **PROMOS DE TEMPORADA (Buen Fin, Hot Sale…)**: mecánica = **add-on con descuento en PDP de kits + en carrito** (`src/lib/promo-addon.ts`, reusable). Producto APARTE, oculto, solo en carrito junto a un kit. La owner NO quiere copy "ya trae el mismo color": preselección + selector visible. Sticker de la promo flotando arriba a la derecha de la foto (PDP + tarjetas).
 - 🛒 **UPSELL EN CARRITO (construido 2026-11-13)**: UNA sugerencia a la vez, en secuencia: 1º promo de temporada (si aplica) → 2º aroma. El aroma es permanente. Medir antes de agregar más.
 
@@ -87,6 +87,7 @@
 - 🃏 `ProductCardUI`: foto 4:5, chips con nombre (swatches ignorados), `tone="dark"` para ediciones.
 
 ### 🗓️ EDICIONES (HOY `src/lib/seasonal.ts`, solo DDM → MIGRAR a `src/lib/editions.ts`, FASE 14)
+- Mapa de lo hardcodeado a DDM (auditado 2026-11-16): `seasonal.ts` (SEASONAL_BASE_SLUG, SEASONAL_SLUGS, DDM_PATH, SEASONAL_HEADLINE, contentSlug), `DiaDeMuertosSection` (home), `DdmCollectionHero` + `DdmInspirationGallery` (landing), `Collection.tsx` (DDM_COLLECTION_HANDLE), `SeasonalRibbon` + `useSeasonalTheme` (.theme-ddm en PDP), `ProductCardUI` (sello cempasúchil), `LimitedEditionBadge`, `MainNav` (link si hay slugs activos), `navigation.ts` (link "Día de Muertos"), `catalog-order.ts` (grupo), `scents.ts` (SEASONAL_SCENTS), `App.tsx` (alias /dia-de-muertos), `index.css` (--dunaru-cempasuchil, .theme-ddm).
 - Archivar oculta: sección home, link menú, grupo `/categorias/todos`. Redirect de PDP archivada NO implementado.
 - CHECKLIST CAMBIO DE EDICIÓN — Owner: archivar (no borrar), no archivar colección, crear nuevos en Borrador, publicar cuando el agente confirme. Agente: entrada en `EDITIONS`, verificar home/menú/landing/PDP/carrito, sitemap+SEO, actualizar §1 y §7.
 
@@ -106,6 +107,13 @@
 
 ## 3. Active Plan
 
+### ❄️ FASE 17: EDICIÓN NAVIDAD / "NIEVE" — 📋 en definición 2026-11-16 (depende de FASE 14)
+Owner quiere replicar EXACTO el formato DDM (banner + nombre grande + productos fondo oscuro con sello + galería inspiración + sección home).
+- Propuesta del agente (esperando confirmación): eyebrow "EDICIÓN LIMITADA · NAVIDAD", título grande **NIEVE**, URL **`/categorias/navidad`** (+ alias `/navidad`) por SEO (búsqueda "velas navidad" >> "nieve"). Ángulo REGALO. Galería: "Ideas para regalar / tu mesa de Navidad".
+- Instrucciones dadas a la owner: crear productos NUEVOS (no duplicar), título `Vela Rellenable Nieve · [Recipiente]` / `Cera Duna Nieve · 500 g`, SIN variantes de color (el color es la edición), dejar en BORRADOR y avisar; fotos 4:5.
+- Info pedida a la owner: nombre final + URL, lista de productos y su producto base (para `contentSlug`), color de la cera (hex/nombre), ¿aroma de temporada? (pino/canela/vainilla → producto oculto como esencia cempasúchil), foto banner + 3–6 fotos inspiración.
+- Pasos agente: (1) FASE 14 generalizar ediciones; (2) crear colección `navidad` si no existe; (3) entrada NIEVE en `EDITIONS` con slugs reales (via list-data), headlines por PDP, acento de color (`--edition-accent`, ej. plata/hielo, evaluar contraste en fondo ónix); (4) hero + galería + sección home + menú; (5) sitemap; (6) QA; (7) avisar a owner para publicar.
+
 ### 🛒 FASE 16: UPSELL EN CARRITO (Buen Fin → Aroma) — ✅ CONSTRUIDO 2026-11-13 (incluye 15.b)
 ⏳ Pendiente 16.5 QA en preview: Eclipse Marfil en carrito → tarjeta Buen Fin con Marfil → cambiar a Ónix → Agregar → línea "Precio Buen Fin" Ónix $249 tachado $499, "+" deshabilitado → tarjeta pasa a Aroma → elegir aroma → Agregar → sin tarjeta. 2 kits + 1 bolsa → sigue Buen Fin. Solo Cera Duna 500 g → Aroma. Solo recipiente → nada. Móvil 375 px. `npx tsc --noEmit`.
 NO se hace: carrusel, sugerencias aleatorias, popups.
@@ -117,9 +125,9 @@ NO se hace: carrusel, sugerencias aleatorias, popups.
 - 15.d Top bar "Buen Fin: 500 g extra a mitad de precio con tu vela" condicionado a `isPromoLive()`.
 - 15.e Cierre 18 nov: owner ARCHIVA el producto add-on (la fecha ya apaga todo sola).
 
-### FASE 14: SISTEMA DE EDICIONES RECICLABLES (DDM → Navidad) 📋 planeado 2026-11-02, NO construido
-- 14.1 `src/lib/editions.ts` (reemplaza `seasonal.ts`) con `EDITIONS[]`, helpers y `useActiveEdition()`.
-- 14.2 `--edition-accent` / `.theme-edition-ddm`. 14.3 componentes genéricos. 14.4 menú dinámico (`MainNav.useLiveNav`, móvil, footer). 14.5 landing fuera de temporada ("regresa en…" + newsletter). 14.6 aliases de rutas. 14.7 PDP archivada → `<Navigate>` al base. 14.8 Navidad (ángulo REGALO) cuando la owner mande datos. 14.9 QA. 14.10 sitemap.
+### FASE 14: SISTEMA DE EDICIONES RECICLABLES (DDM → Navidad) 📋 planeado 2026-11-02, NO construido · AHORA BLOQUEA FASE 17
+- 14.1 `src/lib/editions.ts` (reemplaza `seasonal.ts`) con `EDITIONS[]` (id, collectionHandle, path, eyebrow, title, tagline, accent token, heroImage, inspiration[], baseSlug map, headlines, seasonalScents), helpers (`isEditionSlug`, `contentSlug`, `editionForSlug`) y `useActiveEdition()` (edición con productos activos).
+- 14.2 `--edition-accent` / `.theme-edition-ddm` / `.theme-edition-nieve`. 14.3 componentes genéricos (`EditionCollectionHero`, `EditionInspirationGallery`, `EditionHomeSection`, `EditionRibbon`, sello en ProductCardUI). 14.4 menú dinámico (`MainNav.useLiveNav`, móvil, footer). 14.5 landing fuera de temporada ("regresa en…" + newsletter). 14.6 aliases de rutas. 14.7 PDP archivada → `<Navigate>` al base. 14.8 Navidad = FASE 17. 14.9 QA. 14.10 sitemap.
 
 ### FASE 13: CUENCO ALBA ✅ pendientes 13.b variantes (owner) · 13.c descripción (owner) · 13.d menú/footer (con 14.4)
 ### FASE 12: DÚO ✅ falta QA (12.a) + $999 compare (12.b)
@@ -129,6 +137,7 @@ NO se hace: carrusel, sugerencias aleatorias, popups.
 ---
 
 ## 4. Recent Changes
+- 2026-11-16 — 📋 FASE 17 (Navidad/Nieve) en definición: auditado lo hardcodeado a DDM, instrucciones de creación de productos dadas a owner, propuesta nombre/URL enviada.
 - 2026-11-13 — 🛒 FASE 16 construida: upsell en carrito (drawer + /carrito), Buen Fin → Aroma, una tarjeta a la vez; línea "Precio Buen Fin" con tachado y "+" bloqueado; tracking PostHog viewed/added.
 - 2026-11-13 — 📋 Plan FASE 16 guardado: upsell en carrito (Buen Fin → Aroma, una tarjeta a la vez).
 - 2026-11-13 — 🏷️ Sticker Buen Fin flotante (arriba derecha) en PDP y tarjetas de catálogo de los 5 kits (`PromoStickerBadge`). Owner: "quedó perfecto".
@@ -143,7 +152,6 @@ NO se hace: carrusel, sugerencias aleatorias, popups.
 - 2026-10-10 — 🏵️ `/categorias/dia-de-muertos` rediseñada.
 - 2026-10-10 — 🃏 Tarjetas de catálogo rediseñadas; fix doble padding en Collection.
 - 2026-10-09 — 🏵️ Aroma de temporada Cempasúchil.
-- 2026-10-09 — 🎠 Home: sección DDM en carrusel.
 
 ## 5. Image Inventory
 - Fotos de producto: 1122×1402 (4:5), webp. Base uploads owner: `.../message-images/58337cbc-5a9f-4862-810a-1470616566de/`.
@@ -153,19 +161,20 @@ NO se hace: carrusel, sugerencias aleatorias, popups.
 - Aromas (flat-lays, en `SCENTS.imageUrl`): usados como miniatura en la tarjeta de aroma del carrito.
 - 🏵️ Banner DDM `1791586723101-uqttcs5raf.webp`. Aroma Cempasúchil `1791590350527-o3gpv79gzvi.webp`. Bowl Ámbar ref `1791588734332-bzvkrpcdmwe.webp`.
 - 🏵️ INSPIRACIÓN DDM: `1791586723101-uqttcs5raf` · `-beyoys9qmbm` · `-m6tb2khuzlr` · `-1fvs134xdv6` · `-b7696bizhwg` · `-bcdckoare7`.
+- 2026-11-16 — Captura owner de `/categorias/dia-de-muertos` en "Muy pronto": `1794856525954-dsz2sseuy6r.webp` (solo referencia, no usar en UI).
 - UGC reseñas: `facil` `1784238899092-acdwwacyaq` · `sala` `1787861715629-sjd49g0k2j` · `visitas` `1784238899091-zp99w7xbo5a` · `reutilizar` `-i6pb49ce8vp` · `regalo` `-0snwjx0f7w7` · `completa` `-ztn82bcfir`.
 - Cuenco bloques: `1787859462824-br3pyp2cr9k` · `1787859462825-p6zo71cvpai`. Cerámica: `1787846317152-fp7km169wu7` · `-d15my4ruzvs` · `-kecin16ha`.
 - 4 pasos: `1787701006060-mdjjspbepql` · `1787699972902-6ha0kcq29g` · `-pr81fsb4jso` · `-11zjzn59pysq`.
 - Hero desktop `1787702019949-nscqjcvsz0r.webp`; hero móvil `hero-dunaru-mobile.mp4`. Ritual `1787701006060-vpgjgog2juh.webp`. Casa real `/casa-real-*.webp`.
-- 🔴 FALTAN: fotos reales cempasúchil · packshots esencia · empaque nuevo · todo Navidad.
+- 🔴 FALTAN: fotos reales cempasúchil · packshots esencia · empaque nuevo · todo Navidad/Nieve (banner + inspiración + productos).
 
 ## 6. Known Issues
 - 2026-11-13 — 🟠 `create-product`/`update-product` NO guardan `compare_at_price` en el add-on. Workaround: `usePromoAddon` usa precio de Cera Duna 500 g como "antes". Si la owner pone compare en Dashboard, se usa ese.
 - 2026-11-13 — 🟡 Upsell carrito: `npx tsc --noEmit` y QA visual no ejecutados por el agente.
 - 2026-11-13 — 🟡 Sticker Buen Fin: posición en carrusel móvil calculada (slide 90%), validar visualmente en QA.
 - 2026-11-02 — 🟠 PDP de producto de temporada archivado muestra "Producto no encontrado". Fix en 14.7.
-- 2026-11-02 — 🟡 `/categorias/dia-de-muertos` sin productos = "Muy pronto" genérico. Fix en 14.5.
-- 2026-10-14 — 🟠 Duplicar en Dashboard copia los variant IDs. Para Navidad: crear productos nuevos, no duplicar.
+- 2026-11-02 — 🟡 `/categorias/dia-de-muertos` sin productos = "Muy pronto" genérico (confirmado en captura owner 2026-11-16). Fix en 14.5.
+- 2026-10-14 — 🟠 Duplicar en Dashboard copia los variant IDs. Para Navidad: crear productos nuevos, no duplicar (ya se le dijo a la owner 2026-11-16).
 - 2026-10-13 — 🟠 `update-product` con `variants_config` BORRA el compare_at.
 - 2026-10-13 — 🟡 Variantes del Dúo sin foto propia.
 - 2026-10-10 — 🟡 Tarjetas 4:5 recortan fotos no 4:5.
@@ -174,10 +183,10 @@ NO se hace: carrusel, sugerencias aleatorias, popups.
 - 2026-08-21 — 🔴 `update-product` NO soporta imágenes por variante ni cambio de slug.
 
 ## 7. Pending / Future Sessions
+- [URGENTE] FASE 17 Navidad/Nieve: esperar de la owner nombre+URL, lista de productos y su base, color, aroma, fotos. En cuanto confirme nombre/URL → construir FASE 14 (sistema de ediciones) mientras ella sube productos en Borrador.
 - [URGENTE HOY] QA FASE 16 (16.5) + FASE 15 (15.a). Luego sitemap (15.c), top bar Buen Fin (15.d).
 - [2026-11-20] Revisar en PostHog `cart_upsell_viewed` vs `cart_upsell_added` por tipo; decidir siguiente upsell (mechas / 1 kg para quien compra 500 g).
 - [2026-11-18] Owner: archivar producto add-on Buen Fin. Sticker y tarjeta de carrito se apagan solos por fecha; después del 17 el carrito solo sugiere aroma.
-- [URGENTE] Craft: FASE 14 ANTES de lanzar Navidad. Owner: mandar datos de Navidad → 14.8.
 - [ALTA] QA Dúo (12.a/12.b). Owner: variantes + descripción Cuenco Alba. Menú/footer Eclipse/Alba (13.d con 14.4).
 - [ALTA] Bowl Ámbar medidas/bloques. Tests tracking + tsc.
 - [MED] PDP_CONTENT Cuenco Alba. Foto del Dúo por pareja. `/aromas`. Tiers AOV.
