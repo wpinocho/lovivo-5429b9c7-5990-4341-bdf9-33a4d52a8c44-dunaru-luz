@@ -73,7 +73,9 @@ const App = () => (
                         <Route path="/" element={<Index />} />
                         <Route path="/productos/:slug" element={<Product />} />
                         <Route path="/categorias/:handle" element={<Collection />} />
-            <Route path="/dia-de-muertos" element={<Navigate to="/categorias/dia-de-muertos" replace />} />
+                        <Route path="/dia-de-muertos" element={<Navigate to="/categorias/dia-de-muertos" replace />} />
+                        {/* ❄️ Edición Nieve: URL corta canónica (también vive en /categorias/navidad) */}
+                        <Route path="/navidad" element={<Collection handle="navidad" />} />
                         <Route path="/paquete/:slug" element={<Bundle />} />
                         <Route path="/carrito" element={<Cart />} />
                         <Route path="/pagar" element={<Checkout />} />

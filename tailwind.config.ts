@@ -93,6 +93,8 @@ export default {
 					// Paleta 2026
 					terracota:  'hsl(var(--dunaru-terracota) / <alpha-value>)',
 					cempasuchil: 'hsl(var(--dunaru-cempasuchil) / <alpha-value>)',
+					// Acento de la edición de temporada activa (ver .edition-* en index.css)
+					edition: 'hsl(var(--edition-accent) / <alpha-value>)',
 					'oliva-claro': 'hsl(var(--dunaru-oliva-claro) / <alpha-value>)',
 					periwinkle: 'hsl(var(--dunaru-periwinkle) / <alpha-value>)',
 					travertino: 'hsl(var(--dunaru-travertino) / <alpha-value>)',

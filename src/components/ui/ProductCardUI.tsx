@@ -7,7 +7,7 @@ import type { Product } from "@/lib/supabase"
 import { getReviewStats } from "@/data/reviews"
 import { getChooseOnPdp } from "@/lib/catalog-order"
 import { getVariantDisplayImage } from "@/lib/variant-image"
-import { isSeasonalSlug } from "@/lib/seasonal"
+import { editionForSlug } from "@/lib/editions"
 import { cn } from "@/lib/utils"
 import { PromoStickerBadge } from "@/components/PromoStickerBadge"
 import { Star } from "lucide-react"
@@ -33,10 +33,11 @@ export const ProductCardUI = ({ product, tone = "light" }: ProductCardUIProps) =
   // Productos que se eligen en su propia página (ej. la esencia: primero el aroma).
   const chooseOnPdp = getChooseOnPdp(product.slug)
   const dark = tone === "dark"
-  const seasonal = isSeasonalSlug(product.slug)
+  const edition = editionForSlug(product.slug)
 
+  // tone="dark" solo se usa en landings de edición: el acento viene de su .edition-*
   const ctaClass = dark
-    ? "border border-dunaru-cempasuchil/60 bg-transparent text-dunaru-cempasuchil hover:bg-dunaru-cempasuchil hover:text-dunaru-onix"
+    ? "border border-dunaru-edition/60 bg-transparent text-dunaru-edition hover:bg-dunaru-edition hover:text-dunaru-onix"
     : "border-0 bg-transparent text-dunaru-terracota hover:bg-dunaru-terracota hover:text-dunaru-marfil"
 
   return (
@@ -51,9 +52,9 @@ export const ProductCardUI = ({ product, tone = "light" }: ProductCardUIProps) =
         const stats = getReviewStats(logic.product.slug)
 
         const badges: React.ReactNode[] = []
-        if (seasonal) {
+        if (edition) {
           badges.push(
-            <span key="ddm" className="bg-dunaru-cempasuchil px-2 py-1 font-body text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-dunaru-onix">
+            <span key="edition" className={`${edition.accentClass} bg-dunaru-edition px-2 py-1 font-body text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-dunaru-onix`}>
               Edición limitada
             </span>
           )
@@ -205,7 +206,7 @@ export const ProductCardUI = ({ product, tone = "light" }: ProductCardUIProps) =
 
             <div className="mt-auto flex items-center justify-between gap-2 pt-3">
               <div className="flex items-baseline gap-2">
-                <span className={cn("font-body text-sm font-semibold", dark ? "text-dunaru-cempasuchil" : "text-foreground")}>
+                <span className={cn("font-body text-sm font-semibold", dark ? "text-dunaru-edition" : "text-foreground")}>
                   {logic.formatMoney(logic.currentPrice)}
                 </span>
                 {logic.currentCompareAt && logic.currentCompareAt > logic.currentPrice && (

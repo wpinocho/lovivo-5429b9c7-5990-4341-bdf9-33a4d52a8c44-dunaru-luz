@@ -10,21 +10,24 @@
  * y al final refacciones y recipientes sueltos.
  */
 
-import { SEASONAL_SLUGS } from "@/lib/seasonal"
+import { EDITIONS, editionForSlug } from "@/lib/editions"
 
 export type CatalogGroup = {
   id: string
   label: string
   slugs: string[]
+  /** Atrapa slugs nuevos de la misma familia (ediciones creadas desde el Dashboard). */
+  match?: (slug: string) => boolean
 }
 
 export const CATALOG_GROUPS: CatalogGroup[] = [
-  // Temporal: al archivar los 4 productos el grupo vacío se oculta solo.
-  {
-    id: "dia-de-muertos",
-    label: "Edición limitada · Día de Muertos",
-    slugs: SEASONAL_SLUGS,
-  },
+  // Ediciones de temporada: al archivar sus productos el grupo vacío se oculta solo.
+  ...EDITIONS.map((e) => ({
+    id: e.collectionHandle,
+    label: e.eyebrow,
+    slugs: Object.keys(e.products),
+    match: (slug: string) => editionForSlug(slug)?.id === e.id,
+  })),
   {
     id: "kits",
     label: "Empieza aquí",
@@ -126,6 +129,9 @@ export function sortByCatalogOrder<T extends Sortable>(items: T[]): T[] {
   })
 }
 
+const inGroup = (g: CatalogGroup, slug: string) =>
+  g.slugs.includes(slug) || !!g.match?.(slug)
+
 /**
  * Agrupa productos ya ordenados en las secciones del catálogo.
  * Los grupos vacíos se omiten (no se renderiza su encabezado).
@@ -136,10 +142,12 @@ export function groupByCatalog<T extends Sortable>(
   const groups = CATALOG_GROUPS.map((g) => ({
     id: g.id,
     label: g.label,
-    items: items.filter((p) => g.slugs.includes(p.slug || "")),
+    items: items.filter((p) => inGroup(g, p.slug || "")),
   })).filter((g) => g.items.length > 0)
 
-  const rest = items.filter((p) => !CATALOG_ORDER.includes(p.slug || ""))
+  const rest = items.filter(
+    (p) => !CATALOG_GROUPS.some((g) => inGroup(g, p.slug || "")),
+  )
   if (rest.length > 0) {
     groups.push({ id: "otros", label: CATALOG_FALLBACK_LABEL, items: rest })
   }

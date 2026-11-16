@@ -1,4 +1,4 @@
-import { contentSlug, isSeasonalSlug } from "@/lib/seasonal"
+import { contentSlug, editionForSlug } from "@/lib/editions"
 
 /**
  * scents — Configuración central de los aromas dunaru.
@@ -139,7 +139,7 @@ const HIDDEN_IN_SEASONAL: string[] = ["costa-mineral"]
  *   los de HIDDEN_IN_SEASONAL (siempre 6 en total).
  */
 export const getScentsForProduct = (slug?: string | null): Scent[] =>
-  isSeasonalSlug(slug)
+  editionForSlug(slug)?.seasonalScents
     ? [
         ...SEASONAL_SCENTS,
         ...SCENTS.filter((s) => !HIDDEN_IN_SEASONAL.includes(s.id)),

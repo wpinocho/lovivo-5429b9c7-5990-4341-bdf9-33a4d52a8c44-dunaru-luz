@@ -44,6 +44,8 @@ async function buildEntries(): Promise<SitemapEntry[]> {
   const entries: SitemapEntry[] = [
     { path: '/', changefreq: 'weekly', priority: '1.0' },
     { path: '/como-funciona', changefreq: 'monthly', priority: '0.8' },
+    // ❄️ Edición Nieve (Navidad): URL perenne, se reutiliza cada año
+    { path: '/navidad', changefreq: 'weekly', priority: '0.8' },
     { path: '/blog', changefreq: 'weekly', priority: '0.6' },
     { path: '/terminos-y-condiciones', changefreq: 'yearly', priority: '0.3' },
     { path: '/aviso-de-privacidad', changefreq: 'yearly', priority: '0.3' },

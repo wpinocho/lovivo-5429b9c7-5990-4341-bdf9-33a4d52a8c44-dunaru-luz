@@ -13,9 +13,9 @@ import {
   groupByCatalog,
   filterCatalogVisible,
 } from "@/lib/catalog-order"
-import { DDM_COLLECTION_HANDLE } from "@/lib/seasonal"
-import { DdmInspirationGallery } from "@/components/DdmInspirationGallery"
-import { DdmCollectionHero } from "@/components/DdmCollectionHero"
+import { editionForHandle, fetchEditionProducts } from "@/lib/editions"
+import { EditionInspirationGallery } from "@/components/EditionInspirationGallery"
+import { EditionCollectionHero } from "@/components/EditionCollectionHero"
 import { cn } from "@/lib/utils"
 
 /**
@@ -37,8 +37,10 @@ const isInStock = (p: Product) => {
   return true
 }
 
-const Collection = () => {
-  const { handle } = useParams<{ handle: string }>()
+/** `handle` como prop: rutas cortas de edición (ej. /navidad). */
+const Collection = ({ handle: handleProp }: { handle?: string } = {}) => {
+  const params = useParams<{ handle: string }>()
+  const handle = handleProp ?? params.handle
   const { storeName } = useSettings()
 
   const [collection, setCollection] = useState<CollectionType | null>(null)
@@ -47,7 +49,10 @@ const Collection = () => {
   const [notFound, setNotFound] = useState(false)
 
   const isAll = handle === ALL_HANDLE
-  const isDdm = handle === DDM_COLLECTION_HANDLE
+  // Edición de temporada: banner propio, página oscura y productos por edición
+  // (no depende de que la owner los asigne a la colección).
+  const edition = editionForHandle(handle)
+  const isDdm = !!edition
 
   useEffect(() => {
     let active = true
@@ -88,6 +93,13 @@ const Collection = () => {
           return
         }
         setCollection(col as CollectionType)
+
+        if (edition) {
+          const prods = await fetchEditionProducts<Product>(edition)
+          if (!active) return
+          setProducts(prods)
+          return
+        }
 
         // 2) product_ids
         const { data: cp } = await supabase
@@ -143,19 +155,20 @@ const Collection = () => {
       <SEO
         title={title}
         description={description}
-        canonicalPath={`/categorias/${handle}`}
+        canonicalPath={edition ? edition.canonicalPath : `/categorias/${handle}`}
+        ogImage={edition?.heroImage}
         storeName={storeName}
       />
 
       {/* Día de Muertos: banner propio + página oscura (edición de temporada) */}
-      {isDdm && (
+      {edition && (
         <div className="-mt-6">
-          <DdmCollectionHero />
+          <EditionCollectionHero edition={edition} />
         </div>
       )}
 
       {/* `dark` invierte los tokens: los estados vacíos también se leen sobre ónix */}
-      <div className={cn(isDdm && "dark bg-dunaru-onix texture-grain")}>
+      <div className={cn(edition && ["dark bg-dunaru-onix texture-grain", edition.accentClass])}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-5 pb-12 sm:pt-8 lg:pt-12 lg:pb-16">
         {/* Encabezado compacto: en móvil, producto antes que texto */}
         {!isDdm && (
@@ -232,8 +245,11 @@ const Collection = () => {
       </div>
       </div>
 
-      {isDdm && !loading && !notFound && (
-        <DdmInspirationGallery className="-mb-6 border-t border-dunaru-cempasuchil/25" />
+      {edition && !loading && !notFound && (
+        <EditionInspirationGallery
+          edition={edition}
+          className="-mb-6 border-t border-dunaru-edition/25"
+        />
       )}
     </EcommerceTemplate>
   )

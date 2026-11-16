@@ -1,39 +1,46 @@
 import { useEffect } from "react"
 import { Link } from "react-router-dom"
 import { ArrowRight } from "lucide-react"
-import { DDM_PATH } from "@/lib/seasonal"
+import type { Edition } from "@/lib/editions"
+import { cn } from "@/lib/utils"
 
 /**
- * Edición Día de Muertos en PDPs (temporal).
- * - useSeasonalTheme: activa la paleta cálida (.theme-ddm) mientras la PDP
- *   de temporada está montada; se limpia sola al salir.
+ * Edición de temporada en PDPs.
+ * - useSeasonalTheme: pone en <html> el papel (theme-*) y el acento (edition-*)
+ *   de la edición mientras la PDP está montada; se limpia sola al salir.
  * - SeasonalRibbon: franja ónix a ancho completo que conecta con la edición.
  */
 
-export const useSeasonalTheme = (active: boolean) => {
+export const useSeasonalTheme = (edition: Edition | null) => {
   useEffect(() => {
-    if (!active) return
+    if (!edition) return
     const root = document.documentElement
-    root.classList.add("theme-ddm")
-    return () => root.classList.remove("theme-ddm")
-  }, [active])
+    const classes = [edition.pdpThemeClass, edition.accentClass]
+    root.classList.add(...classes)
+    return () => root.classList.remove(...classes)
+  }, [edition])
 }
 
-export const SeasonalRibbon = () => (
-  <div className="full-bleed bg-dunaru-onix texture-grain border-b border-dunaru-cempasuchil/30">
+export const SeasonalRibbon = ({ edition }: { edition: Edition }) => (
+  <div
+    className={cn(
+      "full-bleed bg-dunaru-onix texture-grain border-b border-dunaru-edition/30",
+      edition.accentClass,
+    )}
+  >
     <Link
-      to={DDM_PATH}
+      to={edition.path}
       className="group mx-auto flex h-9 max-w-[1400px] items-center justify-center gap-2 px-4 font-body text-[10px] uppercase tracking-[0.22em] text-dunaru-marfil/85 sm:text-[11px]"
     >
-      <span className="h-1.5 w-1.5 rounded-full bg-dunaru-cempasuchil" aria-hidden />
+      <span className="h-1.5 w-1.5 rounded-full bg-dunaru-edition" aria-hidden />
       <span>
-        Edición <span className="text-dunaru-cempasuchil">Cempasúchil</span>
-        <span className="hidden sm:inline"> · Día de Muertos</span>
+        Edición <span className="text-dunaru-edition">{edition.name}</span>
+        <span className="hidden sm:inline"> · {edition.occasion}</span>
       </span>
-      <span className="text-dunaru-cempasuchil underline-offset-4 group-hover:underline">
+      <span className="text-dunaru-edition underline-offset-4 group-hover:underline">
         Ver todo
       </span>
-      <ArrowRight className="h-3 w-3 text-dunaru-cempasuchil" strokeWidth={1.5} />
+      <ArrowRight className="h-3 w-3 text-dunaru-edition" strokeWidth={1.5} />
     </Link>
   </div>
 )

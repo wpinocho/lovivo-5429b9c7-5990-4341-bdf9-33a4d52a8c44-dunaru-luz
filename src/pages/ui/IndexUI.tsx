@@ -11,7 +11,7 @@ import { RitualSection } from '@/components/RitualSection';
 import { Reveal } from '@/components/Reveal';
 import { Reviews } from '@/components/Reviews';
 import { ScentsSection } from '@/components/ScentsSection';
-import { DiaDeMuertosSection } from '@/components/DiaDeMuertosSection';
+import { EditionHomeSections } from '@/components/EditionHomeSection';
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate';
 import type { UseIndexLogicReturn } from '@/components/headless/HeadlessIndex';
 import { formatMoney } from '@/lib/money';
@@ -298,7 +298,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
       </section>
 
       {/* ── DÍA DE MUERTOS (temporal: se oculta sola al archivar) ── */}
-      <DiaDeMuertosSection />
+      <EditionHomeSections />
 
       {/* ── CÓMO FUNCIONA ─────────────────────────────────────────────────── */}
       <ProductStepsCarousel

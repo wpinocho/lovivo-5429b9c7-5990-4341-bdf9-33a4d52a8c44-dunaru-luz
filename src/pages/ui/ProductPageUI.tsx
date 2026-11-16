@@ -64,12 +64,11 @@ import {
 } from "@/components/PromoAddonSelector"
 import { usePromoAddon } from "@/hooks/usePromoAddon"
 import { getColorValue, isPromoKitSlug } from "@/lib/promo-addon"
-import { contentSlug, isSeasonalSlug, SEASONAL_HEADLINE } from "@/lib/seasonal"
+import { contentSlug, editionForSlug, editionHeadline } from "@/lib/editions"
 import { LimitedEditionNotice, LimitedEditionTag } from "@/components/LimitedEditionBadge"
 import { PromoStickerBadge } from "@/components/PromoStickerBadge"
 import { SeasonalRibbon, useSeasonalTheme } from "@/components/SeasonalRibbon"
-import { DDM_PATH } from "@/lib/seasonal"
-import { DdmInspirationGallery } from "@/components/DdmInspirationGallery"
+import { EditionInspirationGallery } from "@/components/EditionInspirationGallery"
 import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
@@ -751,7 +750,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   }, [])
 
   // 🏵️ PDP de temporada: paleta cálida (antes de cualquier return temprano)
-  useSeasonalTheme(isSeasonalSlug(logic.product?.slug))
+  useSeasonalTheme(editionForSlug(logic.product?.slug))
 
   if (logic.loading) {
     return (
@@ -846,7 +845,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     .join(" · ")
 
   const headline = logic.product?.slug
-    ? SEASONAL_HEADLINE[logic.product.slug] ??
+    ? editionHeadline(logic.product.slug) ??
       PDP_HEADLINE[contentSlug(logic.product.slug)]
     : undefined
   const benefits =
@@ -854,7 +853,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   /** "Qué incluye": componente + beneficio, driven por slug. */
   const productIncludes = getIncludes(logic.product?.slug)
   /** Edición de temporada (Día de Muertos): sello + galería de inspiración. */
-  const isSeasonal = isSeasonalSlug(logic.product?.slug)
+  const edition = editionForSlug(logic.product?.slug)
+  const isSeasonal = !!edition
 
   // Rating compacto reutilizable (móvil arriba del fold)
   const InlineRating =
@@ -914,9 +914,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
     <EcommerceTemplate hideFloatingCartOnMobile>
       <div className="max-w-[1400px] mx-auto -mt-4 md:mt-0 pb-24 md:pb-0">
         {/* 🏵️ Franja de la edición, pegada al header */}
-        {isSeasonal && (
+        {edition && (
           <div className="-mt-2 mb-4 md:-mt-6 md:mb-6">
-            <SeasonalRibbon />
+            <SeasonalRibbon edition={edition} />
           </div>
         )}
 
@@ -930,10 +930,10 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           </Link>
           <ChevronRight className="h-3 w-3" />
           <Link
-            to={isSeasonal ? DDM_PATH : "/"}
+            to={edition ? edition.path : "/"}
             className="hover:text-foreground transition-colors"
           >
-            {isSeasonal ? "Día de Muertos" : "Productos"}
+            {edition ? edition.occasion : "Productos"}
           </Link>
           <ChevronRight className="h-3 w-3" />
           <span className="text-foreground/80 truncate max-w-[280px]">
@@ -946,7 +946,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           <div className="lg:col-span-7 lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)]">
             {/* Móvil/tablet: título + promesa ARRIBA de la foto (arriba del fold) */}
             <div className="lg:hidden mb-4 space-y-2">
-              {isSeasonal && <LimitedEditionTag />}
+              {edition && <LimitedEditionTag edition={edition} />}
               {vendor && (
                 <p className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground font-medium">
                   {vendor}
@@ -1157,7 +1157,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                   {vendor}
                 </p>
               )}
-              {isSeasonal && <LimitedEditionTag className="hidden lg:inline-flex" />}
+              {edition && <LimitedEditionTag edition={edition} className="hidden lg:inline-flex" />}
               {/* El <h1> vive en el bloque de arriba (mobile-first). Aquí solo la versión desktop. */}
               <p className="hidden lg:block text-3xl md:text-4xl lg:text-5xl font-light tracking-tight leading-[1.1]">
                 {logic.product.title}
@@ -1531,7 +1531,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             {/* Disponibilidad + fecha concreta de entrega */}
             {logic.inStock && <DeliveryEstimate />}
 
-            {isSeasonal && logic.inStock && <LimitedEditionNotice />}
+            {edition && logic.inStock && <LimitedEditionNotice edition={edition} />}
 
             {/* CTAs */}
             <div ref={ctaRef} className="flex flex-col gap-2.5">
@@ -1742,7 +1742,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
           <ProductStorySections
             slug={logic.product.slug}
             afterReviews={
-              isSeasonal ? <DdmInspirationGallery className="full-bleed" /> : undefined
+              edition ? (
+                <EditionInspirationGallery edition={edition} className="full-bleed" />
+              ) : undefined
             }
           />
         )}

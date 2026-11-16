@@ -81,6 +81,9 @@ html {
     /* ── Nuevos tokens de paleta ── */
     --dunaru-terracota: 14 55% 50%;   /* #C55B3A Burnt Terracotta */
     --dunaru-cempasuchil: 30 88% 55%; /* Cempasúchil · SOLO edición Día de Muertos */
+    --dunaru-nieve: 205 32% 76%;      /* Escarcha · SOLO edición Nieve (Navidad) */
+    /* Acento de la edición activa (lo cambia .edition-*). Default: cempasúchil */
+    --edition-accent: 30 88% 55%;
     --dunaru-periwinkle: 230 25% 64%; /* #8B93B9 Muted Periwinkle */
     --dunaru-periwinkle-deep: 230 27% 45%; /* misma familia, legible sobre marfil */
     --dunaru-travertino: 36 30% 82%;  /* piedra porosa, superficies */
@@ -133,6 +136,24 @@ html {
     --border: 29 26% 72%;
     --input: 29 26% 72%;
     --dunaru-arena: 29 36% 80%;
+  }
+
+  /* ❄️ Edición Nieve: papel un punto más frío y limpio. */
+  .theme-nieve {
+    --background: 40 22% 93%;
+    --card: 40 22% 93%;
+    --muted: 210 14% 87%;
+    --border: 210 10% 78%;
+    --input: 210 10% 78%;
+    --dunaru-arena: 210 14% 87%;
+  }
+
+  /* Acentos por edición (se aplican en la sección/landing/PDP/sello) */
+  .edition-ddm {
+    --edition-accent: var(--dunaru-cempasuchil);
+  }
+  .edition-nieve {
+    --edition-accent: var(--dunaru-nieve);
   }
 }
 
