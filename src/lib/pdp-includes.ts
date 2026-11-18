@@ -30,7 +30,55 @@ const ENVIO = {
   benefit: "Llega en 2 a 5 días hábiles. Si no te convence, lo devuelves sin costo.",
 }
 
+/** Pieza decorativa de las velas Navidad (⏳ owner confirma material/cantidades). */
+const NAVIDAD_CERA = {
+  item: "Cera Duna blanca, como nieve",
+  benefit: "Cera 100% vegetal y biodegradable. Cuando se acabe, la vuelves a llenar.",
+}
+
+const NAVIDAD_MECHAS = {
+  item: "Mechas de algodón",
+  benefit: "Cambias la mecha, no la vela. Una por recarga.",
+}
+
 export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
+  // ❄️ Edición Navidad (slugs exactos, ganan sobre el contenido heredado)
+  "casita-de-navidad-cuenco-dunaru": [
+    { item: "Cuenco Dunaru de cerámica, 20 cm de diámetro", benefit: "Pieza de diseño que se queda en casa. Se lava y vuelve a empezar." },
+    { item: "Casita navideña y pinito nevado", benefit: "La escena lista para tu mesa, sin armar nada." },
+    NAVIDAD_CERA,
+    NAVIDAD_MECHAS,
+    ENVIO,
+  ],
+  "aldea-de-navidad-centro-de-madera": [
+    { item: "Charola de madera para centro de mesa", benefit: "Amplia y baja, pensada para varias mechas encendidas a la vez." },
+    { item: "Casitas, pinitos y nochebuenas", benefit: "Arma tu pueblito nevado a tu gusto y cámbialo cada año." },
+    NAVIDAD_CERA,
+    NAVIDAD_MECHAS,
+    ENVIO,
+  ],
+  "pino-de-invierno-cuenco-alba": [
+    { item: "Cuenco Alba de cerámica artesanal", benefit: "Pieza de diseño que se queda en casa. Se lava y vuelve a empezar." },
+    { item: "Pino navideño decorativo", benefit: "Le da la escena de invierno a tu vela, encendida o apagada." },
+    NAVIDAD_CERA,
+    NAVIDAD_MECHAS,
+    ENVIO,
+  ],
+  "refugio-de-invierno-cuenco-eclipse": [
+    { item: "Cuenco Eclipse de cerámica", benefit: "Esmalte en tonos fríos. Se lava y vuelve a empezar." },
+    { item: "Pino navideño decorativo", benefit: "Le da la escena de invierno a tu vela, encendida o apagada." },
+    NAVIDAD_CERA,
+    NAVIDAD_MECHAS,
+    ENVIO,
+  ],
+  "nochebuena-de-navidad-bowl-mbar": [
+    { item: "Bowl Ámbar de vidrio con borde ondulado", benefit: "Se ilumina desde adentro con la llama. Se lava y vuelve a empezar." },
+    { item: "Nochebuena decorativa", benefit: "El rojo de la temporada sobre la cera blanca." },
+    NAVIDAD_CERA,
+    NAVIDAD_MECHAS,
+    ENVIO,
+  ],
+
   "perlas-originales-500-g": [
     CERA_500,
     MECHAS_30,
@@ -209,5 +257,5 @@ export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
 
 export function getIncludes(slug?: string): IncludeItem[] | undefined {
   if (!slug) return undefined
-  return PDP_INCLUDES[contentSlug(slug)]
+  return PDP_INCLUDES[slug] ?? PDP_INCLUDES[contentSlug(slug)]
 }

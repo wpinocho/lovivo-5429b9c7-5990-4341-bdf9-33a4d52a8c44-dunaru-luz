@@ -45,8 +45,11 @@ export type Edition = {
   /** Productos que la owner cree con otro slug pero misma familia. */
   slugPrefixes: string[]
   headlines: Record<string, string>
-  /** Muestra los aromas de temporada (SEASONAL_SCENTS) primero. */
-  seasonalScents: boolean
+  /**
+   * Aromas en el selector de la PDP: ids de SEASONAL_SCENTS que van primero
+   * (con etiqueta "Temporada") + ids regulares que se ocultan para dejar sitio.
+   */
+  scents: { seasonal: string[]; hide: string[] }
 }
 
 const MSG =
@@ -91,37 +94,39 @@ export const EDITIONS: Edition[] = [
       titleLead: "IDEAS PARA",
       titleEm: "regalar",
       intro: "Formas de llevar la luz de la temporada a tu casa. Toca una foto para verla completa.",
-      ideas: [], // ⏳ fotos de la owner
+      ideas: [
+        { src: `${MSG}/1795038283050-yuqxeisjjd.webp`, title: "Una aldea nevada", tip: "Casitas y pinos sobre Cera Duna blanca, con varias mechas encendidas entre ellos." },
+        { src: `${MSG}/1795038283050-w6zybbbc4dd.webp`, title: "Listo para regalar", tip: "Un cuenco con tres mechas junto a los regalos. Llega listo para encender." },
+        { src: `${MSG}/1795038283050-et53jlvbbf.webp`, title: "La isla de la cocina", tip: "Un cuenco amplio, un vaso pequeño y dos casitas junto a un ramo de nochebuenas." },
+        { src: `${MSG}/1795038283050-7fohsz8y38l.webp`, title: "Mesa de Nochebuena", tip: "Vasos altos de vidrio con cera, ramas de pino, piñas y naranja seca para la cena." },
+        { src: `${MSG}/1795038283050-dhe9t85y9ge.webp`, title: "Dibuja en la cera", tip: "Con un molde y un poco de canela formas una galleta de jengibre sobre la superficie." },
+        { src: `${MSG}/1795038283050-zjoe0ial8g.webp`, title: "Un bosque de luz", tip: "Extiende la cera como nieve y acomoda pinitos, piñas y mechas a distintas alturas." },
+      ],
     },
     accentClass: "edition-nieve",
     pdpThemeClass: "theme-nieve",
+    // Slugs reales creados por la owner (2026-11-18). Orden = merchandising.
     products: {
-      "vela-rellenable-nieve-vaso-de-vidrio": "kit-vaso-de-vidrio",
-      "vela-rellenable-nieve-cuenco-dunaru": "vela-rellenable-cuenco-dunaru",
-      "vela-rellenable-nieve-cuenco-eclipse": "kit-vaso-de-concreto",
-      "vela-rellenable-nieve-cuenco-alba": "vela-rellenable-cuenco-eclipse-copy-ppsiy",
-      "vela-rellenable-nieve-bowl-ambar": "vela-rellenable-bowl-ambar",
-      "cera-duna-nieve-500-g": "perlas-originales-500-g",
-      "cera-duna-nieve-1-kg": "reserva-1-kg",
+      "casita-de-navidad-cuenco-dunaru": "vela-rellenable-cuenco-dunaru",
+      "aldea-de-navidad-centro-de-madera": "vela-rellenable-cuenco-dunaru", // sin base propia: hereda reseñas/FAQ del cuenco multimecha
+      "pino-de-invierno-cuenco-alba": "vela-rellenable-cuenco-eclipse-copy-ppsiy",
+      "refugio-de-invierno-cuenco-eclipse": "kit-vaso-de-concreto",
+      "nochebuena-de-navidad-bowl-mbar": "vela-rellenable-bowl-ambar",
     },
     slugPrefixes: ["vela-rellenable-nieve-", "cera-duna-nieve-"],
     headlines: {
-      "vela-rellenable-nieve-vaso-de-vidrio":
-        "Una vela de invierno lista para encender o para regalar. Cuando se acabe, la vuelves a llenar.",
-      "vela-rellenable-nieve-cuenco-dunaru":
-        "Una luz generosa para el centro de tu mesa de Navidad, con varias mechas encendidas a la vez.",
-      "vela-rellenable-nieve-cuenco-eclipse":
-        "Cerámica oscura y cera Nieve: el contraste más elegante para tu mesa de invierno.",
-      "vela-rellenable-nieve-cuenco-alba":
-        "Cerámica artesanal y cera Nieve para tus noches de diciembre. Cuando se acabe, la vuelves a llenar.",
-      "vela-rellenable-nieve-bowl-ambar":
-        "Vidrio ámbar y cera Nieve: luz cálida para las noches frías.",
-      "cera-duna-nieve-500-g":
-        "La edición Nieve para el recipiente que ya tienes. Edición limitada de temporada.",
-      "cera-duna-nieve-1-kg":
-        "Cera Nieve para llenar varios recipientes de tu casa esta Navidad. Edición limitada de temporada.",
+      "casita-de-navidad-cuenco-dunaru":
+        "Una casita nevada en el centro de tu mesa. Cuando se acabe la cera, la vuelves a llenar.",
+      "aldea-de-navidad-centro-de-madera":
+        "Un pueblito nevado con varias mechas encendidas. El centro de mesa de tu Navidad.",
+      "pino-de-invierno-cuenco-alba":
+        "Un pino entre la nieve y tres mechas encendidas. Cerámica artesanal que se queda en casa.",
+      "refugio-de-invierno-cuenco-eclipse":
+        "Cerámica de tonos fríos, un pino y tres mechas: luz cálida para las noches de diciembre.",
+      "nochebuena-de-navidad-bowl-mbar":
+        "Vidrio ámbar, cera blanca y una nochebuena. La luz más cálida de la temporada.",
     },
-    seasonalScents: false,
+    scents: { seasonal: ["pino-navideno", "manzana-canela"], hide: ["higo-matcha", "costa-mineral"] },
   },
   {
     id: "ddm",
@@ -187,7 +192,7 @@ export const EDITIONS: Edition[] = [
       "cera-duna-cempasuchil-1-kg":
         "Cera cempasúchil para llenar varios recipientes de tu altar. Edición limitada de temporada.",
     },
-    seasonalScents: true,
+    scents: { seasonal: ["cempasuchil"], hide: ["costa-mineral"] },
   },
 ]
 

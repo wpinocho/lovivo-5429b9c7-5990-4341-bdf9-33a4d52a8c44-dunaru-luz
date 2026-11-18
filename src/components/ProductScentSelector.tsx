@@ -61,9 +61,13 @@ export const ProductScentSelector = ({
   const candidateScents = useMemo(() => getScentsForProduct(productSlug), [productSlug])
   const seasonalSlugs = useMemo(
     () =>
-      candidateScents
-        .map((s) => s.seasonalProductSlug)
-        .filter((s): s is string => !!s),
+      Array.from(
+        new Set(
+          candidateScents
+            .map((s) => s.seasonalProductSlug)
+            .filter((s): s is string => !!s)
+        )
+      ),
     [candidateScents]
   )
 
@@ -273,7 +277,7 @@ export const ProductScentSelector = ({
               className={cn(
                 optionBase,
                 optionState(isSelected, isAvailable),
-                isSeasonal && !isSelected && isAvailable && "border-dunaru-cempasuchil"
+                isSeasonal && !isSelected && isAvailable && "border-dunaru-edition"
               )}
             >
               <span className="flex flex-wrap items-center gap-x-1.5 gap-y-1">
@@ -281,7 +285,7 @@ export const ProductScentSelector = ({
                   {scent.name}
                 </span>
                 {isSeasonal && (
-                  <span className="bg-dunaru-cempasuchil text-dunaru-onix px-1.5 py-0.5 text-[9px] font-semibold uppercase leading-none tracking-[0.14em]">
+                  <span className="bg-dunaru-edition text-dunaru-onix px-1.5 py-0.5 text-[9px] font-semibold uppercase leading-none tracking-[0.14em]">
                     Temporada
                   </span>
                 )}

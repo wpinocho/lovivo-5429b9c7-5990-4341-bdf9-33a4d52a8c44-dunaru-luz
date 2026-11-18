@@ -104,10 +104,15 @@ export const getScentImageByVariantName = (
 }
 
 /**
- * 🏵️ AROMAS DE TEMPORADA (Día de Muertos 2026)
- * Solo aparecen en los productos de temporada (isSeasonalSlug), SIEMPRE primero
- * y con la etiqueta "Temporada".
+ * AROMAS DE TEMPORADA (todas las ediciones).
+ * Cada edición elige cuáles muestra en `EDITIONS[].scents.seasonal`. Aparecen
+ * SIEMPRE primero y con la etiqueta "Temporada". Si su producto está archivado,
+ * el aroma simplemente no aparece.
  */
+const NAVIDAD_SCENT_SLUG = "esencia-para-vela-navideo-10-ml"
+const NAVIDAD_IMG =
+  "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/"
+
 export const SEASONAL_SCENTS: Scent[] = [
   {
     id: "cempasuchil",
@@ -127,24 +132,50 @@ export const SEASONAL_SCENTS: Scent[] = [
     imageUrl: `${SCENT_IMG}1791590350527-o3gpv79gzvi.webp`,
     seasonalProductSlug: "esencia-para-vela-cempasuchil-10-ml",
   },
+  // ❄️ Navidad: un solo producto con 2 variantes (opción "Aroma").
+  {
+    id: "pino-navideno",
+    name: "Pino Navideño",
+    inspiredBy: "Bosque en diciembre",
+    profile: "Verde · resinoso · fresco",
+    description: "Aguja de pino recién cortada con un fondo limpio de madera.",
+    recommendedFor: "que tu casa huela a árbol de Navidad.",
+    notes: ["Pino", "Abeto", "Madera"],
+    story: "El árbol recién puesto en la sala, con las luces encendidas.",
+    pyramid: { salida: "Pino", corazon: "Abeto", fondo: "Madera" },
+    imageUrl: `${NAVIDAD_IMG}xpu7atgmjzq.webp`,
+    seasonalProductSlug: NAVIDAD_SCENT_SLUG,
+  },
+  {
+    id: "manzana-canela",
+    name: "Manzana Canela",
+    inspiredBy: "Ponche de la abuela",
+    profile: "Dulce · especiado · cálido",
+    description: "Manzana horneada con canela. Dulce, tibio y muy de temporada.",
+    recommendedFor: "un aroma cálido que se siente a fiesta en casa.",
+    notes: ["Manzana", "Canela"],
+    story: "La cocina en Nochebuena, con algo dulce en el horno.",
+    imageUrl: `${NAVIDAD_IMG}b8pwxy0ah5k.webp`,
+    seasonalProductSlug: NAVIDAD_SCENT_SLUG,
+  },
 ]
-
-/** Aromas regulares que NO se muestran en los productos de temporada. */
-const HIDDEN_IN_SEASONAL: string[] = ["costa-mineral"]
 
 /**
  * Lista de aromas a mostrar en el selector de un producto.
  * - Colección normal: los 6 de siempre.
- * - Productos de temporada: aromas de temporada primero + los regulares menos
- *   los de HIDDEN_IN_SEASONAL (siempre 6 en total).
+ * - Productos de edición: sus aromas de temporada primero + los regulares
+ *   menos los que la edición oculta (siempre 6 en total).
  */
-export const getScentsForProduct = (slug?: string | null): Scent[] =>
-  editionForSlug(slug)?.seasonalScents
-    ? [
-        ...SEASONAL_SCENTS,
-        ...SCENTS.filter((s) => !HIDDEN_IN_SEASONAL.includes(s.id)),
-      ]
-    : SCENTS
+export const getScentsForProduct = (slug?: string | null): Scent[] => {
+  const config = editionForSlug(slug)?.scents
+  if (!config) return SCENTS
+  return [
+    ...config.seasonal
+      .map((id) => SEASONAL_SCENTS.find((s) => s.id === id))
+      .filter((s): s is Scent => !!s),
+    ...SCENTS.filter((s) => !config.hide.includes(s.id)),
+  ]
+}
 
 export const SCENTS: Scent[] = [
   {

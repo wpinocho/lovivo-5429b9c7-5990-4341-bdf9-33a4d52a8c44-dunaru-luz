@@ -142,6 +142,32 @@ const PDP_HEADLINE: Record<string, string> = {
  * Copy orientado a "qué gano yo", no a lista de contenido de caja.
  */
 const PDP_BENEFITS: Record<string, string[]> = {
+  // ❄️ Edición Navidad (slug exacto gana sobre el heredado)
+  "casita-de-navidad-cuenco-dunaru": [
+    "Incluye: Cuenco Dunaru de 20 cm + casita y pinito navideños + Cera Duna + mechas de algodón",
+    "Admite varias mechas a la vez: el centro de tu mesa de Navidad",
+    "Se rellena infinitas veces: el cuenco se queda en casa",
+  ],
+  "aldea-de-navidad-centro-de-madera": [
+    "Incluye: charola de madera + casitas, pinitos y nochebuenas + Cera Duna + mechas de algodón",
+    "Varias mechas encendidas a la vez: un pueblito nevado al centro de la mesa",
+    "Arma la escena a tu gusto y cámbiala cada año",
+  ],
+  "pino-de-invierno-cuenco-alba": [
+    "Incluye: Cuenco Alba de cerámica + pino navideño + Cera Duna + mechas de algodón",
+    "Tres mechas encendidas y un bosque en miniatura",
+    "Se rellena infinitas veces: el cuenco se queda en casa",
+  ],
+  "refugio-de-invierno-cuenco-eclipse": [
+    "Incluye: Cuenco Eclipse de cerámica + pino navideño + Cera Duna + mechas de algodón",
+    "Esmalte en tonos fríos que resalta la cera blanca y la llama",
+    "Se rellena infinitas veces: el cuenco se queda en casa",
+  ],
+  "nochebuena-de-navidad-bowl-mbar": [
+    "Incluye: Bowl Ámbar de vidrio + nochebuena + Cera Duna + mechas de algodón",
+    "El vidrio ámbar se ilumina desde adentro con la llama",
+    "Se rellena infinitas veces: el bowl se queda en casa",
+  ],
   "kit-vaso-de-vidrio": [
     "Incluye: vaso de vidrio + 500 g de Cera Duna + 30 mechas de algodón",
     "Cuando se acaba la rellenas, no la tiras: el mismo vaso te dura años",
@@ -849,7 +875,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
       PDP_HEADLINE[contentSlug(logic.product.slug)]
     : undefined
   const benefits =
-    (logic.product?.slug && PDP_BENEFITS[contentSlug(logic.product.slug)]) || []
+    (logic.product?.slug &&
+      (PDP_BENEFITS[logic.product.slug] ?? PDP_BENEFITS[contentSlug(logic.product.slug)])) ||
+    []
   /** "Qué incluye": componente + beneficio, driven por slug. */
   const productIncludes = getIncludes(logic.product?.slug)
   /** Edición de temporada (Día de Muertos): sello + galería de inspiración. */
