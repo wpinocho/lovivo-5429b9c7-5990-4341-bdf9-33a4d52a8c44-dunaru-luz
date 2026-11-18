@@ -108,9 +108,11 @@ export const EDITIONS: Edition[] = [
     // Slugs reales creados por la owner (2026-11-18). Orden = merchandising.
     products: {
       "casita-de-navidad-cuenco-dunaru": "vela-rellenable-cuenco-dunaru",
-      "aldea-de-navidad-centro-de-madera": "vela-rellenable-cuenco-dunaru", // sin base propia: hereda reseñas/FAQ del cuenco multimecha
-      "pino-de-invierno-cuenco-alba": "vela-rellenable-cuenco-eclipse-copy-ppsiy",
-      "refugio-de-invierno-cuenco-eclipse": "kit-vaso-de-concreto",
+      // Aldea, Alba y Eclipse heredan reseñas y aromas del Cuenco Dunaru (pedido owner 2026-11-18).
+      // Las secciones de la PDP son propias: NIEVE_STORY en ProductStorySections.
+      "aldea-de-navidad-centro-de-madera": "vela-rellenable-cuenco-dunaru",
+      "pino-de-invierno-cuenco-alba": "vela-rellenable-cuenco-dunaru",
+      "refugio-de-invierno-cuenco-eclipse": "vela-rellenable-cuenco-dunaru",
       "nochebuena-de-navidad-bowl-mbar": "vela-rellenable-bowl-ambar",
     },
     slugPrefixes: ["vela-rellenable-nieve-", "cera-duna-nieve-"],
@@ -120,9 +122,9 @@ export const EDITIONS: Edition[] = [
       "aldea-de-navidad-centro-de-madera":
         "Un pueblito nevado con varias mechas encendidas. El centro de mesa de tu Navidad.",
       "pino-de-invierno-cuenco-alba":
-        "Un pino entre la nieve y tres mechas encendidas. Cerámica artesanal que se queda en casa.",
+        "Un pino de vela entre la nieve y tres mechas encendidas. Cerámica artesanal que se queda en casa.",
       "refugio-de-invierno-cuenco-eclipse":
-        "Cerámica de tonos fríos, un pino y tres mechas: luz cálida para las noches de diciembre.",
+        "Cerámica de tonos fríos, un pino de vela y tres mechas: luz cálida para las noches de diciembre.",
       "nochebuena-de-navidad-bowl-mbar":
         "Vidrio ámbar, cera blanca y una nochebuena. La luz más cálida de la temporada.",
     },

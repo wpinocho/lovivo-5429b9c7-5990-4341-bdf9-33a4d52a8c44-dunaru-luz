@@ -792,6 +792,153 @@ const GUARANTEES = [
   { icon: Sparkles, label: "Siempre nueva" },
 ]
 
+/**
+ * ❄️ NIEVE (Navidad): mismas secciones que el Cuenco Dunaru, pero con los
+ * datos reales de cada pieza (confirmados por la owner 2026-11-18).
+ * Gana sobre el contenido heredado del producto base.
+ */
+const PRODUCT_IMG =
+  "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/product-images/products/"
+
+interface NieveSpec {
+  /** "Tu Casita de Navidad" */
+  name: string
+  /** Recipiente con medidas, para bullets. */
+  vessel: string
+  /** Recipiente en minúsculas para frases ("el cuenco", "la batea"). */
+  vesselShort: string
+  /** Piezas de la escena, para bullets. */
+  pieces: string[]
+  wax: "500 g" | "1 kg"
+  image: string
+  includesAnswer: string
+  mechasAnswer: string
+}
+
+const nieveStory = (s: NieveSpec): PdpContent => ({
+  blocks: [
+    {
+      title: "Todo listo para encender hoy",
+      body: `Sin armar, sin buscar recipiente, sin complicaciones. ${s.name} trae **todo lo que necesitas para encender o regalar**.`,
+      bullets: [
+        s.vessel,
+        ...s.pieces,
+        `${s.wax} de Cera Duna color Nieve`,
+        "30 mechas de algodón incluidas",
+        "Envío gratis a todo México",
+      ],
+      image: s.image,
+      photo: true,
+    },
+    {
+      title: "Se compra una vez, se rellena para siempre",
+      body: `Cuando la cera se consume, **no tiras nada**: vuelves a llenar ${s.vesselShort} con una recarga y tu vela empieza de nuevo. Esta Navidad y las que siguen.`,
+      bullets: [
+        `${s.vesselShort.charAt(0).toUpperCase()}${s.vesselShort.slice(1)} se reutiliza infinitas veces`,
+        "Recarga con cualquier bolsa de Cera Duna",
+      ],
+      image:
+        "https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1787859462825-p6zo71cvpai.webp",
+      photo: true,
+      flip: true,
+    },
+  ],
+  compareRows: [
+    { label: "Llega listo para encender", dunaru: true, traditional: false },
+    { label: "Varias mechas a la vez", dunaru: true, traditional: false },
+    { label: "Rellenable infinitamente", dunaru: true, traditional: false },
+    { label: "Cera 100% vegetal y biodegradable", dunaru: true, traditional: false },
+    { label: "Sin cera pegada ni desperdicio", dunaru: true, traditional: false },
+    { label: "Recipiente de diseño reutilizable", dunaru: true, traditional: false },
+    { label: "Cambias de aroma sin cambiar de vela", dunaru: true, traditional: false },
+    { label: "Costo por hora de luz", dunaru: "$", traditional: "$$$" },
+  ],
+  faqs: [
+    { q: "¿Qué incluye?", a: s.includesAnswer },
+    { q: "¿Cuántas mechas puedo encender a la vez?", a: s.mechasAnswer },
+    {
+      q: "¿Tiene costo el envío?",
+      a: "No. El envío es gratis a todo México, con entrega estimada de 2 a 5 días hábiles.",
+    },
+    {
+      q: "¿Puedo rellenarla después?",
+      a: `Sí. Cuando la cera se consuma, agregas una recarga de Cera Duna y mechas nuevas en ${s.vesselShort}. Se reutiliza infinitas veces.`,
+    },
+    {
+      q: "¿Sirve para regalar?",
+      a: "Totalmente. Llega lista para encender desde el primer momento. Es una edición limitada: solo se hace para Navidad.",
+    },
+    {
+      q: "¿De qué color es la cera?",
+      a: "Color Nieve, un blanco como recién nevado. Es el tono de esta edición, por eso no se elige color.",
+    },
+  ],
+})
+
+const MECHAS_15CM =
+  "Por su diámetro de 15 cm recomendamos hasta tres mechas a la vez, además del pino. Repártelas de forma pareja y deja espacio entre ellas."
+
+const NIEVE_STORY: Record<string, PdpContent> = {
+  "casita-de-navidad-cuenco-dunaru": nieveStory({
+    name: "Tu Casita de Navidad",
+    vessel: "Cuenco Dunaru de cerámica, 20 × 6 cm",
+    vesselShort: "el mismo cuenco",
+    pieces: ["Casita de vela con mecha", "Pino nevado decorativo"],
+    wax: "500 g",
+    image: `${PRODUCT_IMG}pcr2chmvxs.webp`,
+    includesAnswer:
+      "El Cuenco Dunaru de cerámica de 20 cm de diámetro por 6 cm de alto, una casita de vela con su mecha, un pino nevado decorativo, 500 g de Cera Duna color Nieve y 30 mechas de algodón.",
+    mechasAnswer:
+      "Por su diámetro de 20 cm admite varias mechas al mismo tiempo, además de la casita. Repártelas de forma pareja sobre la cera y deja espacio entre ellas.",
+  }),
+  "aldea-de-navidad-centro-de-madera": nieveStory({
+    name: "Tu Aldea de Navidad",
+    vessel: "Batea de madera natural, 43 × 30 × 4 cm",
+    vesselShort: "la misma batea",
+    pieces: ["3 casitas de vela con mecha", "2 nochebuenas de cera", "3 pinos nevados decorativos"],
+    wax: "1 kg",
+    image: `${PRODUCT_IMG}aa7f61ffq9t.webp`,
+    includesAnswer:
+      "Una batea de madera natural de 43 × 30 cm y 4 cm de profundidad, 3 casitas de vela, 2 nochebuenas de cera, 3 pinos nevados decorativos, 1 kg de Cera Duna color Nieve y 30 mechas de algodón.",
+    mechasAnswer:
+      "Por su tamaño admite muchas mechas al mismo tiempo, además de las casitas y las nochebuenas. Repártelas entre las piezas y deja espacio entre ellas.",
+  }),
+  "pino-de-invierno-cuenco-alba": nieveStory({
+    name: "Tu Pino de Invierno",
+    vessel: "Cuenco Alba de cerámica, 15 × 4 cm",
+    vesselShort: "el mismo cuenco",
+    pieces: ["Pino de vela con mecha"],
+    wax: "500 g",
+    image: `${PRODUCT_IMG}u42c8wvtmid.webp`,
+    includesAnswer:
+      "El Cuenco Alba de cerámica de 15 cm de diámetro por 4 cm de alto, un pino de vela con su mecha, 500 g de Cera Duna color Nieve y 30 mechas de algodón.",
+    mechasAnswer: MECHAS_15CM,
+  }),
+  "refugio-de-invierno-cuenco-eclipse": nieveStory({
+    name: "Tu Refugio de Invierno",
+    vessel: "Cuenco Eclipse de cerámica, 15 × 4 cm",
+    vesselShort: "el mismo cuenco",
+    pieces: ["Pino de vela con mecha"],
+    wax: "500 g",
+    image: `${PRODUCT_IMG}0189tb9i2pfv.webp`,
+    includesAnswer:
+      "El Cuenco Eclipse de cerámica de 15 cm de diámetro por 4 cm de alto, un pino de vela con su mecha, 500 g de Cera Duna color Nieve y 30 mechas de algodón.",
+    mechasAnswer: MECHAS_15CM,
+  }),
+  "nochebuena-de-navidad-bowl-mbar": nieveStory({
+    name: "Tu Nochebuena de Navidad",
+    vessel: "Bowl Ámbar de vidrio con borde ondulado",
+    vesselShort: "el mismo bowl",
+    pieces: ["Nochebuena de vela con mecha"],
+    wax: "500 g",
+    image: `${PRODUCT_IMG}l6o60g0rwz.webp`,
+    includesAnswer:
+      "El Bowl Ámbar de vidrio con borde ondulado, una nochebuena de vela con su mecha, 500 g de Cera Duna color Nieve y 30 mechas de algodón.",
+    mechasAnswer:
+      "Recomendamos hasta tres mechas a la vez, además de la nochebuena. Repártelas de forma pareja y deja espacio entre ellas.",
+  }),
+}
+
 interface ProductStorySectionsProps {
   slug: string
   /** Contenido opcional entre las reseñas y los bloques de beneficios (ej. galería de temporada). */
@@ -799,7 +946,7 @@ interface ProductStorySectionsProps {
 }
 
 export const ProductStorySections = ({ slug, afterReviews }: ProductStorySectionsProps) => {
-  const content = PDP_CONTENT[contentSlug(slug)]
+  const content = NIEVE_STORY[slug] ?? PDP_CONTENT[contentSlug(slug)]
   if (!content) return null
 
   return (

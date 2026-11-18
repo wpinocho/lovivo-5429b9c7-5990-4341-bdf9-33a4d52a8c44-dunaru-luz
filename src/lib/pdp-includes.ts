@@ -30,50 +30,53 @@ const ENVIO = {
   benefit: "Llega en 2 a 5 días hábiles. Si no te convence, lo devuelves sin costo.",
 }
 
-/** Pieza decorativa de las velas Navidad (⏳ owner confirma material/cantidades). */
+/** Navidad · Nieve: datos confirmados por la owner 2026-11-18. */
 const NAVIDAD_CERA = {
-  item: "Cera Duna blanca, como nieve",
+  item: "500 g de Cera Duna color Nieve",
   benefit: "Cera 100% vegetal y biodegradable. Cuando se acabe, la vuelves a llenar.",
 }
 
-const NAVIDAD_MECHAS = {
-  item: "Mechas de algodón",
-  benefit: "Cambias la mecha, no la vela. Una por recarga.",
+const NAVIDAD_CERA_1KG = {
+  item: "1 kg de Cera Duna color Nieve",
+  benefit: "Cera 100% vegetal y biodegradable, suficiente para cubrir toda la batea.",
 }
+
+const NAVIDAD_MECHAS = MECHAS_30
 
 export const PDP_INCLUDES: Record<string, IncludeItem[]> = {
   // ❄️ Edición Navidad (slugs exactos, ganan sobre el contenido heredado)
   "casita-de-navidad-cuenco-dunaru": [
-    { item: "Cuenco Dunaru de cerámica, 20 cm de diámetro", benefit: "Pieza de diseño que se queda en casa. Se lava y vuelve a empezar." },
-    { item: "Casita navideña y pinito nevado", benefit: "La escena lista para tu mesa, sin armar nada." },
+    { item: "Cuenco Dunaru de cerámica, 20 cm de diámetro y 6 cm de alto", benefit: "Admite varias mechas a la vez. Se lava y vuelve a empezar." },
+    { item: "Casita de vela con mecha y pino nevado decorativo", benefit: "La casita también se enciende. El pino decora la escena." },
     NAVIDAD_CERA,
     NAVIDAD_MECHAS,
     ENVIO,
   ],
   "aldea-de-navidad-centro-de-madera": [
-    { item: "Charola de madera para centro de mesa", benefit: "Amplia y baja, pensada para varias mechas encendidas a la vez." },
-    { item: "Casitas, pinitos y nochebuenas", benefit: "Arma tu pueblito nevado a tu gusto y cámbialo cada año." },
-    NAVIDAD_CERA,
+    { item: "Batea de madera natural, 43 × 30 cm y 4 cm de profundidad", benefit: "Amplia y baja, pensada para varias mechas encendidas a la vez." },
+    { item: "3 casitas de vela y 3 pinos nevados decorativos", benefit: "Las casitas se encienden. Arma tu pueblito a tu gusto." },
+    { item: "2 nochebuenas de cera", benefit: "El rojo de la Navidad sobre la nieve. También son velas." },
+    NAVIDAD_CERA_1KG,
     NAVIDAD_MECHAS,
     ENVIO,
   ],
   "pino-de-invierno-cuenco-alba": [
-    { item: "Cuenco Alba de cerámica artesanal", benefit: "Pieza de diseño que se queda en casa. Se lava y vuelve a empezar." },
-    { item: "Pino navideño decorativo", benefit: "Le da la escena de invierno a tu vela, encendida o apagada." },
+    { item: "Cuenco Alba de cerámica, 15 cm de diámetro y 4 cm de alto", benefit: "Pieza de diseño que se queda en casa. Se lava y vuelve a empezar." },
+    { item: "Pino de vela con mecha", benefit: "El pino también se enciende, junto a las mechas en la cera." },
     NAVIDAD_CERA,
     NAVIDAD_MECHAS,
     ENVIO,
   ],
   "refugio-de-invierno-cuenco-eclipse": [
-    { item: "Cuenco Eclipse de cerámica", benefit: "Esmalte en tonos fríos. Se lava y vuelve a empezar." },
-    { item: "Pino navideño decorativo", benefit: "Le da la escena de invierno a tu vela, encendida o apagada." },
+    { item: "Cuenco Eclipse de cerámica, 15 cm de diámetro y 4 cm de alto", benefit: "Esmalte en tonos fríos. Se lava y vuelve a empezar." },
+    { item: "Pino de vela con mecha", benefit: "El pino también se enciende, junto a las mechas en la cera." },
     NAVIDAD_CERA,
     NAVIDAD_MECHAS,
     ENVIO,
   ],
   "nochebuena-de-navidad-bowl-mbar": [
     { item: "Bowl Ámbar de vidrio con borde ondulado", benefit: "Se ilumina desde adentro con la llama. Se lava y vuelve a empezar." },
-    { item: "Nochebuena decorativa", benefit: "El rojo de la temporada sobre la cera blanca." },
+    { item: "Nochebuena de vela con mecha", benefit: "El rojo de la temporada sobre la cera blanca. También se enciende." },
     NAVIDAD_CERA,
     NAVIDAD_MECHAS,
     ENVIO,
