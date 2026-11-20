@@ -12,7 +12,7 @@
 - STORE_ID `5429b9c7-5990-4341-bdf9-33a4d52a8c44`. Rutas: `/productos/:slug`, `/paquete/:slug`, `/carrito`, `/pagar`, `/categorias/:handle`, `/como-funciona`, `/dia-de-muertos` (Navigate → `/categorias/dia-de-muertos`), **`/navidad`** (renderiza Collection handle `navidad`, canónica).
 - ⚠️ `kit-vaso-de-concreto` = **Cuenco Eclipse**; slug no se cambia. Ancla Meta Ads = `kit-vaso-de-vidrio`.
 - ⚠️ La owner repriza, crea, DUPLICA y ARCHIVA desde el Dashboard. **NUNCA hardcodear precios.** El agente NO puede cambiar slugs.
-- 🗓️ **EDICIONES DE TEMPORADA = sistema anual reciclable** (`src/lib/editions.ts`). Activa: **NIEVE (Navidad)**, 5 productos activos desde 2026-11-18. DDM regresa oct 2027. Archivar, nunca borrar. ⛔ NO fecha límite de pedido en la web.
+- 🗓️ **EDICIONES DE TEMPORADA = sistema anual reciclable** (`src/lib/editions.ts`). Activa: **NIEVE (Navidad)**, 6 productos activos. DDM regresa oct 2027. Archivar, nunca borrar. ⛔ NO fecha límite de pedido en la web.
 - ⚠️ Los productos de edición pueden tener **nombres propios**: registrar SIEMPRE el slug real en `EDITIONS[].products`.
 - 🛍️ **PROMOS**: add-on con descuento en PDP de kits + carrito (`src/lib/promo-addon.ts`). 🛒 **UPSELL CARRITO**: promo (si aplica) → aroma.
 
@@ -34,6 +34,7 @@
 | ❄️ pino-de-invierno-cuenco-alba | Pino de Invierno · Cuenco Alba | $1,099 | |
 | ❄️ refugio-de-invierno-cuenco-eclipse | Refugio de Invierno · Cuenco Eclipse | $1,099 | |
 | ❄️ nochebuena-de-navidad-bowl-mbar | Nochebuena de Navidad · Bowl Ámbar | $1,299 | slug "mbar" |
+| ❄️ cera-duna-nieve-500-g | Cera Duna Nieve · 500 g (id 37545763-…) | $499 | sin variantes; hereda PDP de perlas-originales-500-g |
 | ❄️ esencia-para-vela-navideo-10-ml | Esencia Navideño · 10 ml (Pino Navideño / Manzana Canela) | $99 | OCULTO en catálogo |
 | 🛍️ cera-duna-500-g-buen-fin | Add-on Buen Fin | $249 | OCULTO |
 | 🏵️ 7 productos Cempasúchil + esencia | ARCHIVADOS desde 2026-11-02 | | |
@@ -43,11 +44,12 @@
 - Aldea (batea madera 43×30×4 cm): 3 casitas de vela + 2 nochebuenas de cera + 3 pinos DECORATIVOS · **1 kg** · 30 mechas.
 - Pino de Invierno (Alba 15×4 cm) y Refugio (Eclipse 15×4 cm): pino DE VELA · 500 g · 30 mechas.
 - Nochebuena (Bowl Ámbar): nochebuena DE VELA · 500 g · 30 mechas. ⏳ Medidas del Bowl Ámbar NO confirmadas.
+- Cera Duna Nieve 500 g (2026-11-20): misma PDP que Cera Duna 500 g; fotos = las de variante Marfil + generales (sin Champagne/Ónix).
 - Cera color **Nieve** (sin selector de color).
-- Aromas (de las imágenes de variantes): Pino Navideño = aguja de pino, ciprés, enebro, resina, corteza. Manzana Canela = manzana roja, jengibre, canela, anís estrella, clavo, miel.
+- Aromas: Pino Navideño = aguja de pino, ciprés, enebro, resina, corteza. Manzana Canela = manzana roja, jengibre, canela, anís estrella, clavo, miel.
 
 ⚠️ Copias hardcodeadas de títulos: `CATALOG_FALLBACK` (IndexUI), `FOOTER_SHOP_LINKS` (EcommerceTemplate), `src/lib/navigation.ts`.
-- COLECCIONES: `kits`, `recipientes`, `accesorios`, `dia-de-muertos`, `navidad` (5 productos Nieve).
+- COLECCIONES: `kits`, `recipientes`, `accesorios`, `dia-de-muertos`, `navidad` (6 productos Nieve).
 - ORDEN = `src/lib/catalog-order.ts`. `HIDDEN_FROM_CATALOG_SLUGS` = esencias de temporada + add-on Buen Fin.
 
 ---
@@ -71,9 +73,10 @@
 
 ### 🗓️ SISTEMA DE EDICIONES (`src/lib/editions.ts`)
 - `EDITIONS[]`: id, name, occasion, collectionHandle, path, canonicalPath, navLabel, eyebrow, title, heroTagline, heroImage, home{}, notice, inspiration{ideas[]}, accentClass, pdpThemeClass, **products (slug real → slug base)**, slugPrefixes, headlines, **scents {seasonal, hide}**.
-- Nieve: Casita, Aldea, Alba y Eclipse mapean a `vela-rellenable-cuenco-dunaru` (reseñas/aromas del Dunaru, pedido owner). Nochebuena → `vela-rellenable-bowl-ambar`.
-- Aromas: `SEASONAL_SCENTS` en `scents.ts`. Nieve oculta higo-matcha + costa-mineral; DDM oculta costa-mineral.
-- Contenido PDP: `PDP_INCLUDES`, `PDP_BENEFITS` (ProductPageUI) y **`NIEVE_STORY`** (ProductStorySections, builder `nieveStory(spec)`) buscan **slug exacto primero**, luego `contentSlug`.
+- Nieve: Casita, Aldea, Alba y Eclipse mapean a `vela-rellenable-cuenco-dunaru`. Nochebuena → `vela-rellenable-bowl-ambar`. Cera Nieve → `perlas-originales-500-g`.
+- Aromas: `SEASONAL_SCENTS` en `scents.ts`. Nieve oculta higo-matcha + costa-mineral; DDM oculta costa-mineral. `supportsScentAddon` usa contentSlug.
+- Contenido PDP: `PDP_INCLUDES`, `PDP_BENEFITS` (ProductPageUI) y **`NIEVE_STORY`** (ProductStorySections) buscan **slug exacto primero**, luego `contentSlug`. Reseñas también por contentSlug.
+- `TIER_SELECTOR_SLUGS` (500 g / 1 kg) es por slug exacto: NO aparece en Cera Nieve (correcto, no hay 1 kg Nieve).
 - Menú: link "Navidad" aparece si algún slug activo hace match con `editionForSlug`.
 - CHECKLIST NUEVA EDICIÓN: entrada en `EDITIONS` (slugs reales) + `--dunaru-X`, `.edition-X`/`.theme-X` en index.css + ruta corta App.tsx + sitemap + colección DB + esencia oculta + includes/benefits/story por slug.
 
@@ -87,13 +90,14 @@
 ## 3. Active Plan
 
 ### ❄️ FASE 17: EDICIÓN NIEVE (Navidad) — 🟢 EN VIVO
-- Hecho 2026-11-18 (sesión 2): datos reales en includes/beneficios/descripciones DB; secciones PDP propias (`NIEVE_STORY`) para los 5 (Alba y Eclipse antes no tenían o tenían las del bowl negro); notas de aromas navideños desde sus imágenes.
+- 2026-11-20: creado **Cera Duna Nieve · 500 g** ($499, activo, colección navidad), mapeado en EDITIONS + headline.
 - ⏳ Pendiente:
   1. Medidas del Bowl Ámbar (hoy no se mencionan).
-  2. La owner sube a cada producto la imagen "Este kit incluye" (ya existe para Aldea en el chat: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1795040429854-34pnoxnxfvx.webp`). No se agregó a la galería; preguntar si quiere que la agregue.
+  2. Imagen "Este kit incluye" por producto (Aldea ya existe: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1795040429854-34pnoxnxfvx.webp`). Preguntar si la agrego a galería.
   3. Descripción del producto Esencia Navideño (vacía).
-  4. QA visual: `/navidad`, PDPs (secciones, selector aromas, pirámide), carrito, móvil 375; `npx tsc --noEmit`.
-  5. ¿Agregar los Nieve a "Elige tu vela" / footer? (no pedido aún).
+  4. QA visual: `/navidad`, PDPs, Cera Nieve PDP, carrito, móvil 375; `npx tsc --noEmit`.
+  5. Owner: asignar paquete "Caja chica" a Cera Nieve en Dashboard (tool no lo copia).
+  6. ¿Fotos propias color Nieve para Cera Nieve? hoy usa fotos Marfil.
 
 ### 🛒 FASE 16 UPSELL CARRITO ✅ · ⏳ QA 16.5
 ### 🛍️ FASE 15 BUEN FIN terminó 17 nov · ⏳ owner archiva add-on, quitar sticker
@@ -102,8 +106,9 @@
 ---
 
 ## 4. Recent Changes
-- 2026-11-18 — ❄️ Nieve: datos reales (piezas de vela vs decorativas, 500 g / 1 kg, 30 mechas, medidas), `NIEVE_STORY` en ProductStorySections, Alba/Eclipse heredan del Cuenco Dunaru, descripciones DB actualizadas, notas de aromas navideños.
-- 2026-11-18 — ❄️ Nieve conectada a productos reales: slugs, inspiración (6 fotos), aromas navideños con UI de temporada, includes/beneficios propios, colección.
+- 2026-11-20 — ❄️ Nuevo producto `cera-duna-nieve-500-g` (clon de Cera Duna 500 g, sin variantes, fotos Marfil), en colección navidad, mapeado a perlas en EDITIONS.
+- 2026-11-18 — ❄️ Nieve: datos reales, `NIEVE_STORY` en ProductStorySections, descripciones DB, notas de aromas navideños.
+- 2026-11-18 — ❄️ Nieve conectada a productos reales: slugs, inspiración, aromas navideños, includes/beneficios, colección.
 - 2026-11-18 — 🌿 `Edition.scents {seasonal, hide}` reemplaza `seasonalScents`.
 - 2026-11-16 — ❄️ Sistema de ediciones + edición NIEVE.
 - 2026-11-13 — 🛒 FASE 16 upsell en carrito.
@@ -117,14 +122,15 @@
 
 ## 5. Image Inventory
 - Fotos producto 1122×1402 (4:5) webp. Uploads owner: `.../message-images/58337cbc-5a9f-4862-810a-1470616566de/`.
+- Cera Duna 500 g: Marfil `m4gndhjxsj, wjrp5b6unfo, 0fxyjfz8hpv5, 7d84s8xv6k6, 5vig8ko6ums`; generales `qqmcg71lw2k, 1xb5mgphkap, binneg1kw2o, 1uw63qn80ye` (products/). Cera Nieve usa estas 9.
 - ❄️ Banner Nieve (aprobado): `.../product-images/5429b9c7-.../nieve-banner.webp`.
 - ❄️ Inspiración Nieve: `1795038283050-{yuqxeisjjd, w6zybbbc4dd, et53jlvbbf, 7fohsz8y38l, dhe9t85y9ge, zjoe0ial8g}.webp`.
 - ❄️ Aromas navideños: Pino `products/xpu7atgmjzq.webp`, Manzana Canela `products/b8pwxy0ah5k.webp` (4:3).
-- ❄️ Fotos usadas en bloque "Todo listo" de NIEVE_STORY: Casita `pcr2chmvxs`, Aldea `aa7f61ffq9t`, Alba `u42c8wvtmid`, Eclipse `0189tb9i2pfv`, Nochebuena `l6o60g0rwz` (products/). Bloque 2 = foto rellenar del Dunaru `1787859462825-p6zo71cvpai`.
-- Productos Nieve comparten 2 fotos: lata Dunaru sobre nieve (72 KB) y 4 pasos (112 KB).
+- ❄️ Fotos bloque "Todo listo" NIEVE_STORY: Casita `pcr2chmvxs`, Aldea `aa7f61ffq9t`, Alba `u42c8wvtmid`, Eclipse `0189tb9i2pfv`, Nochebuena `l6o60g0rwz` (products/). Bloque 2 = `1787859462825-p6zo71cvpai`.
 - 🛍️ Sticker Buen Fin: DEPRECAR. 🏵️ DDM banner + 6 inspiración en `EDITIONS[ddm]`.
 
 ## 6. Known Issues
+- 2026-11-20 — 🟡 Cera Nieve creada sin `default_package_id` (original = "Caja chica"); owner debe asignarlo en Dashboard.
 - 2026-11-18 — 🟡 Cambios de Nieve sin `tsc` ni QA visual.
 - 2026-11-18 — 🟡 Slug `nochebuena-de-navidad-bowl-mbar` (sin "a"); funciona por mapeo explícito.
 - 2026-11-16 — 🟠 gpt-image/gemini sin créditos (402); usar flux.
@@ -135,7 +141,7 @@
 - 2026-08-21 — 🔴 `update-product` NO soporta imágenes por variante ni cambio de slug.
 
 ## 7. Pending / Future Sessions
-- [URGENTE] Nieve pendientes 1–4 de FASE 17.
+- [URGENTE] Nieve pendientes 1–6 de FASE 17.
 - [ALTA] Owner archiva add-on Buen Fin y quitar sticker.
 - [2026-11-20] PostHog `cart_upsell_viewed` vs `added`.
 - [ALTA] 14.5 landing fuera de temporada · 14.7 redirect PDP archivada.

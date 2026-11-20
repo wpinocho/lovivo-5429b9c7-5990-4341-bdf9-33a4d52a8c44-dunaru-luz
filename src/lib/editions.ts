@@ -114,6 +114,8 @@ export const EDITIONS: Edition[] = [
       "pino-de-invierno-cuenco-alba": "vela-rellenable-cuenco-dunaru",
       "refugio-de-invierno-cuenco-eclipse": "vela-rellenable-cuenco-dunaru",
       "nochebuena-de-navidad-bowl-mbar": "vela-rellenable-bowl-ambar",
+      // Misma PDP que Cera Duna · 500 g (secciones, incluye, reseñas, FAQ). Sin selector de color.
+      "cera-duna-nieve-500-g": "perlas-originales-500-g",
     },
     slugPrefixes: ["vela-rellenable-nieve-", "cera-duna-nieve-"],
     headlines: {
@@ -127,6 +129,8 @@ export const EDITIONS: Edition[] = [
         "Cerámica de tonos fríos, un pino de vela y tres mechas: luz cálida para las noches de diciembre.",
       "nochebuena-de-navidad-bowl-mbar":
         "Vidrio ámbar, cera blanca y una nochebuena. La luz más cálida de la temporada.",
+      "cera-duna-nieve-500-g":
+        "Cera color Nieve para el recipiente que ya tienes. Hasta 120 horas de luz esta Navidad.",
     },
     scents: { seasonal: ["pino-navideno", "manzana-canela"], hide: ["higo-matcha", "costa-mineral"] },
   },
