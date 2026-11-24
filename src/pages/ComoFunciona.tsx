@@ -118,7 +118,7 @@ const ComoFunciona = () => (
             <InlineCta secondary={{ label: 'Ver aromas', to: '/productos/esencia-para-vela-10-ml' }} />
           </div>
           <p className="font-body text-xs text-foreground/50 mt-4">
-            Envío gratis a todo México · 30 días de garantía
+            Envío gratis desde $499 · 30 días de garantía
           </p>
         </Reveal>
       </div>

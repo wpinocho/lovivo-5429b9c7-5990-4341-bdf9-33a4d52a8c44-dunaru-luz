@@ -119,7 +119,7 @@ const BENEFITS = [
   { icon: Leaf, text: '100% vegetal y biodegradable' },
   { icon: RefreshCw, text: 'Rellenable para siempre' },
   { icon: MapPin, text: 'Hecha en México' },
-  { icon: Truck, text: 'Envío gratis + 30 días' },
+  { icon: Truck, text: 'Envío gratis desde $499' },
 ];
 
 const STEPS = [
@@ -183,7 +183,7 @@ const FAQ_ITEMS = [
   { q: '¿Cuánto dura una bolsa?', a: 'Aproximadamente 120 horas de luz por bolsa de 500 g, dependiendo del tamaño de tu recipiente.' },
   { q: '¿Qué pasa al encenderla?', a: 'La mecha se consume lentamente. Las perlas no se "derriten" como una vela tradicional, solo rodean la llama. Al terminar la mecha, agregas una nueva.' },
   { q: '¿Es seguro?', a: 'Sí. La vela se apaga si se vuelca porque la mecha pierde contacto. Úsala siempre sobre una superficie plana y estable, nunca sin supervisión cerca de telas o materiales inflamables.' },
-  { q: '¿Cómo llega?', a: 'Enviamos desde CDMX con paquetería estándar. Entregas en 2–5 días hábiles. Envío gratis a todo México, sin monto mínimo.' },
+  { q: '¿Cómo llega?', a: 'Enviamos desde CDMX con paquetería estándar. Entregas en 2–5 días hábiles. Envío gratis a todo México en pedidos desde $499 (incluye cualquier vela o Cera Duna). En pedidos menores, el envío cuesta $99.' },
   { q: '¿Puedo pagar a meses?', a: 'Sí. Aceptamos hasta 6 meses sin intereses con tarjetas participantes (VISA y Mastercard). El banco puede aplicar condiciones propias.' },
 ];
 
@@ -270,7 +270,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
             {/* Social proof mini */}
             <div className="mt-10 sm:mt-12 flex items-center gap-3 animate-fade-up delay-400">
               <span className="badge-msi">Hasta 6 MSI</span>
-              <span className="font-body text-xs text-dunaru-marfil/50">· Envío gratis a todo México</span>
+              <span className="font-body text-xs text-dunaru-marfil/50">· Envío gratis desde $499</span>
             </div>
           </div>
         </div>
@@ -326,7 +326,7 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
               ELIGE <em>tu</em> VELA
             </h2>
             <p className="font-body text-sm text-foreground/55 max-w-sm mx-auto mt-4">
-              Envío gratis a todo México, sin mínimo. Hasta 6 meses sin intereses. 30 días de garantía.
+              Todas llegan con envío gratis a todo México. Hasta 6 meses sin intereses. 30 días de garantía.
             </p>
           </Reveal>
 

@@ -1075,7 +1075,7 @@ export const ProductStorySections = ({ slug, afterReviews }: ProductStorySection
             ¿Lista para encender la tuya?
           </h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Envío gratis a todo México, llega en 2 a 5 días · 30 días de garantía
+            Envío gratis a todo México desde $499, llega en 2 a 5 días · 30 días de garantía
           </p>
           <button
             type="button"

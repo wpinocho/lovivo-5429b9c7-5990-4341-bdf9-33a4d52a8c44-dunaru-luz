@@ -65,7 +65,7 @@ const ReturnsPolicy = () => {
             <h3 className="font-display text-lg text-foreground mb-2">Tiempos de entrega</h3>
             <p>
               Enviamos desde la Ciudad de México a todo el país. Las entregas tardan de 2 a 5
-              días hábiles. Envío gratis en pedidos desde $899.
+              días hábiles. Envío gratis en pedidos desde $499; en pedidos menores, el envío cuesta $99.
             </p>
           </section>
 

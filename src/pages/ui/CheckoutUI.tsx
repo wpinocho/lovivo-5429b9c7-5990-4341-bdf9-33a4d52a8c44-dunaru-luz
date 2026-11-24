@@ -19,6 +19,7 @@ import { BrandLogoLeft } from "@/components/BrandLogoLeft";
 import { useURLCheckoutParams } from "@/hooks/useURLCheckoutParams";
 import { useTokenCheckout } from "@/hooks/useTokenCheckout";
 import { formatMoney } from "@/lib/money";
+import { useFreeShippingThreshold, FREE_SHIPPING_COPY } from "@/lib/shipping";
 import { countryNameToCode, countryCodeToName } from "@/lib/country-codes";
 
 /**
@@ -314,7 +315,7 @@ export default function CheckoutUI() {
                     const trustBadgesSlot = (
                       <div className="space-y-3 pt-1">
                         <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
-                          <span className="flex items-center gap-1.5"><Truck className="h-4 w-4 text-dunaru-ambar" /> Envío gratis a todo México</span>
+                          <span className="flex items-center gap-1.5"><Truck className="h-4 w-4 text-dunaru-ambar" /> {FREE_SHIPPING_COPY.short}</span>
                           <span className="flex items-center gap-1.5"><Lock className="h-4 w-4 text-dunaru-ambar" /> Pago seguro</span>
                           <span className="flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-dunaru-ambar" /> Garantía 30 días</span>
                         </div>
@@ -584,8 +585,7 @@ export default function CheckoutUI() {
                     <div className="flex justify-between">
                       <span>Envío</span>
                       <span className={`${logic.isCalculatingShipping ? 'opacity-50 blur-sm' : ''} transition-all duration-200`}>
-                        {logic.selectedPickupLocation ? 'GRATIS (Recoger en tienda)' : 
-                         logic.shippingCost > 0 ? formatMoney(logic.shippingCost, logic.currencyCode) : 'GRATIS'}
+                        {logic.selectedPickupLocation ? 'GRATIS (Recoger en tienda)' : <ShippingAmount logic={logic} />}
                       </span>
                     </div>
 
@@ -639,7 +639,9 @@ export default function CheckoutUI() {
 
 /* ─── Promesa de envío: resuelta desde el primer render ─── */
 function ShippingPromise({ logic }: { logic: any }) {
-  const isFree = logic.selectedPickupLocation || logic.shippingCost === 0;
+  const { minSubtotal } = useFreeShippingThreshold();
+  const belowMin = logic.summaryTotal < minSubtotal;
+  const isFree = logic.shippingCost === 0 && !belowMin;
 
   if (logic.selectedPickupLocation) {
     return (
@@ -654,11 +656,26 @@ function ShippingPromise({ logic }: { logic: any }) {
     <div className="flex items-center gap-2 text-xs text-dunaru-ambar">
       <Truck className="h-4 w-4 shrink-0" />
       <span>
-        {isFree ? <span className="font-semibold">Envío gratis</span> : <>Envío {formatMoney(logic.shippingCost, logic.currencyCode)}</>}
+        {isFree ? (
+          <span className="font-semibold">Envío gratis</span>
+        ) : logic.shippingCost > 0 ? (
+          <>Envío {formatMoney(logic.shippingCost, logic.currencyCode)}</>
+        ) : (
+          <>Te faltan {formatMoney(minSubtotal - logic.summaryTotal, logic.currencyCode)} para envío gratis</>
+        )}
         {" · Llega entre el "}{getDeliveryRange()}
       </span>
     </div>
   );
+}
+
+/* ─── Monto de envío en el resumen: honesto bajo el mínimo ─── */
+function ShippingAmount({ logic }: { logic: any }) {
+  const { minSubtotal } = useFreeShippingThreshold();
+  if (logic.shippingCost > 0) return <>{formatMoney(logic.shippingCost, logic.currencyCode)}</>;
+  // Bajo el mínimo el costo llega al capturar la dirección
+  if (logic.summaryTotal < minSubtotal) return <>Por calcular</>;
+  return <>GRATIS</>;
 }
 
 /* ─── Mobile Order Summary (collapsible, top of checkout) ─── */
@@ -724,9 +741,7 @@ function MobileOrderSummary({ logic }: { logic: any }) {
             <div className="flex justify-between">
               <span className="text-muted-foreground">Envío</span>
               <span className="font-medium">
-                {logic.shippingCost > 0
-                  ? formatMoney(logic.shippingCost, logic.currencyCode)
-                  : "GRATIS"}
+                <ShippingAmount logic={logic} />
               </span>
             </div>
             {logic.discountAmount > 0 && (

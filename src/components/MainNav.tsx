@@ -133,7 +133,7 @@ export const DesktopNav = () => {
                   {SHOP_ALL.label}
                 </Link>
                 <span className="font-body text-xs text-foreground/45">
-                  Envío gratis a todo México · Hasta 6 meses sin intereses
+                  Envío gratis desde $499 · Hasta 6 meses sin intereses
                 </span>
               </div>
             </div>

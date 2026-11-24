@@ -66,7 +66,8 @@ export const EcommerceTemplate = ({
       <div className="flex items-center justify-center gap-2.5 sm:gap-5 text-[11px] sm:text-xs font-medium">
         <span className="flex items-center gap-1.5 whitespace-nowrap">
           <Truck className="h-3.5 w-3.5 text-dunaru-champagne shrink-0" strokeWidth={1.75} />
-          Envío gratis a todo México
+          <span className="sm:hidden">Envío gratis desde $499</span>
+          <span className="hidden sm:inline">Envío gratis a todo México desde $499</span>
         </span>
         <span className="h-3 w-px bg-dunaru-marfil/25 shrink-0" />
         <span className="flex items-center gap-1.5 whitespace-nowrap">

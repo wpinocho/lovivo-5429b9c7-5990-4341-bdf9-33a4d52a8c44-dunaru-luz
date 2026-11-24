@@ -1648,7 +1648,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
 
                   <div className="grid grid-cols-3 gap-2 pt-3 mt-1 border-t border-border/60">
                     {[
-                      { icon: Truck, title: "Envío gratis", sub: "A todo México" },
+                      { icon: Truck, title: "Envío gratis", sub: "Desde $499" },
                       { icon: ShieldCheck, title: "30 días", sub: "De garantía" },
                       { icon: CreditCard, title: "6 meses", sub: "Sin intereses" },
                     ].map(({ icon: Icon, title, sub }) => (
@@ -1751,8 +1751,9 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
                 </AccordionTrigger>
                 <AccordionContent className="text-sm text-muted-foreground space-y-2">
                   <p>
-                    Envío gratis a todo México, sin mínimo de compra. Tiempo
-                    estimado de entrega: 2 a 5 días hábiles.
+                    Envío gratis a todo México en pedidos desde $499. En pedidos
+                    menores, el envío cuesta $99. Tiempo estimado de entrega: 2 a 5
+                    días hábiles.
                   </p>
                   <p>
                     Cuentas con 30 días para solicitar tu devolución sin

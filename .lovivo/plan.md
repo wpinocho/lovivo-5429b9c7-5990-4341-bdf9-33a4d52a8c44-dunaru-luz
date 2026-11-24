@@ -7,7 +7,7 @@
 - **AROMA**: cera neutra. Add-on **Esencia para Vela · 10 ml** ($99). 1 frasco perfuma 500 g. Cada frasco = UN aroma.
 - Target: mujer 25–45, urbana, CDMX/GDL/MTY/Puebla/QRO. México, MXN, es-MX.
 - Tono: claro, cálido, directo, **editorial premium** (refs sensatehomes.com, soliracandle.com). ⛔ NO founder-led.
-- Pagos: **hasta 6 MSI** (nunca nombrar Stripe/Mercado Pago). Envío: HOY **GRATIS A TODO MÉXICO, SIN MÍNIMO** (⏳ propuesta 2026-11-24: gratis desde $499, ver FASE 18). Garantía 30 días. WhatsApp `525531215386`.
+- Pagos: **hasta 6 MSI** (nunca nombrar Stripe/Mercado Pago). Envío: **GRATIS A TODO MÉXICO DESDE $499** (desde 2026-11-24); pedidos menores pagan **$99**. Garantía 30 días. WhatsApp `525531215386`.
 - INTEGRIDAD: nunca reseñas falsas (16 reales, 4.9), nunca precios tachados inventados, nunca logos de prensa.
 - STORE_ID `5429b9c7-5990-4341-bdf9-33a4d52a8c44`. Rutas: `/productos/:slug`, `/paquete/:slug`, `/carrito`, `/pagar`, `/categorias/:handle`, `/como-funciona`, `/dia-de-muertos` (Navigate → `/categorias/dia-de-muertos`), **`/navidad`** (renderiza Collection handle `navidad`, canónica).
 - ⚠️ `kit-vaso-de-concreto` = **Cuenco Eclipse**; slug no se cambia. Ancla Meta Ads = `kit-vaso-de-vidrio`.
@@ -15,7 +15,7 @@
 - 🗓️ **EDICIONES DE TEMPORADA = sistema anual reciclable** (`src/lib/editions.ts`). Activa: **NIEVE (Navidad)**, 6 productos activos. DDM regresa oct 2027. Archivar, nunca borrar. ⛔ NO fecha límite de pedido en la web.
 - ⚠️ Los productos de edición pueden tener **nombres propios**: registrar SIEMPRE el slug real en `EDITIONS[].products`.
 - 🛍️ **PROMOS**: add-on con descuento en PDP de kits + carrito (`src/lib/promo-addon.ts`). 🛒 **UPSELL CARRITO**: promo (si aplica) → aroma.
-- 💸 Modelo de negocio = recompra de cera (rellenable). Los pedidos de solo cera ($499–$598) son clientas que vuelven: NUNCA castigarlos con envío.
+- 💸 Modelo de negocio = recompra de cera (rellenable). Los pedidos de solo cera ($499–$598) son clientas que vuelven: NUNCA castigarlos con envío (por eso el mínimo = $499).
 
 ### 🏷️ CATÁLOGO
 | Slug | Título | Precio | Compare |
@@ -81,48 +81,34 @@
 - Menú: link "Navidad" aparece si algún slug activo hace match con `editionForSlug`.
 - CHECKLIST NUEVA EDICIÓN: entrada en `EDITIONS` (slugs reales) + `--dunaru-X`, `.edition-X`/`.theme-X` en index.css + ruta corta App.tsx + sitemap + colección DB + esencia oculta + includes/benefits/story por slug.
 
+### 🚚 SISTEMA DE ENVÍO (`src/lib/shipping.ts`, 2026-11-24)
+- Fuente de verdad: price rule DB **`473eff23-0da2-4714-a0f5-0a7fea205d81`** "Envío gratis desde $499" (free_shipping, `min_subtotal: 499`, applies_to all, activa).
+- `FREE_SHIPPING_MIN = 499` (respaldo + cifra del copy estático) · `FREE_SHIPPING_COPY {short, long, sub}` · hook `useFreeShippingThreshold()` lee la regla.
+- ⚠️ Si la owner cambia el mínimo: actualizar regla + constante + copy hardcodeado "$499" (top bar, MainNav, IndexUI, ProductPageUI, ComoFunciona, ReturnsPolicy, ProductStorySections cierre).
+- Tarifa < $499 = **$99**, configurada por la owner en Dashboard (zonas de envío). El costo real llega del backend (`shippingFromCheckout`).
+- `FreeShippingBar` (carrito drawer + /carrito): "Te faltan $X para envío gratis" → "Tu envío es gratis a todo México". Estilo dunaru (radius 0, oliva-claro).
+- Checkout: `ShippingPromise` y `ShippingAmount` (CheckoutUI) no dicen "gratis" si el subtotal < mínimo: muestran "Te faltan $X…" / "Por calcular" hasta que el backend devuelve el costo.
+- Copy en PDPs de kits/ceras (≥ $499) sigue diciendo "Envío gratis a todo México" (verdadero). Copy genérico dice "desde $499".
+
 ### Otros sistemas
 - TRACKING `tracking-utils.ts`. ESTATUS `useActiveProductSlugs.ts`. RESEÑAS `src/data/reviews.ts`. DEEP LINK `?variante=`.
 - ADD-ONS PDP: `scentSelection` + `addonSelection`; candado `enforcePromoAddonLimit`.
 - CHECKLIST PDP vela nueva: PDP_HEADLINE + PDP_BENEFITS, pdp-includes, SCENT_ENABLED_SLUGS, catalog-order, SHOP_CARDS + CATALOG_FALLBACK, [promo] `PROMO_ADDON.kitSlugs`.
-- ENVÍO: barra de progreso `src/components/ui/FreeShippingBar.tsx` ya lee price rules `free_shipping` con `conditions.min_subtotal` (vía `usePriceRules().getFreeShippingRules()`). Hoy no hay regla activa → la barra no se muestra.
 
 ---
 
 ## 3. Active Plan
 
-### 🚚 FASE 18: POLÍTICA DE ENVÍO (propuesta 2026-11-24, ⏳ esperando OK de la owner)
-**Problema:** owner cubre envío en todos los pedidos; pierde dinero en pedidos muy chicos (mechas $99 sola).
-**Datos PostHog 90 días (107 pedidos):** AOV $1,400 · mediana $1,199. Distribución: <$300 = 1 pedido ($99 mechas) · $300–499 = 3 (Cera 500 g sola, recompra) · $500–749 = 6 (casi todos $598 = cera + esencia/mechas) · $750–999 = 15 · $1,000–1,499 = 62 · $1,500+ = 20. → 97% de pedidos ya ≥ $499. El problema es ~1% de pedidos.
-**Recomendación:**
-1. **Envío gratis desde $499** (= precio Cera Duna 500 g). Cubre todos los kits, todas las ceras (recompra protegida) y casi todos los recipientes. Solo pagan envío: mechas $99, esencia $99, vaso solo $299 (o combinaciones < $499).
-   - NO usar umbral alto ($899/$1,500): castigaría a las clientas de recompra (corazón del modelo rellenable) y debilitaría el gancho de Meta Ads.
-   - Costo de envío bajo el mínimo: tarifa plana (sugerido $99, confirmar costo real de guía con la owner). Configurar en Dashboard (zonas/tarifas de envío).
-2. **Copy honesto:** "Envío gratis a todo México desde $499". Quitar TODOS los "sin mínimo".
-3. **Barra de progreso en carrito** (ya existe FreeShippingBar): se activa al crear price rule free_shipping min_subtotal 499. Mensaje "Te faltan $X para envío gratis" → en pedido de mechas sugiere agregar cera.
-4. **Palanca AOV real = regalo por monto, no el envío** (fase opcional 18B): "Desde $1,400 te regalamos una esencia de 10 ml" (≈ AOV actual; cuenco $999 + cera $499 lo cruza). Barra en carrito con 2 metas: envío gratis ($499) → regalo ($1,400). Implementar como sistema tipo `promo-addon.ts` (agregar esencia $0 / variante elegible cuando subtotal ≥ umbral). Medir con PostHog (AOV antes/después, % pedidos ≥ umbral). Alternativa más simple si no quiere regalo: dejar solo upsell actual.
-
-**Implementación (Craft Mode, cuando la owner apruebe):**
-- [Dashboard/owner] Configurar tarifa de envío para pedidos < $499 (monto a confirmar).
-- `create-price-rule` tipo free_shipping, `conditions.min_subtotal = 499`, activa. Verificar que el checkout la respete (CheckoutUI línea ~657 usa `logic.shippingCost` / `isFree`).
-- Revisar FreeShippingBar: estilo dunaru (radius 0, oliva), copy "Te faltan $X para envío gratis" / "Tu envío es gratis". Sin guion largo.
-- Actualizar copy (quitar "sin mínimo", agregar "desde $499" donde sea afirmación absoluta):
-  - `src/templates/EcommerceTemplate.tsx` L69 top bar → "Envío gratis a todo México desde $499"
-  - `src/components/MainNav.tsx` L136
-  - `src/pages/ui/IndexUI.tsx` L122, L186 (FAQ "sin monto mínimo"), L273, L329 ("sin mínimo")
-  - `src/pages/ui/ProductPageUI.tsx` L1651 trust badge (sub "A todo México desde $499"), L1754 ("sin mínimo de compra")
-  - `src/pages/ui/CheckoutUI.tsx` L317
-  - `src/pages/ComoFunciona.tsx` L121, L232
-  - `src/components/ProductStorySections.tsx` (17 matches: en PDPs de kits ≥ $499 el claim sigue siendo verdadero; solo cambiar FAQs genéricas)
-  - `src/components/ProductQuantityTiers.tsx` L126 (ok, siempre ≥ $499)
-  - `src/lib/pdp-includes.ts` L29 (ok para kits)
-  - ⚠️ `src/pages/ReturnsPolicy.tsx` L68 dice "Envío gratis en pedidos desde $899" → YA ES INCONSISTENTE HOY; alinear a $499.
-  - Descripciones DB de mechas/esencia/vaso solo: no deben prometer envío gratis.
-  - `public/llms.txt` si menciona envío.
-- QA: carrito con solo mechas ($99) → muestra barra + cobra envío; carrito con Cera 500 g ($499) → gratis; checkout total correcto.
+### 🚚 FASE 18: POLÍTICA DE ENVÍO — 🟢 IMPLEMENTADA 2026-11-24 (falta tarifa $99 en Dashboard + QA)
+**Datos PostHog 90 días (107 pedidos):** AOV $1,400 · mediana $1,199. 97% de pedidos ya ≥ $499. Solo 1 pedido < $300 (mechas $99).
+**Hecho:** regla free_shipping $499 en DB, `src/lib/shipping.ts`, FreeShippingBar rediseñada, checkout honesto bajo mínimo, copy "desde $499" en top bar, MainNav, IndexUI (trust bar, FAQ, hero, sección kits), PDP (badge + acordeón envío), ComoFunciona, ReturnsPolicy (antes decía $899), cierre ProductStorySections.
+**Pendiente:**
+1. [OWNER] Configurar tarifa $99 en Dashboard (zonas/tarifas). Sin esto, todo sigue saliendo gratis (y el resumen de checkout bajo $499 dirá "Por calcular" y luego GRATIS).
+2. QA: carrito solo mechas ($99) → barra "Te faltan $400" + checkout cobra $99; carrito Cera 500 g ($499) → gratis; kit → gratis. ⚠️ Verificar unidad de `min_subtotal`: la tool de price rules sugiere centavos (ej. $400 = 40000) pero el front compara en pesos. Si el backend NO da envío gratis a pedidos ≥ $499 tras configurar $99, cambiar a 49900 y ajustar `useFreeShippingThreshold` (dividir entre 100).
+3. Revisar descripciones DB de mechas / esencia / vaso solo: que no prometan envío gratis.
+4. **FASE 18B (después, si owner quiere):** regalo por monto "Desde $1,400 te regalamos una esencia de 10 ml". Barra con 2 metas (envío $499 → regalo $1,400). Sistema tipo `promo-addon.ts`. Medir AOV en PostHog.
 
 ### ❄️ FASE 17: EDICIÓN NIEVE (Navidad) — 🟢 EN VIVO
-- 2026-11-20: creado **Cera Duna Nieve · 500 g** ($499, activo, colección navidad), mapeado en EDITIONS + headline.
 - ⏳ Pendiente:
   1. Medidas del Bowl Ámbar (hoy no se mencionan).
   2. Imagen "Este kit incluye" por producto (Aldea ya existe: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1795040429854-34pnoxnxfvx.webp`). Preguntar si la agrego a galería.
@@ -138,7 +124,8 @@
 ---
 
 ## 4. Recent Changes
-- 2026-11-24 — 🚚 Análisis de envío (chat): datos PostHog + recomendación FASE 18 (gratis desde $499 + regalo por monto). Sin cambios de código.
+- 2026-11-24 — 🚚 FASE 18: regla envío gratis desde $499 (DB), `src/lib/shipping.ts`, FreeShippingBar nueva, checkout sin "gratis" falso bajo mínimo, copy "desde $499" en toda la tienda, ReturnsPolicy alineada ($899 → $499 / $99).
+- 2026-11-24 — 🚚 Análisis de envío (chat): datos PostHog + recomendación FASE 18.
 - 2026-11-20 — ❄️ Nuevo producto `cera-duna-nieve-500-g` (clon de Cera Duna 500 g, sin variantes, fotos Marfil), en colección navidad, mapeado a perlas en EDITIONS.
 - 2026-11-18 — ❄️ Nieve: datos reales, `NIEVE_STORY` en ProductStorySections, descripciones DB, notas de aromas navideños.
 - 2026-11-18 — ❄️ Nieve conectada a productos reales: slugs, inspiración, aromas navideños, includes/beneficios, colección.
@@ -163,7 +150,8 @@
 - 🛍️ Sticker Buen Fin: DEPRECAR. 🏵️ DDM banner + 6 inspiración en `EDITIONS[ddm]`.
 
 ## 6. Known Issues
-- 2026-11-24 — 🟡 `ReturnsPolicy.tsx` L68 dice "Envío gratis en pedidos desde $899" mientras el resto del sitio dice "sin mínimo". Inconsistente; corregir en FASE 18.
+- 2026-11-24 — 🟡 Unidad de `min_subtotal` (pesos vs centavos) sin verificar contra backend; ver FASE 18 pendiente 2.
+- 2026-11-24 — 🟡 Tarifa $99 aún no configurada en Dashboard (owner).
 - 2026-11-20 — 🟡 Cera Nieve creada sin `default_package_id` (original = "Caja chica"); owner debe asignarlo en Dashboard.
 - 2026-11-18 — 🟡 Cambios de Nieve sin `tsc` ni QA visual.
 - 2026-11-18 — 🟡 Slug `nochebuena-de-navidad-bowl-mbar` (sin "a"); funciona por mapeo explícito.
@@ -175,7 +163,8 @@
 - 2026-08-21 — 🔴 `update-product` NO soporta imágenes por variante ni cambio de slug.
 
 ## 7. Pending / Future Sessions
-- [ALTA] FASE 18 envío: esperar OK de owner (umbral $499, tarifa < $499, ¿regalo desde $1,400?).
+- [ALTA] FASE 18: owner configura $99 en Dashboard → QA envío (mechas vs cera vs kit) y unidad de min_subtotal.
+- [MEDIA] FASE 18B regalo desde $1,400 (cuando owner confirme que el envío funciona bien).
 - [URGENTE] Nieve pendientes 1–6 de FASE 17.
 - [ALTA] Owner archiva add-on Buen Fin y quitar sticker.
 - [2026-11-20] PostHog `cart_upsell_viewed` vs `added`.
