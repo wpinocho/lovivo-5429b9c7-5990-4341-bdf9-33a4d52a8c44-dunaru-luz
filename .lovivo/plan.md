@@ -82,12 +82,12 @@
 - CHECKLIST NUEVA EDICIÓN: entrada en `EDITIONS` (slugs reales) + `--dunaru-X`, `.edition-X`/`.theme-X` en index.css + ruta corta App.tsx + sitemap + colección DB + esencia oculta + includes/benefits/story por slug.
 
 ### 🚚 SISTEMA DE ENVÍO (`src/lib/shipping.ts`, 2026-11-24)
-- Fuente de verdad: price rule DB **`473eff23-0da2-4714-a0f5-0a7fea205d81`** "Envío gratis desde $499" (free_shipping, `min_subtotal: 499`, applies_to all, activa).
+- Fuente de verdad: price rule DB **`473eff23-0da2-4714-a0f5-0a7fea205d81`** "Envío gratis desde $499" (free_shipping, `min_subtotal: 499`, applies_to all, activa, usage_count 0).
 - `FREE_SHIPPING_MIN = 499` (respaldo + cifra del copy estático) · `FREE_SHIPPING_COPY {short, long, sub}` · hook `useFreeShippingThreshold()` lee la regla.
 - ⚠️ Si la owner cambia el mínimo: actualizar regla + constante + copy hardcodeado "$499" (top bar, MainNav, IndexUI, ProductPageUI, ComoFunciona, ReturnsPolicy, ProductStorySections cierre).
-- Tarifa < $499 = **$99**, configurada por la owner en Dashboard (zonas de envío). El costo real llega del backend (`shippingFromCheckout`).
+- Tarifa < $499 = **$99**, configurada por la owner en Dashboard (zonas de envío). El costo real llega del backend: `CheckoutAdapter` → `updateShippingAddress(...)` → `response.shipping_amount` → `shippingFromCheckout` → `shippingCost`.
 - `FreeShippingBar` (carrito drawer + /carrito): "Te faltan $X para envío gratis" → "Tu envío es gratis a todo México". Estilo dunaru (radius 0, oliva-claro).
-- Checkout: `ShippingPromise` y `ShippingAmount` (CheckoutUI) no dicen "gratis" si el subtotal < mínimo: muestran "Te faltan $X…" / "Por calcular" hasta que el backend devuelve el costo.
+- Checkout: `ShippingPromise` y `ShippingAmount` (CheckoutUI ~L641-679).
 - Copy en PDPs de kits/ceras (≥ $499) sigue diciendo "Envío gratis a todo México" (verdadero). Copy genérico dice "desde $499".
 
 ### Otros sistemas
@@ -99,14 +99,39 @@
 
 ## 3. Active Plan
 
-### 🚚 FASE 18: POLÍTICA DE ENVÍO — 🟢 IMPLEMENTADA 2026-11-24 (falta tarifa $99 en Dashboard + QA)
-**Datos PostHog 90 días (107 pedidos):** AOV $1,400 · mediana $1,199. 97% de pedidos ya ≥ $499. Solo 1 pedido < $300 (mechas $99).
-**Hecho:** regla free_shipping $499 en DB, `src/lib/shipping.ts`, FreeShippingBar rediseñada, checkout honesto bajo mínimo, copy "desde $499" en top bar, MainNav, IndexUI (trust bar, FAQ, hero, sección kits), PDP (badge + acordeón envío), ComoFunciona, ReturnsPolicy (antes decía $899), cierre ProductStorySections.
-**Pendiente:**
-1. [OWNER] Configurar tarifa $99 en Dashboard (zonas/tarifas). Sin esto, todo sigue saliendo gratis (y el resumen de checkout bajo $499 dirá "Por calcular" y luego GRATIS).
-2. QA: carrito solo mechas ($99) → barra "Te faltan $400" + checkout cobra $99; carrito Cera 500 g ($499) → gratis; kit → gratis. ⚠️ Verificar unidad de `min_subtotal`: la tool de price rules sugiere centavos (ej. $400 = 40000) pero el front compara en pesos. Si el backend NO da envío gratis a pedidos ≥ $499 tras configurar $99, cambiar a 49900 y ajustar `useFreeShippingThreshold` (dividir entre 100).
-3. Revisar descripciones DB de mechas / esencia / vaso solo: que no prometan envío gratis.
-4. **FASE 18B (después, si owner quiere):** regalo por monto "Desde $1,400 te regalamos una esencia de 10 ml". Barra con 2 metas (envío $499 → regalo $1,400). Sistema tipo `promo-addon.ts`. Medir AOV en PostHog.
+### 🚚 FASE 18.1: BUG "ENVÍO POR CALCULAR" EN CHECKOUT — 🔴 DIAGNOSTICADO 2026-11-24, falta fix en Craft
+**Síntoma (screenshot owner):** carrito solo "30 Mechas" ($99), dirección CDMX 06700 completa → resumen dice "Envío: Por calcular", Total MXN $99, botón "Completar compra · MXN $99.00". O sea: el backend devolvió `shipping_amount = 0` y la clienta pagaría $99 SIN envío.
+
+**Diagnóstico (código revisado):**
+- El front SÍ lee bien el costo del backend (`CheckoutAdapter` L298-308 → `setShippingFromCheckout(response.shipping_amount)`). El backend respondió 0.
+- `ShippingAmount` (CheckoutUI L673-679): si `shippingCost` = 0 y subtotal < $499 → "Por calcular" PARA SIEMPRE. Ese texto fue pensado como "antes de la dirección", pero no distingue "ya calculado y salió 0". → Bug de UI nuestro.
+- Por qué el backend da 0, dos causas posibles (no se puede ver zonas de envío desde aquí):
+  A) La owner aún no configuró la tarifa $99 en Dashboard (tarifa sigue en $0).
+  B) El backend interpreta `min_subtotal: 499` en CENTAVOS = $4.99 → un pedido de $99 califica como envío gratis. (La tool de price rules sugería centavos.)
+- PREGUNTÉ A LA OWNER si ya puso la tarifa $99 en Dashboard.
+
+**Prueba para distinguir A vs B (Craft Mode):**
+1. Desactivar temporalmente la regla `473eff23…` (`update-price-rule active:false`).
+2. Owner recarga checkout con solo mechas. Si ahora cobra $99 → tarifa OK, el problema es B. Si sigue en 0 → problema A (owner configura $99 en Dashboard; el AI del Dashboard ayuda).
+3. Reactivar la regla siempre al terminar.
+
+**Fix si es B (unidad):**
+- `update-price-rule` → `conditions.min_subtotal: 49900`.
+- `useFreeShippingThreshold`: normalizar → `const pesos = min >= 10000 ? min / 100 : min` (robusto a ambas unidades). Revisar `FreeShippingConditions` y cualquier otro consumidor de `getFreeShippingRules()` (buscar en FreeShippingBar, CartUI, price-rule-utils) para que no comparen centavos vs pesos.
+- QA: mechas ($99) → $99 de envío, total $198 · Cera 500 g ($499) → GRATIS · kit → GRATIS.
+
+**Fix de UI (hacerlo SIEMPRE, independiente de A/B):**
+- Agregar en `CheckoutAdapter` un flag `shippingResolved` (true cuando `updateShippingAddress` responde OK con número; false al cambiar país/estado/CP o en error). Exponerlo en `logic`.
+- `ShippingAmount`: `shippingCost > 0` → monto · `!shippingResolved && subtotal < min` → "Por calcular" · resto → "GRATIS".
+- `ShippingPromise`: si `shippingResolved && shippingCost > 0` → "Envío $99 · Te faltan $X para envío gratis" (mantener la invitación a subir el carrito); si no resuelto y bajo mínimo → "Te faltan $X para envío gratis".
+- Revisar el MobileOrderSummary (usa los mismos componentes) y el monto del botón "Completar compra" (debe incluir envío; ya usa finalTotal).
+- NO tocar la lógica del backend; solo mostrar lo que devuelve.
+
+### 🚚 FASE 18: POLÍTICA DE ENVÍO — 🟢 IMPLEMENTADA 2026-11-24 (ver 18.1)
+**Datos PostHog 90 días (107 pedidos):** AOV $1,400 · mediana $1,199. 97% de pedidos ya ≥ $499.
+**Hecho:** regla free_shipping $499 en DB, `src/lib/shipping.ts`, FreeShippingBar, checkout, copy "desde $499" en toda la tienda, ReturnsPolicy.
+**Pendiente:** 18.1 arriba · revisar descripciones DB de mechas / esencia / vaso solo (que no prometan envío gratis).
+**FASE 18B (después de confirmar envío):** regalo "Desde $1,400 te regalamos una esencia de 10 ml". Barra con 2 metas (envío $499 → regalo $1,400). Sistema tipo `promo-addon.ts`. Medir AOV en PostHog.
 
 ### ❄️ FASE 17: EDICIÓN NIEVE (Navidad) — 🟢 EN VIVO
 - ⏳ Pendiente:
@@ -124,6 +149,7 @@
 ---
 
 ## 4. Recent Changes
+- 2026-11-24 — 🔎 FASE 18.1 diagnóstico (chat): checkout con mechas muestra "Por calcular" y cobra $0 de envío. Causa backend A (tarifa $99 no configurada) o B (min_subtotal en centavos) + bug UI "Por calcular" permanente. Plan guardado.
 - 2026-11-24 — 🚚 FASE 18: regla envío gratis desde $499 (DB), `src/lib/shipping.ts`, FreeShippingBar nueva, checkout sin "gratis" falso bajo mínimo, copy "desde $499" en toda la tienda, ReturnsPolicy alineada ($899 → $499 / $99).
 - 2026-11-24 — 🚚 Análisis de envío (chat): datos PostHog + recomendación FASE 18.
 - 2026-11-20 — ❄️ Nuevo producto `cera-duna-nieve-500-g` (clon de Cera Duna 500 g, sin variantes, fotos Marfil), en colección navidad, mapeado a perlas en EDITIONS.
@@ -138,7 +164,6 @@
 - 2026-10-14 — 🏵️ Cempasúchil Eclipse y Alba publicados.
 - 2026-10-13 — 🎨 Dúo de Tonos selector.
 - 2026-10-10 — 🏵️ PDPs de temporada.
-- 2026-10-09 — 🏵️ Aroma Cempasúchil.
 
 ## 5. Image Inventory
 - Fotos producto 1122×1402 (4:5) webp. Uploads owner: `.../message-images/58337cbc-5a9f-4862-810a-1470616566de/`.
@@ -150,8 +175,7 @@
 - 🛍️ Sticker Buen Fin: DEPRECAR. 🏵️ DDM banner + 6 inspiración en `EDITIONS[ddm]`.
 
 ## 6. Known Issues
-- 2026-11-24 — 🟡 Unidad de `min_subtotal` (pesos vs centavos) sin verificar contra backend; ver FASE 18 pendiente 2.
-- 2026-11-24 — 🟡 Tarifa $99 aún no configurada en Dashboard (owner).
+- 2026-11-24 — 🔴 Checkout bajo $499 cobra $0 de envío y muestra "Por calcular" permanente (FASE 18.1). Causa backend sin confirmar (tarifa $99 vs unidad min_subtotal).
 - 2026-11-20 — 🟡 Cera Nieve creada sin `default_package_id` (original = "Caja chica"); owner debe asignarlo en Dashboard.
 - 2026-11-18 — 🟡 Cambios de Nieve sin `tsc` ni QA visual.
 - 2026-11-18 — 🟡 Slug `nochebuena-de-navidad-bowl-mbar` (sin "a"); funciona por mapeo explícito.
@@ -163,8 +187,8 @@
 - 2026-08-21 — 🔴 `update-product` NO soporta imágenes por variante ni cambio de slug.
 
 ## 7. Pending / Future Sessions
-- [ALTA] FASE 18: owner configura $99 en Dashboard → QA envío (mechas vs cera vs kit) y unidad de min_subtotal.
-- [MEDIA] FASE 18B regalo desde $1,400 (cuando owner confirme que el envío funciona bien).
+- [URGENTE] FASE 18.1: respuesta owner (¿tarifa $99 configurada?) → prueba desactivando regla → fix unidad si aplica + fix UI "Por calcular".
+- [MEDIA] FASE 18B regalo desde $1,400 (cuando el envío funcione bien).
 - [URGENTE] Nieve pendientes 1–6 de FASE 17.
 - [ALTA] Owner archiva add-on Buen Fin y quitar sticker.
 - [2026-11-20] PostHog `cart_upsell_viewed` vs `added`.
