@@ -7,6 +7,8 @@ import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, Package, Loader2, Tag, X,
 import { Badge } from "@/components/ui/badge"
 import { formatMoney } from "@/lib/money"
 import { FreeShippingBar } from "@/components/ui/FreeShippingBar"
+import { CartPreorderBanner, PreorderLine } from "@/components/PreorderNotice"
+import { getPreorder } from "@/lib/restock"
 import { BOGOGiftBanner } from "@/components/ui/BOGOGiftBanner"
 import type { Discount } from "@/lib/discount-utils"
 import type { CartProductItem } from "@/contexts/CartContext"
@@ -76,6 +78,9 @@ export const CartUI = ({ logic }: CartUIProps) => {
               <FreeShippingBar
                 cartTotal={logic.total}
                 cartQuantity={logic.items.reduce((sum: number, i: any) => sum + i.quantity, 0)}
+              />
+              <CartPreorderBanner
+                slugs={logic.items.map((i: any) => (i.type === 'product' ? i.product?.slug : null))}
               />
               <BOGOGiftBanner
                 cartItems={logic.items as any}
@@ -155,6 +160,10 @@ export const CartUI = ({ logic }: CartUIProps) => {
                             {isPromoAddonSlug(item.product?.slug) ? PROMO_ADDON.cartTitle : item.product.title}
                           </h3>
                           {item.variant?.title && <p className="text-muted-foreground mb-1">{item.variant.title}</p>}
+                          {(() => {
+                            const preorder = getPreorder(item.product?.slug)
+                            return preorder ? <PreorderLine preorder={preorder} className="mb-2 text-xs" /> : null
+                          })()}
                           {item.type === 'product' && (item as CartProductItem).sellingPlan && (
                             <div className="flex items-center gap-1.5 mb-2">
                               <Badge variant="secondary" className="text-xs px-2 py-0.5">

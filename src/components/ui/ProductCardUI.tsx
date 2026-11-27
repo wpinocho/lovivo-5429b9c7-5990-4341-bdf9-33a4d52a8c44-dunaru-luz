@@ -11,6 +11,8 @@ import { editionForSlug } from "@/lib/editions"
 import { cn } from "@/lib/utils"
 import { PromoStickerBadge } from "@/components/PromoStickerBadge"
 import { Star } from "lucide-react"
+import { isPreorderSlug } from "@/lib/restock"
+import { PreorderChip } from "@/components/PreorderNotice"
 
 /**
  * EDITABLE UI COMPONENT - ProductCardUI
@@ -58,6 +60,9 @@ export const ProductCardUI = ({ product, tone = "light" }: ProductCardUIProps) =
               Edición limitada
             </span>
           )
+        }
+        if (logic.inStock && isPreorderSlug(logic.product.slug)) {
+          badges.push(<PreorderChip key="preorder" />)
         }
         if (logic.discountPercentage) {
           badges.push(

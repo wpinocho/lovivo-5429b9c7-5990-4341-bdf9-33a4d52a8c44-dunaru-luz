@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { isPreorderSlug } from '@/lib/restock';
+import { PreorderChip } from '@/components/PreorderNotice';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, ChevronDown, MessageCircle, Leaf, RefreshCw, MapPin, Truck } from 'lucide-react';
 import { FloatingCart } from '@/components/FloatingCart';
@@ -344,7 +346,11 @@ export const IndexUI = ({ logic }: IndexUIProps) => {
                         loading="lazy"
                         className="w-full h-full object-cover transition-editorial group-hover:scale-[1.04]"
                       />
-                      {badge && (
+                      {isPreorderSlug(slug) ? (
+                        <span className="absolute top-3 left-3">
+                          <PreorderChip />
+                        </span>
+                      ) : badge && (
                         <span className="absolute top-3 left-3 font-body text-[10px] uppercase tracking-[0.2em] text-dunaru-marfil drop-shadow-[0_1px_3px_rgba(0,0,0,0.6)]">
                           {badge}
                         </span>

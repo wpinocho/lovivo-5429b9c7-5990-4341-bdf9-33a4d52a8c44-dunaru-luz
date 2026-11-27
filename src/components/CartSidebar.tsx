@@ -11,6 +11,8 @@ import { Minus, Plus, Trash2, ExternalLink, Package, X, Loader2, Tag, RefreshCw,
 import { useNavigate, Link } from "react-router-dom"
 import { Badge } from "@/components/ui/badge"
 import { FreeShippingBar } from "@/components/ui/FreeShippingBar"
+import { CartPreorderBanner, PreorderLine } from "@/components/PreorderNotice"
+import { getPreorder } from "@/lib/restock"
 import { useToast } from "@/hooks/use-toast"
 import { callEdgeFetch } from "@/lib/edge"
 import { STORE_ID } from "@/lib/config"
@@ -156,6 +158,9 @@ export const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
             <>
               <div className="px-6 pt-4 space-y-3">
                 <FreeShippingBar cartTotal={state.total} cartQuantity={state.items.reduce((sum, i) => sum + i.quantity, 0)} />
+                <CartPreorderBanner
+                  slugs={state.items.map(i => (i.type === 'product' ? (i as CartProductItem).product.slug : null))}
+                />
                 <BOGOGiftBanner
                   cartItems={state.items as any}
                   bogoRules={bogoRules}
@@ -232,6 +237,10 @@ export const CartSidebar = ({ isOpen, onClose }: CartSidebarProps) => {
                             <h4 className="font-medium text-sm text-foreground line-clamp-2">
                               {isPromoAddonSlug(item.product.slug) ? PROMO_ADDON.cartTitle : item.product.title}{item.variant?.title ? ` - ${item.variant.title}` : ''}
                             </h4>
+                            {(() => {
+                              const preorder = getPreorder(item.product.slug)
+                              return preorder ? <PreorderLine preorder={preorder} className="mt-0.5" /> : null
+                            })()}
                             {item.type === 'product' && (item as CartProductItem).sellingPlan && (
                               <div className="flex items-center gap-1 mt-0.5">
                                 <Badge variant="secondary" className="text-[10px] px-1.5 py-0">

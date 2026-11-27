@@ -5,6 +5,8 @@ import { Reveal } from "@/components/Reveal"
 import { EDITIONS, fetchEditionProducts, type Edition } from "@/lib/editions"
 import { filterCatalogVisible } from "@/lib/catalog-order"
 import { cn } from "@/lib/utils"
+import { isPreorderSlug } from "@/lib/restock"
+import { PreorderChip } from "@/components/PreorderNotice"
 
 /**
  * EditionHomeSection — franja de la edición de temporada en la home.
@@ -125,9 +127,12 @@ export const EditionHomeSection = ({ edition }: { edition: Edition }) => {
                     className="h-full w-full object-cover transition-editorial group-hover:scale-[1.03]"
                   />
                 )}
-                <span className="absolute left-2 top-2 bg-dunaru-edition px-2 py-1 font-body text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-dunaru-onix">
-                  Edición limitada
-                </span>
+                <div className="absolute left-2 top-2 flex flex-col items-start gap-1">
+                  <span className="bg-dunaru-edition px-2 py-1 font-body text-[9px] sm:text-[10px] uppercase tracking-[0.16em] text-dunaru-onix">
+                    Edición limitada
+                  </span>
+                  {isPreorderSlug(p.slug) && <PreorderChip />}
+                </div>
               </div>
               <h3 className="mt-3 font-body text-xs sm:text-sm text-dunaru-marfil leading-snug">
                 {p.title}

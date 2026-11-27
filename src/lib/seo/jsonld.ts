@@ -1,5 +1,6 @@
 import type { Product, Bundle, Blog } from '@/lib/supabase'
 import { buildCanonical } from './site'
+import { getPreorder } from '@/lib/restock'
 
 /** Limpia HTML y trunca para descripciones meta. */
 export function plainText(input?: string, maxLen = 300): string {
@@ -56,6 +57,12 @@ export function productJsonLd(product: Product, opts: {
   const url = buildCanonical(`/productos/${product.slug}`)
   const variants = (product as any).variants as any[] | undefined
   const hasVariants = Array.isArray(variants) && variants.length > 0
+  const preorder = getPreorder(product.slug)
+  const availability = !opts.inStock
+    ? 'https://schema.org/OutOfStock'
+    : preorder
+      ? 'https://schema.org/PreOrder'
+      : 'https://schema.org/InStock'
 
   const offers = hasVariants
     ? {
@@ -64,18 +71,14 @@ export function productJsonLd(product: Product, opts: {
         lowPrice: Math.min(...variants!.map((v) => v.price ?? product.price)),
         highPrice: Math.max(...variants!.map((v) => v.price ?? product.price)),
         offerCount: variants!.length,
-        availability: opts.inStock
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
+        availability,
         url,
       }
     : {
         '@type': 'Offer',
         priceCurrency: opts.currencyCode,
         price: opts.price,
-        availability: opts.inStock
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/OutOfStock',
+        availability,
         url,
       }
 

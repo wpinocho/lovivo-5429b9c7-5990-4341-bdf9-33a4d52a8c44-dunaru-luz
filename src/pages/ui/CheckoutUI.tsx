@@ -21,6 +21,7 @@ import { useTokenCheckout } from "@/hooks/useTokenCheckout";
 import { formatMoney } from "@/lib/money";
 import { useFreeShippingThreshold, FREE_SHIPPING_COPY } from "@/lib/shipping";
 import { countryNameToCode, countryCodeToName } from "@/lib/country-codes";
+import { getOrderPreorder, formatShipDate } from "@/lib/restock";
 
 /**
  * EDITABLE UI COMPONENT - CheckoutUI
@@ -642,6 +643,9 @@ function ShippingPromise({ logic }: { logic: any }) {
   const { minSubtotal } = useFreeShippingThreshold();
   const belowMin = logic.summaryTotal < minSubtotal;
   const isFree = logic.shippingCost === 0 && !belowMin;
+  const { preorder } = getOrderPreorder(
+    (logic.orderItems || []).map((i: any) => i.product?.name)
+  );
 
   if (logic.selectedPickupLocation) {
     return (
@@ -663,7 +667,9 @@ function ShippingPromise({ logic }: { logic: any }) {
         ) : (
           <>Te faltan {formatMoney(minSubtotal - logic.summaryTotal, logic.currencyCode)} para envío gratis</>
         )}
-        {" · Llega entre el "}{getDeliveryRange()}
+        {preorder
+          ? <>{" · Se envía a partir del "}{formatShipDate(preorder.shipDate)} (preventa)</>
+          : <>{" · Llega entre el "}{getDeliveryRange()}</>}
       </span>
     </div>
   );

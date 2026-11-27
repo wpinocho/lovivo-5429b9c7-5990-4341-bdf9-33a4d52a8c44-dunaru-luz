@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { CheckCircle, Package, Mail, ArrowLeft, ShoppingBag, Truck } from 'lucide-react'
+import { CheckCircle, Package, Mail, ArrowLeft, ShoppingBag, Truck, CalendarClock } from 'lucide-react'
+import { getOrderPreorder, formatShipDate } from '@/lib/restock'
 import { formatMoney } from '@/lib/money'
 import { EcommerceTemplate } from '@/templates/EcommerceTemplate'
 import { SEO } from '@/components/SEO'
@@ -201,6 +202,21 @@ const ThankYou = () => {
           <Badge variant="secondary" className="text-sm">
             Pedido #{order.order_number}
           </Badge>
+          {(() => {
+            const { preorder, mixed } = getOrderPreorder(
+              order.order_items.filter(i => i.quantity > 0).map(i => i.product_name)
+            )
+            if (!preorder) return null
+            return (
+              <div className="mx-auto mt-5 flex max-w-md items-start gap-3 border border-dunaru-oliva-claro/50 bg-dunaru-oliva-claro/10 px-4 py-3 text-left">
+                <CalendarClock className="mt-0.5 h-4 w-4 shrink-0 text-dunaru-oliva-claro" strokeWidth={1.75} />
+                <p className="text-sm leading-snug text-foreground">
+                  Tu {preorder.label} está en preventa: {mixed ? "enviamos tu pedido completo" : "lo enviamos"} a partir del{" "}
+                  {formatShipDate(preorder.shipDate)} y te avisamos con tu guía.
+                </p>
+              </div>
+            )
+          })()}
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">

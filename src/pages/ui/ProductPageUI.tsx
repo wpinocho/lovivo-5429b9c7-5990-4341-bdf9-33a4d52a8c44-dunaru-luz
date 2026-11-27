@@ -73,6 +73,8 @@ import { calcVolumeDiscount } from "@/lib/price-rule-utils"
 import { getReviewStats } from "@/data/reviews"
 import { ProductStorySections } from "@/components/ProductStorySections"
 import { DeliveryEstimate, PdpSocialProof } from "@/components/PdpTrust"
+import { PreorderNotice } from "@/components/PreorderNotice"
+import { getPreorder } from "@/lib/restock"
 import { DuoTonePicker } from "@/components/DuoTonePicker"
 import {
   isDuoSlug,
@@ -882,6 +884,7 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
   const productIncludes = getIncludes(logic.product?.slug)
   /** Edición de temporada (Día de Muertos): sello + galería de inspiración. */
   const edition = editionForSlug(logic.product?.slug)
+  const preorder = getPreorder(logic.product?.slug)
   const isSeasonal = !!edition
 
   // Rating compacto reutilizable (móvil arriba del fold)
@@ -1557,7 +1560,8 @@ export const ProductPageUI = ({ logic }: ProductPageUIProps) => {
             )}
 
             {/* Disponibilidad + fecha concreta de entrega */}
-            {logic.inStock && <DeliveryEstimate />}
+            {logic.inStock &&
+              (preorder ? <PreorderNotice preorder={preorder} /> : <DeliveryEstimate />)}
 
             {edition && logic.inStock && <LimitedEditionNotice edition={edition} />}
 
