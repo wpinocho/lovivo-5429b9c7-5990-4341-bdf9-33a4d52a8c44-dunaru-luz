@@ -8,7 +8,7 @@
 - Target: mujer 25–45, urbana, CDMX/GDL/MTY/Puebla/QRO. México, MXN, es-MX.
 - Tono: claro, cálido, directo, **editorial premium** (refs sensatehomes.com, soliracandle.com). ⛔ NO founder-led.
 - Pagos: **hasta 6 MSI** (nunca nombrar Stripe/Mercado Pago). Envío: **GRATIS A TODO MÉXICO DESDE $499** (desde 2026-11-24); pedidos menores pagan **$99**. Garantía 30 días. WhatsApp `525531215386`.
-- INTEGRIDAD: nunca reseñas falsas (16 reales, 4.9), nunca precios tachados inventados, nunca logos de prensa.
+- INTEGRIDAD: nunca reseñas falsas (16 reales, 4.9), nunca precios tachados inventados, nunca logos de prensa. **Nunca prometer fechas de envío que no sean reales** (preventa = fecha confirmada por owner + colchón).
 - STORE_ID `5429b9c7-5990-4341-bdf9-33a4d52a8c44`. Rutas: `/productos/:slug`, `/paquete/:slug`, `/carrito`, `/pagar`, `/categorias/:handle`, `/como-funciona`, `/dia-de-muertos` (Navigate → `/categorias/dia-de-muertos`), **`/navidad`** (renderiza Collection handle `navidad`, canónica).
 - ⚠️ `kit-vaso-de-concreto` = **Cuenco Eclipse**; slug no se cambia. Ancla Meta Ads = `kit-vaso-de-vidrio`.
 - ⚠️ La owner repriza, crea, DUPLICA y ARCHIVA desde el Dashboard. **NUNCA hardcodear precios.** El agente NO puede cambiar slugs.
@@ -22,17 +22,17 @@
 |---|---|---|---|
 | kit-vaso-de-vidrio | Vela Rellenable · Vaso de Vidrio | $749 | $899 |
 | kit-vaso-de-concreto | Vela Rellenable · Cuenco Eclipse | $999 | $1,199 |
-| vela-rellenable-cuenco-eclipse-copy-ppsiy | Vela Rellenable · Cuenco Alba | $999 | $1,199 |
+| vela-rellenable-cuenco-eclipse-copy-ppsiy | Vela Rellenable · Cuenco Alba (id f54a5a9e…) | $999 | $1,199 |
 | vela-rellenable-cuenco-dunaru | Vela Rellenable · Cuenco Dunaru | $1,199 | — |
 | vela-rellenable-bowl-ambar | Vela Rellenable · Bowl Ámbar | $1,199 | $1,299 |
 | perlas-originales-500-g | Cera Duna · 500 g | $499 | — |
 | reserva-1-kg | Cera Duna · 1 kg | $849 | $999 |
 | d-o-de-tonos / tr-o-de-tonos | Dúo / Trío de Tonos | $899 / $1,199 | — / $1,499 |
-| bowl-negro ($549), cuenco-eclipse-copy-tjby7 ($549), cuenco-dunaru ($799), bowl-ambar ($699), vaso-extra-transparente ($299) | recipientes solos | | |
+| bowl-negro ($549), cuenco-eclipse-copy-tjby7 = **Cuenco Alba solo** ($549, id f4698252…), cuenco-dunaru ($799), bowl-ambar ($699), vaso-extra-transparente ($299) | recipientes solos | | |
 | pack-30-mechas · esencia-para-vela-10-ml | accesorios | $99 | |
 | ❄️ casita-de-navidad-cuenco-dunaru | Casita de Navidad · Cuenco Dunaru | $1,399 | $1,499 |
 | ❄️ aldea-de-navidad-centro-de-madera | Aldea de Navidad · Centro de madera | $1,999 | $2,500 |
-| ❄️ pino-de-invierno-cuenco-alba | Pino de Invierno · Cuenco Alba | $1,099 | |
+| ❄️ pino-de-invierno-cuenco-alba | Pino de Invierno · Cuenco Alba (id 3a319228…) | $1,099 | |
 | ❄️ refugio-de-invierno-cuenco-eclipse | Refugio de Invierno · Cuenco Eclipse | $1,099 | |
 | ❄️ nochebuena-de-navidad-bowl-mbar | Nochebuena de Navidad · Bowl Ámbar | $1,299 | slug "mbar" |
 | ❄️ cera-duna-nieve-500-g | Cera Duna Nieve · 500 g (id 37545763-…) | $499 | sin variantes; hereda PDP de perlas-originales-500-g |
@@ -90,6 +90,10 @@
 - Checkout: `ShippingPromise` y `ShippingAmount` (CheckoutUI ~L641-679).
 - Copy en PDPs de kits/ceras (≥ $499) sigue diciendo "Envío gratis a todo México" (verdadero). Copy genérico dice "desde $499".
 
+### 📦 INVENTARIO (verificado 2026-11-27)
+- Los productos Alba tienen `track_inventory: false` → siguen vendibles aunque `inventory_quantity` = 0. NO desaparecen.
+- ⚠️ Si algún producto se pone `track_inventory: true` con stock 0: `Collection.tsx` (`isInStock`) y `HeadlessIndex` lo **ocultan** del catálogo, `ProductCardUI` muestra "Agotado" y el checkout lo quita (`unavailable_items`). Para preventa, mantener `track_inventory: false`.
+
 ### Otros sistemas
 - TRACKING `tracking-utils.ts`. ESTATUS `useActiveProductSlugs.ts`. RESEÑAS `src/data/reviews.ts`. DEEP LINK `?variante=`.
 - ADD-ONS PDP: `scentSelection` + `addonSelection`; candado `enforcePromoAddonLimit`.
@@ -99,48 +103,65 @@
 
 ## 3. Active Plan
 
+### 📦 FASE 19: PREVENTA CUENCO ALBA — 🟡 PLANEADA 2026-11-27 (esperando fecha exacta de la owner)
+**Contexto:** Se acabó el Cuenco Alba; nuevo inventario llega en ~8 días (≈ 5 dic 2026). Afecta 3 productos:
+- `pino-de-invierno-cuenco-alba` (Nieve, $1,099)
+- `vela-rellenable-cuenco-eclipse-copy-ppsiy` (Vela Rellenable · Cuenco Alba, $999, variantes Marfil/Champagne/Ónix)
+- `cuenco-eclipse-copy-tjby7` (Cuenco Alba solo, $549)
+Owner NO quiere apagarlos. Decisión: **preventa con fecha clara** (mejor práctica: sigue vendiendo, temporada navideña, alinea expectativas). NO "se nos acabó" (suena a problema); SÍ "Preventa · se envía a partir del X".
+
+**Antes de construir, confirmar con owner:**
+1. Fecha REAL de envío (llegada + 1-2 días de colchón). Propuesta: "Se envía a partir del 8 de diciembre".
+2. Pedidos mixtos (Alba + otros productos): ¿se envía todo junto cuando llega el Alba (default recomendado, más simple y un solo envío) o en dos envíos?
+
+**Implementación (Craft Mode):**
+1. Nuevo `src/lib/restock.ts`:
+   - `PREORDERS: { slugs: string[]; shipDate: string /* ISO yyyy-mm-dd */; label?: string }[]` con los 3 slugs.
+   - `getPreorder(slug)` → entrada solo si `today < shipDate` (se apaga sola al llegar la fecha; sin re-deploy).
+   - `formatShipDate()` → "8 de diciembre" (es-MX, sin año).
+   - `cartHasPreorder(items)` → la fecha más tardía.
+2. PDP (`ProductPageUI.tsx`), justo arriba del CTA: aviso sobrio estilo dunaru (radius 0, borde oliva-claro, ícono reloj/caja): **"Preventa · Se envía a partir del 8 de diciembre."** Subtexto: "Llega a tiempo para Navidad." (solo si shipDate ≤ ~12 dic; si es más tarde, omitir). Mantener texto del botón; opcional sufijo "· Preventa". Reemplazar/ajustar cualquier línea de "Llega entre X y Y" en esa PDP para que no contradiga.
+3. Tarjetas (`ProductCardUI` / cards de colección y home / SHOP_CARDS): chip pequeño "Preventa" (no "Agotado").
+4. Carrito (drawer + `/carrito`, CartUI): bajo la línea del producto, "Preventa · se envía a partir del 8 dic". Si hay mezcla: "Tu pedido completo se envía a partir del 8 dic" (según respuesta 2).
+5. Checkout (`CheckoutUI` `ShippingPromise`): si `cartHasPreorder` → reemplazar "Llega entre…" por "Se envía a partir del 8 de diciembre (preventa)". Hoy el checkout muestra "Llega entre el 26 de noviembre y el 1 de diciembre" → debe cambiar para no prometer en falso.
+6. Página de gracias (`ThankYou`): si la orden incluye slugs de preventa, una línea "Tu Cuenco Alba está en preventa: lo enviamos a partir del 8 de diciembre y te avisamos con tu guía."
+7. Opcional (venta cruzada): en PDP del Alba, link discreto "¿Lo necesitas ya? El Cuenco Eclipse tiene la misma medida y sale hoy" → Pino de Invierno → `refugio-de-invierno-cuenco-eclipse`; Vela Alba → `kit-vaso-de-concreto`; Alba solo → recipiente Eclipse. Confirmar con owner.
+8. JSON-LD (`src/lib/seo/jsonld.ts`): para preventa usar `https://schema.org/PreOrder` (no InStock) si el slug está en PREORDERS.
+9. NO tocar `track_inventory` (ya es false → sigue vendiendo).
+10. QA: 3 PDPs, tarjetas en /navidad y /categorias/kits, carrito con Alba solo y mezclado, checkout, móvil 375; `npx tsc --noEmit`.
+
+**Fuera del código (owner):** avisar en email/WhatsApp de confirmación a quien compre Alba; actualizar inventario en Dashboard cuando llegue. Cuando pase la fecha, el aviso desaparece solo; si el proveedor se retrasa, actualizar `shipDate` en Craft.
+
+**Hallazgo extra:** la descripción DB de "Vela Rellenable · Cuenco Alba" dice "bowl artesanal de cerámica negra mate" (parece copy del Eclipse). Revisar con owner y corregir con `update-product` (solo description; NO usar variants_config porque borra compare_at).
+
 ### 🚚 FASE 18.1: BUG "ENVÍO POR CALCULAR" EN CHECKOUT — 🔴 DIAGNOSTICADO 2026-11-24, falta fix en Craft
 **Síntoma (screenshot owner):** carrito solo "30 Mechas" ($99), dirección CDMX 06700 completa → resumen dice "Envío: Por calcular", Total MXN $99, botón "Completar compra · MXN $99.00". O sea: el backend devolvió `shipping_amount = 0` y la clienta pagaría $99 SIN envío.
 
 **Diagnóstico (código revisado):**
 - El front SÍ lee bien el costo del backend (`CheckoutAdapter` L298-308 → `setShippingFromCheckout(response.shipping_amount)`). El backend respondió 0.
-- `ShippingAmount` (CheckoutUI L673-679): si `shippingCost` = 0 y subtotal < $499 → "Por calcular" PARA SIEMPRE. Ese texto fue pensado como "antes de la dirección", pero no distingue "ya calculado y salió 0". → Bug de UI nuestro.
-- Por qué el backend da 0, dos causas posibles (no se puede ver zonas de envío desde aquí):
-  A) La owner aún no configuró la tarifa $99 en Dashboard (tarifa sigue en $0).
-  B) El backend interpreta `min_subtotal: 499` en CENTAVOS = $4.99 → un pedido de $99 califica como envío gratis. (La tool de price rules sugería centavos.)
-- PREGUNTÉ A LA OWNER si ya puso la tarifa $99 en Dashboard.
+- `ShippingAmount` (CheckoutUI L673-679): si `shippingCost` = 0 y subtotal < $499 → "Por calcular" PARA SIEMPRE. → Bug de UI nuestro.
+- Por qué el backend da 0: A) tarifa $99 no configurada en Dashboard, o B) `min_subtotal: 499` leído en CENTAVOS = $4.99.
+- PREGUNTÉ A LA OWNER si ya puso la tarifa $99 en Dashboard (sin respuesta aún al 2026-11-27).
 
-**Prueba para distinguir A vs B (Craft Mode):**
-1. Desactivar temporalmente la regla `473eff23…` (`update-price-rule active:false`).
-2. Owner recarga checkout con solo mechas. Si ahora cobra $99 → tarifa OK, el problema es B. Si sigue en 0 → problema A (owner configura $99 en Dashboard; el AI del Dashboard ayuda).
-3. Reactivar la regla siempre al terminar.
+**Prueba A vs B (Craft):** desactivar temporalmente regla `473eff23…` → si cobra $99 es B; si sigue en 0 es A. Reactivar siempre.
 
-**Fix si es B (unidad):**
-- `update-price-rule` → `conditions.min_subtotal: 49900`.
-- `useFreeShippingThreshold`: normalizar → `const pesos = min >= 10000 ? min / 100 : min` (robusto a ambas unidades). Revisar `FreeShippingConditions` y cualquier otro consumidor de `getFreeShippingRules()` (buscar en FreeShippingBar, CartUI, price-rule-utils) para que no comparen centavos vs pesos.
-- QA: mechas ($99) → $99 de envío, total $198 · Cera 500 g ($499) → GRATIS · kit → GRATIS.
+**Fix si es B:** `conditions.min_subtotal: 49900`; `useFreeShippingThreshold` normaliza `min >= 10000 ? min/100 : min`; revisar consumidores de `getFreeShippingRules()`. QA: mechas → $99 envío (total $198) · Cera 500 g → GRATIS · kit → GRATIS.
 
-**Fix de UI (hacerlo SIEMPRE, independiente de A/B):**
-- Agregar en `CheckoutAdapter` un flag `shippingResolved` (true cuando `updateShippingAddress` responde OK con número; false al cambiar país/estado/CP o en error). Exponerlo en `logic`.
-- `ShippingAmount`: `shippingCost > 0` → monto · `!shippingResolved && subtotal < min` → "Por calcular" · resto → "GRATIS".
-- `ShippingPromise`: si `shippingResolved && shippingCost > 0` → "Envío $99 · Te faltan $X para envío gratis" (mantener la invitación a subir el carrito); si no resuelto y bajo mínimo → "Te faltan $X para envío gratis".
-- Revisar el MobileOrderSummary (usa los mismos componentes) y el monto del botón "Completar compra" (debe incluir envío; ya usa finalTotal).
-- NO tocar la lógica del backend; solo mostrar lo que devuelve.
+**Fix UI (SIEMPRE):** flag `shippingResolved` en `CheckoutAdapter`; `ShippingAmount`: `>0` monto · `!resolved && subtotal<min` "Por calcular" · resto "GRATIS". `ShippingPromise` con "Envío $99 · Te faltan $X para envío gratis". Revisar MobileOrderSummary y botón (finalTotal).
 
 ### 🚚 FASE 18: POLÍTICA DE ENVÍO — 🟢 IMPLEMENTADA 2026-11-24 (ver 18.1)
 **Datos PostHog 90 días (107 pedidos):** AOV $1,400 · mediana $1,199. 97% de pedidos ya ≥ $499.
-**Hecho:** regla free_shipping $499 en DB, `src/lib/shipping.ts`, FreeShippingBar, checkout, copy "desde $499" en toda la tienda, ReturnsPolicy.
-**Pendiente:** 18.1 arriba · revisar descripciones DB de mechas / esencia / vaso solo (que no prometan envío gratis).
-**FASE 18B (después de confirmar envío):** regalo "Desde $1,400 te regalamos una esencia de 10 ml". Barra con 2 metas (envío $499 → regalo $1,400). Sistema tipo `promo-addon.ts`. Medir AOV en PostHog.
+**Pendiente:** 18.1 · revisar descripciones DB de mechas / esencia / vaso solo (que no prometan envío gratis).
+**FASE 18B:** regalo "Desde $1,400 te regalamos una esencia de 10 ml". Barra con 2 metas. Medir AOV.
 
 ### ❄️ FASE 17: EDICIÓN NIEVE (Navidad) — 🟢 EN VIVO
 - ⏳ Pendiente:
-  1. Medidas del Bowl Ámbar (hoy no se mencionan).
-  2. Imagen "Este kit incluye" por producto (Aldea ya existe: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1795040429854-34pnoxnxfvx.webp`). Preguntar si la agrego a galería.
+  1. Medidas del Bowl Ámbar.
+  2. Imagen "Este kit incluye" por producto (Aldea: `https://ptgmltivisbtvmoxwnhd.supabase.co/storage/v1/object/public/message-images/58337cbc-5a9f-4862-810a-1470616566de/1795040429854-34pnoxnxfvx.webp`).
   3. Descripción del producto Esencia Navideño (vacía).
   4. QA visual: `/navidad`, PDPs, Cera Nieve PDP, carrito, móvil 375; `npx tsc --noEmit`.
-  5. Owner: asignar paquete "Caja chica" a Cera Nieve en Dashboard (tool no lo copia).
-  6. ¿Fotos propias color Nieve para Cera Nieve? hoy usa fotos Marfil.
+  5. Owner: asignar paquete "Caja chica" a Cera Nieve en Dashboard.
+  6. ¿Fotos propias color Nieve para Cera Nieve?
 
 ### 🛒 FASE 16 UPSELL CARRITO ✅ · ⏳ QA 16.5
 ### 🛍️ FASE 15 BUEN FIN terminó 17 nov · ⏳ owner archiva add-on, quitar sticker
@@ -149,12 +170,13 @@
 ---
 
 ## 4. Recent Changes
-- 2026-11-24 — 🔎 FASE 18.1 diagnóstico (chat): checkout con mechas muestra "Por calcular" y cobra $0 de envío. Causa backend A (tarifa $99 no configurada) o B (min_subtotal en centavos) + bug UI "Por calcular" permanente. Plan guardado.
-- 2026-11-24 — 🚚 FASE 18: regla envío gratis desde $499 (DB), `src/lib/shipping.ts`, FreeShippingBar nueva, checkout sin "gratis" falso bajo mínimo, copy "desde $499" en toda la tienda, ReturnsPolicy alineada ($899 → $499 / $99).
+- 2026-11-27 — 📦 FASE 19 plan (chat): preventa Cuenco Alba (3 productos) con fecha de envío visible en PDP, tarjetas, carrito, checkout y gracias; se apaga sola. Verificado que los 3 tienen `track_inventory: false` (siguen vendibles).
+- 2026-11-24 — 🔎 FASE 18.1 diagnóstico (chat): checkout con mechas muestra "Por calcular" y cobra $0 de envío.
+- 2026-11-24 — 🚚 FASE 18: regla envío gratis desde $499 (DB), `src/lib/shipping.ts`, FreeShippingBar, copy "desde $499", ReturnsPolicy.
 - 2026-11-24 — 🚚 Análisis de envío (chat): datos PostHog + recomendación FASE 18.
-- 2026-11-20 — ❄️ Nuevo producto `cera-duna-nieve-500-g` (clon de Cera Duna 500 g, sin variantes, fotos Marfil), en colección navidad, mapeado a perlas en EDITIONS.
-- 2026-11-18 — ❄️ Nieve: datos reales, `NIEVE_STORY` en ProductStorySections, descripciones DB, notas de aromas navideños.
-- 2026-11-18 — ❄️ Nieve conectada a productos reales: slugs, inspiración, aromas navideños, includes/beneficios, colección.
+- 2026-11-20 — ❄️ Nuevo producto `cera-duna-nieve-500-g`.
+- 2026-11-18 — ❄️ Nieve: datos reales, `NIEVE_STORY`, descripciones DB, notas de aromas navideños.
+- 2026-11-18 — ❄️ Nieve conectada a productos reales.
 - 2026-11-18 — 🌿 `Edition.scents {seasonal, hide}` reemplaza `seasonalScents`.
 - 2026-11-16 — ❄️ Sistema de ediciones + edición NIEVE.
 - 2026-11-13 — 🛒 FASE 16 upsell en carrito.
@@ -163,7 +185,6 @@
 - 2026-11-09 — 🃏 Tarjetas con chips de nombre.
 - 2026-10-14 — 🏵️ Cempasúchil Eclipse y Alba publicados.
 - 2026-10-13 — 🎨 Dúo de Tonos selector.
-- 2026-10-10 — 🏵️ PDPs de temporada.
 
 ## 5. Image Inventory
 - Fotos producto 1122×1402 (4:5) webp. Uploads owner: `.../message-images/58337cbc-5a9f-4862-810a-1470616566de/`.
@@ -175,8 +196,10 @@
 - 🛍️ Sticker Buen Fin: DEPRECAR. 🏵️ DDM banner + 6 inspiración en `EDITIONS[ddm]`.
 
 ## 6. Known Issues
-- 2026-11-24 — 🔴 Checkout bajo $499 cobra $0 de envío y muestra "Por calcular" permanente (FASE 18.1). Causa backend sin confirmar (tarifa $99 vs unidad min_subtotal).
-- 2026-11-20 — 🟡 Cera Nieve creada sin `default_package_id` (original = "Caja chica"); owner debe asignarlo en Dashboard.
+- 2026-11-27 — 🟡 Cuenco Alba sin stock hasta ~5 dic; los 3 productos se siguen vendiendo sin aviso (track_inventory false) y el checkout promete "Llega entre 26 nov y 1 dic" → falso para Alba hasta implementar FASE 19.
+- 2026-11-27 — 🟡 Descripción DB de "Vela Rellenable · Cuenco Alba" dice "cerámica negra mate" (posible copy equivocado).
+- 2026-11-24 — 🔴 Checkout bajo $499 cobra $0 de envío y muestra "Por calcular" permanente (FASE 18.1).
+- 2026-11-20 — 🟡 Cera Nieve creada sin `default_package_id`; owner debe asignarlo.
 - 2026-11-18 — 🟡 Cambios de Nieve sin `tsc` ni QA visual.
 - 2026-11-18 — 🟡 Slug `nochebuena-de-navidad-bowl-mbar` (sin "a"); funciona por mapeo explícito.
 - 2026-11-16 — 🟠 gpt-image/gemini sin créditos (402); usar flux.
@@ -187,8 +210,9 @@
 - 2026-08-21 — 🔴 `update-product` NO soporta imágenes por variante ni cambio de slug.
 
 ## 7. Pending / Future Sessions
-- [URGENTE] FASE 18.1: respuesta owner (¿tarifa $99 configurada?) → prueba desactivando regla → fix unidad si aplica + fix UI "Por calcular".
-- [MEDIA] FASE 18B regalo desde $1,400 (cuando el envío funcione bien).
+- [URGENTE] FASE 19 preventa Alba: owner confirma fecha exacta + pedidos mixtos → construir.
+- [URGENTE] FASE 18.1: respuesta owner (¿tarifa $99 configurada?) → prueba → fix unidad si aplica + fix UI "Por calcular".
+- [MEDIA] FASE 18B regalo desde $1,400.
 - [URGENTE] Nieve pendientes 1–6 de FASE 17.
 - [ALTA] Owner archiva add-on Buen Fin y quitar sticker.
 - [2026-11-20] PostHog `cart_upsell_viewed` vs `added`.
